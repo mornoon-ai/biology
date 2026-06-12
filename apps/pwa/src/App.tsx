@@ -754,7 +754,6 @@ function DashboardPage({ data }: { data: AppData }) {
   const dueErrors = openErrors.filter((error) => new Date(error.dueAt).getTime() <= now);
   const allAttempts = Object.values(topicsProgress).flatMap((progress) => Object.values(progress.attempts ?? {}));
   const correctAttempts = allAttempts.filter((attempt) => attempt.correct);
-  const refinedCards = data.knowledgeCards.filter((card) => card.maintenance_status === "refined");
   const activeTopicIds = new Set([...Object.keys(topicsProgress), ...errors.map((error) => error.topicId)]);
 
   const topicStats = data.topics.map((topic) => {
@@ -793,8 +792,6 @@ function DashboardPage({ data }: { data: AppData }) {
       gateTotal: gates.length,
       chapterDone,
       chapterTotal,
-      refinedCards: topicCards.filter((card) => card.maintenance_status === "refined").length,
-      cardsTotal: topicCards.length,
       lastVisited: progress?.lastVisited,
     };
   });
@@ -873,8 +870,8 @@ function DashboardPage({ data }: { data: AppData }) {
             <p>到期/待复测</p>
           </div>
           <div>
-            <span>{refinedCards.length}</span>
-            <p>已精修卡</p>
+            <span>{activeTopicIds.size}</span>
+            <p>活跃母题</p>
           </div>
         </div>
       </section>
