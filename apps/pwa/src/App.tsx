@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
-import { Link, NavLink, Route, Routes, useParams } from "react-router-dom";
+import { Link, NavLink, Route, Routes, useLocation, useParams } from "react-router-dom";
 import {
   Activity,
   BadgeCheck,
@@ -344,6 +344,25 @@ function practiceAnchorId(id: string) {
   return `practice_${normalizeAnswer(id) || "item"}`;
 }
 
+function scrollToPageSection(id: string) {
+  const target = document.getElementById(id);
+  if (!target) return;
+  const top = Math.max(0, target.getBoundingClientRect().top + window.scrollY - 8);
+  window.scrollTo({ top, behavior: "smooth" });
+}
+
+function ScrollToRouteHash() {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (!location.hash) return;
+    const id = decodeURIComponent(location.hash.slice(1));
+    window.setTimeout(() => scrollToPageSection(id), 80);
+  }, [location.hash, location.pathname]);
+
+  return null;
+}
+
 function chapterPracticeTarget(section: string, units: TrainingUnit[], variants: AppData["variants"]) {
   const triggerUnit = units.find((unit) => unit.type === "trigger_signal") ?? units[0];
   const structureUnit = units.find((unit) => unit.type === "structure") ?? units[0];
@@ -434,6 +453,7 @@ function App() {
   return (
     <div className="app-shell">
       <main className="app-main">
+        <ScrollToRouteHash />
         <Routes>
           <Route path="/" element={<TodayPage data={data} />} />
           <Route path="/plan" element={<PlanPage data={data} />} />
@@ -701,14 +721,14 @@ function PlayerPage({ data }: { data: AppData }) {
   return (
     <Page>
       <Header eyebrow={topic.module_title} title={topic.title} action={<TopicPill topic={topic} />} />
-      <section className="anchor-tabs">
-        <a href="#memory">图片</a>
-        <a href="#lecture">讲座</a>
-        <a href="#gate">门禁</a>
-        <a href="#training">结构</a>
-        <a href="#variants">变式</a>
-        <a href="#review">错因</a>
-        <a href="#coach">教练</a>
+      <section className="anchor-tabs" aria-label="播放器分区导航">
+        <button type="button" onClick={() => scrollToPageSection("memory")}>图片</button>
+        <button type="button" onClick={() => scrollToPageSection("lecture")}>讲座</button>
+        <button type="button" onClick={() => scrollToPageSection("gate")}>门禁</button>
+        <button type="button" onClick={() => scrollToPageSection("training")}>结构</button>
+        <button type="button" onClick={() => scrollToPageSection("variants")}>变式</button>
+        <button type="button" onClick={() => scrollToPageSection("review")}>错因</button>
+        <button type="button" onClick={() => scrollToPageSection("coach")}>教练</button>
       </section>
 
       <StudyRail topicId={topic.topic_id} gates={gates} trainingUnits={trainingUnits} variants={variants} />
@@ -1892,10 +1912,7 @@ function ScriptViewer({
 
   function jumpToPractice(href: string) {
     const id = href.startsWith("#") ? href.slice(1) : href;
-    const target = document.getElementById(id);
-    if (!target) return;
-    window.history.replaceState(null, "", `#${id}`);
-    target.scrollIntoView({ behavior: "smooth", block: "start" });
+    scrollToPageSection(id);
   }
 
   useEffect(() => {

@@ -570,17 +570,20 @@ a {
 .anchor-tabs {
   display: flex;
   gap: 8px;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
   overflow-x: auto;
   padding-bottom: 4px;
 }
 
-.anchor-tabs a {
+.anchor-tabs a,
+.anchor-tabs button {
   background: #e5ead8;
+  border: 0;
   color: #1f392d;
   flex: 0 0 auto;
   font-size: 13px;
   font-weight: 800;
+  line-height: 1;
   padding: 8px 10px;
   border-radius: 8px;
 }
