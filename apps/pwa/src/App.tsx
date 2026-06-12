@@ -50,11 +50,6 @@ type LectureBookmark = {
   estimated: boolean;
 };
 
-type BeforeInstallPromptEvent = Event & {
-  prompt: () => Promise<void>;
-  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
-};
-
 type ChapterJump = {
   section: string;
   source: "audio" | "script";
@@ -550,9 +545,6 @@ function TodayPage({ data }: { data: AppData }) {
           任务单
         </Link>
       </section>
-
-      <InstallPromptCard />
-      <PwaStatusCard />
 
       <section className="quick-grid" aria-label="今日学习入口">
         <QuickLink to={`/player/${topic.topic_id}#memory`} icon={Images} label="图片记忆卡" value="1 张" />
@@ -1525,48 +1517,6 @@ function QuickLink({ to, icon: Icon, label, value }: { to: string; icon: LucideI
   );
 }
 
-function InstallPromptCard() {
-  const [installEvent, setInstallEvent] = useState<BeforeInstallPromptEvent | null>(null);
-  const [installed, setInstalled] = useState(false);
-
-  useEffect(() => {
-    const handleBeforeInstall = (event: Event) => {
-      event.preventDefault();
-      setInstallEvent(event as BeforeInstallPromptEvent);
-    };
-    const handleInstalled = () => setInstalled(true);
-    window.addEventListener("beforeinstallprompt", handleBeforeInstall);
-    window.addEventListener("appinstalled", handleInstalled);
-    return () => {
-      window.removeEventListener("beforeinstallprompt", handleBeforeInstall);
-      window.removeEventListener("appinstalled", handleInstalled);
-    };
-  }, []);
-
-  return (
-    <section className="install-card">
-      <div>
-        <strong>{installed ? "已安装到设备" : "PWA 原型已支持安装"}</strong>
-        <p>适合放到手机桌面，用离线缓存快速打开记忆卡、音频和训练页。</p>
-      </div>
-      {installEvent ? (
-        <button
-          className="secondary-action"
-          onClick={() => {
-            installEvent.prompt();
-            setInstallEvent(null);
-          }}
-        >
-          <Sparkles size={17} />
-          安装
-        </button>
-      ) : (
-        <span>离线就绪</span>
-      )}
-    </section>
-  );
-}
-
 function thumbnailUrl(path: string): string {
   return publicUrl(path.replace("/assets/memory-cards/", "/assets/thumbs/memory-cards/").replace("/assets/diagrams/", "/assets/thumbs/diagrams/"));
 }
@@ -2328,38 +2278,6 @@ function CoachPanel({ data, topicId, compact = false }: { data: AppData; topicId
         </section>
       ) : null}
     </div>
-  );
-}
-
-function PwaStatusCard() {
-  const [online, setOnline] = useState(navigator.onLine);
-  const [workerState, setWorkerState] = useState(import.meta.env.DEV ? "开发模式" : "检测中");
-
-  useEffect(() => {
-    const updateOnline = () => setOnline(navigator.onLine);
-    window.addEventListener("online", updateOnline);
-    window.addEventListener("offline", updateOnline);
-    if ("serviceWorker" in navigator && !import.meta.env.DEV) {
-      navigator.serviceWorker.ready
-        .then((registration) => {
-          setWorkerState(registration.active ? "已启用" : "待刷新");
-        })
-        .catch(() => setWorkerState("不可用"));
-    }
-    return () => {
-      window.removeEventListener("online", updateOnline);
-      window.removeEventListener("offline", updateOnline);
-    };
-  }, []);
-
-  return (
-    <section className="pwa-status-card">
-      <div>
-        <strong>离线缓存</strong>
-        <p>{workerState}</p>
-      </div>
-      <span>{online ? "在线" : "离线"}</span>
-    </section>
   );
 }
 
