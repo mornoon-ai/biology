@@ -912,10 +912,6 @@ a {
   border-radius: 8px;
 }
 
-.script-toc button.has-progress {
-  background: #d5e6df;
-}
-
 .script-toc button span,
 .script-toc button small {
   display: block;
@@ -957,114 +953,6 @@ a {
   font-size: 18px;
   line-height: 1.24;
   margin: 18px 0 8px;
-}
-
-.chapter-status-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin: -2px 0 8px;
-}
-
-.chapter-status-row span {
-  background: #e8dfca;
-  color: #786846;
-  font-size: 11px;
-  font-weight: 900;
-  line-height: 1;
-  padding: 6px 7px;
-  border-radius: 8px;
-}
-
-.chapter-status-row span.done {
-  background: #d5e6df;
-  color: #1f654d;
-}
-
-.chapter-practice-link {
-  background: #fffaf0;
-  border: 1px solid #ded3b8;
-  border-left: 4px solid #f2c14e;
-  display: grid;
-  gap: 3px;
-  margin: 8px 0 12px;
-  padding: 10px;
-  border-radius: 0 8px 8px 0;
-}
-
-.chapter-practice-link span {
-  color: #6b4f11;
-  font-size: 12px;
-  font-weight: 900;
-}
-
-.chapter-practice-link strong {
-  color: #17211b;
-  font-size: 15px;
-  line-height: 1.28;
-}
-
-.chapter-practice-link small {
-  color: #6f5e3d;
-  font-size: 12px;
-  font-weight: 800;
-}
-
-.knowledge-card-strip {
-  display: grid;
-  gap: 8px;
-  margin: 8px 0 14px;
-}
-
-.knowledge-card {
-  background: #f3ead5;
-  border: 1px solid #d8c8a7;
-  display: grid;
-  gap: 7px;
-  padding: 10px;
-  border-radius: 8px;
-}
-
-.knowledge-card.type-trap {
-  border-left: 4px solid #b85c38;
-}
-
-.knowledge-card.type-signal {
-  border-left: 4px solid #487a73;
-}
-
-.knowledge-card.type-rule,
-.knowledge-card.type-mnemonic {
-  border-left: 4px solid #6f7c3b;
-}
-
-.knowledge-card.type-representative {
-  border-left: 4px solid #846aa8;
-}
-
-.knowledge-card span {
-  color: #6b4f11;
-  display: block;
-  font-size: 11px;
-  font-weight: 900;
-  margin-bottom: 3px;
-}
-
-.knowledge-card strong {
-  color: #17211b;
-  display: block;
-  font-size: 14px;
-  line-height: 1.34;
-}
-
-.knowledge-card p {
-  background: #fffaf0;
-  border: 1px solid #e1d0a6;
-  font-size: 13px;
-  line-height: 1.55;
-  margin: 0;
-  padding: 8px;
-  border-radius: 8px;
 }
 
 .answer-layers {

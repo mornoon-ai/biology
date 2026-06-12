@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, NavLink, Route, Routes, useLocation, useParams } from "react-router-dom";
 import {
   Activity,
@@ -369,77 +369,6 @@ function ScrollToRouteHash() {
   return null;
 }
 
-function chapterPracticeTarget(section: string, units: TrainingUnit[], variants: AppData["variants"]) {
-  const triggerUnit = units.find((unit) => unit.type === "trigger_signal") ?? units[0];
-  const structureUnit = units.find((unit) => unit.type === "structure") ?? units[0];
-  const scoringUnit = units.find((unit) => unit.type === "scoring_expression") ?? structureUnit;
-  const errorUnit = units.find((unit) => unit.type === "error_correction") ?? units[0];
-  const variant = variants[0];
-  const advancedVariant = variants.find((item) => item.level === "L2") ?? variant;
-
-  if (["钩子", "信号"].includes(section) && triggerUnit) {
-    return {
-      href: `#${practiceAnchorId(triggerUnit.unit_id)}`,
-      itemId: triggerUnit.unit_id,
-      label: "练触发信号",
-      title: triggerUnit.title,
-      meta: "先把题面入口抓准",
-    };
-  }
-
-  if (section === "判断" && structureUnit) {
-    return {
-      href: `#${practiceAnchorId(structureUnit.unit_id)}`,
-      itemId: structureUnit.unit_id,
-      label: "练判定链条",
-      title: structureUnit.title,
-      meta: "防止显隐和位置跳步",
-    };
-  }
-
-  if (section === "框架" && scoringUnit) {
-    return {
-      href: `#${practiceAnchorId(scoringUnit.unit_id)}`,
-      itemId: scoringUnit.unit_id,
-      label: "练得分表达",
-      title: scoringUnit.title,
-      meta: "把框架写成阅卷语言",
-    };
-  }
-
-  if (section === "拆题" && advancedVariant) {
-    return {
-      href: `#${practiceAnchorId(advancedVariant.variant_id)}`,
-      itemId: advancedVariant.variant_id,
-      label: "做代表变式",
-      title: advancedVariant.title,
-      meta: "把母题迁移到新材料",
-    };
-  }
-
-  if (section === "陷阱" && errorUnit) {
-    return {
-      href: `#${practiceAnchorId(errorUnit.unit_id)}`,
-      itemId: errorUnit.unit_id,
-      label: "练错因纠偏",
-      title: errorUnit.title,
-      meta: "把典型错法当场修掉",
-    };
-  }
-
-  if (section === "收束") {
-    return {
-      href: "#coach",
-      itemId: "coach",
-      label: "让教练追问",
-      title: "AI 教练",
-      meta: "用追问完成最后复盘",
-    };
-  }
-
-  return null;
-}
-
 function App() {
   const [data, setData] = useState<AppData | null>(null);
   const [error, setError] = useState("");
@@ -712,7 +641,6 @@ function PlayerPage({ data }: { data: AppData }) {
   const trainingUnits = data.trainingUnits.filter((unit) => unit.topic_id === topic.topic_id);
   const variants = data.variants.filter((variant) => variant.topic_id === topic.topic_id);
   const audioSegments = data.audioSegments.filter((segment) => segment.topic_id === topic.topic_id);
-  const knowledgeCards = data.knowledgeCards.filter((card) => card.topic_id === topic.topic_id);
   const touchTopic = useProgressStore((state) => state.touchTopic);
   const [chapterJump, setChapterJump] = useState<ChapterJump | null>(null);
 
@@ -759,9 +687,6 @@ function PlayerPage({ data }: { data: AppData }) {
           <ScriptViewer
             topicId={topic.topic_id}
             asset={script}
-            trainingUnits={trainingUnits}
-            variants={variants}
-            knowledgeCards={knowledgeCards}
             chapterJump={chapterJump}
             onChapterJump={(section) => setChapterJump({ section, source: "script", token: Date.now() })}
           />
@@ -1777,28 +1702,17 @@ function AudioPlayer({
 function ScriptViewer({
   topicId,
   asset,
-  trainingUnits,
-  variants,
-  knowledgeCards,
   chapterJump,
   onChapterJump,
 }: {
   topicId: string;
   asset: Asset;
-  trainingUnits: TrainingUnit[];
-  variants: AppData["variants"];
-  knowledgeCards: KnowledgeCard[];
   chapterJump: ChapterJump | null;
   onChapterJump: (section: string) => void;
 }) {
   const [open, setOpen] = useState(false);
   const [text, setText] = useState("");
-  const progress = useProgressStore((state) => state.topics[topicId]);
-  const errors = useProgressStore((state) => state.errors);
   const markChapterStatus = useProgressStore((state) => state.markChapterStatus);
-  const addError = useProgressStore((state) => state.addError);
-  const [revealedCards, setRevealedCards] = useState<Record<string, boolean>>({});
-  const [revealedDetails, setRevealedDetails] = useState<Record<string, boolean>>({});
   const scriptUrl = publicUrl(asset.public_path);
 
   useEffect(() => {
@@ -1820,21 +1734,6 @@ function ScriptViewer({
   const visibleBlocks = blocks;
   const headings = blocks.filter((block) => block.type === "h2").map((block) => block.text);
 
-  function statusForChapter(section: string, target: ReturnType<typeof chapterPracticeTarget>) {
-    const stored = progress?.chapterStatus?.[chapterStatusId(section)] ?? {};
-    const completed = progress?.completedUnits ?? [];
-    const practiced = Boolean(stored.practiced || (target?.itemId && target.itemId !== "coach" && completed.includes(target.itemId)));
-    const hasOpenError = target?.itemId
-      ? errors.some((error) => error.topicId === topicId && !error.resolved && (target.itemId === "coach" ? error.sourceType === "coach" : error.unitId === target.itemId))
-      : false;
-    return {
-      read: Boolean(stored.read),
-      listened: Boolean(stored.listened),
-      practiced,
-      cleared: practiced && !hasOpenError,
-    };
-  }
-
   function scrollToSection(section: string) {
     const target = document.getElementById(scriptHeadingId(section));
     if (!target) return;
@@ -1845,11 +1744,6 @@ function ScriptViewer({
       return;
     }
     target.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
-
-  function jumpToPractice(href: string) {
-    const id = href.startsWith("#") ? href.slice(1) : href;
-    scrollToPageSection(id);
   }
 
   useEffect(() => {
@@ -1885,23 +1779,17 @@ function ScriptViewer({
 
           {headings.length ? (
             <div className="script-toc" aria-label="讲稿目录">
-              {headings.map((heading) => {
-                const target = chapterPracticeTarget(heading, trainingUnits, variants);
-                const status = statusForChapter(heading, target);
-                return (
-                  <button
-                    className={status.read || status.listened || status.practiced ? "has-progress" : ""}
-                    key={heading}
-                    onClick={() => {
-                      scrollToSection(heading);
-                      onChapterJump(heading);
-                    }}
-                  >
-                    <span>{heading}</span>
-                    <small>{[status.listened ? "听" : "", status.read ? "读" : "", status.practiced ? "练" : ""].filter(Boolean).join(" / ") || "未开始"}</small>
-                  </button>
-                );
-              })}
+              {headings.map((heading) => (
+                <button
+                  key={heading}
+                  onClick={() => {
+                    scrollToSection(heading);
+                    onChapterJump(heading);
+                  }}
+                >
+                  <span>{heading}</span>
+                </button>
+              ))}
             </div>
           ) : null}
 
@@ -1909,81 +1797,7 @@ function ScriptViewer({
             {visibleBlocks.map((block, index) => {
               const key = `${block.type}_${index}_${block.text.slice(0, 16)}`;
               if (block.type === "h1") return <h3 key={key}>{block.text}</h3>;
-              if (block.type === "h2") {
-                const target = chapterPracticeTarget(block.text, trainingUnits, variants);
-                const status = statusForChapter(block.text, target);
-                const chapterCards = knowledgeCards.filter((card) => card.chapter === block.text);
-                return (
-                  <Fragment key={key}>
-                    <h4 id={scriptHeadingId(block.text)}>{block.text}</h4>
-                    <div className="chapter-status-row" aria-label={`${block.text} 章节状态`}>
-                      <span className={status.listened ? "done" : ""}>已听</span>
-                      <span className={status.read ? "done" : ""}>已读</span>
-                      <span className={status.practiced ? "done" : ""}>已练</span>
-                      <span className={status.cleared ? "done" : ""}>错因已清</span>
-                    </div>
-                    {target ? (
-                      <a
-                        className="chapter-practice-link"
-                        href={target.href}
-                        onClick={(event) => {
-                          event.preventDefault();
-                          if (target.itemId === "coach") {
-                            markChapterStatus(topicId, chapterStatusId(block.text), { practiced: true });
-                          }
-                          jumpToPractice(target.href);
-                        }}
-                      >
-                        <span>{target.label}</span>
-                        <strong>{target.title}</strong>
-                        <small>{target.meta}</small>
-                      </a>
-                    ) : null}
-                    {chapterCards.length ? (
-                      <div className="knowledge-card-strip" aria-label={`${block.text} 知识卡`}>
-                        {chapterCards.slice(0, 3).map((card) => (
-                          <article className={`knowledge-card type-${card.type}`} key={card.card_id}>
-                            <div>
-                              <span>{knowledgeTypeLabel(card.type)}</span>
-                              <strong>{card.front}</strong>
-                            </div>
-                            {revealedCards[card.card_id] ? (
-                              <div className="answer-layers">
-                                <p>{card.short_back ?? card.back}</p>
-                                {card.detail_back && card.detail_back !== (card.short_back ?? card.back) ? (
-                                  <>
-                                    {revealedDetails[card.card_id] ? <p className="detail-answer">{card.detail_back}</p> : null}
-                                    <button
-                                      className="text-button"
-                                      onClick={() => setRevealedDetails({ ...revealedDetails, [card.card_id]: !revealedDetails[card.card_id] })}
-                                    >
-                                      {revealedDetails[card.card_id] ? "收起详细" : "详细解释"}
-                                    </button>
-                                  </>
-                                ) : null}
-                              </div>
-                            ) : null}
-                            <div className="knowledge-actions">
-                              <button
-                                className="text-button"
-                                onClick={() => setRevealedCards({ ...revealedCards, [card.card_id]: !revealedCards[card.card_id] })}
-                              >
-                                {revealedCards[card.card_id] ? "收起" : "看答案"}
-                              </button>
-                              <button
-                                className="text-button"
-                                onClick={() => addError(topicId, card.card_id, card.review_prompt, "coach")}
-                              >
-                                加入复测
-                              </button>
-                            </div>
-                          </article>
-                        ))}
-                      </div>
-                    ) : null}
-                  </Fragment>
-                );
-              }
+              if (block.type === "h2") return <h4 id={scriptHeadingId(block.text)} key={key}>{block.text}</h4>;
               if (block.type === "h3") return <h5 key={key}>{block.text}</h5>;
               if (block.type === "li") return <p className="script-list" key={key}>{inlineMarkup(block.text)}</p>;
               if (block.type === "quote") return <blockquote key={key}>{inlineMarkup(block.text)}</blockquote>;
