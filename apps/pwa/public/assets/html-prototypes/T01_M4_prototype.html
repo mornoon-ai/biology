@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T01_M4 · 前沿分子干预与治疗型</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent:#993C1D; --accent-l:#FAECE7; --accent-m:#E09070; --accent-d:#712B13;
+  --teal:#0F6E56; --teal-l:#E1F5EE; --teal-d:#085041;
+  --amber:#BA7517; --amber-l:#FAEEDA; --amber-d:#633806;
+  --purple:#534AB7; --purple-l:#EEEDFE; --purple-d:#3C3489;
+  --rose:#9E1D5A; --rose-l:#FAEDF4; --rose-d:#6B1040;
+  --bg:#ffffff; --bg2:#f7f7f5; --bg3:#f1efe8;
+  --tx:#1a1a18; --tx2:#5f5e5a; --tx3:#888780;
+  --bd:rgba(0,0,0,0.10); --bd2:rgba(0,0,0,0.18);
+  --r-sm:6px; --r-md:8px; --r-lg:12px; --r-xl:16px;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#1c1c1a;--bg2:#252523;--bg3:#2c2c2a;
+    --tx:#f0efea;--tx2:#b4b2a9;--tx3:#888780;
+    --bd:rgba(255,255,255,0.09);--bd2:rgba(255,255,255,0.16);
+    --accent-l:#4A1B0C;--accent-d:#F5C4B3;
+    --teal-l:#04342C;--teal-d:#9FE1CB;
+    --amber-l:#412402;--amber-d:#FAC775;
+    --purple-l:#26215C;--purple-d:#CECBF6;
+    --rose-l:#3A0A25;--rose-d:#F0A8CF;
+  }
+}
+body{font-family:var(--font);font-size:15px;line-height:1.6;color:var(--tx);background:var(--bg3);min-height:100vh;}
+.app{max-width:800px;margin:0 auto;background:var(--bg);min-height:100vh;}
+.site-header{padding:1.25rem 1.5rem 0;background:var(--bg);border-bottom:0.5px solid var(--bd);position:sticky;top:0;z-index:20;}
+.header-top{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.header-icon{background:var(--accent-l);border-radius:var(--r-md);padding:6px 8px;display:flex;align-items:center;justify-content:center;}
+.header-icon i{font-size:20px;color:var(--accent);}
+.header-meta{font-size:12px;color:var(--tx3);}
+.header-title{font-size:17px;font-weight:500;color:var(--tx);}
+.header-id{margin-left:auto;font-size:11px;color:var(--tx3);background:var(--bg2);padding:3px 9px;border-radius:var(--r-sm);}
+.nav-tabs{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.nav-tab{padding:.6rem 1.1rem;font-size:13px;color:var(--tx2);cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;font-family:var(--font);white-space:nowrap;transition:color .15s,border-color .15s;}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500;}
+.nav-tab:hover:not(.active){color:var(--tx);}
+.page{display:none;padding:1.5rem;}
+.page.active{display:block;}
+.memory-section{margin-bottom:1.5rem;}
+.memory-card{border:0.5px solid var(--bd);border-radius:var(--r-xl);overflow:hidden;background:var(--bg);}
+.memory-placeholder{min-height:200px;background:var(--bg2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--tx3);padding:2rem;}
+.memory-placeholder i{font-size:32px;color:var(--bd2);}
+.memory-placeholder-text{font-size:13px;text-align:center;line-height:1.6;}
+.memory-placeholder-filename{font-size:11px;background:var(--bg3);border:0.5px solid var(--bd);border-radius:var(--r-sm);padding:4px 10px;font-family:monospace;color:var(--tx2);}
+.memory-img{width:100%;display:block;max-height:320px;object-fit:contain;background:var(--bg3);cursor:zoom-in;transition:opacity .15s;}
+.memory-img:hover{opacity:.9;}
+.memory-footer{padding:.85rem 1rem;display:flex;align-items:center;gap:10px;border-top:0.5px solid var(--bd);}
+.memory-label{font-size:13px;font-weight:500;color:var(--tx);flex:1;}
+audio{height:32px;width:220px;}
+.audio-placeholder{font-size:12px;color:var(--tx3);display:flex;align-items:center;gap:5px;background:var(--bg2);padding:6px 10px;border-radius:var(--r-sm);}
+.section-title{font-size:13px;font-weight:500;color:var(--tx2);display:flex;align-items:center;gap:7px;margin-bottom:1rem;text-transform:uppercase;letter-spacing:.04em;}
+.section-divider{height:0.5px;background:var(--bd);margin:1.5rem 0;}
+.signal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:1.5rem;}
+.signal-card{background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;}
+.signal-label{font-size:11px;color:var(--tx3);letter-spacing:.04em;margin-bottom:.4rem;text-transform:uppercase;}
+.signal-tag{font-size:13px;color:var(--tx);margin-bottom:2px;}
+.subtopic-list{display:flex;flex-direction:column;gap:10px;margin-bottom:1.5rem;}
+.subtopic-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.9rem 1.1rem;border-left:3px solid var(--accent);}
+.subtopic-card.s2{border-left-color:var(--teal);}
+.subtopic-num{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.3rem;}
+.subtopic-name{font-size:14px;font-weight:500;color:var(--tx);margin-bottom:.3rem;}
+.subtopic-signal{font-size:13px;color:var(--tx2);line-height:1.6;}
+.trap-list{display:flex;flex-direction:column;gap:7px;}
+.trap-item{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.55;}
+.trap-icon{color:#E24B4A;font-size:15px;flex-shrink:0;margin-top:1px;}
+.filter-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem;}
+.filter-btn{padding:5px 13px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx2);font-family:var(--font);transition:all .15s;}
+.filter-btn.active{background:var(--accent-l);color:var(--accent-d);border-color:var(--accent);font-weight:500;}
+.mq-card{border:0.5px solid var(--bd);border-radius:var(--r-lg);background:var(--bg);margin-bottom:.85rem;overflow:hidden;}
+.mq-header{padding:.9rem 1.1rem;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;transition:background .15s;}
+.mq-header:hover{background:var(--bg2);}
+.mq-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);white-space:nowrap;}
+.mq-badge.s1{background:var(--accent-l);color:var(--accent-d);}
+.mq-badge.s2{background:var(--teal-l);color:var(--teal-d);}
+.mq-name{font-size:14px;font-weight:500;color:var(--tx);flex:1;}
+.mq-purity{font-size:12px;color:var(--tx3);flex-shrink:0;}
+.mq-chevron{color:var(--tx3);font-size:16px;transition:transform .2s;flex-shrink:0;}
+.mq-chevron.open{transform:rotate(180deg);}
+.mq-body{display:none;padding:.75rem 1.1rem 1.1rem;border-top:0.5px solid var(--bd);}
+.mq-body.open{display:block;}
+.mq-source{font-size:12px;color:var(--tx3);margin-bottom:.65rem;}
+.rule-box{background:var(--accent-l);border-left:3px solid var(--accent);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:.65rem .9rem;font-size:13px;color:var(--accent-d);margin:.75rem 0;line-height:1.65;}
+.rule-box.s2{background:var(--teal-l);border-left-color:var(--teal);color:var(--teal-d);}
+.chain-label{font-size:12px;font-weight:500;color:var(--tx2);margin:.75rem 0 .4rem;text-transform:uppercase;letter-spacing:.04em;}
+.signal-chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:6px;}
+.sc-node{background:var(--bg2);border-radius:var(--r-sm);padding:3px 9px;font-size:13px;color:var(--tx);}
+.sc-node.s1{background:var(--accent-l);color:var(--accent-d);}
+.sc-node.s2{background:var(--teal-l);color:var(--teal-d);}
+.sc-arrow{color:var(--tx3);font-size:13px;}
+.mq-note{font-size:13px;color:var(--tx2);margin-top:.75rem;line-height:1.6;}
+.q-trigger{display:inline-flex;align-items:center;gap:5px;margin-top:.75rem;padding:6px 12px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;color:var(--tx2);cursor:pointer;font-family:var(--font);transition:all .15s;}
+.q-trigger:hover{background:var(--bg2);color:var(--tx);}
+.q-trigger i{font-size:14px;}
+.ladder-section-label{font-size:13px;font-weight:500;color:var(--tx2);margin-bottom:.85rem;display:flex;align-items:center;gap:7px;}
+.ladder-rows{display:flex;flex-direction:column;gap:8px;margin-bottom:1rem;}
+.ladder-row{display:grid;grid-template-columns:64px 1fr;gap:10px;align-items:start;}
+.ladder-level{font-size:11px;font-weight:500;padding:6px 4px;border-radius:var(--r-sm);text-align:center;line-height:1.4;}
+.l0{background:var(--accent-l);color:var(--accent-d);}
+.l1{background:var(--teal-l);color:var(--teal-d);}
+.ladder-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.65rem .9rem;background:var(--bg);cursor:pointer;transition:background .15s;}
+.ladder-card:hover{background:var(--bg2);}
+.ladder-card-name{font-size:13px;font-weight:500;color:var(--tx);}
+.ladder-card-sub{font-size:12px;color:var(--tx3);margin-top:3px;line-height:1.5;}
+.ladder-note{background:var(--bg2);border-radius:var(--r-md);padding:.65rem .9rem;font-size:12px;color:var(--tx2);margin-bottom:1rem;line-height:1.55;}
+.progress-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem;}
+.progress-bar{height:5px;border-radius:3px;background:var(--bg2);margin-bottom:1.25rem;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;background:var(--accent);width:0%;transition:width .3s;}
+.checklist{display:flex;flex-direction:column;gap:7px;}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:.7rem .9rem;border:0.5px solid var(--bd);border-radius:var(--r-md);background:var(--bg);cursor:pointer;transition:background .15s;}
+.check-item.done{background:var(--bg2);}
+.check-box{width:18px;height:18px;border:1.5px solid var(--bd2);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .15s;}
+.check-item.done .check-box{background:var(--accent);border-color:var(--accent);}
+.check-box i{font-size:11px;color:#fff;display:none;}
+.check-item.done .check-box i{display:block;}
+.check-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.check-item.done .check-text{color:var(--tx3);text-decoration:line-through;}
+.action-row{margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:8px;}
+.action-btn{padding:7px 14px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.action-btn:hover{background:var(--bg2);}
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s;}
+.drawer-overlay.open{opacity:1;pointer-events:all;}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100vw);background:var(--bg);z-index:101;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden;}
+.drawer.open{transform:translateX(0);}
+.drawer-header{padding:1rem 1.25rem;border-bottom:0.5px solid var(--bd);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.drawer-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);}
+.drawer-title{font-size:14px;font-weight:500;color:var(--tx);flex:1;line-height:1.4;}
+.drawer-close{background:none;border:none;cursor:pointer;color:var(--tx2);padding:4px;border-radius:var(--r-sm);display:flex;align-items:center;transition:background .15s;}
+.drawer-close:hover{background:var(--bg2);}
+.drawer-body{flex:1;overflow-y:auto;padding:1.25rem;}
+.drawer-ec-ref{font-size:12px;color:var(--tx3);margin-bottom:1rem;display:flex;align-items:center;gap:6px;}
+.drawer-stem{font-size:14px;color:var(--tx);line-height:1.75;white-space:pre-wrap;}
+.drawer-sub{font-size:13px;color:var(--tx2);background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:1rem;line-height:1.65;}
+.drawer-sub-label{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-answer{font-size:13px;color:var(--tx);background:var(--accent-l);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:.75rem;line-height:1.65;display:none;}
+.drawer-answer.show{display:block;}
+.drawer-answer-label{font-size:11px;font-weight:500;color:var(--accent-d);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-footer{padding:.85rem 1.25rem;border-top:0.5px solid var(--bd);display:flex;gap:8px;flex-shrink:0;}
+.drawer-btn{flex:1;padding:8px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.drawer-btn:hover{background:var(--bg2);}
+.drawer-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+.drawer-btn.primary:hover{background:var(--accent-d);}
+.lb-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:200;display:none;align-items:center;justify-content:center;cursor:zoom-out;}
+.lb-overlay.open{display:flex;}
+.lb-img{max-width:92vw;max-height:92vh;object-fit:contain;border-radius:var(--r-md);box-shadow:0 8px 40px rgba(0,0,0,.5);}
+.lb-close{position:fixed;top:16px;right:20px;background:none;border:none;color:#fff;font-size:28px;cursor:pointer;line-height:1;opacity:.7;transition:opacity .15s;}
+.lb-close:hover{opacity:1;}
+@media(max-width:600px){
+  .site-header{padding:1rem 1rem 0;}.page{padding:1rem;}.header-title{font-size:15px;}
+  .signal-grid{grid-template-columns:1fr 1fr;}.ladder-row{grid-template-columns:52px 1fr;gap:8px;}
+  .action-row{flex-direction:column;}.action-btn{width:100%;text-align:center;}
+  .drawer{width:100vw;}audio{width:160px;}
+}
+@media(max-width:380px){.signal-grid{grid-template-columns:1fr;}}
+
+.back-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;font-size:12px;color:var(--tx2);background:var(--bg2);border:0.5px solid var(--bd2);border-radius:var(--r-md);text-decoration:none;font-family:var(--font);transition:background .15s,color .15s;white-space:nowrap;flex-shrink:0;}
+.back-btn:hover{background:var(--bg3);color:var(--tx);}
+.back-btn i{font-size:14px;}
+.memory-video{width:100%;max-height:220px;display:block;border-radius:var(--r-md);background:#000;margin-top:8px;}
+</style>
+</head>
+<body>
+<div class="app">
+
+<header class="site-header">
+  <div class="header-top">
+    <div class="header-icon"><i class="ti ti-cut" aria-hidden="true"></i></div>
+    <div>
+      <div class="header-meta">01 分子病理 · M4 前沿分子干预与治疗型</div>
+      <div class="header-title">前沿分子干预与治疗型</div>
+    </div>
+    <a class="back-btn" href="index.html" aria-label="返回首页"><i class="ti ti-arrow-left"></i> 首页</a>
+    <div class="header-id">T01_M4</div>
+  </div>
+  <nav class="nav-tabs" role="tablist">
+    <button class="nav-tab active" role="tab" onclick="switchTab('overview',this)">概览</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('mothers',this)">母题精讲</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('ladder',this)">变式阶梯</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('check',this)">自查清单</button>
+  </nav>
+</header>
+
+<!-- ══ 概览 ══ -->
+<div id="page-overview" class="page active">
+  <div class="memory-section">
+    <div class="memory-card">
+      <img class="memory-img" src="记忆卡/T01_M4_memory.png" alt="T01_M4 前沿分子干预与治疗型 记忆卡"
+           onclick="openLightbox(this.src,this.alt)"
+           onerror="this.style.display='none';document.getElementById('mem-placeholder').style.display='flex'">
+      <div id="mem-placeholder" class="memory-placeholder" style="display:none;">
+        <i class="ti ti-photo-up"></i>
+        <div class="memory-placeholder-text">记忆卡图片放置于此</div>
+        <div class="memory-placeholder-filename">记忆卡/T01_M4_memory.png</div>
+      </div>
+      <div class="memory-footer">
+        <span class="memory-label"><i class="ti ti-brain" style="margin-right:5px;color:var(--accent);"></i>记忆卡 · CRISPR与RNA干扰</span>
+        <video class="memory-video" controls controlsList="nodownload" preload="metadata" style="display:none">
+        <source src="audio/T01_M4.mp4" type="video/mp4">
+      </video>
+      <div class="audio-placeholder" style="display:flex"><i class="ti ti-video-off"></i>视频待放入</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title"><i class="ti ti-radar"></i>核心识别信号</div>
+  <div class="signal-grid">
+    <div class="signal-card">
+      <div class="signal-label">题型触发词</div>
+      <div class="signal-tag">CRISPR/Cas9 / 向导RNA</div>
+      <div class="signal-tag">基因编辑 / 基因敲除</div>
+      <div class="signal-tag">miRNA / siRNA / RNA干扰</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">两大工具</div>
+      <div class="signal-tag">① CRISPR/Cas9（DNA层面，永久修复）</div>
+      <div class="signal-tag">② miRNA/siRNA（RNA层面，转录后调控）</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">共同机制</div>
+      <div class="signal-tag">碱基互补配对→精确识别靶位点</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">核酸结构考查</div>
+      <div class="signal-tag">核苷酸种类（碱基/五碳糖/磷酸基团）</div>
+      <div class="signal-tag">RNA与DNA结构差异</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-sitemap"></i>两条子专题</div>
+  <div class="subtopic-list">
+    <div class="subtopic-card">
+      <div class="subtopic-num">子专题 1</div>
+      <div class="subtopic-name">CRISPR/Cas9 基因编辑</div>
+      <div class="subtopic-signal">sgRNA（向导RNA）引导Cas9核酸内切酶→识别PAM序列+碱基互补配对→切割靶DNA双链磷酸二酯键→NHEJ随机修复（敲除）或HDR模板修复（敲入）→永久改变基因序列</div>
+    </div>
+    <div class="subtopic-card s2">
+      <div class="subtopic-num">子专题 2</div>
+      <div class="subtopic-name">RNA 干扰疗法（miRNA/siRNA）</div>
+      <div class="subtopic-signal">miRNA基因→转录→pri-miRNA→Drosha加工→pre-miRNA→核孔出核→Dicer加工→成熟miRNA→RISC复合物→碱基互补识别靶mRNA→翻译抑制（③）或mRNA降解（④）→靶基因沉默（转录后调控）</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-alert-triangle"></i>高频易错</div>
+  <div class="trap-list">
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>向导RNA与目标DNA碱基配对时：A配U（RNA-DNA杂合）而非A-T。四种配对：A-U、T-A、C-G、G-C。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>Cas9蛋白切断DNA的是磷酸二酯键，不是氢键（氢键连接双链）。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>核酸种类计数：RNA病毒只有RNA→4种碱基、4种核苷酸、1种五碳糖。有细胞结构的生物（含原核）→5种碱基、8种核苷酸、2种五碳糖。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>Drosha和Dicer都是水解磷酸二酯键（切割RNA），不是催化氢键断裂。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>miRNA对靶mRNA的调控属于转录后调控（③翻译抑制，发生在细胞质/核糖体），不是转录水平。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>CRISPR实验对照设计：突变基因纯合小鼠（有mRNA）→编辑有效；基因敲除小鼠（无靶序列）→编辑无效（是空白对照）。类比sup-tRNA实验逻辑。</span></div>
+  </div>
+</div>
+
+<!-- ══ 母题精讲 ══ -->
+<div id="page-mothers" class="page">
+  <div class="filter-tabs">
+    <button class="filter-btn active" onclick="filterMQ('all',this)">全部 (2母题)</button>
+    <button class="filter-btn" onclick="filterMQ('s1',this)">子专题1·CRISPR</button>
+    <button class="filter-btn" onclick="filterMQ('s2',this)">子专题2·RNA干扰</button>
+  </div>
+
+  <!-- MQ1: EC-007 -->
+  <div class="mq-card" data-topic="s1">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge s1">子专题1 母题</span>
+      <span class="mq-name">CRISPR/Cas9基因编辑机制·核酸结构综合分析</span>
+      <span class="mq-purity">★ 10/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-007 · (1)(2)(3)(4)(5)(6) · 2026-05-18 · 2020年诺贝尔化学奖</div>
+      <div class="rule-box">核心因果链：sgRNA（向导RNA）碱基互补→引导Cas9核酸内切酶→识别靶DNA特定位点+PAM序列→切割磷酸二酯键→双链断裂→NHEJ（随机修复/敲除）或HDR（模板修复/敲入）→基因永久编辑</div>
+      <div class="chain-label">向导RNA与DNA的异同（高频考点）</div>
+      <div class="signal-chain">
+        <span class="sc-node s1">相同：①元素组成</span><span class="sc-arrow">+</span>
+        <span class="sc-node s1">③磷酸基团</span><span class="sc-arrow">+</span>
+        <span class="sc-node s1">⑥连接方式（磷酸二酯键）</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node">不同：②五碳糖</span><span class="sc-arrow">+</span>
+        <span class="sc-node">④含氮碱基（U/T差异）</span><span class="sc-arrow">+</span>
+        <span class="sc-node">⑤分子结构（单/双链）</span>
+      </div>
+      <div class="mq-note">
+        <strong>核酸种类计数（考点4）：</strong><br>
+        新冠病毒（RNA病毒）：4种碱基(AUCG)、4种核糖核苷酸、1种五碳糖（核糖）→选A；<br>
+        大肠杆菌（有细胞结构，含DNA+RNA）：5种碱基、8种核苷酸、2种五碳糖→B错；<br>
+        酵母菌：5种碱基、8种核苷酸、2种五碳糖→C对；<br>
+        人体细胞：5种碱基、8种核苷酸、2种五碳糖→D错（表中写8种碱基错误）。答案AC。<br><br>
+        <strong>考点(3)核酸分布：</strong>人体肌肉细胞RNA主要（不是全部）在细胞质；肝细胞细胞质（线粒体）含DNA→D正确。<br><br>
+        <strong>考点(6)正误判断：</strong>Cas9含C/H/O/N，向导RNA含C/H/O/N/P，两者都含N（A错）；Cas9由氨基酸脱水缩合，RNA由核苷酸聚合（B错）；Cas9切断磷酸二酯键（C对）；RNA-DNA配对有A-U、T-A等（D错）。
+      </div>
+      <button class="q-trigger" onclick="openDrawer('mq-ec007')"><i class="ti ti-eye"></i>查看完整题干与答案</button>
+    </div>
+  </div>
+
+  <!-- MQ2: EC-202 -->
+  <div class="mq-card" data-topic="s2">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge s2">子专题2 母题</span>
+      <span class="mq-name">miRNA转录后调控·Drosha/Dicer加工·卵巢癌miRNA-183</span>
+      <span class="mq-purity">★ 9/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-202 · (1)(2)(3)(4)(5)(6) · 2026-05-21 · 2024年诺贝尔生理学或医学奖</div>
+      <div class="rule-box s2">核心因果链：miRNA基因→(①)转录→pri-miRNA→Drosha切割→pre-miRNA→Exportin5/核孔→细胞质→Dicer切割→成熟miRNA→RISC复合物→碱基互补识别靶mRNA→(③)翻译抑制或(④)mRNA降解。miRNA-183过表达→p21/p27↓、CyclinD1↑→卵巢癌细胞增殖↑</div>
+      <div class="chain-label">miRNA完整合成流程</div>
+      <div class="signal-chain">
+        <span class="sc-node s2">miRNA基因</span><span class="sc-arrow">→①转录→</span>
+        <span class="sc-node s2">pri-miRNA</span><span class="sc-arrow">→Drosha→</span>
+        <span class="sc-node s2">pre-miRNA</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node">核孔出核</span><span class="sc-arrow">→Dicer→</span>
+        <span class="sc-node s2">成熟miRNA</span><span class="sc-arrow">→RISC→</span>
+        <span class="sc-node s2">靶mRNA沉默</span>
+      </div>
+      <div class="mq-note">
+        <strong>考点(1)：</strong>miRNA基因是DNA→基本单位为脱氧核苷酸；转录需RNA聚合酶；转录特有配对：A-U（DNA的A与RNA的U配对）。<br><br>
+        <strong>考点(2)：</strong>Exportin5通过核孔转运pre-miRNA到细胞质。miRNA对靶mRNA的调控在③翻译抑制（核糖体层面）。<br><br>
+        <strong>考点(3)：</strong>A错—DNA vs RNA差异不止五碳糖，还有碱基T/U；B错—Drosha/Dicer切断磷酸二酯键；C对—RISC-mRNA双链阻断核糖体移动→翻译终止；D对—碱基互补配对保证特异性。选CD。<br><br>
+        <strong>考点(5)实验设计：</strong>miRNA-183过表达→组1增殖最强=②(过表达)；组2中等=①(未处理空白)；组3最弱=③(抑制剂)。<br><br>
+        <strong>考点(6)：</strong>抑制miRNA-183→p21/p27↑（阻断细胞周期）+ CyclinD1↓（降低增殖调节失控）+ 凋亡↑→可治疗卵巢癌。
+      </div>
+      <button class="q-trigger" onclick="openDrawer('mq-ec202')"><i class="ti ti-eye"></i>查看完整题干与答案</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 变式阶梯 ══ -->
+<div id="page-ladder" class="page">
+  <div class="ladder-note">从"基因编辑工具的核酸结构基础"到"miRNA从生物合成到靶向治疗的全链路"，掌握前沿分子干预的完整框架。</div>
+
+  <div class="ladder-section-label"><i class="ti ti-stairs"></i>子专题1 · CRISPR/Cas9</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l0">母题<br>10/10</div>
+      <div class="ladder-card" onclick="openDrawer('mq-ec007')">
+        <div class="ladder-card-name">EC-007 CRISPR/Cas9基因编辑机制</div>
+        <div class="ladder-card-sub">核酸结构基础→向导RNA与DNA异同→CRISPR切割机制→核酸种类计数综合</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ladder-section-label"><i class="ti ti-stairs"></i>子专题2 · RNA干扰</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l0">母题<br>9/10</div>
+      <div class="ladder-card" onclick="openDrawer('mq-ec202')">
+        <div class="ladder-card-name">EC-202 miRNA-183与卵巢癌治疗</div>
+        <div class="ladder-card-sub">miRNA完整合成流程（Drosha→Dicer）→RISC靶向机制→p21/p27/CyclinD1表达→实验设计与治疗方向判断</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 自查清单 ══ -->
+<div id="page-check" class="page">
+  <div class="progress-row">
+    <span style="font-size:13px;color:var(--tx2);">掌握进度</span>
+    <span id="check-count" style="font-size:13px;color:var(--tx2);">0 / 10</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="check-bar"></div></div>
+
+  <div class="checklist" id="checklist">
+    <div class="check-item" onclick="toggleCheck(this,0)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能说明CRISPR/Cas9的工作原理：sgRNA碱基互补配对→引导Cas9→切割靶DNA磷酸二酯键→双链断裂</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,1)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能列举向导RNA与目标DNA的相同点（元素组成、磷酸基团、磷酸二酯键连接）和不同点（五碳糖、碱基T/U、单/双链结构）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,2)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能正确计算各类生物的碱基/核苷酸/五碳糖种类（RNA病毒4/4/1；有细胞结构生物5/8/2）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,3)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能说出RNA-DNA杂合碱基配对规则：A(DNA)-U(RNA)、T(DNA)-A(RNA)、C-G、G-C（不是A-T）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,4)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能描述miRNA的完整合成流程：miRNA基因→转录→pri-miRNA→Drosha→pre-miRNA→核孔出核→Dicer→成熟miRNA</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,5)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能说明miRNA对靶基因的两种调控方式：③RISC+mRNA→核糖体阻断→翻译抑制；④mRNA降解——均属转录后调控</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,6)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能区分Drosha/Dicer的作用：均切割RNA的磷酸二酯键（不是氢键），逐步加工成熟miRNA</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,7)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能解释miRNA-183卵巢癌实验的设计逻辑：过表达组→增殖最强；未处理空白→中等；抑制剂组→增殖最弱</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,8)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能解释miRNA-183促癌机制：↓p21/p27（阻断细胞周期蛋白）+↑CyclinD1（增殖失控）→卵巢癌细胞增殖加速</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,9)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能比较CRISPR（DNA层面、永久、可能脱靶）与RNA干扰（RNA层面、可逆、靶向mRNA）的区别</div>
+    </div>
+  </div>
+
+  <div class="action-row">
+    <button class="action-btn" onclick="checkAll()">全部勾选</button>
+    <button class="action-btn" onclick="clearAll()">清空重来</button>
+  </div>
+</div>
+
+</div><!-- .app -->
+
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <span class="drawer-badge" id="drawer-badge"></span>
+    <span class="drawer-title" id="drawer-title"></span>
+    <button class="drawer-close" onclick="closeDrawer()"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="drawer-ec-ref"><i class="ti ti-database"></i><span id="drawer-ref"></span></div>
+    <div class="drawer-stem" id="drawer-stem"></div>
+    <div class="drawer-sub" id="drawer-focus">
+      <div class="drawer-sub-label">解题关注点</div>
+      <div id="drawer-focus-text"></div>
+    </div>
+    <div class="drawer-answer" id="drawer-answer">
+      <div class="drawer-answer-label">参考答案</div>
+      <div id="drawer-answer-text"></div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="drawer-btn" onclick="toggleAnswer()">显示 / 隐藏答案</button>
+    <button class="drawer-btn primary" onclick="closeDrawer()">关闭</button>
+  </div>
+</div>
+
+<div class="lb-overlay" id="lb-overlay" onclick="closeLightbox()">
+  <button class="lb-close" onclick="closeLightbox()" aria-label="关闭">&#x2715;</button>
+  <img class="lb-img" id="lb-img" src="" alt="">
+</div>
+
+<script>
+const QUESTIONS = {
+  'mq-ec007': {
+    badge: '子专题1 母题',
+    badgeStyle: 'background:var(--accent-l);color:var(--accent-d);',
+    name: 'EC-007 CRISPR/Cas9基因编辑机制与核酸结构分析',
+    ref: 'EC-20260518-007 · 组成细胞的分子·综合题 · 2020诺贝尔化学奖',
+    stem: `2020年诺贝尔化学奖授予两位科学家，表彰她们在基因编辑领域的贡献。CRISPR/Cas9基因剪刀可以极高精度编辑DNA。
+
+(1) 图甲所示核苷酸（含核糖和腺嘌呤）的名称是________，是构成________（中文名称）的原料。
+
+(2) 图乙核苷酸链中，1号位（脱氧核糖）和2号位（胞嘧啶）的名称分别是________、________。一般由2条图乙所示核苷酸链构成一个________分子。
+
+(3) 关于DNA和RNA，下列说法正确的是________
+A．人体肌肉细胞中的RNA都分布在细胞质中
+B．人体肌肉细胞中的DNA都分布在细胞核中
+C．人体所有细胞中都有DNA
+D．人体肝细胞的细胞质中也有DNA分子
+
+(4) 不同生物含有的核酸种类不同。下列关于各种生物碱基、核苷酸、五碳糖种类的描述，正确的是________
+A. 新冠病毒（RNA病毒）：碱基4种、核苷酸4种、五碳糖1种
+B. 大肠杆菌：碱基4种、核苷酸4种、五碳糖1种
+C. 酵母菌：碱基5种、核苷酸8种、五碳糖2种
+D. 人体细胞：碱基8种、核苷酸8种、五碳糖2种
+
+(5) 向导RNA与目标DNA相同之处是________；不同之处是________。（编号选填）
+①元素组成 ②五碳糖 ③磷酸基团 ④含氮碱基 ⑤分子结构 ⑥基本组成单位的连接方式
+
+(6) 关于CRISPR/Cas9系统，下列叙述正确的是________
+A．Cas9蛋白含C、H、O，向导RNA含C、H、O、N、P，Cas9蛋白不含N
+B．Cas9蛋白和向导RNA均由若干个单体脱水缩合连接而成
+C．Cas9蛋白可以断裂DNA分子中的磷酸二酯键
+D．向导RNA与目标DNA结合的碱基互补配对方式仅有A-T、C-G`,
+    focus: `关键①：图甲含核糖+腺嘌呤→腺嘌呤核糖核苷酸→RNA的原料
+关键②：图乙含脱氧核糖（1）+胞嘧啶（2）→DNA分子
+关键③：RNA主要（非全部）在细胞质；DNA主要（非全部）在细胞核；成熟红细胞无DNA（C错）；线粒体含DNA（D对）→选D
+关键④：RNA病毒→只含RNA→4种碱基/4种核苷酸/1种五碳糖（A对）；有细胞结构→含DNA+RNA→5种碱基/8种核苷酸/2种五碳糖（C对）→选AC
+关键⑤：RNA与DNA相同①③⑥；不同②④⑤
+关键⑥：A错（Cas9也含N）；B错（RNA由核苷酸聚合，不是脱水缩合，氨基酸才是脱水缩合）；C对（Cas9切磷酸二酯键）；D错（RNA-DNA配对有A-U/T-A/C-G/G-C）→选C`,
+    answer: `(1) 腺嘌呤核糖核苷酸；核糖核酸（RNA）
+(2) 脱氧核糖；胞嘧啶；DNA
+(3) D
+(4) AC
+(5) 相同：①③⑥；不同：②④⑤
+(6) C`
+  },
+  'mq-ec202': {
+    badge: '子专题2 母题',
+    badgeStyle: 'background:var(--teal-l);color:var(--teal-d);',
+    name: 'EC-202 miRNA转录后基因调控·miRNA-183卵巢癌标志物',
+    ref: 'EC-20260521-202 · 遗传与进化 · 2024诺贝尔生理学或医学奖',
+    stem: `2024年诺贝尔生理学或医学奖因"发现microRNA及转录后基因调控功能"颁发。miRNA一般为长约22核苷酸的真核生物内源非编码RNA。miRNA在细胞中产生及发挥调控的过程：
+
+①miRNA基因→转录(Pol-II)→pri-miRNA→Drosha→pre-miRNA→Exportin5/核孔→细胞质→Dicer→成熟miRNA→RISC复合物→③翻译抑制 或 ④mRNA降解
+
+(1) miRNA基因的基本组成单位是_____，①过程需要_______酶。与DNA复制相比较，①过程特有的碱基互补配对形式是______。
+
+(2) Exportin5的功能是将前导miRNA通过______（填结构名称）转运到细胞质。miRNA对靶基因的表达调控发生在____（③还是④，编号选填）翻译阶段。
+
+(3) 以下相关叙述正确的是______
+A．miRNA基因与miRNA在化学构成上的差异仅限于五碳糖的种类
+B．据图推测，Drosha和Dicer的功能都是催化氢键的断裂
+C．图中③过程会导致翻译终止，原因是RISC复合体干扰了核糖体在mRNA上的移动
+D．图中④过程RISC复合体会导致结合的mRNA降解，这一过程的特异性依赖于碱基互补配对
+
+(4) 研究者评估了卵巢癌患者与健康女性血浆中两种miRNA（miR-200c和miR-141）的水平，结果显示卵巢癌患者两种miRNA含量均显著高于健康组（*p<0.05）。这两种miRNA____（"是"或"否"）有作为卵巢癌标志物的潜力，理由____。
+
+(5) 已知miRNA-183过表达可显著促进卵巢癌细胞增殖。增殖实验3组处理（增殖从强到弱）：
+组1：______  组2：______  组3：______
+①未经转染的卵巢癌细胞  ②用miRNA-183过表达转染  ③用miRNA-183抑制剂转染
+
+(6) 蛋白质检测显示：抑制miRNA-183后，p21/p27蛋白升高，CyclinD1蛋白降低，凋亡增加。请判断，抑制miRNA-183的表达是否可以成为治疗卵巢癌的新方向，并说明理由______。`,
+    focus: `关键①：miRNA基因是DNA片段→脱氧核苷酸；①转录→RNA聚合酶；转录特有配对：A(DNA)-U(RNA)（复制是A-T/T-A）
+关键②：核孔（Exportin5通过核孔转运）；调控发生在③翻译层面（RISC在细胞质与核糖体上作用）
+关键③：A错（DNA vs RNA差异包括五碳糖+碱基T/U）；B错（Drosha/Dicer切磷酸二酯键不是氢键）；C对（RISC-mRNA复合体阻断核糖体移动→翻译终止）；D对（碱基互补配对保证特异性）→选CD
+关键④："是"；理由：卵巢癌患者两种miRNA均显著高于健康组→可区分患者与正常人→有标志物潜力
+关键⑤：miRNA-183过表达促增殖→组1最强=②；未处理空白→中等=①；抑制剂抑制增殖→最弱=③
+关键⑥："是"；抑制miRNA-183→p21/p27升高（阻断细胞周期进程）→CyclinD1降低（抑制增殖失控）→凋亡增加→卵巢癌细胞增殖受抑→可作为治疗方向`,
+    answer: `(1) 脱氧核糖核苷酸；RNA聚合酶；A-U（腺嘌呤-尿嘧啶）
+(2) 核孔；③
+(3) CD
+(4) 是；卵巢癌患者血浆中miR-200c和miR-141水平均显著高于健康对照组，可作为区分卵巢癌患者与健康人的指标
+(5) 组1：②（miRNA-183过表达）；组2：①（未处理空白）；组3：③（miRNA-183抑制剂）
+(6) 是。抑制miRNA-183表达后：①p21、p27蛋白升高→阻断细胞周期进程；②CyclinD1蛋白降低→抑制增殖失控；③细胞凋亡增加→共同导致卵巢癌细胞增殖受到抑制，因此可以成为治疗卵巢癌的新方向`
+  }
+};
+
+function switchTab(tab, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + tab).classList.add('active');
+  btn.classList.add('active');
+}
+function toggleMQ(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.mq-chevron');
+  body.classList.toggle('open');
+  chevron.classList.toggle('open');
+}
+function filterMQ(topic, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.mq-card').forEach(card => {
+    card.style.display = (topic === 'all' || card.dataset.topic === topic) ? '' : 'none';
+  });
+}
+function openDrawer(id) {
+  const q = QUESTIONS[id];
+  if (!q) return;
+  document.getElementById('drawer-badge').textContent = q.badge;
+  document.getElementById('drawer-badge').style.cssText = q.badgeStyle;
+  document.getElementById('drawer-title').textContent = q.name;
+  document.getElementById('drawer-ref').textContent = q.ref;
+  document.getElementById('drawer-stem').textContent = q.stem;
+  document.getElementById('drawer-focus-text').textContent = q.focus;
+  document.getElementById('drawer-answer-text').textContent = q.answer;
+  document.getElementById('drawer-answer').classList.remove('show');
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawer-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeDrawer() {
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('drawer-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function toggleAnswer() {
+  document.getElementById('drawer-answer').classList.toggle('show');
+}
+function openLightbox(src, alt) {
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lb-img').alt = alt || '';
+  document.getElementById('lb-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lb-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('lb-img').addEventListener('click', e => e.stopPropagation());
+
+const STORAGE_KEY = 'T01_M4_checks';
+const TOTAL = 10;
+function loadChecks() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch(e) { return []; } }
+function saveChecks(arr) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)); } catch(e) {} }
+function updateProgress() {
+  const done = document.querySelectorAll('.check-item.done').length;
+  document.getElementById('check-count').textContent = done + ' / ' + TOTAL;
+  document.getElementById('check-bar').style.width = (done / TOTAL * 100) + '%';
+}
+function toggleCheck(item, idx) {
+  item.classList.toggle('done');
+  const arr = loadChecks(); arr[idx] = item.classList.contains('done'); saveChecks(arr); updateProgress();
+}
+function checkAll() {
+  const arr = [];
+  document.querySelectorAll('.check-item').forEach((item, i) => { item.classList.add('done'); arr[i] = true; });
+  saveChecks(arr); updateProgress();
+}
+function clearAll() {
+  const arr = [];
+  document.querySelectorAll('.check-item').forEach((item, i) => { item.classList.remove('done'); arr[i] = false; });
+  saveChecks(arr); updateProgress();
+}
+(function() {
+  const arr = loadChecks();
+  document.querySelectorAll('.check-item').forEach((item, i) => { if (arr[i]) item.classList.add('done'); });
+  updateProgress();
+})();
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (document.getElementById('lb-overlay').classList.contains('open')) closeLightbox();
+    else if (document.getElementById('drawer').classList.contains('open')) closeDrawer();
+  }
+});
+</script>
+</body>
+</html>

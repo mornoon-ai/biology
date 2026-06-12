@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T05_M4 · 植物激素与生长调控</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent:#639922; --accent-l:#EAF3DE; --accent-m:#9DC95C; --accent-d:#27500A;
+  --teal:#0F6E56; --teal-l:#E1F5EE; --teal-d:#085041;
+  --amber:#BA7517; --accent-d2:#27500A; --amber-l:#FAEEDA; --amber-d:#633806;
+  --coral:#993C1D; --coral-l:#FAECE7; --coral-d:#712B13;
+  --blue:#185FA5; --blue-l:#E6F1FB; --blue-d:#0C447C;
+  --bg:#ffffff; --bg2:#f7f7f5; --bg3:#f1efe8;
+  --tx:#1a1a18; --tx2:#5f5e5a; --tx3:#888780;
+  --bd:rgba(0,0,0,0.10); --bd2:rgba(0,0,0,0.18);
+  --r-sm:6px; --r-md:8px; --r-lg:12px; --r-xl:16px;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+}
+@media(prefers-color-scheme:dark){
+  :root{--bg:#1c1c1a;--bg2:#252523;--bg3:#2c2c2a;--tx:#f0efea;--tx2:#b4b2a9;--tx3:#888780;--bd:rgba(255,255,255,0.09);--bd2:rgba(255,255,255,0.16);--accent-l:#173404;--accent-d:#C0DD97;--accent-d2:#C0DD97;--teal-l:#04342C;--teal-d:#9FE1CB;--amber-l:#412402;--amber-d:#FAC775;--coral-l:#4A1B0C;--coral-d:#F5C4B3;--blue-l:#042C53;--blue-d:#B5D4F4;}
+}
+body{font-family:var(--font);font-size:15px;line-height:1.6;color:var(--tx);background:var(--bg3);min-height:100vh;}
+.app{max-width:800px;margin:0 auto;background:var(--bg);min-height:100vh;}
+.site-header{padding:1.25rem 1.5rem 0;background:var(--bg);border-bottom:0.5px solid var(--bd);position:sticky;top:0;z-index:20;}
+.header-top{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.header-icon{background:var(--accent-l);border-radius:var(--r-md);padding:6px 8px;display:flex;align-items:center;justify-content:center;}
+.header-icon i{font-size:20px;color:var(--accent);}
+.header-meta{font-size:12px;color:var(--tx3);}
+.header-title{font-size:17px;font-weight:500;color:var(--tx);}
+.header-id{margin-left:auto;font-size:11px;color:var(--tx3);background:var(--bg2);padding:3px 9px;border-radius:var(--r-sm);}
+.nav-tabs{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.nav-tab{padding:.6rem 1.1rem;font-size:13px;color:var(--tx2);cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;font-family:var(--font);white-space:nowrap;transition:color .15s,border-color .15s;}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500;}
+.nav-tab:hover:not(.active){color:var(--tx);}
+.page{display:none;padding:1.5rem;}
+.page.active{display:block;}
+.memory-section{margin-bottom:1.5rem;}
+.memory-card{border:0.5px solid var(--bd);border-radius:var(--r-xl);overflow:hidden;background:var(--bg);}
+.memory-img{width:100%;display:block;max-height:300px;object-fit:contain;background:var(--bg3);cursor:zoom-in;transition:opacity .15s;}
+.memory-img:hover{opacity:.9;}
+.memory-footer{padding:.85rem 1rem;display:flex;align-items:center;gap:10px;border-top:0.5px solid var(--bd);}
+.memory-label{font-size:13px;font-weight:500;color:var(--tx);flex:1;}
+audio{height:32px;width:220px;}
+.lb-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:200;display:none;align-items:center;justify-content:center;cursor:zoom-out;}
+.lb-overlay.open{display:flex;}
+.lb-img{max-width:92vw;max-height:92vh;object-fit:contain;border-radius:var(--r-md);}
+.lb-close{position:fixed;top:16px;right:20px;background:none;border:none;color:#fff;font-size:28px;cursor:pointer;opacity:.7;}
+.lb-close:hover{opacity:1;}
+.section-title{font-size:13px;font-weight:500;color:var(--tx2);display:flex;align-items:center;gap:7px;margin-bottom:1rem;text-transform:uppercase;letter-spacing:.04em;}
+.section-divider{height:0.5px;background:var(--bd);margin:1.5rem 0;}
+.signal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:1.5rem;}
+.signal-card{background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;}
+.signal-label{font-size:11px;color:var(--tx3);letter-spacing:.04em;margin-bottom:.4rem;text-transform:uppercase;}
+.signal-tag{font-size:13px;color:var(--tx);margin-bottom:3px;}
+.mode-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:1.5rem;}
+.mode-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.85rem 1rem;border-left-width:3px;}
+.mode-card-label{font-size:11px;font-weight:500;margin-bottom:.3rem;}
+.mode-card-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.trap-list{display:flex;flex-direction:column;gap:7px;}
+.trap-item{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.55;}
+.trap-icon{color:#E24B4A;font-size:15px;flex-shrink:0;margin-top:1px;}
+.filter-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem;}
+.filter-btn{padding:5px 13px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx2);font-family:var(--font);transition:all .15s;}
+.filter-btn.active{background:var(--accent-l);color:var(--accent-d2);border-color:var(--accent-m);font-weight:500;}
+.mq-card{border:0.5px solid var(--bd);border-radius:var(--r-lg);background:var(--bg);margin-bottom:.85rem;overflow:hidden;}
+.mq-header{padding:.9rem 1.1rem;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;transition:background .15s;}
+.mq-header:hover{background:var(--bg2);}
+.mq-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);white-space:nowrap;}
+.mq-badge.auxin{background:var(--accent-l);color:var(--accent-d2);}
+.mq-badge.gibberellin{background:var(--teal-l);color:var(--teal-d);}
+.mq-badge.aba{background:var(--amber-l);color:var(--amber-d);}
+.mq-badge.ethylene{background:var(--coral-l);color:var(--coral-d);}
+.mq-name{font-size:14px;font-weight:500;color:var(--tx);flex:1;}
+.mq-purity{font-size:12px;color:var(--tx3);flex-shrink:0;}
+.mq-chevron{color:var(--tx3);font-size:16px;transition:transform .2s;flex-shrink:0;}
+.mq-chevron.open{transform:rotate(180deg);}
+.mq-body{display:none;padding:.75rem 1.1rem 1.1rem;border-top:0.5px solid var(--bd);}
+.mq-body.open{display:block;}
+.mq-source{font-size:12px;color:var(--tx3);margin-bottom:.65rem;}
+.rule-box{background:var(--accent-l);border-left:3px solid var(--accent);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:.65rem .9rem;font-size:13px;color:var(--accent-d2);margin:.75rem 0;line-height:1.65;}
+.chain-label{font-size:12px;font-weight:500;color:var(--tx2);margin:.75rem 0 .4rem;text-transform:uppercase;letter-spacing:.04em;}
+.signal-chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:6px;}
+.sc-node{background:var(--bg2);border-radius:var(--r-sm);padding:3px 9px;font-size:13px;color:var(--tx);}
+.sc-node.auxin{background:var(--accent-l);color:var(--accent-d2);}
+.sc-node.gibberellin{background:var(--teal-l);color:var(--teal-d);}
+.sc-node.aba{background:var(--amber-l);color:var(--amber-d);}
+.sc-node.ethylene{background:var(--coral-l);color:var(--coral-d);}
+.sc-arrow{color:var(--tx3);font-size:13px;}
+.mq-note{font-size:13px;color:var(--tx2);margin-top:.75rem;line-height:1.6;}
+.q-trigger{display:inline-flex;align-items:center;gap:5px;margin-top:.75rem;padding:6px 12px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;color:var(--tx2);cursor:pointer;font-family:var(--font);transition:all .15s;}
+.q-trigger:hover{background:var(--bg2);color:var(--tx);}
+.q-trigger i{font-size:14px;}
+.ladder-section-label{font-size:13px;font-weight:500;color:var(--tx2);margin-bottom:.85rem;display:flex;align-items:center;gap:7px;}
+.ladder-rows{display:flex;flex-direction:column;gap:8px;margin-bottom:1rem;}
+.ladder-row{display:grid;grid-template-columns:64px 1fr;gap:10px;align-items:start;}
+.ladder-level{font-size:11px;font-weight:500;padding:6px 4px;border-radius:var(--r-sm);text-align:center;line-height:1.4;}
+.l1{background:var(--teal-l);color:var(--teal-d);}
+.l2{background:var(--accent-l);color:var(--accent-d2);}
+.l3{background:var(--amber-l);color:var(--amber-d);}
+.ladder-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.65rem .9rem;background:var(--bg);}
+.ladder-card-name{font-size:13px;font-weight:500;color:var(--tx);}
+.ladder-card-sub{font-size:12px;color:var(--tx3);margin-top:3px;line-height:1.5;}
+.ladder-note{background:var(--bg2);border-radius:var(--r-md);padding:.65rem .9rem;font-size:12px;color:var(--tx2);margin-bottom:1rem;line-height:1.55;}
+.progress-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem;}
+.progress-bar{height:5px;border-radius:3px;background:var(--bg2);margin-bottom:1.25rem;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;background:var(--accent);width:0%;transition:width .3s;}
+.checklist{display:flex;flex-direction:column;gap:7px;}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:.7rem .9rem;border:0.5px solid var(--bd);border-radius:var(--r-md);background:var(--bg);cursor:pointer;transition:background .15s;}
+.check-item.done{background:var(--bg2);}
+.check-box{width:18px;height:18px;border:1.5px solid var(--bd2);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .15s;}
+.check-item.done .check-box{background:var(--accent);border-color:var(--accent);}
+.check-box i{font-size:11px;color:#fff;display:none;}
+.check-item.done .check-box i{display:block;}
+.check-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.check-item.done .check-text{color:var(--tx3);text-decoration:line-through;}
+.action-row{margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:8px;}
+.action-btn{padding:7px 14px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.action-btn:hover{background:var(--bg2);}
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s;}
+.drawer-overlay.open{opacity:1;pointer-events:all;}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100vw);background:var(--bg);z-index:101;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden;}
+.drawer.open{transform:translateX(0);}
+.drawer-header{padding:1rem 1.25rem;border-bottom:0.5px solid var(--bd);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.drawer-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);}
+.drawer-title{font-size:14px;font-weight:500;color:var(--tx);flex:1;line-height:1.4;}
+.drawer-close{background:none;border:none;cursor:pointer;color:var(--tx2);padding:4px;border-radius:var(--r-sm);display:flex;align-items:center;transition:background .15s;}
+.drawer-close:hover{background:var(--bg2);}
+.drawer-body{flex:1;overflow-y:auto;padding:1.25rem;}
+.drawer-ec-ref{font-size:12px;color:var(--tx3);margin-bottom:1rem;display:flex;align-items:center;gap:6px;}
+.drawer-stem{font-size:14px;color:var(--tx);line-height:1.75;white-space:pre-wrap;}
+.drawer-sub{font-size:13px;color:var(--tx2);background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:1rem;line-height:1.65;}
+.drawer-sub-label{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-answer{font-size:13px;color:var(--tx);background:var(--accent-l);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:.75rem;line-height:1.65;display:none;}
+.drawer-answer.show{display:block;}
+.drawer-answer-label{font-size:11px;font-weight:500;color:var(--accent-d2);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-footer{padding:.85rem 1.25rem;border-top:0.5px solid var(--bd);display:flex;gap:8px;flex-shrink:0;}
+.drawer-btn{flex:1;padding:8px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.drawer-btn:hover{background:var(--bg2);}
+.drawer-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+.drawer-btn.primary:hover{background:var(--accent-d);}
+@media(max-width:600px){.site-header{padding:1rem 1rem 0;}.page{padding:1rem;}.header-title{font-size:15px;}.mode-grid{grid-template-columns:1fr 1fr;}.ladder-row{grid-template-columns:52px 1fr;gap:8px;}.action-row{flex-direction:column;}.action-btn{width:100%;text-align:center;}.drawer{width:100vw;}audio{width:160px;}}
+@media(max-width:380px){.mode-grid,.signal-grid{grid-template-columns:1fr;}}
+
+.back-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;font-size:12px;color:var(--tx2);background:var(--bg2);border:0.5px solid var(--bd2);border-radius:var(--r-md);text-decoration:none;font-family:var(--font);transition:background .15s,color .15s;white-space:nowrap;flex-shrink:0;}
+.back-btn:hover{background:var(--bg3);color:var(--tx);}
+.back-btn i{font-size:14px;}
+.memory-video{width:100%;max-height:220px;display:block;border-radius:var(--r-md);background:#000;margin-top:8px;}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="site-header">
+  <div class="header-top">
+    <div class="header-icon"><i class="ti ti-leaf" aria-hidden="true"></i></div>
+    <div>
+      <div class="header-meta">05 植物生理 · M4 植物激素</div>
+      <div class="header-title">植物激素与生长调控</div>
+    </div>
+    <a class="back-btn" href="index.html" aria-label="返回首页"><i class="ti ti-arrow-left"></i> 首页</a>
+    <div class="header-id">T05_M4</div>
+  </div>
+  <nav class="nav-tabs" role="tablist">
+    <button class="nav-tab active" role="tab" onclick="switchTab('overview',this)">概览</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('mothers',this)">母题精讲</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('ladder',this)">变式阶梯</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('self',this)">自查清单</button>
+  </nav>
+</header>
+
+<div id="tab-overview" class="page active" role="tabpanel">
+  <div class="memory-section">
+    <div class="memory-card">
+      <img class="memory-img" src="记忆卡/T05_M4_memory.png" alt="植物激素与生长调控记忆卡" onclick="openLightbox(this.src,this.alt)" onerror="this.style.display='none'">
+      <div class="memory-footer">
+        <div>
+          <div class="memory-label">记忆卡 · 五大植物激素功能对比与两重性分析框架</div>
+          <div style="font-size:12px;color:var(--tx3);">点击图片可放大</div>
+        </div>
+        <video class="memory-video" controls controlsList="nodownload" preload="metadata" style="display:none">
+          <source src="audio/T05_M4.mp4" type="video/mp4">
+        </video>
+          <div class="audio-placeholder" style="display:flex"><i class="ti ti-video-off"></i>视频待放入</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title"><i class="ti ti-scan" aria-hidden="true"></i> 触发信号速查</div>
+  <div class="signal-grid">
+    <div class="signal-card">
+      <div class="signal-label">图像信号</div>
+      <div class="signal-tag">生长素浓度-效果曲线（两重性）</div>
+      <div class="signal-tag">弯曲生长示意图（向光性）</div>
+      <div class="signal-tag">顶端优势示意图</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">文字信号</div>
+      <div class="signal-tag">生长素 / IAA / 两重性 / 极性运输</div>
+      <div class="signal-tag">赤霉素（GA）/ 节间伸长 / 矮生植物</div>
+      <div class="signal-tag">脱落酸（ABA）/ 种子休眠 / 气孔关闭</div>
+      <div class="signal-tag">乙烯 / 果实成熟 / 浓度效应</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">任务关键词</div>
+      <div class="signal-tag">判断激素类型（由效应推激素）</div>
+      <div class="signal-tag">解释两重性（低促高抑）的原理</div>
+      <div class="signal-tag">分析极性运输与非极性运输</div>
+    </div>
+  </div>
+
+  <div class="section-title"><i class="ti ti-arrow-fork" aria-hidden="true"></i> 核心概念 · 四类激素调控</div>
+  <div class="mode-grid">
+    <div class="mode-card" style="border-left-color:var(--accent);">
+      <div class="mode-card-label" style="color:var(--accent-d2);">生长素（IAA）两重性</div>
+      <div class="mode-card-text">低浓度促进生长，高浓度抑制生长；根&lt;芽&lt;茎对生长素的敏感性（根最敏感）；极性运输（形态学上端→下端，主动运输）；横向运输在弯曲部位。</div>
+    </div>
+    <div class="mode-card" style="border-left-color:var(--teal);">
+      <div class="mode-card-label" style="color:var(--teal-d);">赤霉素（GA）</div>
+      <div class="mode-card-text">促进细胞伸长（节间）→茎秆增高；促进种子萌发和果实发育；外施GA→矮生植物变高（可替代正常高度基因功能）；赤霉素缺乏→矮生表型。</div>
+    </div>
+    <div class="mode-card" style="border-left-color:var(--amber);">
+      <div class="mode-card-label" style="color:var(--amber-d);">脱落酸（ABA）</div>
+      <div class="mode-card-text">抑制生长、促进脱落和种子休眠；干旱→ABA↑→气孔关闭→减少水分散失；种子成熟时ABA积累→休眠；与赤霉素拮抗（GA促萌发、ABA抑萌发）。</div>
+    </div>
+    <div class="mode-card" style="border-left-color:var(--coral);">
+      <div class="mode-card-label" style="color:var(--coral-d);">乙烯</div>
+      <div class="mode-card-text">气体激素；促进果实成熟（催熟）；抑制细胞伸长（高浓度）；乙烯合成在果实成熟过程中正反馈加速；外施乙烯或与成熟果实同放→催熟未熟果实。</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-alert-triangle" aria-hidden="true"></i> 高频陷阱（5 个）</div>
+  <div class="trap-list">
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon"></i><div>生长素两重性的"高浓度抑制"是<strong>相对的</strong>——对茎来说是促进的浓度，对根来说可能已经是高浓度抑制了；不能脱离靶器官单独判断高低浓度效果</div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon"></i><div>极性运输是<strong>主动运输</strong>（需要载体蛋白和能量），方向固定为形态学上端→下端；而横向运输（侧方光照引起）是被动的，属于横向不均等分布，两者机制不同</div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon"></i><div>顶端优势中，顶芽<strong>产生的生长素</strong>向下运输积累到侧芽处→侧芽处生长素浓度过高→侧芽受抑制；去除顶芽后侧芽处浓度降低→侧芽萌发。不能说顶芽"分泌抑制激素"</div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon"></i><div>植物激素不是蛋白质（脱落酸是萜类化合物，生长素是吲哚乙酸，乙烯是气体），<strong>不能用蛋白质变性或高温破坏来消除其活性</strong>——这是考查化学本质的常见陷阱</div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon"></i><div>赤霉素和生长素都能促进果实发育（无子果实形成），但机制不同：赤霉素主要促进细胞体积增大；生长素促进子房发育；<strong>两者协同但不能互相替代所有功能</strong></div></div>
+  </div>
+</div>
+
+<div id="tab-mothers" class="page" role="tabpanel">
+  <div class="filter-tabs" role="group">
+    <button class="filter-btn active" onclick="filterMode('all',this)">全部（4 类）</button>
+    <button class="filter-btn" onclick="filterMode('auxin',this)">生长素</button>
+    <button class="filter-btn" onclick="filterMode('gibberellin',this)">赤霉素</button>
+    <button class="filter-btn" onclick="filterMode('aba',this)">脱落酸</button>
+    <button class="filter-btn" onclick="filterMode('ethylene',this)">乙烯</button>
+  </div>
+
+  <div class="mq-card" data-mode="auxin">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge auxin">生长素</span>
+      <span class="mq-name">生长素两重性——浓度-效果曲线的三个关键点解读与顶端优势</span>
+      <span class="mq-purity">10/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-480 · 子问题 (1)(2)(3)</div>
+      <div class="rule-box">核心信号：题目出现"生长素浓度-效果坐标图"或询问"高浓度生长素对某器官的效果"，或分析顶端优势的原理。需辨析根、芽、茎对生长素敏感性的差异及两重性表现。</div>
+      <div class="chain-label">浓度-效果曲线三个关键坐标点</div>
+      <div class="signal-chain"><span class="sc-node">促进最大点（最适浓度）</span><span class="sc-arrow">：</span><span class="sc-node auxin">效果曲线顶点；根&lt;芽&lt;茎最适浓度依次升高</span></div>
+      <div class="signal-chain"><span class="sc-node">零效果点（既不促进也不抑制）</span><span class="sc-arrow">：</span><span class="sc-node auxin">曲线与X轴交点；高于此点→开始抑制</span></div>
+      <div class="signal-chain"><span class="sc-node">最高浓度（强烈抑制）</span><span class="sc-arrow">：</span><span class="sc-node">远高于最适浓度→与最大抑制效果对应</span></div>
+      <div class="chain-label">顶端优势机制</div>
+      <div class="signal-chain"><span class="sc-node">顶芽合成IAA</span><span class="sc-arrow">→</span><span class="sc-node auxin">极性运输到侧芽</span><span class="sc-arrow">→</span><span class="sc-node auxin">侧芽IAA浓度高（超最适）→侧芽受抑制 ✓</span></div>
+      <div class="signal-chain"><span class="sc-node">摘除顶芽</span><span class="sc-arrow">→</span><span class="sc-node">侧芽IAA浓度降低到促进范围</span><span class="sc-arrow">→</span><span class="sc-node auxin">侧芽萌发→分枝增多</span></div>
+      <p class="mq-note">根对生长素最敏感（最适浓度约10⁻¹⁰mol/L），茎最不敏感（约10⁻⁶mol/L）。根的弯曲生长：向光侧IAA少→促进较弱；背光侧IAA多→促进较强→根弯向光侧（向地弯曲）。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec480')"><i class="ti ti-file-text"></i> 查看完整题干</button>
+    </div>
+  </div>
+
+  <div class="mq-card" data-mode="gibberellin">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge gibberellin">赤霉素</span>
+      <span class="mq-name">赤霉素促进节间伸长与矮生植物突变体实验分析</span>
+      <span class="mq-purity">10/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-485 · 子问题 (1)(2)</div>
+      <div class="rule-box">核心信号：题目提供"矮生植物突变体"或"外施赤霉素后植物变高"的实验，要求判断突变的原因（赤霉素合成缺陷 vs 受体缺陷）以及赤霉素的作用靶点。</div>
+      <div class="chain-label">赤霉素作用机制</div>
+      <div class="signal-chain"><span class="sc-node">赤霉素合成</span><span class="sc-arrow">→</span><span class="sc-node gibberellin">与细胞受体结合</span><span class="sc-arrow">→</span><span class="sc-node gibberellin">促进细胞纵向伸长（节间）→茎秆增高 ✓</span></div>
+      <div class="signal-chain"><span class="sc-node">赤霉素还促进</span><span class="sc-arrow">：</span><span class="sc-node gibberellin">种子萌发（解除休眠）</span><span class="sc-arrow">+</span><span class="sc-node gibberellin">果实发育（无子果实）</span></div>
+      <div class="chain-label">矮生突变体实验判断</div>
+      <div class="signal-chain"><span class="sc-node">外施赤霉素→植物变高</span><span class="sc-arrow">→</span><span class="sc-node gibberellin">突变为赤霉素合成缺陷（受体正常）✓</span></div>
+      <div class="signal-chain"><span class="sc-node">外施赤霉素→植物仍矮</span><span class="sc-arrow">→</span><span class="sc-node">突变为赤霉素受体缺陷（无法响应激素）</span></div>
+      <p class="mq-note">赤霉素与生长素协同促进茎的生长：生长素促进细胞分裂（分裂素），赤霉素促进细胞伸长，两者协同作用远大于单独作用。这是激素协同作用的典型考点。另：外施赤霉素处理大麦种子→α-淀粉酶分泌增加→淀粉水解→为萌发提供能量，是萌发激素调控的重要机制。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec485')"><i class="ti ti-file-text"></i> 查看完整题干</button>
+    </div>
+  </div>
+
+  <div class="mq-card" data-mode="aba">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge aba">脱落酸</span>
+      <span class="mq-name">ABA促进种子休眠与干旱胁迫下气孔调节的信号通路分析</span>
+      <span class="mq-purity">9/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-490 · 子问题 (1)(2)(3)</div>
+      <div class="rule-box">核心信号：题目提供"干旱→ABA→气孔关闭"信号链，或要求分析种子休眠/萌发中ABA与GA的拮抗关系，或提供ABA受体突变体实验数据。</div>
+      <div class="chain-label">ABA双重调控功能</div>
+      <div class="signal-chain"><span class="sc-node">种子成熟期</span><span class="sc-arrow">：</span><span class="sc-node aba">ABA积累→抑制萌发→种子进入休眠</span></div>
+      <div class="signal-chain"><span class="sc-node">种子萌发期</span><span class="sc-arrow">：</span><span class="sc-node aba">GA↑拮抗ABA↓→解除休眠→萌发启动 ✓</span></div>
+      <div class="signal-chain"><span class="sc-node">干旱胁迫</span><span class="sc-arrow">→</span><span class="sc-node aba">叶片ABA合成↑→保卫细胞K⁺外流→气孔关闭→减少蒸腾 ✓</span></div>
+      <div class="chain-label">ABA受体突变体分析（实验常考）</div>
+      <div class="signal-chain"><span class="sc-node">ABA受体功能缺失突变体</span><span class="sc-arrow">→</span><span class="sc-node">无法感受ABA信号</span><span class="sc-arrow">→</span><span class="sc-node aba">干旱下气孔不关闭→植物萎蔫 ✓</span></div>
+      <div class="signal-chain"><span class="sc-node">ABA受体功能增益突变体</span><span class="sc-arrow">→</span><span class="sc-node aba">即使正常水分条件也关闭气孔→生长减慢</span></div>
+      <p class="mq-note">ABA的化学本质：倍半萜烯（萜类化合物），不是蛋白质。合成部位：叶肉细胞（干旱时大量合成）。运输方式：韧皮部运输（可长距离）。⚠️ABA与乙烯协同促进叶片/果实脱落；与GA拮抗（GA促萌发，ABA抑萌发）。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec490')"><i class="ti ti-file-text"></i> 查看完整题干</button>
+    </div>
+  </div>
+
+  <div class="mq-card" data-mode="ethylene">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge ethylene">乙烯</span>
+      <span class="mq-name">乙烯催熟果实的正反馈机制及激素间协同与拮抗关系综合分析</span>
+      <span class="mq-purity">9/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-495 · 子问题 (1)(2)(4)</div>
+      <div class="rule-box">核心信号：题目要求分析"乙烯催熟果实"的机制，或在综合激素题中要求判断"协同/拮抗"关系，或给出不同激素处理实验要求解释结果。</div>
+      <div class="chain-label">乙烯催熟正反馈</div>
+      <div class="signal-chain"><span class="sc-node">果实发育后期</span><span class="sc-arrow">→</span><span class="sc-node ethylene">乙烯合成↑</span><span class="sc-arrow">→</span><span class="sc-node ethylene">促进果实成熟（色、香、软）</span></div>
+      <div class="signal-chain"><span class="sc-node">成熟过程</span><span class="sc-arrow">→</span><span class="sc-node ethylene">进一步刺激乙烯合成↑（正反馈）</span><span class="sc-arrow">→</span><span class="sc-node ethylene">加速成熟进程 ✓</span></div>
+      <div class="chain-label">激素协同与拮抗总结</div>
+      <div class="signal-chain"><span class="sc-node">协同（加强效果）</span><span class="sc-arrow">：</span><span class="sc-node ethylene">生长素+赤霉素→促茎生长</span><span class="sc-arrow">，</span><span class="sc-node ethylene">ABA+乙烯→促脱落 ✓</span></div>
+      <div class="signal-chain"><span class="sc-node">拮抗（相互对抗）</span><span class="sc-arrow">：</span><span class="sc-node">GA促萌发 ↔ ABA抑萌发</span><span class="sc-arrow">，</span><span class="sc-node">生长素促茎生长 ↔ 乙烯（高浓度）抑茎伸长</span></div>
+      <p class="mq-note">乙烯是气体激素，化学本质是不饱和烃（CH₂=CH₂），非蛋白质。乙烯效应还包括：促进叶片/果实脱落（与ABA协同），抑制茎的纵向伸长（高浓度下茎横向增粗）。外施乙烯释放剂（乙烯利）→催熟未熟果实，是农业中常用的应用方式。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec495')"><i class="ti ti-file-text"></i> 查看完整题干</button>
+    </div>
+  </div>
+</div>
+
+<div id="tab-ladder" class="page" role="tabpanel">
+  <div class="ladder-note">按 L1 基础 → L2 进阶 → L3 综合三级递进。点击卡片可查看完整题干。</div>
+  <div class="ladder-section-label"><span class="ladder-level l1" style="width:auto;padding:3px 8px;">L1 基础</span> 激素功能识别与两重性判断</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1-1<br>功能</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec480-1')" style="cursor:pointer;">
+        <div class="ladder-card-name">根据效应判断激素类型（五大激素功能速查）</div>
+        <div class="ladder-card-sub">EC-480 (1) · 促茎伸长→GA；促成熟→乙烯；促休眠→ABA；促弯曲→IAA <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1-2<br>两重性</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec480-2')" style="cursor:pointer;">
+        <div class="ladder-card-name">在生长素浓度-效果图中标注关键点并判断器官敏感性</div>
+        <div class="ladder-card-sub">EC-480 (2) · 最适浓度、零效果点；根&lt;芽&lt;茎敏感性顺序 <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1-3<br>运输</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec480-3')" style="cursor:pointer;">
+        <div class="ladder-card-name">区分极性运输与非极性运输，判断生长素流向</div>
+        <div class="ladder-card-sub">EC-480 (3) · 极性=主动，形态上端→下端；横向运输（弯曲部位） <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+  </div>
+  <div class="section-divider"></div>
+  <div class="ladder-section-label"><span class="ladder-level l2" style="width:auto;padding:3px 8px;">L2 进阶</span> 激素实验分析 + 突变体推理</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2-1<br>突变体</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec485-12')" style="cursor:pointer;">
+        <div class="ladder-card-name">矮生突变体外施赤霉素实验——判断是合成缺陷还是受体缺陷</div>
+        <div class="ladder-card-sub">EC-485 (1)+(2) · 外施后变高→合成缺陷；仍矮→受体缺陷 <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2-2<br>拮抗</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec490-13')" style="cursor:pointer;">
+        <div class="ladder-card-name">GA与ABA拮抗调控种子萌发——外施GA或ABA后发芽率变化分析</div>
+        <div class="ladder-card-sub">EC-490 (1)+(3) · GA↑→ABA效果↓→萌发率↑；ABA↑→萌发率↓ <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2-3<br>协同</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec495-12')" style="cursor:pointer;">
+        <div class="ladder-card-name">乙烯+ABA协同促脱落实验——解释同时施用效果强于单独施用的原因</div>
+        <div class="ladder-card-sub">EC-495 (1)+(2) · 协同：两种激素正向叠加；信号通路不同但效果方向相同 <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+  </div>
+  <div class="section-divider"></div>
+  <div class="ladder-section-label"><span class="ladder-level l3" style="width:auto;padding:3px 8px;">L3 综合</span> 多激素综合分析 + 实验设计</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l3">L3-1</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec498-135')" style="cursor:pointer;">
+        <div class="ladder-card-name">综合题：果实发育全程激素变化分析（IAA→GA→乙烯→ABA）+实验设计验证某激素作用</div>
+        <div class="ladder-card-sub">EC-498 (1)+(3)+(5) · 四种激素在果实发育不同阶段的动态变化、协同/拮抗关系及实验验证方案 <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="tab-self" class="page" role="tabpanel">
+  <div class="progress-row">
+    <span style="font-size:13px;color:var(--tx2);">学习自查清单</span>
+    <span style="font-size:13px;color:var(--tx2);" id="progress-text">0 / 7 完成</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="pbar"></div></div>
+  <div class="checklist" id="checklist">
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">能列出五大植物激素（IAA、GA、CTK、ABA、乙烯）的主要功能，并能根据实验效应反推是哪种激素在起作用</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">能解释生长素两重性——在浓度-效果曲线上指出最适浓度点、零效果点，并说明根比茎更敏感的原因及应用</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">能用极性运输和横向运输解释顶端优势和植物弯曲生长（向光性、向重力性），说明运输的主被动性质</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">能分析矮生突变体外施赤霉素实验——判断突变位点是赤霉素合成缺陷还是受体缺陷，并说明判断依据</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">能解释干旱→ABA↑→气孔关闭的信号通路，并能分析ABA受体功能缺失突变体在干旱条件下的表型</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">完成 L1 全部 3 道基础变式（激素功能识别、两重性曲线分析、运输方向判断各 1 道）</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">完成至少 2 道 L2 进阶变式，能区分激素协同与拮抗并解释实验结果差异</div></div>
+  </div>
+  <div class="action-row">
+    <button class="action-btn" onclick="window.scrollTo(0,0);switchTab('mothers',document.querySelectorAll('.nav-tab')[1])">返回母题精讲 →</button>
+    <button class="action-btn" onclick="window.scrollTo(0,0);switchTab('ladder',document.querySelectorAll('.nav-tab')[2])">进入变式阶梯 →</button>
+  </div>
+</div>
+</div>
+
+<div class="lb-overlay" id="lb-overlay" onclick="closeLightbox()"><button class="lb-close" onclick="closeLightbox()">×</button><img class="lb-img" id="lb-img" src="" alt=""></div>
+<div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer" role="dialog" aria-modal="true">
+  <div class="drawer-header"><span class="drawer-badge" id="drawer-badge"></span><span class="drawer-title" id="drawer-title"></span><button class="drawer-close" onclick="closeDrawer()"><i class="ti ti-x" style="font-size:18px;"></i></button></div>
+  <div class="drawer-body"><div class="drawer-ec-ref" id="drawer-ref"></div><div class="drawer-stem" id="drawer-stem"></div><div class="drawer-sub" id="drawer-sub" style="display:none;"><div class="drawer-sub-label">本题考查重点</div><div id="drawer-sub-text"></div></div><div class="drawer-answer" id="drawer-answer"><div class="drawer-answer-label">参考答案</div><div id="drawer-answer-text"></div></div></div>
+  <div class="drawer-footer"><button class="drawer-btn" id="drawer-ans-btn" onclick="toggleAnswer()">显示答案</button><button class="drawer-btn primary" onclick="closeDrawer()">完成阅读</button></div>
+</div>
+
+<script>
+function switchTab(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');if(btn)btn.classList.add('active');}
+function toggleMQ(h){const b=h.nextElementSibling,c=h.querySelector('.mq-chevron'),o=b.classList.contains('open');b.classList.toggle('open',!o);c.classList.toggle('open',!o);}
+function filterMode(mode,btn){document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.mq-card').forEach(card=>{card.style.display=(mode==='all'||card.dataset.mode===mode)?'':'none';});}
+function toggleCheck(item){item.classList.toggle('done');updateProgress();saveChecklist();}
+function updateProgress(){const total=document.querySelectorAll('.check-item').length,done=document.querySelectorAll('.check-item.done').length;document.getElementById('pbar').style.width=(done/total*100)+'%';document.getElementById('progress-text').textContent=done+' / '+total+' 完成';}
+function saveChecklist(){try{const s=Array.from(document.querySelectorAll('.check-item')).map(el=>el.classList.contains('done'));localStorage.setItem('T05_M4_checklist',JSON.stringify(s));}catch(e){}}
+(function(){try{const s=JSON.parse(localStorage.getItem('T05_M4_checklist')||'[]');document.querySelectorAll('.check-item').forEach((item,i)=>{if(s[i])item.classList.add('done');});updateProgress();}catch(e){}})();
+const QUESTIONS={
+  'mq-ec480':{badge:'生长素 · 母题',badgeClass:'auxin',title:'生长素两重性——浓度-效果曲线的关键点解读与顶端优势',ref:'EC-20260525-480 · 子问题 (1)(2)(3)',stem:`生长素（IAA）是植物重要的内源激素，其作用具有两重性。\n\n(1) 某植物根、芽、茎对生长素的最适浓度不同。若某一浓度对茎的生长有显著促进作用，推断该浓度对根和芽的作用分别是什么？说明依据（根、芽、茎的敏感性关系）。\n(2) 在顶端优势现象中，侧芽受到抑制的原因是什么？若摘除顶芽，会发生什么变化，为什么？\n(3) 生长素的极性运输与横向运输有何区别？在弯曲生长中（如向光性），生长素如何分布？`,focus:'(1) 根对生长素最敏感（最适浓度最低），茎最不敏感（最适浓度最高）；对茎是促进的浓度，对根和芽来说可能已超过其最适浓度，导致根被抑制，芽处于促进或抑制边界（视具体浓度而定）。\n(2) 顶芽产生的IAA极性运输到侧芽处，积累使侧芽IAA浓度超过其最适浓度→侧芽受抑制。摘除顶芽→侧芽处IAA来源消失→浓度降低→侧芽萌发。\n(3) 极性运输：从形态学上端→下端，需要载体，为主动运输；横向运输：在单侧光刺激下，生长素在弯曲部位横向从向光侧移向背光侧，为被动。结果：背光侧IAA多→伸长更快→茎弯向光源侧。',answer:'(1) 根对生长素敏感性远高于茎（根最适浓度约10⁻¹⁰mol/L，茎约10⁻⁶mol/L）。若该浓度对茎有显著促进作用，说明浓度接近茎的最适浓度（如10⁻⁶mol/L量级）；在此浓度下：\n对根：远超过根的最适浓度→根的生长受到抑制（抑制效果明显）；\n对芽：芽的敏感性介于根与茎之间，该浓度超过芽的最适浓度→可能轻微抑制或刚好在零效果点附近（具体视曲线而定）。\n依据：根、芽、茎对生长素敏感性顺序为根＞芽＞茎，最适浓度顺序为根＜芽＜茎。\n(2) 顶端优势原因：顶芽合成IAA→通过极性运输向下运输到侧芽处积累→侧芽处IAA浓度高于侧芽的最适浓度（超过了促进范围，进入抑制范围）→侧芽生长受抑制，不能萌发。\n摘除顶芽后：顶芽对侧芽的IAA供应中断→侧芽处IAA浓度逐渐降低到促进浓度范围→侧芽解除抑制→侧芽萌发生长→植株分枝增多（农业上可用于促进棉花、茶树等分枝）。\n(3) 两种运输的区别：\n极性运输：方向固定（形态学上端→下端，如茎尖→茎基部）；需要特定的IAA载体蛋白（PIN蛋白家族）；消耗ATP→主动运输；不受单侧光影响（方向由细胞极性决定）。\n横向运输：在单侧光或单侧重力刺激下发生；在弯曲部位（如茎端转变区）IAA从向光侧横向移动到背光侧；被动过程。\n弯曲生长中IAA分布：背光侧IAA浓度高→背光侧细胞伸长快；向光侧IAA浓度低→向光侧细胞伸长慢→茎弯向光源（茎向光弯曲生长）。'},
+  'mq-ec485':{badge:'赤霉素 · 母题',badgeClass:'gibberellin',title:'赤霉素促进节间伸长与矮生植物突变体实验分析',ref:'EC-20260525-485 · 子问题 (1)(2)',stem:`研究者发现一种矮生豌豆突变体，茎高度仅为野生型的1/3。为了确定矮生原因，设计了以下实验：将矮生突变体幼苗分为两组，A组施用赤霉素溶液，B组施用等量清水（对照）。\n\n(1) 若A组矮生豌豆施用赤霉素后，植株高度恢复到与野生型相当的水平，说明了什么？该突变体的矮生原因是什么？\n(2) 若A组施用赤霉素后，植株高度仍比野生型矮，说明了什么？这种情况下突变体的矮生原因是什么？\n（选做）赤霉素在促进节间伸长中的细胞学机制是什么？`,focus:'(1) 外施赤霉素有效→说明突变体能够响应赤霉素（受体正常），矮生原因为赤霉素合成缺陷（内源赤霉素不足）。外源GA补充了缺乏的赤霉素→恢复正常高度。\n(2) 外施赤霉素无效→说明突变体无法响应赤霉素（受体或下游信号通路有缺陷），即使外源赤霉素充足也无法起作用，矮生原因为赤霉素受体（或信号转导组件）缺陷。\n细胞学机制：赤霉素与受体结合→促进分生区细胞纵向伸长（细胞壁松弛→细胞吸水膨胀）→节间细胞体积增大→茎秆伸长。',answer:'(1) A组施用赤霉素后恢复正常高度，说明：\n该矮生突变体能够正常感受和响应赤霉素（受体和信号通路完好），导致矮生的原因是赤霉素合成途径发生了突变（赤霉素合成缺陷型突变），导致内源赤霉素含量不足，无法促进节间细胞充分伸长，表现为矮生。\n外施赤霉素为植株补充了所缺乏的激素，信号通路正常运作，节间细胞伸长恢复正常，植株高度恢复到野生型水平。\n(2) A组施用赤霉素后植株仍矮，说明：\n该矮生突变体即使在充足的赤霉素（外源补充）存在下，仍无法通过赤霉素信号促进节间伸长，说明植株对赤霉素不敏感（赤霉素不应答型）。矮生原因为赤霉素受体（或赤霉素信号转导下游组件）发生了缺陷，无法将赤霉素信号转化为细胞伸长响应，外施赤霉素也无效。\n（选做）赤霉素促进节间伸长的细胞学机制：赤霉素与特异性受体结合→激活细胞壁松弛酶（如扩张蛋白）→细胞壁松弛、可塑性增大→细胞吸水膨胀→细胞沿纵轴方向伸长→节间长度增加。赤霉素还可促进细胞分裂素信号，协同促进分生区细胞数量和体积增大。'},
+  'mq-ec490':{badge:'脱落酸 · 母题',badgeClass:'aba',title:'ABA促进种子休眠与干旱胁迫下气孔调节分析',ref:'EC-20260525-490 · 子问题 (1)(2)(3)',stem:`植物脱落酸（ABA）在逆境响应中起重要作用。\n\n(1) 在种子成熟过程中，ABA浓度逐渐升高；在种子萌发时，GA（赤霉素）浓度升高，ABA浓度下降。用激素拮抗关系解释上述现象，说明种子从休眠到萌发的调控逻辑。\n(2) 干旱条件下，植物叶片合成大量ABA，导致气孔关闭（保卫细胞K⁺外流）。若某拟南芥突变体的ABA受体基因完全失活，预测该突变体在干旱条件下的表现，并说明理由。\n(3) 将正常种子分为三组，分别处理：A组：外施ABA；B组：外施GA；C组：外施ABA + GA（等量混合）。预测三组萌发率排序，说明依据。`,focus:'(1) ABA高→种子休眠（ABA抑制萌发相关基因表达）；萌发时GA升高→GA与ABA拮抗→GA的作用超过ABA→萌发启动。\n(2) ABA受体失活→无法感受ABA信号→保卫细胞不响应ABA→K⁺不外流→气孔不关闭→干旱下蒸腾失水持续→植物萎蔫死亡。\n(3) 萌发率：B（GA单独）> C（GA+ABA，两者拮抗，GA效果部分被ABA抵消）> 对照（正常）> A（ABA单独，抑制萌发）。',answer:'(1) 种子从休眠到萌发的激素调控：\n种子成熟阶段：ABA浓度高→抑制与萌发相关的基因（如α-淀粉酶基因）表达→种子进入休眠，耐受干旱和不良环境，保持胚的活力；\n种子萌发阶段：适宜环境→GA合成↑→GA与ABA拮抗（GA促进ABA降解，同时GA激活萌发相关基因）→ABA效果被削弱→萌发启动→GA还通过促进α-淀粉酶分泌，分解胚乳淀粉为糖，为萌发提供能量。\n调控逻辑：ABA/GA比值决定休眠/萌发状态；比值高→休眠；比值低（GA占主导）→萌发。\n(2) ABA受体基因完全失活突变体在干旱条件下的表现：\n该突变体对ABA完全不响应。干旱条件下：植物叶片虽然合成大量ABA，但保卫细胞无法感受ABA信号（受体缺失）→保卫细胞不触发K⁺外流→气孔无法关闭→蒸腾作用持续进行→植物大量失水→叶片萎蔫，严重时导致植株死亡。\n（与正常植物对比：正常植物在干旱时ABA→气孔关闭→保留水分→存活；突变体则无此保护机制。）\n(3) 三组萌发率预测（由高到低）：B（仅GA）> C（GA+ABA）> 正常对照 > A（仅ABA）\n依据：\nA组（仅ABA）：外施ABA→ABA浓度升高→强烈抑制萌发→萌发率最低；\n正常对照：内源激素平衡→正常萌发率；\nB组（仅GA）：外施GA→促进萌发→萌发率高于对照；\nC组（GA+ABA混合）：两种激素拮抗→GA的促进效果被ABA部分抵消→萌发率低于B组（GA单独效果更强），但ABA也被GA部分拮抗，萌发率高于A组。'},
+  'mq-ec495':{badge:'乙烯 · 母题',badgeClass:'ethylene',title:'乙烯催熟果实正反馈机制及激素协同与拮抗综合分析',ref:'EC-20260525-495 · 子问题 (1)(2)(4)',stem:`苹果等呼吸跃变型果实在成熟时乙烯产生量急剧增加，并加速果实软化和色变。\n\n(1) 解释乙烯催熟果实的正反馈机制——为什么成熟过程会自我加速？\n(2) 将一批未成熟苹果分为两箱：一箱与成熟苹果放在同一密封容器中，另一箱单独密封。预测两组苹果的成熟速度差异，说明原因。\n(4) 在以下各组中，哪些激素之间是协同关系？哪些是拮抗关系？请各举一例并说明生理表现：乙烯与ABA；GA与ABA；生长素与乙烯（高浓度生长素时）。`,focus:'(1) 乙烯正反馈：乙烯合成→促进果实成熟→成熟细胞进一步产生乙烯→乙烯更多→成熟加速（正反馈循环）。\n(2) 成熟苹果释放乙烯→扩散到未成熟苹果→促进未成熟果实乙烯合成→加速成熟；单独密封组乙烯浓度低→成熟较慢。\n(4) 乙烯与ABA：协同（都促进脱落和果实成熟）；GA与ABA：拮抗（GA促萌发↔ABA抑萌发）；高浓度IAA与乙烯：协同（高浓度IAA促进乙烯合成→乙烯抑制茎伸长）。',answer:'(1) 乙烯催熟正反馈机制：\n果实发育后期→内源乙烯合成开始增加（ACC合酶基因表达）→乙烯与受体结合→激活细胞壁降解酶（纤维素酶、果胶酶）→果实软化；同时激活叶绿素降解和花色苷合成→色变；\n正反馈环节：果实成熟过程中产生的信号（细胞壁降解产物等）进一步刺激ACC合酶表达→乙烯产量进一步升高→成熟进程加速→形成正反馈循环，直到成熟完成（或过熟腐烂）。\n(2) 两组成熟速度差异：\n与成熟苹果同密封组：成熟较快。原因：成熟苹果持续释放大量乙烯（气体激素）→密封容器内乙烯浓度升高→未成熟苹果感受乙烯信号→启动自身乙烯合成（正反馈触发）→加速成熟。\n单独密封组：成熟较慢。原因：容器内乙烯仅来自未成熟苹果自身少量产生，浓度较低，正反馈启动缓慢，成熟时间较长。\n（农业应用：与成熟果实同储、或人工施用乙烯利，可加速未熟果实上市；低温+低O₂+高CO₂可抑制乙烯合成，延缓成熟。）\n(4) 激素关系分析：\n①乙烯与ABA：协同关系。\n生理表现：二者共同促进叶片/果实脱落（乙烯触发离层形成，ABA促进细胞壁水解），在秋季落叶和果实脱落中协同起作用；同时都能促进果实成熟。\n②GA与ABA：拮抗关系。\n生理表现：在种子萌发调控中，GA促进萌发（激活α-淀粉酶，促进储能物质水解）；ABA抑制萌发（维持休眠）。GA浓度升高时，ABA的抑制效果被削弱，种子从休眠转向萌发。\n③高浓度IAA与乙烯：协同（间接）。\n生理表现：高浓度生长素（IAA）促进乙烯的合成（IAA是乙烯合成的前体信号之一）→乙烯积累→乙烯反过来抑制茎的纵向伸长（乙烯效应）。结果：高浓度IAA处理→茎不伸长（看似高浓度IAA抑制，实为IAA诱导的乙烯在起作用）。这是乙烯与生长素协同产生抑制效果的典型机制。'},
+  'v-ec480-1':{badge:'L1 基础变式 · 功能识别',badgeClass:'auxin',title:'根据效应判断激素类型',ref:'EC-20260525-480 · (1)',stem:`下列各生理现象，各由哪种植物激素（IAA/GA/CTK/ABA/乙烯）主导？\n(A) 矮生豌豆施用某物质后变高\n(B) 苹果催熟时大量释放某气体激素\n(C) 干旱时叶片合成某激素→气孔关闭\n(D) 顶芽产生某激素极性运输→侧芽受抑制\n(E) 种子成熟期某激素积累→种子进入休眠`,focus:'对应：(A) 赤霉素（GA）；(B) 乙烯；(C) 脱落酸（ABA）；(D) 生长素（IAA）；(E) 脱落酸（ABA）',answer:'(A) 赤霉素（GA）——促进节间细胞伸长，矮生→正常高度，常用于鉴别赤霉素合成缺陷型突变体。\n(B) 乙烯——气体激素（CH₂=CH₂），果实成熟时大量合成，正反馈加速成熟过程，农业中用乙烯利催熟。\n(C) 脱落酸（ABA）——干旱→ABA合成↑→保卫细胞K⁺外流→气孔关闭→减少蒸腾散失，是植物耐旱的重要机制。\n(D) 生长素（IAA）——顶芽合成IAA→极性运输（主动）到侧芽→侧芽IAA浓度超过其最适值→侧芽受抑制（顶端优势）。\n(E) 脱落酸（ABA）——种子成熟期ABA积累→抑制萌发相关基因→种子进入休眠，保障种子在适宜环境萌发（与GA拮抗调控萌发时机）。'},
+  'v-ec480-2':{badge:'L1 基础变式 · 两重性',badgeClass:'auxin',title:'生长素浓度-效果图关键点分析',ref:'EC-20260525-480 · (2)',stem:'（同母题 mq-ec480 (1)(2)——浓度-效果图分析、根芽茎敏感性）',focus:'同母题分析。关键记忆：根最适10⁻¹⁰mol/L，茎约10⁻⁶mol/L；对茎促进的浓度对根已是高浓度抑制。',answer:'见母题 EC-480 答案。'},
+  'v-ec480-3':{badge:'L1 基础变式 · 运输',badgeClass:'auxin',title:'极性运输与横向运输的区分及弯曲生长分析',ref:'EC-20260525-480 · (3)',stem:'（同母题 mq-ec480 (3)——极性/横向运输区别，向光性生长素分布）',focus:'同母题分析。',answer:'见母题 EC-480 答案。'},
+  'v-ec485-12':{badge:'L2 进阶变式 · 突变体',badgeClass:'gibberellin',title:'矮生突变体外施GA实验——判断合成缺陷或受体缺陷',ref:'EC-20260525-485 · (1)+(2)',stem:'（同母题 mq-ec485 (1)(2)）',focus:'同母题分析。核心判断：外施GA变高→合成缺陷；仍矮→受体/信号缺陷。',answer:'见母题 EC-485 答案。'},
+  'v-ec490-13':{badge:'L2 进阶变式 · 拮抗',badgeClass:'aba',title:'GA与ABA拮抗调控种子萌发率',ref:'EC-20260525-490 · (1)+(3)',stem:'（同母题 mq-ec490 (1)(3)——ABA/GA拮抗，三组萌发率排序）',focus:'同母题分析。',answer:'见母题 EC-490 答案。'},
+  'v-ec495-12':{badge:'L2 进阶变式 · 协同',badgeClass:'ethylene',title:'乙烯+ABA协同促脱落实验分析',ref:'EC-20260525-495 · (1)+(2)',stem:'（同母题 mq-ec495 (1)(2)）',focus:'同母题分析。',answer:'见母题 EC-495 答案。'},
+  'v-ec498-135':{badge:'L3 综合变式',badgeClass:'auxin',title:'果实发育全程激素动态变化及实验验证方案',ref:'EC-20260525-498 · (1)+(3)+(5)',stem:`苹果果实从授粉到成熟过程中，四种激素的相对含量变化如下（示意）：\n·授粉后：IAA（生长素）迅速升高→促进子房发育（果实膨大）\n·果实快速生长期：GA（赤霉素）升高→促进细胞增大\n·果实成熟前期：CTK（细胞分裂素）下降，ABA开始升高\n·果实成熟期：乙烯急剧升高→正反馈加速成熟；ABA升高协同促进脱落\n\n(1) 在果实发育的不同阶段，主导激素如何切换？各阶段主要激素的功能是什么？\n(3) 若要验证"乙烯是苹果成熟的必要信号"，设计实验方案（需包括实验组、对照组和预期结果）。\n(5) 解释以下现象：为什么"一个烂苹果毁一筐"？从激素机制分析腐烂扩散的原理。`,focus:'(1) 激素切换：IAA（早期膨大）→GA（快速生长）→乙烯（成熟）→ABA（脱落）。各阶段有主导激素，体现激素的阶段性和协同性。\n(3) 实验设计：实验组用乙烯受体抑制剂（如1-MCP）处理苹果，阻断乙烯信号；对照组不处理；预期：实验组成熟延迟/不成熟，对照组正常成熟。\n(5) 烂苹果释放大量乙烯→周围苹果感受乙烯信号→启动自身乙烯正反馈→加速成熟→过熟腐烂→释放更多乙烯→扩散（"链式反应"）。',answer:'(1) 苹果果实发育全程激素主导切换：\n①授粉→早期果实膨大期：IAA（生长素）主导。功能：促进子房壁细胞分裂和膨大，形成果实（无子果实形成原理：外施IAA可刺激未受精子房发育为果实）。\n②快速生长期（细胞扩大期）：GA（赤霉素）主导。功能：促进果实细胞体积增大（细胞壁松弛，细胞吸水膨胀），与IAA协同使果实快速增大。\n③成熟前期：CTK（细胞分裂素）下降→细胞分裂减缓；ABA逐渐升高→开始积累，准备脱落信号。\n④成熟期：乙烯急剧升高（正反馈触发）。功能：激活细胞壁降解酶→果肉软化；促进叶绿素降解和花色苷合成→色变；ABA协同促进果柄离层形成→果实脱落。\n(3) 验证"乙烯是苹果成熟必要信号"实验方案：\n实验思路：阻断乙烯信号，观察成熟是否受阻。\n实验组：用乙烯受体抑制剂（如1-甲基环丙烯，1-MCP）密闭处理预成熟苹果，阻断乙烯与受体结合；\n对照组：同一批预成熟苹果，用等量空气（不含1-MCP）处理（其他条件相同）；\n观察指标：记录两组苹果每天的硬度变化、色泽变化（叶绿素含量）、乙烯释放量；\n预期结果：实验组（1-MCP处理）苹果成熟延缓，硬度下降缓慢，颜色转变滞后；对照组苹果正常成熟。\n结论：若实验组成熟受阻，证明乙烯（信号通路完整）是苹果成熟的必要信号。\n(5) "一个烂苹果毁一筐"的激素机制（乙烯扩散链式反应）：\n腐烂苹果→细胞大量死亡并释放大量乙烯（气体，可扩散）；\n乙烯扩散到周围苹果→触发各苹果内乙烯合成的正反馈→各苹果加速成熟→过熟→细胞壁完全降解→腐烂；\n腐烂苹果又释放更多乙烯→继续扩散影响其他苹果→链式反应（"一传十，十传百"）；\n应对措施：低温（降低乙烯合成酶活性）+1-MCP处理（竞争性阻断乙烯受体）+高CO₂气调（抑制乙烯合成前体ACC转化为乙烯）→延缓成熟扩散。'}
+};
+let answerShown=false;
+function openDrawer(key){const q=QUESTIONS[key];if(!q)return;const badge=document.getElementById('drawer-badge');badge.textContent=q.badge;badge.className='drawer-badge mq-badge '+(q.badgeClass||'');document.getElementById('drawer-title').textContent=q.title;document.getElementById('drawer-ref').innerHTML='<i class="ti ti-source-code" style="font-size:13px;"></i> '+q.ref;document.getElementById('drawer-stem').textContent=q.stem;const sub=document.getElementById('drawer-sub');if(q.focus){document.getElementById('drawer-sub-text').textContent=q.focus;sub.style.display='';}else{sub.style.display='none';}answerShown=false;document.getElementById('drawer-answer').classList.remove('show');document.getElementById('drawer-answer-text').textContent=q.answer||'';const btn=document.getElementById('drawer-ans-btn');btn.textContent='显示答案';btn.style.display=q.answer?'':'none';document.getElementById('overlay').classList.add('open');document.getElementById('drawer').classList.add('open');document.body.style.overflow='hidden';}
+function closeDrawer(){document.getElementById('overlay').classList.remove('open');document.getElementById('drawer').classList.remove('open');document.body.style.overflow='';}
+function toggleAnswer(){answerShown=!answerShown;document.getElementById('drawer-answer').classList.toggle('show',answerShown);document.getElementById('drawer-ans-btn').textContent=answerShown?'隐藏答案':'显示答案';}
+function openLightbox(src,alt){document.getElementById('lb-img').src=src;document.getElementById('lb-img').alt=alt;document.getElementById('lb-overlay').classList.add('open');document.body.style.overflow='hidden';}
+function closeLightbox(){document.getElementById('lb-overlay').classList.remove('open');document.body.style.overflow='';}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(document.getElementById('lb-overlay').classList.contains('open'))closeLightbox();else closeDrawer();}});
+</script>
+</body>
+</html>

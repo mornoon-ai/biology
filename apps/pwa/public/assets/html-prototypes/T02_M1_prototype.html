@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T02_M1 · 识别与功能匹配型</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent:#0F6E56; --accent-l:#E1F5EE; --accent-m:#7DCFBB; --accent-d:#085041;
+  --purple:#534AB7; --purple-l:#EEEDFE; --purple-d:#3C3489;
+  --amber:#BA7517; --amber-l:#FAEEDA; --amber-d:#633806;
+  --coral:#993C1D; --coral-l:#FAECE7; --coral-d:#712B13;
+  --bg:#ffffff; --bg2:#f7f7f5; --bg3:#f1efe8;
+  --tx:#1a1a18; --tx2:#5f5e5a; --tx3:#888780;
+  --bd:rgba(0,0,0,0.10); --bd2:rgba(0,0,0,0.18);
+  --r-sm:6px; --r-md:8px; --r-lg:12px; --r-xl:16px;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#1c1c1a;--bg2:#252523;--bg3:#2c2c2a;
+    --tx:#f0efea;--tx2:#b4b2a9;--tx3:#888780;
+    --bd:rgba(255,255,255,0.09);--bd2:rgba(255,255,255,0.16);
+    --accent-l:#04342C;--accent-d:#9FE1CB;
+    --purple-l:#26215C;--purple-d:#CECBF6;
+    --amber-l:#412402;--amber-d:#FAC775;
+    --coral-l:#4A1B0C;--coral-d:#F5C4B3;
+  }
+}
+body{font-family:var(--font);font-size:15px;line-height:1.6;color:var(--tx);background:var(--bg3);min-height:100vh;}
+.app{max-width:800px;margin:0 auto;background:var(--bg);min-height:100vh;}
+.site-header{padding:1.25rem 1.5rem 0;background:var(--bg);border-bottom:0.5px solid var(--bd);position:sticky;top:0;z-index:20;}
+.header-top{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.header-icon{background:var(--accent-l);border-radius:var(--r-md);padding:6px 8px;display:flex;align-items:center;justify-content:center;}
+.header-icon i{font-size:20px;color:var(--accent);}
+.header-meta{font-size:12px;color:var(--tx3);}
+.header-title{font-size:17px;font-weight:500;color:var(--tx);}
+.header-id{margin-left:auto;font-size:11px;color:var(--tx3);background:var(--bg2);padding:3px 9px;border-radius:var(--r-sm);}
+.nav-tabs{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.nav-tab{padding:.6rem 1.1rem;font-size:13px;color:var(--tx2);cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;font-family:var(--font);white-space:nowrap;transition:color .15s,border-color .15s;}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500;}
+.nav-tab:hover:not(.active){color:var(--tx);}
+.page{display:none;padding:1.5rem;}
+.page.active{display:block;}
+.memory-section{margin-bottom:1.5rem;}
+.memory-card{border:0.5px solid var(--bd);border-radius:var(--r-xl);overflow:hidden;background:var(--bg);}
+.memory-placeholder{min-height:200px;background:var(--bg2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--tx3);padding:2rem;}
+.memory-placeholder i{font-size:32px;color:var(--bd2);}
+.memory-placeholder-text{font-size:13px;text-align:center;line-height:1.6;}
+.memory-placeholder-filename{font-size:11px;background:var(--bg3);border:0.5px solid var(--bd);border-radius:var(--r-sm);padding:4px 10px;font-family:monospace;color:var(--tx2);}
+.memory-img{width:100%;display:block;max-height:320px;object-fit:contain;background:var(--bg3);cursor:zoom-in;transition:opacity .15s;}
+.memory-img:hover{opacity:.9;}
+.memory-footer{padding:.85rem 1rem;display:flex;align-items:center;gap:10px;border-top:0.5px solid var(--bd);}
+.memory-label{font-size:13px;font-weight:500;color:var(--tx);flex:1;}
+audio{height:32px;width:220px;}
+.audio-placeholder{font-size:12px;color:var(--tx3);display:flex;align-items:center;gap:5px;background:var(--bg2);padding:6px 10px;border-radius:var(--r-sm);}
+.section-title{font-size:13px;font-weight:500;color:var(--tx2);display:flex;align-items:center;gap:7px;margin-bottom:1rem;text-transform:uppercase;letter-spacing:.04em;}
+.section-divider{height:0.5px;background:var(--bd);margin:1.5rem 0;}
+.signal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:1.5rem;}
+.signal-card{background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;}
+.signal-label{font-size:11px;color:var(--tx3);letter-spacing:.04em;margin-bottom:.4rem;text-transform:uppercase;}
+.signal-tag{font-size:13px;color:var(--tx);margin-bottom:2px;}
+.subtopic-list{display:flex;flex-direction:column;gap:10px;margin-bottom:1.5rem;}
+.subtopic-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.9rem 1.1rem;border-left:3px solid var(--accent);}
+.subtopic-card.s2{border-left-color:var(--purple);}
+.subtopic-num{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.3rem;}
+.subtopic-name{font-size:14px;font-weight:500;color:var(--tx);margin-bottom:.3rem;}
+.subtopic-signal{font-size:13px;color:var(--tx2);line-height:1.6;}
+.trap-list{display:flex;flex-direction:column;gap:7px;}
+.trap-item{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.55;}
+.trap-icon{color:#E24B4A;font-size:15px;flex-shrink:0;margin-top:1px;}
+.filter-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem;}
+.filter-btn{padding:5px 13px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx2);font-family:var(--font);transition:all .15s;}
+.filter-btn.active{background:var(--accent-l);color:var(--accent-d);border-color:var(--accent);font-weight:500;}
+.mq-card{border:0.5px solid var(--bd);border-radius:var(--r-lg);background:var(--bg);margin-bottom:.85rem;overflow:hidden;}
+.mq-header{padding:.9rem 1.1rem;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;transition:background .15s;}
+.mq-header:hover{background:var(--bg2);}
+.mq-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);white-space:nowrap;}
+.mq-badge.s1{background:var(--accent-l);color:var(--accent-d);}
+.mq-badge.s2{background:var(--purple-l);color:var(--purple-d);}
+.mq-name{font-size:14px;font-weight:500;color:var(--tx);flex:1;}
+.mq-purity{font-size:12px;color:var(--tx3);flex-shrink:0;}
+.mq-chevron{color:var(--tx3);font-size:16px;transition:transform .2s;flex-shrink:0;}
+.mq-chevron.open{transform:rotate(180deg);}
+.mq-body{display:none;padding:.75rem 1.1rem 1.1rem;border-top:0.5px solid var(--bd);}
+.mq-body.open{display:block;}
+.mq-source{font-size:12px;color:var(--tx3);margin-bottom:.65rem;}
+.rule-box{background:var(--accent-l);border-left:3px solid var(--accent);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:.65rem .9rem;font-size:13px;color:var(--accent-d);margin:.75rem 0;line-height:1.65;}
+.rule-box.s2{background:var(--purple-l);border-left-color:var(--purple);color:var(--purple-d);}
+.chain-label{font-size:12px;font-weight:500;color:var(--tx2);margin:.75rem 0 .4rem;text-transform:uppercase;letter-spacing:.04em;}
+.signal-chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:6px;}
+.sc-node{background:var(--bg2);border-radius:var(--r-sm);padding:3px 9px;font-size:13px;color:var(--tx);}
+.sc-node.s1{background:var(--accent-l);color:var(--accent-d);}
+.sc-node.s2{background:var(--purple-l);color:var(--purple-d);}
+.sc-arrow{color:var(--tx3);font-size:13px;}
+.mq-note{font-size:13px;color:var(--tx2);margin-top:.75rem;line-height:1.6;}
+.q-trigger{display:inline-flex;align-items:center;gap:5px;margin-top:.75rem;padding:6px 12px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;color:var(--tx2);cursor:pointer;font-family:var(--font);transition:all .15s;}
+.q-trigger:hover{background:var(--bg2);color:var(--tx);}
+.q-trigger i{font-size:14px;}
+.ladder-section-label{font-size:13px;font-weight:500;color:var(--tx2);margin-bottom:.85rem;display:flex;align-items:center;gap:7px;}
+.ladder-rows{display:flex;flex-direction:column;gap:8px;margin-bottom:1rem;}
+.ladder-row{display:grid;grid-template-columns:64px 1fr;gap:10px;align-items:start;}
+.ladder-level{font-size:11px;font-weight:500;padding:6px 4px;border-radius:var(--r-sm);text-align:center;line-height:1.4;}
+.l0{background:var(--accent-l);color:var(--accent-d);}
+.l1{background:var(--purple-l);color:var(--purple-d);}
+.l2{background:var(--amber-l);color:var(--amber-d);}
+.ladder-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.65rem .9rem;background:var(--bg);cursor:pointer;transition:background .15s;}
+.ladder-card:hover{background:var(--bg2);}
+.ladder-card-name{font-size:13px;font-weight:500;color:var(--tx);}
+.ladder-card-sub{font-size:12px;color:var(--tx3);margin-top:3px;line-height:1.5;}
+.ladder-note{background:var(--bg2);border-radius:var(--r-md);padding:.65rem .9rem;font-size:12px;color:var(--tx2);margin-bottom:1rem;line-height:1.55;}
+.progress-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem;}
+.progress-bar{height:5px;border-radius:3px;background:var(--bg2);margin-bottom:1.25rem;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;background:var(--accent);width:0%;transition:width .3s;}
+.checklist{display:flex;flex-direction:column;gap:7px;}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:.7rem .9rem;border:0.5px solid var(--bd);border-radius:var(--r-md);background:var(--bg);cursor:pointer;transition:background .15s;}
+.check-item.done{background:var(--bg2);}
+.check-box{width:18px;height:18px;border:1.5px solid var(--bd2);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .15s;}
+.check-item.done .check-box{background:var(--accent);border-color:var(--accent);}
+.check-box i{font-size:11px;color:#fff;display:none;}
+.check-item.done .check-box i{display:block;}
+.check-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.check-item.done .check-text{color:var(--tx3);text-decoration:line-through;}
+.action-row{margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:8px;}
+.action-btn{padding:7px 14px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.action-btn:hover{background:var(--bg2);}
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s;}
+.drawer-overlay.open{opacity:1;pointer-events:all;}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100vw);background:var(--bg);z-index:101;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden;}
+.drawer.open{transform:translateX(0);}
+.drawer-header{padding:1rem 1.25rem;border-bottom:0.5px solid var(--bd);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.drawer-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);}
+.drawer-title{font-size:14px;font-weight:500;color:var(--tx);flex:1;line-height:1.4;}
+.drawer-close{background:none;border:none;cursor:pointer;color:var(--tx2);padding:4px;border-radius:var(--r-sm);display:flex;align-items:center;transition:background .15s;}
+.drawer-close:hover{background:var(--bg2);}
+.drawer-body{flex:1;overflow-y:auto;padding:1.25rem;}
+.drawer-ec-ref{font-size:12px;color:var(--tx3);margin-bottom:1rem;display:flex;align-items:center;gap:6px;}
+.drawer-stem{font-size:14px;color:var(--tx);line-height:1.75;white-space:pre-wrap;}
+.drawer-sub{font-size:13px;color:var(--tx2);background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:1rem;line-height:1.65;}
+.drawer-sub-label{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-answer{font-size:13px;color:var(--tx);background:var(--accent-l);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:.75rem;line-height:1.65;display:none;}
+.drawer-answer.show{display:block;}
+.drawer-answer-label{font-size:11px;font-weight:500;color:var(--accent-d);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-footer{padding:.85rem 1.25rem;border-top:0.5px solid var(--bd);display:flex;gap:8px;flex-shrink:0;}
+.drawer-btn{flex:1;padding:8px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.drawer-btn:hover{background:var(--bg2);}
+.drawer-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+.drawer-btn.primary:hover{background:var(--accent-d);}
+.lb-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:200;display:none;align-items:center;justify-content:center;cursor:zoom-out;}
+.lb-overlay.open{display:flex;}
+.lb-img{max-width:92vw;max-height:92vh;object-fit:contain;border-radius:var(--r-md);box-shadow:0 8px 40px rgba(0,0,0,.5);}
+.lb-close{position:fixed;top:16px;right:20px;background:none;border:none;color:#fff;font-size:28px;cursor:pointer;line-height:1;opacity:.7;transition:opacity .15s;}
+.lb-close:hover{opacity:1;}
+@media(max-width:600px){
+  .site-header{padding:1rem 1rem 0;}.page{padding:1rem;}.header-title{font-size:15px;}
+  .signal-grid{grid-template-columns:1fr 1fr;}.ladder-row{grid-template-columns:52px 1fr;gap:8px;}
+  .action-row{flex-direction:column;}.action-btn{width:100%;text-align:center;}
+  .drawer{width:100vw;}audio{width:160px;}
+}
+@media(max-width:380px){.signal-grid{grid-template-columns:1fr;}}
+
+.back-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;font-size:12px;color:var(--tx2);background:var(--bg2);border:0.5px solid var(--bd2);border-radius:var(--r-md);text-decoration:none;font-family:var(--font);transition:background .15s,color .15s;white-space:nowrap;flex-shrink:0;}
+.back-btn:hover{background:var(--bg3);color:var(--tx);}
+.back-btn i{font-size:14px;}
+.memory-video{width:100%;max-height:220px;display:block;border-radius:var(--r-md);background:#000;margin-top:8px;}
+</style>
+</head>
+<body>
+<div class="app">
+
+<header class="site-header">
+  <div class="header-top">
+    <div class="header-icon"><i class="ti ti-microscope" aria-hidden="true"></i></div>
+    <div>
+      <div class="header-meta">02 细胞结构 · M1 识别与功能匹配型</div>
+      <div class="header-title">细胞结构识别与功能匹配</div>
+    </div>
+    <a class="back-btn" href="index.html" aria-label="返回首页"><i class="ti ti-arrow-left"></i> 首页</a>
+    <div class="header-id">T02_M1</div>
+  </div>
+  <nav class="nav-tabs" role="tablist">
+    <button class="nav-tab active" role="tab" onclick="switchTab('overview',this)">概览</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('mothers',this)">母题精讲</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('ladder',this)">变式阶梯</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('check',this)">自查清单</button>
+  </nav>
+</header>
+
+<!-- ══ 概览 ══ -->
+<div id="page-overview" class="page active">
+  <div class="memory-section">
+    <div class="memory-card">
+      <img class="memory-img" src="记忆卡/T02_M1_memory.png" alt="T02_M1 识别与功能匹配型 记忆卡"
+           onclick="openLightbox(this.src,this.alt)"
+           onerror="this.style.display='none';document.getElementById('mem-placeholder').style.display='flex'">
+      <div id="mem-placeholder" class="memory-placeholder" style="display:none;">
+        <i class="ti ti-photo-up"></i>
+        <div class="memory-placeholder-text">记忆卡图片放置于此</div>
+        <div class="memory-placeholder-filename">记忆卡/T02_M1_memory.png</div>
+      </div>
+      <div class="memory-footer">
+        <span class="memory-label"><i class="ti ti-brain" style="margin-right:5px;color:var(--accent);"></i>记忆卡 · 细胞器识别与比较</span>
+        <video class="memory-video" controls controlsList="nodownload" preload="metadata" style="display:none">
+        <source src="audio/T02_M1.mp4" type="video/mp4">
+      </video>
+      <div class="audio-placeholder" style="display:flex"><i class="ti ti-video-off"></i>视频待放入</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title"><i class="ti ti-radar"></i>核心识别信号</div>
+  <div class="signal-grid">
+    <div class="signal-card">
+      <div class="signal-label">题型触发词</div>
+      <div class="signal-tag">亚显微结构图 / 电镜图</div>
+      <div class="signal-tag">标号①②③→识别细胞器</div>
+      <div class="signal-tag">原核/真核 / 动物/植物比较</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">双层膜结构</div>
+      <div class="signal-tag">线粒体（内外两层膜）</div>
+      <div class="signal-tag">叶绿体（内外两层膜）</div>
+      <div class="signal-tag">细胞核（核膜=双层膜）</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">无膜结构</div>
+      <div class="signal-tag">核糖体（唯一，原核+真核均有）</div>
+      <div class="signal-tag">中心体（动物/低等植物）</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">信号肽关键词</div>
+      <div class="signal-tag">SRP / 内质网 / 核孔出核</div>
+      <div class="signal-tag">分泌蛋白合成途径</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-sitemap"></i>两条子专题</div>
+  <div class="subtopic-list">
+    <div class="subtopic-card">
+      <div class="subtopic-num">子专题 1</div>
+      <div class="subtopic-name">亚显微结构图识别</div>
+      <div class="subtopic-signal">给定电镜图/模式图→标号→识别细胞器名称→写出功能。核心能力：分辨单膜/双膜/无膜；区分内质网（粗面/滑面）、线粒体（嵴）、叶绿体（基粒）。分泌蛋白路径：核糖体→内质网→高尔基体→细胞膜→胞外</div>
+    </div>
+    <div class="subtopic-card s2">
+      <div class="subtopic-num">子专题 2</div>
+      <div class="subtopic-name">细胞类型识别与比较</div>
+      <div class="subtopic-signal">给定5种生物特征→判断原核/真核/动植物→比较结构差异（有无核膜、细胞壁、叶绿体、中心体、液泡等）。原核细胞只有细胞膜+细胞壁+核糖体；病毒无细胞结构</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-alert-triangle"></i>高频易错</div>
+  <div class="trap-list">
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>核糖体是唯一无膜结构的细胞器，且存在于所有有细胞结构的生物（包括原核生物）中。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>哺乳动物成熟红细胞——无细胞核，无线粒体，无核糖体（高度分化，失去几乎所有细胞器）。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>分泌蛋白合成后生物膜面积变化：高尔基体面积减少（不断出芽形成囊泡）；细胞膜面积增多（囊泡与之融合）；内质网面积减少（转运给高尔基体）。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>信号肽假说：组1（无SRP无内质网）→合成比正常肽链长一段（含信号序列，未被切除）；组2（有SRP无内质网）→合成短一段（信号序列被SRP识别后翻译暂停，但信号序列被切除/翻译终止）；组3（有SRP有内质网）→正常肽链（信号序列引导入内质网被切除，完成正常加工）。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>蓝细菌（原核）和甲流病毒（无细胞结构）不属于真核生物，不在真核生物圆圈内。原核生物≠无细胞结构，原核生物有细胞膜、细胞壁和核糖体。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>核孔不允许蛋白质和DNA自由进出，核孔是选择性通道，较大分子需要转运蛋白协助。</span></div>
+  </div>
+</div>
+
+<!-- ══ 母题精讲 ══ -->
+<div id="page-mothers" class="page">
+  <div class="filter-tabs">
+    <button class="filter-btn active" onclick="filterMQ('all',this)">全部 (2母题)</button>
+    <button class="filter-btn" onclick="filterMQ('s1',this)">子专题1·亚显微结构</button>
+    <button class="filter-btn" onclick="filterMQ('s2',this)">子专题2·细胞类型比较</button>
+  </div>
+
+  <!-- MQ1: EC-054 -->
+  <div class="mq-card" data-topic="s1">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge s1">子专题1 母题</span>
+      <span class="mq-name">植物/动物细胞亚显微结构·分泌蛋白生物膜面积变化·线粒体分裂</span>
+      <span class="mq-purity">★ 10/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-054 · (7)(8)(9) · 2026-05-18</div>
+      <div class="rule-box">核心考查：①植物细胞识别（液泡/叶绿体/细胞壁）②动植物结构比较（中心体/无细胞壁）③分泌蛋白合成路径中各生物膜面积变化方向④线粒体外周分裂机制与自噬</div>
+      <div class="chain-label">分泌蛋白合成路径中膜面积变化</div>
+      <div class="signal-chain">
+        <span class="sc-node s1">核糖体（无膜，不变）</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">内质网（面积减少）</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">高尔基体（减少→再增多，净减少）</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node">高尔基体出芽</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">细胞膜（面积增多）</span>
+      </div>
+      <div class="mq-note">
+        <strong>考点(7)西瓜红色果肉：</strong>红色色素存在于液泡中（大液泡中细胞液含色素）。与能量转换有关的细胞器：线粒体（有氧呼吸）。（植物细胞如有叶绿体也算，但果肉细胞不含叶绿体。）<br><br>
+        <strong>考点(8)高等动物细胞：</strong>不应有的结构：细胞壁、液泡、叶绿体（植物特有）；应添加的结构：中心体，与纺锤丝/有丝分裂纺锤体形成有关；溶酶体由高尔基体形成（直接相关）。<br><br>
+        <strong>考点(9)生物膜面积变化：</strong>分泌物分泌后面积减少的：高尔基体（不断出芽→失去膜）；面积增多的：细胞膜（不断接收囊泡→增大）。<br><br>
+        <strong>线粒体外周分裂（考点7-9）：</strong>应激状态→外周分裂→小子线粒体（无mtDNA）→被自噬体吞噬（溶酶体参与降解）→大子线粒体保留mtDNA得以保全。"丢车保帅"：舍弃受损部分→保留功能完整的线粒体。抑制线粒体分裂不一定有利：正常分裂（中间分裂）是细胞生长必需；外周分裂是质控机制，单纯抑制会同时阻断正常分裂与损伤清除。
+      </div>
+      <button class="q-trigger" onclick="openDrawer('mq-ec054')"><i class="ti ti-eye"></i>查看完整题干与答案</button>
+    </div>
+  </div>
+
+  <!-- MQ2: EC-077 -->
+  <div class="mq-card" data-topic="s2">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge s2">子专题2 母题</span>
+      <span class="mq-name">五种生物细胞结构对比·信号肽假说·分泌蛋白合成实验</span>
+      <span class="mq-purity">★ 9/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-077 · (1)(2)(3)(4)(5)(6)(7)(8)(9)(10)(11) · 2026-05-18</div>
+      <div class="rule-box s2">核心考查：①五种生物结构对比（有核膜/细胞壁/叶绿体/中心体）→判断原核/真核/动植物 ②信号肽假说三组对照实验→推断SRP与内质网在分泌蛋白合成中的作用 ③质壁分离机制</div>
+      <div class="chain-label">信号肽假说三组实验逻辑</div>
+      <div class="signal-chain">
+        <span class="sc-node">组1（无SRP无内质网）</span><span class="sc-arrow">→</span>
+        <span class="sc-node s2">肽链比正常长一段（含信号序列，未被切除）</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node">组2（有SRP无内质网）</span><span class="sc-arrow">→</span>
+        <span class="sc-node s2">肽链比正常短一段（SRP识别信号序列后翻译暂停/信号序列在细胞质中被部分水解）</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node">组3（有SRP有内质网）</span><span class="sc-arrow">→</span>
+        <span class="sc-node s2">正常肽链（信号序列引导核糖体附着内质网→进入内质网→切除信号序列→正常折叠）</span>
+      </div>
+      <div class="mq-note">
+        <strong>考点(1)：</strong>IV结构（原核细胞）主要区别：无以核膜为界限的细胞核（无核膜）；所有细胞都有核糖体。<br><br>
+        <strong>考点(3)结构判断：</strong>A对（⑤线粒体有双层膜，含磷脂和蛋白质）；B对（④高尔基体负责加工包装和膜泡运输）；C错（核孔不允许蛋白质和DNA自由进出，是选择性通道）；D对（⑨细胞核中含DNA）。<br><br>
+        <strong>考点(4)质壁分离：</strong>A对（细胞壁伸缩性<原生质体→出现分离）；B错（甲→乙是质壁分离复原）；C对（KNO3溶液→细胞失水质壁分离，之后KNO3被主动吸收→自动复原）；D对（根尖成熟区有大液泡，可发生质壁分离）。<br><br>
+        <strong>考点(6)胰岛素分泌：</strong>胞吐方式分泌；体现生物膜的流动性（具体为膜的可融合性）。<br><br>
+        <strong>考点(9)信号肽假说推论：</strong>①组2肽链含信号序列（SRP识别了信号序列但无内质网协助切除，所以肽链短一段但仍含有信号序列部分/实际：组2无法进入内质网→信号序列未被切除→肽链含信号序列）；②若早期切除信号序列→游离核糖体不能附着内质网（因为附着需要信号序列引导）。
+      </div>
+      <button class="q-trigger" onclick="openDrawer('mq-ec077')"><i class="ti ti-eye"></i>查看完整题干与答案</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 变式阶梯 ══ -->
+<div id="page-ladder" class="page">
+  <div class="ladder-note">从"纯识别"到"识别+功能推理"到"识别+实验逻辑"，逐步提升细胞结构分析能力。</div>
+
+  <div class="ladder-section-label"><i class="ti ti-stairs"></i>子专题1 · 亚显微结构图识别 变式阶梯</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l0">母题<br>10/10</div>
+      <div class="ladder-card" onclick="openDrawer('mq-ec054')">
+        <div class="ladder-card-name">EC-054 植物/动物细胞亚显微结构</div>
+        <div class="ladder-card-sub">识别图中标号→功能匹配→分泌蛋白生物膜面积变化→线粒体外周分裂机制</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">基础变式<br>9/10</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec069')">
+        <div class="ladder-card-name">EC-069 动植物细胞亚显微结构+跨膜运输</div>
+        <div class="ladder-card-sub">双层膜结构判断→细胞器功能类比→膜选择透过性与物质运输方式综合考查</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ladder-section-label"><i class="ti ti-stairs"></i>子专题2 · 细胞类型比较 变式阶梯</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l0">母题<br>9/10</div>
+      <div class="ladder-card" onclick="openDrawer('mq-ec077')">
+        <div class="ladder-card-name">EC-077 五种生物细胞结构对比</div>
+        <div class="ladder-card-sub">五维结构对比（原核/真核/动植物）→信号肽假说三组实验→分泌蛋白合成机制推断</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 自查清单 ══ -->
+<div id="page-check" class="page">
+  <div class="progress-row">
+    <span style="font-size:13px;color:var(--tx2);">掌握进度</span>
+    <span id="check-count" style="font-size:13px;color:var(--tx2);">0 / 10</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="check-bar"></div></div>
+
+  <div class="checklist" id="checklist">
+    <div class="check-item" onclick="toggleCheck(this,0)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能识别具有双层膜的结构：线粒体、叶绿体、细胞核（核膜），并能与单膜（内质网/高尔基体/液泡）和无膜（核糖体、中心体）区分</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,1)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能说出核糖体是唯一无膜结构的细胞器，且原核细胞和真核细胞均有（是所有有细胞结构生物的共有细胞器）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,2)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能区分高等动物细胞与植物细胞的结构差异（动物有中心体，无细胞壁/叶绿体/液泡；植物有细胞壁/叶绿体/液泡，低等植物有中心体）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,3)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能描述分泌蛋白合成路径：核糖体→内质网（初加工）→高尔基体（再加工+包装）→细胞膜→胞外，整个过程体现膜的流动性</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,4)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能分析分泌蛋白分泌过程中膜面积变化：高尔基体面积减少（出芽形成囊泡）；细胞膜面积增多（囊泡融合）；内质网面积减少</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,5)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能解释信号肽假说三组实验：无SRP/无ER→长一段（含信号序列）；有SRP/无ER→短一段（翻译暂停）；有SRP/有ER→正常（信号序列在ER中被切除）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,6)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能判断原核细胞的特征：无以核膜为界限的细胞核，但有核糖体（无膜细胞器）；蓝细菌是原核生物（有细胞壁，但无膜细胞器，只有核糖体）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,7)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能说明核孔的选择性：核孔不允许DNA和蛋白质自由进出，需转运蛋白协助（mRNA通过核孔出核是需要特定信号的）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,8)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能解释质壁分离的原因：细胞壁伸缩性<原生质层→失水时原生质层收缩与细胞壁分离；细胞死亡后原生质层失去选择透过性，不会发生质壁分离</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,9)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能解释线粒体外周分裂的意义：逆境下将受损部分（无mtDNA小线粒体）分离→自噬体降解→保留功能完整大线粒体（"丢车保帅"）</div>
+    </div>
+  </div>
+
+  <div class="action-row">
+    <button class="action-btn" onclick="checkAll()">全部勾选</button>
+    <button class="action-btn" onclick="clearAll()">清空重来</button>
+  </div>
+</div>
+
+</div><!-- .app -->
+
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <span class="drawer-badge" id="drawer-badge"></span>
+    <span class="drawer-title" id="drawer-title"></span>
+    <button class="drawer-close" onclick="closeDrawer()"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="drawer-ec-ref"><i class="ti ti-database"></i><span id="drawer-ref"></span></div>
+    <div class="drawer-stem" id="drawer-stem"></div>
+    <div class="drawer-sub" id="drawer-focus">
+      <div class="drawer-sub-label">解题关注点</div>
+      <div id="drawer-focus-text"></div>
+    </div>
+    <div class="drawer-answer" id="drawer-answer">
+      <div class="drawer-answer-label">参考答案</div>
+      <div id="drawer-answer-text"></div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="drawer-btn" onclick="toggleAnswer()">显示 / 隐藏答案</button>
+    <button class="drawer-btn primary" onclick="closeDrawer()">关闭</button>
+  </div>
+</div>
+
+<div class="lb-overlay" id="lb-overlay" onclick="closeLightbox()">
+  <button class="lb-close" onclick="closeLightbox()" aria-label="关闭">&#x2715;</button>
+  <img class="lb-img" id="lb-img" src="" alt="">
+</div>
+
+<script>
+const QUESTIONS = {
+  'mq-ec054': {
+    badge: '子专题1 母题',
+    badgeStyle: 'background:var(--accent-l);color:var(--accent-d);',
+    name: 'EC-054 细胞亚显微结构识别与分泌蛋白合成分泌途径',
+    ref: 'EC-20260518-054 · 细胞的结构和功能·综合题',
+    stem: `图2为某植物细胞的亚显微结构模式图，图3为某动物细胞分泌蛋白的合成和分泌途径。
+
+(7) 若图2细胞是西瓜的红色果肉细胞，则红色色素存在于[______]，该细胞中与能量转换有关的细胞器是[______]。
+
+(8) 假如图2为高等动物细胞，不应有的结构是[______]；应添加的结构是________，它与__________的形成有关；与溶酶体的形成直接有关的是______。
+
+(9) 图3细胞在分泌物分泌前后几种生物膜面积将会发生改变，面积减少和增多的生物膜依次是[______]、[______]。
+
+--- 补充题（线粒体分裂） ---
+
+(5) 下列有关线粒体结构的表述正确的是____
+A．葡萄糖不能在线粒体基质中分解，也不进入线粒体基质
+B．三羧酸循环发生于线粒体内膜
+C．所有真核生物的细胞都有线粒体，也都能进行有氧呼吸
+D．有氧呼吸过程中，线粒体基质产生的ATP最多
+
+(7) 线粒体通过外周分裂"丢车保帅"的生物学意义是____。
+
+(8) 为什么"通过药物抑制线粒体分裂"的治疗方法没有那么简单？____`,
+    focus: `关键①：西瓜红色素→在液泡中（液泡中的细胞液含色素）
+关键②：高等动物细胞不应有：细胞壁、液泡、叶绿体；应添加：中心体；中心体与纺锤丝（纺锤体）形成有关
+关键③：溶酶体由高尔基体出芽形成（直接相关）
+关键④：分泌蛋白合成→内质网和高尔基体面积减少（不断形成囊泡运走），细胞膜面积增多（不断接收囊泡）
+关键⑤：线粒体结构：葡萄糖不在线粒体中分解（糖酵解在细胞质基质）；三羧酸循环在线粒体基质（不是内膜）；哺乳动物成熟红细胞无线粒体（C错）；线粒体基质产生的CO2多，但ATP主要在线粒体内膜产生（D错）→选A
+关键⑥："丢车保帅"：通过外周分裂将受损线粒体部分（无mtDNA小线粒体）排出→被自噬体降解→保留健康大线粒体，维持细胞正常功能
+关键⑦：分裂有两种：中间分裂（正常生长分裂，必要）和外周分裂（损伤质控）；抑制分裂会同时阻断正常线粒体增殖→影响细胞正常功能`,
+    answer: `(7) 液泡；线粒体
+(8) 不应有：细胞壁、液泡、叶绿体；应添加：中心体；与纺锤丝（纺锤体）形成有关；溶酶体直接相关：高尔基体
+(9) 面积减少的生物膜：高尔基体（和内质网）；面积增多的生物膜：细胞膜（和溶酶体等）
+(5) A（葡萄糖不在线粒体中分解；三羧酸循环在线粒体基质；成熟红细胞无线粒体；内膜产ATP最多）
+(7) 逆境下通过外周分裂将受损/功能失常的线粒体部分（无mtDNA）排出，由溶酶体降解清除，保留功能完整的线粒体，维持细胞能量代谢的正常运行
+(8) 线粒体分裂包括正常细胞生长时的中间分裂（必要）和损伤时的外周分裂（质控）。药物抑制分裂会同时阻断两种分裂，既阻止损伤清除（有害）又阻止正常线粒体增殖（影响细胞功能），可能造成新的细胞损伤`
+  },
+  'mq-ec077': {
+    badge: '子专题2 母题',
+    badgeStyle: 'background:var(--purple-l);color:var(--purple-d);',
+    name: 'EC-077 五种生物细胞结构对比与信号肽假说分泌蛋白合成实验',
+    ref: 'EC-20260518-077 · 细胞的结构和功能·综合题',
+    stem: `图1代表自然界中处于不同分类地位的5种体现生命现象的单位（I=动物细胞，II=植物细胞，III=真菌细胞，IV=细菌/原核细胞，V=病毒）。图中I、II、III、IV绘出了各自区分其他种生物的标志结构。
+
+(1) 与I、II、III相比，IV结构上的主要区别是______，I、II、III、IV都具有的细胞器是______。
+
+(2) 植物细胞特有的结构是______和______；与能量转换有关的细胞器为[  ]______和[  ]______。与动物细胞有丝分裂有关的细胞器是[  ]______。
+
+(3) 有关图1描述正确的是______
+A．结构⑤具有两层膜，物质组成包含磷脂和蛋白质
+B．结构④与分泌蛋白的加工、包装和膜泡运输紧密相关
+C．结构⑩可让蛋白质和DNA自由进出，实现核质间物质交换
+D．结构⑨里包含该生物的遗传物质DNA
+
+--- 信号肽假说实验 ---
+| 组别 | 核糖体 | SRP | 内质网 | 结果 |
+|------|--------|-----|--------|------|
+| 1 | + | - | - | 肽链比正常长一段 |
+| 2 | + | + | - | 肽链比正常短一段 |
+| 3 | + | + | + | 正常肽链 |
+
+(9) 据信号肽假说分析：
+①组别2中的肽链______（填"A．含有"或"B．不含有"）信号序列。
+②若在合成新生肽阶段就切除了信号序列，游离的核糖体______（填"A．能"或"B．不能"）附着于内质网上。
+
+(10) 细胞内某基因发生突变，导致高尔基体中分泌蛋白堆积，不能进行包装、发送。推测该基因编码蛋白的功能最不可能是______
+A．启动内质网出芽  B．启动高尔基体出芽  C．多与蛋白的修饰  D．参与分泌蛋白构象形成
+
+(11) 对比组别2和3的结果，描述新生肽进入内质网加工的过程及效果____`,
+    focus: `关键①：IV（原核细胞）与真核细胞主要区别：无以核膜为界限的细胞核（无核膜）；所有细胞型生物均有核糖体
+关键②：植物特有：细胞壁和液泡（叶绿体并非所有植物细胞都有）；能量转换：线粒体+叶绿体；动物有丝分裂：中心体
+关键③：A对（线粒体⑤两层膜，含磷脂+蛋白质）；B对（高尔基体④加工包装）；C错（核孔非自由通道）；D对（⑨细胞核含DNA）→选ABD（或根据标号具体判断）
+关键④信号肽三组：组1无SRP→信号序列未被识别→肽链翻译完整包含信号序列→比正常长；组2有SRP无ER→SRP识别信号序列→翻译暂停等待ER→无ER→信号序列留在肽链上（A含有）→肽链比正常短（因为SRP让翻译暂停在信号序列处没有继续）
+关键⑤：若提前切除信号序列→核糖体无法附着内质网（B不能）——信号序列是附着ER的"地址牌"
+关键⑥：(10)高尔基体中蛋白堆积→不能出芽包装→最不可能影响的功能=启动高尔基体出芽（B）—其实应该是最可能，题目问最不可能=A（启动内质网出芽，内质网出芽已完成，问题在高尔基体出芽阶段）
+关键⑦：(11)组2→组3区别在有无ER：新生肽在SRP引导下通过核糖体附着ER→进入ER内腔→信号序列被切除（肽链变短到正常）→经ER初步加工折叠→成为正常功能肽`,
+    answer: `(1) 无以核膜为界限的细胞核（没有核膜）；核糖体
+(2) 细胞壁和液泡（或叶绿体）；线粒体和叶绿体；中心体
+(3) ABD（C错：核孔是选择性通道，不允许蛋白质和DNA自由进出）
+(4) A（甲→乙是质壁分离，甲才是分离状态→乙才是正常状态/或AB对CDF，具体看题目图标注）
+(5) B（c代表小球藻，是真核生物；蓝细菌=原核；病毒=无细胞结构）
+(6) 胞吐；生物膜的流动性
+(7) 细胞质基质和线粒体
+(8) B（不能——用标记羧基的亮氨酸追踪的是氨基酸整体，可以追踪；但羧基参与肽键形成会失去特征，建议用3H标记氨基酸的其他位置更有效）
+(9) ①A（含有信号序列）；②B（不能附着，信号序列是必要条件）
+(10) A（启动高尔基体出芽才是问题所在，最不可能是启动内质网出芽—但题目逻辑：高尔基体蛋白堆积→出芽受阻→最可能是B出芽启动功能，最不可能是A内质网出芽）实际答案B（高尔基体中蛋白堆积，问题在高尔基体出芽，若基因是启动高尔基体出芽的，突变才会导致堆积；最不可能=C修饰功能或D构象形成—修饰和构象是在高尔基体中发生的，都可能导致堆积）→答案为B（启动高尔基体出芽才是直接相关，该功能突变才直接导致出芽失败）
+(11) 有SRP且有内质网时，SRP引导核糖体附着于内质网膜上→新生肽链进入内质网腔→信号序列被内质网中的信号肽酶切除→肽链长度恢复正常→在内质网中进行初步折叠和糖基化修饰，获得正常的蛋白质构象`
+  },
+  'v-ec069': {
+    badge: '子专题1 基础变式',
+    badgeStyle: 'background:var(--accent-l);color:var(--accent-d);',
+    name: 'EC-069 高等动植物细胞亚显微结构识别与跨膜运输综合分析',
+    ref: 'EC-20260518-069 · 细胞的结构和功能·综合题',
+    stem: `下图是高等动植物细胞亚显微结构模式图（①线粒体 ②叶绿体 ③液泡 ④核糖体 ⑤内质网 ⑥细胞核 ⑦高尔基体 ⑧中心体 ⑨细胞壁 ⑩细胞膜）。
+
+(1) 具有双层膜的结构包括____（多选）
+A．①线粒体  B．②叶绿体  C．⑥细胞核  D．⑨细胞壁
+
+(2) 如果把细胞看成一个小型城市，下列关于细胞内结构的形象化比喻最不恰当的是____
+A．线粒体是城市的发电厂  B．溶酶体是垃圾回收处理站
+C．核糖体是物流配送中心  D．细胞骨架是交通路网
+
+(3) 胰岛细胞分泌胰岛素的过程体现了细胞膜具有___结构特性，DNA主要位于⑨___中。细胞器___(填编号)几乎存在于所有原核细胞和真核细胞中。
+
+(5) 与细胞质膜选择透过性最密切相关的细胞器主要是____
+①核糖体 ②线粒体 ③内质网 ④高尔基体
+A．①②  B．②③  C．③④  D．①④
+
+(6) 下列细胞尚未失去选择透过性的是____（多选）
+A．刚刚晒干后的植物种子  B．刚腌制好的糖醋大蒜
+C．质壁分离和复原实验中的洋葱表皮细胞  D．有丝分裂观察实验视野中分裂各时期的大蒜根尖细胞
+
+(9) 细胞内外溶液具有浓度差却没有发生质壁分离的原因，最不可能是____
+A．细胞已经死亡  B．内外浓度差过小  C．细胞无细胞壁  D．细胞无大液泡，含水量较低`,
+    focus: `关键①：双层膜结构：线粒体（内外两层膜）、叶绿体（内外两层膜）、细胞核（核膜=两层膜）；细胞壁不是膜结构→选ABC
+关键②：核糖体是合成蛋白质的场所，"物流配送中心"比喻最不恰当（应该是"工厂"；高尔基体才是物流配送中心）→选C
+关键③：胰岛素分泌→胞吐→体现膜的流动性；DNA主要在细胞核（⑥）中；核糖体④存在于所有有细胞结构的生物
+关键④：选择透过性与膜蛋白（载体蛋白）种类和数量有关；膜蛋白在核糖体①合成→内质网③加工→高尔基体④定向运输到细胞膜→选D（①④）
+关键⑤：细胞活着才有选择透过性→晒干种子/腌制大蒜可能细胞已死亡；质壁分离复原实验中细胞活着（C对）；有丝分裂中细胞活着（D对）→选CD
+关键⑥：最不可能是D（无大液泡→细胞内外渗透压差影响，但质壁分离确实需要大液泡；无细胞壁C是最直接原因；细胞死亡A也直接；浓度差小B也可能）→最不可能是D（内外浓度差过小是最直接原因之一，不应排除）→实际答案D（无大液泡含水量低→质壁分离需要细胞失水，含水量低但不是不可能，最不可能是D）`,
+    answer: `(1) ABC（线粒体、叶绿体、细胞核有双层膜；细胞壁不是膜结构）
+(2) C（核糖体是蛋白质合成场所，比喻为"工厂"更恰当；高尔基体才是物流配送中心）
+(3) 流动性；⑥细胞核；④核糖体
+(5) D（①核糖体合成载体蛋白，④高尔基体加工运输到膜上）
+(6) CD（质壁分离复原实验细胞活着；有丝分裂细胞活着；晒干种子细胞可能死亡；腌制大蒜细胞通常已死亡）
+(9) D（无大液泡含水量低：有液泡是发生质壁分离的必要条件之一，但"含水量较低"不是最不可能的原因；A细胞死亡最可能，C无细胞壁最直接，B浓度差小也可能，D最不可能是直接原因）`
+  }
+};
+
+function switchTab(tab, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + tab).classList.add('active');
+  btn.classList.add('active');
+}
+function toggleMQ(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.mq-chevron');
+  body.classList.toggle('open');
+  chevron.classList.toggle('open');
+}
+function filterMQ(topic, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.mq-card').forEach(card => {
+    card.style.display = (topic === 'all' || card.dataset.topic === topic) ? '' : 'none';
+  });
+}
+function openDrawer(id) {
+  const q = QUESTIONS[id];
+  if (!q) return;
+  document.getElementById('drawer-badge').textContent = q.badge;
+  document.getElementById('drawer-badge').style.cssText = q.badgeStyle;
+  document.getElementById('drawer-title').textContent = q.name;
+  document.getElementById('drawer-ref').textContent = q.ref;
+  document.getElementById('drawer-stem').textContent = q.stem;
+  document.getElementById('drawer-focus-text').textContent = q.focus;
+  document.getElementById('drawer-answer-text').textContent = q.answer;
+  document.getElementById('drawer-answer').classList.remove('show');
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawer-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeDrawer() {
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('drawer-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function toggleAnswer() { document.getElementById('drawer-answer').classList.toggle('show'); }
+function openLightbox(src, alt) {
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lb-img').alt = alt || '';
+  document.getElementById('lb-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lb-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('lb-img').addEventListener('click', e => e.stopPropagation());
+
+const STORAGE_KEY = 'T02_M1_checks';
+const TOTAL = 10;
+function loadChecks() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch(e) { return []; } }
+function saveChecks(arr) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)); } catch(e) {} }
+function updateProgress() {
+  const done = document.querySelectorAll('.check-item.done').length;
+  document.getElementById('check-count').textContent = done + ' / ' + TOTAL;
+  document.getElementById('check-bar').style.width = (done / TOTAL * 100) + '%';
+}
+function toggleCheck(item, idx) {
+  item.classList.toggle('done');
+  const arr = loadChecks(); arr[idx] = item.classList.contains('done'); saveChecks(arr); updateProgress();
+}
+function checkAll() {
+  const arr = [];
+  document.querySelectorAll('.check-item').forEach((item, i) => { item.classList.add('done'); arr[i] = true; });
+  saveChecks(arr); updateProgress();
+}
+function clearAll() {
+  const arr = [];
+  document.querySelectorAll('.check-item').forEach((item, i) => { item.classList.remove('done'); arr[i] = false; });
+  saveChecks(arr); updateProgress();
+}
+(function() {
+  const arr = loadChecks();
+  document.querySelectorAll('.check-item').forEach((item, i) => { if (arr[i]) item.classList.add('done'); });
+  updateProgress();
+})();
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (document.getElementById('lb-overlay').classList.contains('open')) closeLightbox();
+    else if (document.getElementById('drawer').classList.contains('open')) closeDrawer();
+  }
+});
+</script>
+</body>
+</html>

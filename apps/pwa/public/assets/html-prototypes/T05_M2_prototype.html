@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T05_M2 · 气孔开闭与蒸腾调节</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent:#639922; --accent-l:#EAF3DE; --accent-m:#9DC95C; --accent-d:#27500A;
+  --teal:#0F6E56; --teal-l:#E1F5EE; --teal-d:#085041;
+  --amber:#BA7517; --accent-d2:#27500A; --amber-l:#FAEEDA; --amber-d:#633806;
+  --coral:#993C1D; --coral-l:#FAECE7; --coral-d:#712B13;
+  --blue:#185FA5; --blue-l:#E6F1FB; --blue-d:#0C447C;
+  --bg:#ffffff; --bg2:#f7f7f5; --bg3:#f1efe8;
+  --tx:#1a1a18; --tx2:#5f5e5a; --tx3:#888780;
+  --bd:rgba(0,0,0,0.10); --bd2:rgba(0,0,0,0.18);
+  --r-sm:6px; --r-md:8px; --r-lg:12px; --r-xl:16px;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+}
+@media(prefers-color-scheme:dark){
+  :root{--bg:#1c1c1a;--bg2:#252523;--bg3:#2c2c2a;--tx:#f0efea;--tx2:#b4b2a9;--tx3:#888780;--bd:rgba(255,255,255,0.09);--bd2:rgba(255,255,255,0.16);--accent-l:#173404;--accent-d:#C0DD97;--accent-d2:#C0DD97;--teal-l:#04342C;--teal-d:#9FE1CB;--amber-l:#412402;--amber-d:#FAC775;--coral-l:#4A1B0C;--coral-d:#F5C4B3;--blue-l:#042C53;--blue-d:#B5D4F4;}
+}
+body{font-family:var(--font);font-size:15px;line-height:1.6;color:var(--tx);background:var(--bg3);min-height:100vh;}
+.app{max-width:800px;margin:0 auto;background:var(--bg);min-height:100vh;}
+.site-header{padding:1.25rem 1.5rem 0;background:var(--bg);border-bottom:0.5px solid var(--bd);position:sticky;top:0;z-index:20;}
+.header-top{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.header-icon{background:var(--accent-l);border-radius:var(--r-md);padding:6px 8px;display:flex;align-items:center;justify-content:center;}
+.header-icon i{font-size:20px;color:var(--accent);}
+.header-meta{font-size:12px;color:var(--tx3);}
+.header-title{font-size:17px;font-weight:500;color:var(--tx);}
+.header-id{margin-left:auto;font-size:11px;color:var(--tx3);background:var(--bg2);padding:3px 9px;border-radius:var(--r-sm);}
+.nav-tabs{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.nav-tab{padding:.6rem 1.1rem;font-size:13px;color:var(--tx2);cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;font-family:var(--font);white-space:nowrap;transition:color .15s,border-color .15s;}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500;}
+.nav-tab:hover:not(.active){color:var(--tx);}
+.page{display:none;padding:1.5rem;}
+.page.active{display:block;}
+.memory-section{margin-bottom:1.5rem;}
+.memory-card{border:0.5px solid var(--bd);border-radius:var(--r-xl);overflow:hidden;background:var(--bg);}
+.memory-img{width:100%;display:block;max-height:300px;object-fit:contain;background:var(--bg3);cursor:zoom-in;transition:opacity .15s;}
+.memory-img:hover{opacity:.9;}
+.memory-footer{padding:.85rem 1rem;display:flex;align-items:center;gap:10px;border-top:0.5px solid var(--bd);}
+.memory-label{font-size:13px;font-weight:500;color:var(--tx);flex:1;}
+audio{height:32px;width:220px;}
+.lb-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:200;display:none;align-items:center;justify-content:center;cursor:zoom-out;}
+.lb-overlay.open{display:flex;}
+.lb-img{max-width:92vw;max-height:92vh;object-fit:contain;border-radius:var(--r-md);}
+.lb-close{position:fixed;top:16px;right:20px;background:none;border:none;color:#fff;font-size:28px;cursor:pointer;opacity:.7;}
+.lb-close:hover{opacity:1;}
+.section-title{font-size:13px;font-weight:500;color:var(--tx2);display:flex;align-items:center;gap:7px;margin-bottom:1rem;text-transform:uppercase;letter-spacing:.04em;}
+.section-divider{height:0.5px;background:var(--bd);margin:1.5rem 0;}
+.signal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:1.5rem;}
+.signal-card{background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;}
+.signal-label{font-size:11px;color:var(--tx3);letter-spacing:.04em;margin-bottom:.4rem;text-transform:uppercase;}
+.signal-tag{font-size:13px;color:var(--tx);margin-bottom:3px;}
+.mode-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:1.5rem;}
+.mode-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.85rem 1rem;border-left-width:3px;}
+.mode-card-label{font-size:11px;font-weight:500;margin-bottom:.3rem;}
+.mode-card-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.trap-list{display:flex;flex-direction:column;gap:7px;}
+.trap-item{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.55;}
+.trap-icon{color:#E24B4A;font-size:15px;flex-shrink:0;margin-top:1px;}
+.filter-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem;}
+.filter-btn{padding:5px 13px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx2);font-family:var(--font);transition:all .15s;}
+.filter-btn.active{background:var(--accent-l);color:var(--accent-d2);border-color:var(--accent-m);font-weight:500;}
+.mq-card{border:0.5px solid var(--bd);border-radius:var(--r-lg);background:var(--bg);margin-bottom:.85rem;overflow:hidden;}
+.mq-header{padding:.9rem 1.1rem;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;transition:background .15s;}
+.mq-header:hover{background:var(--bg2);}
+.mq-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);white-space:nowrap;}
+.mq-badge.open{background:var(--accent-l);color:var(--accent-d2);}
+.mq-badge.close{background:var(--coral-l);color:var(--coral-d);}
+.mq-badge.aba{background:var(--amber-l);color:var(--amber-d);}
+.mq-badge.transp{background:var(--teal-l);color:var(--teal-d);}
+.mq-name{font-size:14px;font-weight:500;color:var(--tx);flex:1;}
+.mq-purity{font-size:12px;color:var(--tx3);flex-shrink:0;}
+.mq-chevron{color:var(--tx3);font-size:16px;transition:transform .2s;flex-shrink:0;}
+.mq-chevron.open{transform:rotate(180deg);}
+.mq-body{display:none;padding:.75rem 1.1rem 1.1rem;border-top:0.5px solid var(--bd);}
+.mq-body.open{display:block;}
+.mq-source{font-size:12px;color:var(--tx3);margin-bottom:.65rem;}
+.rule-box{background:var(--accent-l);border-left:3px solid var(--accent);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:.65rem .9rem;font-size:13px;color:var(--accent-d2);margin:.75rem 0;line-height:1.65;}
+.chain-label{font-size:12px;font-weight:500;color:var(--tx2);margin:.75rem 0 .4rem;text-transform:uppercase;letter-spacing:.04em;}
+.signal-chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:6px;}
+.sc-node{background:var(--bg2);border-radius:var(--r-sm);padding:3px 9px;font-size:13px;color:var(--tx);}
+.sc-node.open{background:var(--accent-l);color:var(--accent-d2);}
+.sc-node.close{background:var(--coral-l);color:var(--coral-d);}
+.sc-node.aba{background:var(--amber-l);color:var(--amber-d);}
+.sc-node.transp{background:var(--teal-l);color:var(--teal-d);}
+.sc-arrow{color:var(--tx3);font-size:13px;}
+.mq-note{font-size:13px;color:var(--tx2);margin-top:.75rem;line-height:1.6;}
+.q-trigger{display:inline-flex;align-items:center;gap:5px;margin-top:.75rem;padding:6px 12px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;color:var(--tx2);cursor:pointer;font-family:var(--font);transition:all .15s;}
+.q-trigger:hover{background:var(--bg2);color:var(--tx);}
+.q-trigger i{font-size:14px;}
+.ladder-section-label{font-size:13px;font-weight:500;color:var(--tx2);margin-bottom:.85rem;display:flex;align-items:center;gap:7px;}
+.ladder-rows{display:flex;flex-direction:column;gap:8px;margin-bottom:1rem;}
+.ladder-row{display:grid;grid-template-columns:64px 1fr;gap:10px;align-items:start;}
+.ladder-level{font-size:11px;font-weight:500;padding:6px 4px;border-radius:var(--r-sm);text-align:center;line-height:1.4;}
+.l1{background:var(--teal-l);color:var(--teal-d);}
+.l2{background:var(--accent-l);color:var(--accent-d2);}
+.l3{background:var(--amber-l);color:var(--amber-d);}
+.ladder-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.65rem .9rem;background:var(--bg);}
+.ladder-card-name{font-size:13px;font-weight:500;color:var(--tx);}
+.ladder-card-sub{font-size:12px;color:var(--tx3);margin-top:3px;line-height:1.5;}
+.ladder-note{background:var(--bg2);border-radius:var(--r-md);padding:.65rem .9rem;font-size:12px;color:var(--tx2);margin-bottom:1rem;line-height:1.55;}
+.progress-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem;}
+.progress-bar{height:5px;border-radius:3px;background:var(--bg2);margin-bottom:1.25rem;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;background:var(--accent);width:0%;transition:width .3s;}
+.checklist{display:flex;flex-direction:column;gap:7px;}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:.7rem .9rem;border:0.5px solid var(--bd);border-radius:var(--r-md);background:var(--bg);cursor:pointer;transition:background .15s;}
+.check-item.done{background:var(--bg2);}
+.check-box{width:18px;height:18px;border:1.5px solid var(--bd2);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .15s;}
+.check-item.done .check-box{background:var(--accent);border-color:var(--accent);}
+.check-box i{font-size:11px;color:#fff;display:none;}
+.check-item.done .check-box i{display:block;}
+.check-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.check-item.done .check-text{color:var(--tx3);text-decoration:line-through;}
+.action-row{margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:8px;}
+.action-btn{padding:7px 14px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.action-btn:hover{background:var(--bg2);}
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s;}
+.drawer-overlay.open{opacity:1;pointer-events:all;}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100vw);background:var(--bg);z-index:101;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden;}
+.drawer.open{transform:translateX(0);}
+.drawer-header{padding:1rem 1.25rem;border-bottom:0.5px solid var(--bd);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.drawer-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);}
+.drawer-title{font-size:14px;font-weight:500;color:var(--tx);flex:1;line-height:1.4;}
+.drawer-close{background:none;border:none;cursor:pointer;color:var(--tx2);padding:4px;border-radius:var(--r-sm);display:flex;align-items:center;transition:background .15s;}
+.drawer-close:hover{background:var(--bg2);}
+.drawer-body{flex:1;overflow-y:auto;padding:1.25rem;}
+.drawer-ec-ref{font-size:12px;color:var(--tx3);margin-bottom:1rem;display:flex;align-items:center;gap:6px;}
+.drawer-stem{font-size:14px;color:var(--tx);line-height:1.75;white-space:pre-wrap;}
+.drawer-sub{font-size:13px;color:var(--tx2);background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:1rem;line-height:1.65;}
+.drawer-sub-label{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-answer{font-size:13px;color:var(--tx);background:var(--accent-l);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:.75rem;line-height:1.65;display:none;}
+.drawer-answer.show{display:block;}
+.drawer-answer-label{font-size:11px;font-weight:500;color:var(--accent-d2);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-footer{padding:.85rem 1.25rem;border-top:0.5px solid var(--bd);display:flex;gap:8px;flex-shrink:0;}
+.drawer-btn{flex:1;padding:8px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.drawer-btn:hover{background:var(--bg2);}
+.drawer-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+.drawer-btn.primary:hover{background:var(--accent-d);}
+@media(max-width:600px){.site-header{padding:1rem 1rem 0;}.page{padding:1rem;}.header-title{font-size:15px;}.mode-grid{grid-template-columns:1fr 1fr;}.ladder-row{grid-template-columns:52px 1fr;gap:8px;}.action-row{flex-direction:column;}.action-btn{width:100%;text-align:center;}.drawer{width:100vw;}audio{width:160px;}}
+@media(max-width:380px){.mode-grid,.signal-grid{grid-template-columns:1fr;}}
+
+.back-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;font-size:12px;color:var(--tx2);background:var(--bg2);border:0.5px solid var(--bd2);border-radius:var(--r-md);text-decoration:none;font-family:var(--font);transition:background .15s,color .15s;white-space:nowrap;flex-shrink:0;}
+.back-btn:hover{background:var(--bg3);color:var(--tx);}
+.back-btn i{font-size:14px;}
+.memory-video{width:100%;max-height:220px;display:block;border-radius:var(--r-md);background:#000;margin-top:8px;}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="site-header">
+  <div class="header-top">
+    <div class="header-icon"><i class="ti ti-droplet" aria-hidden="true"></i></div>
+    <div>
+      <div class="header-meta">05 植物生理 · M2 气孔调节</div>
+      <div class="header-title">气孔开闭与蒸腾调节</div>
+    </div>
+    <a class="back-btn" href="index.html" aria-label="返回首页"><i class="ti ti-arrow-left"></i> 首页</a>
+    <div class="header-id">T05_M2</div>
+  </div>
+  <nav class="nav-tabs" role="tablist">
+    <button class="nav-tab active" role="tab" onclick="switchTab('overview',this)">概览</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('mothers',this)">母题精讲</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('ladder',this)">变式阶梯</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('self',this)">自查清单</button>
+  </nav>
+</header>
+
+<div id="tab-overview" class="page active" role="tabpanel">
+  <div class="memory-section">
+    <div class="memory-card">
+      <img class="memory-img" src="记忆卡/T05_M2_memory.png" alt="气孔开闭与蒸腾调节记忆卡" onclick="openLightbox(this.src,this.alt)" onerror="this.style.display='none'">
+      <div class="memory-footer">
+        <div>
+          <div class="memory-label">记忆卡 · 保卫细胞渗透压调节与气孔开闭信号链</div>
+          <div style="font-size:12px;color:var(--tx3);">点击图片可放大</div>
+        </div>
+        <video class="memory-video" controls controlsList="nodownload" preload="metadata" style="display:none">
+          <source src="audio/T05_M2.mp4" type="video/mp4">
+        </video>
+          <div class="audio-placeholder" style="display:flex"><i class="ti ti-video-off"></i>视频待放入</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title"><i class="ti ti-scan" aria-hidden="true"></i> 触发信号速查</div>
+  <div class="signal-grid">
+    <div class="signal-card">
+      <div class="signal-label">图像信号</div>
+      <div class="signal-tag">保卫细胞放大图（开/闭状态）</div>
+      <div class="signal-tag">蒸腾速率-环境因子曲线</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">文字信号</div>
+      <div class="signal-tag">气孔开放 / 关闭 / 保卫细胞</div>
+      <div class="signal-tag">蒸腾作用 / 水分散失</div>
+      <div class="signal-tag">脱落酸（ABA）/ K⁺内流 / 渗透压</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">任务关键词</div>
+      <div class="signal-tag">分析气孔开闭的离子机制</div>
+      <div class="signal-tag">说明ABA如何促使气孔关闭</div>
+      <div class="signal-tag">分析蒸腾速率变化的环境因子</div>
+    </div>
+  </div>
+
+  <div class="section-title"><i class="ti ti-arrow-fork" aria-hidden="true"></i> 核心概念 · 四个分析维度</div>
+  <div class="mode-grid">
+    <div class="mode-card" style="border-left-color:var(--accent);">
+      <div class="mode-card-label" style="color:var(--accent-d2);">气孔开放机制</div>
+      <div class="mode-card-text">光照→光合产生有机酸→K⁺主动内流→保卫细胞渗透压↑→吸水膨胀→气孔开放；CO₂浓度降低也促进开放</div>
+    </div>
+    <div class="mode-card" style="border-left-color:var(--coral);">
+      <div class="mode-card-label" style="color:var(--coral-d);">气孔关闭机制（ABA信号）</div>
+      <div class="mode-card-text">水分亏缺→ABA合成↑→保卫细胞ABA受体激活→K⁺外流→渗透压↓→失水收缩→气孔关闭；干旱应激反应</div>
+    </div>
+    <div class="mode-card" style="border-left-color:var(--teal);">
+      <div class="mode-card-label" style="color:var(--teal-d);">蒸腾作用的生理意义</div>
+      <div class="mode-card-text">①降低叶面温度（蒸发散热）；②产生蒸腾拉力，驱动水分和无机盐从根到叶向上运输；③调节水分散失</div>
+    </div>
+    <div class="mode-card" style="border-left-color:var(--amber);">
+      <div class="mode-card-label" style="color:var(--amber-d);">影响蒸腾速率的因素</div>
+      <div class="mode-card-text">光照↑、温度↑、湿度↓、风速↑均使蒸腾速率升高；CO₂浓度↑→气孔关闭→蒸腾↓；水分亏缺→ABA→气孔关闭→蒸腾↓</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-alert-triangle" aria-hidden="true"></i> 高频陷阱（5 个）</div>
+  <div class="trap-list">
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon"></i><div>气孔开放时，K⁺是<strong>主动内流</strong>（需要载体蛋白和ATP）；关闭时K⁺外流——不能说K⁺是"自由扩散"进入保卫细胞</div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon"></i><div>蒸腾作用发生在叶片气孔处（主要），也有少量通过角质层——<strong>关闭气孔不能完全阻止水分散失</strong>，只能减少</div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon"></i><div>ABA促使气孔关闭是<strong>应激反应</strong>，不是正常生理过程；正常白天气孔开放是由光照和K⁺流动调节的</div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon"></i><div>蒸腾拉力驱动的是<strong>木质部</strong>中水分和无机盐的向上运输——韧皮部运输的是有机物，方向可上可下，不依赖蒸腾拉力</div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon"></i><div>CO₂浓度升高→气孔关闭（减少CO₂继续进入）——这是一个<strong>负反馈调节</strong>，不要误以为CO₂多→光合更快→气孔开放</div></div>
+  </div>
+</div>
+
+<div id="tab-mothers" class="page" role="tabpanel">
+  <div class="filter-tabs" role="group">
+    <button class="filter-btn active" onclick="filterMode('all',this)">全部（4 类）</button>
+    <button class="filter-btn" onclick="filterMode('open',this)">气孔开放机制</button>
+    <button class="filter-btn" onclick="filterMode('close',this)">气孔关闭（ABA）</button>
+    <button class="filter-btn" onclick="filterMode('aba',this)">ABA信号通路</button>
+    <button class="filter-btn" onclick="filterMode('transp',this)">蒸腾速率影响</button>
+  </div>
+
+  <div class="mq-card" data-mode="open">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge open">气孔开放机制</span>
+      <span class="mq-name">光照条件下保卫细胞K⁺内流驱动气孔开放的离子机制</span>
+      <span class="mq-purity">10/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-440 · 子问题 (1)(2)</div>
+      <div class="rule-box">核心信号：题目描述"植物叶片在光照条件下气孔开放"，要求从渗透压和离子转运角度解释气孔开放的分子机制。</div>
+      <div class="chain-label">气孔开放信号链</div>
+      <div class="signal-chain"><span class="sc-node">光照</span><span class="sc-arrow">→</span><span class="sc-node open">光合产生ATP和有机酸（H⁺泵激活）</span></div>
+      <div class="signal-chain"><span class="sc-node">H⁺泵向外泵H⁺</span><span class="sc-arrow">→</span><span class="sc-node open">膜内负电位↑→K⁺通道开放→K⁺主动内流</span></div>
+      <div class="signal-chain"><span class="sc-node">K⁺积累→渗透压↑</span><span class="sc-arrow">→</span><span class="sc-node open">保卫细胞吸水膨胀→气孔开放 ✓</span></div>
+      <p class="mq-note">⚠️ K⁺内流是<strong>主动运输</strong>（需要ATP和载体蛋白），不是协助扩散。ATP来源是光合作用（主要）和细胞呼吸（少量）。夜间无光照时，H⁺泵不激活，K⁺外流，气孔关闭。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec440')"><i class="ti ti-file-text"></i> 查看完整题干</button>
+    </div>
+  </div>
+
+  <div class="mq-card" data-mode="close">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge close">气孔关闭（ABA）</span>
+      <span class="mq-name">干旱胁迫下ABA促使气孔关闭以减少水分散失的机制</span>
+      <span class="mq-purity">10/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-444 · 子问题 (2)(3)</div>
+      <div class="rule-box">核心信号：题目描述"植物受到干旱胁迫，叶片ABA含量升高，气孔关闭"，要求分析ABA促使气孔关闭的信号通路，并说明其生物学意义。</div>
+      <div class="chain-label">ABA促使气孔关闭信号链</div>
+      <div class="signal-chain"><span class="sc-node">水分亏缺（干旱）</span><span class="sc-arrow">→</span><span class="sc-node close">叶肉细胞合成并释放ABA↑</span></div>
+      <div class="signal-chain"><span class="sc-node">ABA与保卫细胞受体结合</span><span class="sc-arrow">→</span><span class="sc-node close">胞内Ca²⁺浓度升高→K⁺外流通道激活</span></div>
+      <div class="signal-chain"><span class="sc-node">K⁺外流→渗透压↓</span><span class="sc-arrow">→</span><span class="sc-node close">保卫细胞失水收缩→气孔关闭 ✓</span></div>
+      <p class="mq-note">生物学意义：气孔关闭减少水分通过气孔散失（蒸腾减少），帮助植物在干旱条件下维持水分平衡，是植物应对水分胁迫的重要适应机制。代价：CO₂供应减少→光合速率下降。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec444')"><i class="ti ti-file-text"></i> 查看完整题干</button>
+    </div>
+  </div>
+
+  <div class="mq-card" data-mode="aba">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge aba">ABA信号通路</span>
+      <span class="mq-name">ABA受体突变体植物气孔不能正常关闭的实验分析</span>
+      <span class="mq-purity">9/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-447 · 子问题 (1)(3)</div>
+      <div class="rule-box">核心信号：题目描述"科学家获得一种ABA受体基因突变的拟南芥突变体，该突变体在干旱时气孔不能正常关闭"，要求分析原因并预测表型。标准母题：信号通路功能缺失型分析。</div>
+      <div class="chain-label">突变体分析逻辑</div>
+      <div class="signal-chain"><span class="sc-node">ABA受体突变（功能丧失）</span><span class="sc-arrow">→</span><span class="sc-node aba">ABA无法与受体结合</span></div>
+      <div class="signal-chain"><span class="sc-node">Ca²⁺信号无法激活</span><span class="sc-arrow">→</span><span class="sc-node aba">K⁺外流不被促进→气孔不关闭</span></div>
+      <div class="signal-chain"><span class="sc-node">干旱时蒸腾不减少</span><span class="sc-arrow">→</span><span class="sc-node aba">植物失水萎蔫→不耐旱 ✓</span></div>
+      <p class="mq-note">选题理由：突变体分析是实验题的高频考查类型，考查对信号通路的理解——受体缺失→信号无法传递→下游效应消失。这也是区分"ABA含量"和"ABA信号感知"的典型题目。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec447')"><i class="ti ti-file-text"></i> 查看完整题干</button>
+    </div>
+  </div>
+
+  <div class="mq-card" data-mode="transp">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge transp">蒸腾速率影响</span>
+      <span class="mq-name">环境因子（光照、温度、湿度、CO₂）对蒸腾速率影响的综合分析</span>
+      <span class="mq-purity">9/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-450 · 子问题 (2)(3)</div>
+      <div class="rule-box">核心信号：题目给出不同环境条件下蒸腾速率的变化数据或曲线，要求分析各因子的作用机制，或判断某条件下蒸腾速率的变化原因。</div>
+      <div class="chain-label">各因子对蒸腾速率的影响</div>
+      <div class="signal-chain"><span class="sc-node">光照↑</span><span class="sc-arrow">→</span><span class="sc-node transp">气孔开放→蒸腾↑（主要途径）</span></div>
+      <div class="signal-chain"><span class="sc-node">温度↑</span><span class="sc-arrow">→</span><span class="sc-node transp">水分蒸发加速+气孔开放→蒸腾↑</span></div>
+      <div class="signal-chain"><span class="sc-node">相对湿度↑</span><span class="sc-arrow">→</span><span class="sc-node">叶内外水势差↓→蒸腾↓</span></div>
+      <div class="signal-chain"><span class="sc-node">CO₂浓度↑</span><span class="sc-arrow">→</span><span class="sc-node transp">气孔关闭（负反馈）→蒸腾↓ ✓</span></div>
+      <p class="mq-note">⚠️ CO₂升高→气孔关闭，是很多学生的易错点——直觉上认为CO₂多有利光合→气孔应该开放，实际上高CO₂是一种信号，触发气孔关闭以防水分过度散失。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec450')"><i class="ti ti-file-text"></i> 查看完整题干</button>
+    </div>
+  </div>
+</div>
+
+<div id="tab-ladder" class="page" role="tabpanel">
+  <div class="ladder-note">按 L1 基础 → L2 进阶 → L3 综合三级递进。点击卡片可查看完整题干。</div>
+  <div class="ladder-section-label"><span class="ladder-level l1" style="width:auto;padding:3px 8px;">L1 基础</span> 气孔开闭机制与蒸腾意义识别</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1-1<br>开放</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec440-1')" style="cursor:pointer;">
+        <div class="ladder-card-name">写出光照条件下气孔开放的K⁺内流机制</div>
+        <div class="ladder-card-sub">EC-440 (1) · 光→ATP→H⁺泵→K⁺内流→渗透压↑→吸水 <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1-2<br>关闭</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec444-2')" style="cursor:pointer;">
+        <div class="ladder-card-name">分析干旱时ABA促使气孔关闭的信号链</div>
+        <div class="ladder-card-sub">EC-444 (2) · ABA→受体→Ca²⁺→K⁺外流→失水 <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1-3<br>蒸腾</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec450-1')" style="cursor:pointer;">
+        <div class="ladder-card-name">说明蒸腾作用对植物水分运输的驱动意义</div>
+        <div class="ladder-card-sub">EC-450 (1) · 蒸腾拉力→木质部水分+无机盐向上运输 <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+  </div>
+  <div class="section-divider"></div>
+  <div class="ladder-section-label"><span class="ladder-level l2" style="width:auto;padding:3px 8px;">L2 进阶</span> 突变体分析 + 多因子综合 + 实验设计</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2-1<br>突变体</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec447-13')" style="cursor:pointer;">
+        <div class="ladder-card-name">ABA受体突变体气孔不关闭的原因分析与耐旱表型预测</div>
+        <div class="ladder-card-sub">EC-447 (1)+(3) · 受体缺失→信号通路中断→下游效应丧失 <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2-2<br>多因子</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec450-23')" style="cursor:pointer;">
+        <div class="ladder-card-name">分析CO₂浓度升高为何导致气孔关闭而非开放</div>
+        <div class="ladder-card-sub">EC-450 (2)+(3) · 高CO₂→负反馈→气孔关闭→蒸腾↓，与直觉相反 <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2-3<br>实验</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec444-34')" style="cursor:pointer;">
+        <div class="ladder-card-name">设计实验验证ABA对保卫细胞K⁺外流的促进作用</div>
+        <div class="ladder-card-sub">EC-444 (3)+(4) · 用K⁺荧光探针或电生理记录，单一变量实验设计 <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+  </div>
+  <div class="section-divider"></div>
+  <div class="ladder-section-label"><span class="ladder-level l3" style="width:auto;padding:3px 8px;">L3 综合</span> 气孔调节 + 光合影响 + 生产应用</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l3">L3-1</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec455-135')" style="cursor:pointer;">
+        <div class="ladder-card-name">干旱胁迫下气孔关闭→光合速率变化→产量影响→农业抗旱策略</div>
+        <div class="ladder-card-sub">EC-455 (1)+(3)+(5) · 气孔-光合-产量的完整联动，评价抗旱育种方案 <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="tab-self" class="page" role="tabpanel">
+  <div class="progress-row">
+    <span style="font-size:13px;color:var(--tx2);">学习自查清单</span>
+    <span style="font-size:13px;color:var(--tx2);" id="progress-text">0 / 7 完成</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="pbar"></div></div>
+  <div class="checklist" id="checklist">
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">能写出光照条件下气孔开放的完整信号链（光→ATP→H⁺泵→K⁺主动内流→渗透压↑→吸水→开放）</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">能写出干旱时ABA促使气孔关闭的信号链（ABA→受体→Ca²⁺→K⁺外流→渗透压↓→失水→关闭）</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">能分析蒸腾作用的两个主要生理意义（散热降温 + 蒸腾拉力驱动水分和无机盐向上运输）</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">能解释CO₂浓度升高导致气孔关闭（而非开放）的原因，知道这是负反馈调节</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">能分析ABA受体突变体气孔不关闭的原因，并预测其在干旱条件下的耐旱能力</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">完成 L1 全部 3 道基础变式（气孔开放、关闭机制、蒸腾意义各 1 道）</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">完成至少 2 道 L2 进阶变式，能运用信号通路分析框架解答突变体表型问题</div></div>
+  </div>
+  <div class="action-row">
+    <button class="action-btn" onclick="window.scrollTo(0,0);switchTab('mothers',document.querySelectorAll('.nav-tab')[1])">返回母题精讲 →</button>
+    <button class="action-btn" onclick="window.scrollTo(0,0);switchTab('ladder',document.querySelectorAll('.nav-tab')[2])">进入变式阶梯 →</button>
+  </div>
+</div>
+</div>
+
+<div class="lb-overlay" id="lb-overlay" onclick="closeLightbox()"><button class="lb-close" onclick="closeLightbox()">×</button><img class="lb-img" id="lb-img" src="" alt=""></div>
+<div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer" role="dialog" aria-modal="true">
+  <div class="drawer-header"><span class="drawer-badge" id="drawer-badge"></span><span class="drawer-title" id="drawer-title"></span><button class="drawer-close" onclick="closeDrawer()"><i class="ti ti-x" style="font-size:18px;"></i></button></div>
+  <div class="drawer-body"><div class="drawer-ec-ref" id="drawer-ref"></div><div class="drawer-stem" id="drawer-stem"></div><div class="drawer-sub" id="drawer-sub" style="display:none;"><div class="drawer-sub-label">本题考查重点</div><div id="drawer-sub-text"></div></div><div class="drawer-answer" id="drawer-answer"><div class="drawer-answer-label">参考答案</div><div id="drawer-answer-text"></div></div></div>
+  <div class="drawer-footer"><button class="drawer-btn" id="drawer-ans-btn" onclick="toggleAnswer()">显示答案</button><button class="drawer-btn primary" onclick="closeDrawer()">完成阅读</button></div>
+</div>
+
+<script>
+function switchTab(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');if(btn)btn.classList.add('active');}
+function toggleMQ(h){const b=h.nextElementSibling,c=h.querySelector('.mq-chevron'),o=b.classList.contains('open');b.classList.toggle('open',!o);c.classList.toggle('open',!o);}
+function filterMode(mode,btn){document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.mq-card').forEach(card=>{card.style.display=(mode==='all'||card.dataset.mode===mode)?'':'none';});}
+function toggleCheck(item){item.classList.toggle('done');updateProgress();saveChecklist();}
+function updateProgress(){const total=document.querySelectorAll('.check-item').length,done=document.querySelectorAll('.check-item.done').length;document.getElementById('pbar').style.width=(done/total*100)+'%';document.getElementById('progress-text').textContent=done+' / '+total+' 完成';}
+function saveChecklist(){try{const s=Array.from(document.querySelectorAll('.check-item')).map(el=>el.classList.contains('done'));localStorage.setItem('T05_M2_checklist',JSON.stringify(s));}catch(e){}}
+(function(){try{const s=JSON.parse(localStorage.getItem('T05_M2_checklist')||'[]');document.querySelectorAll('.check-item').forEach((item,i)=>{if(s[i])item.classList.add('done');});updateProgress();}catch(e){}})();
+const QUESTIONS={
+  'mq-ec440':{badge:'气孔开放机制 · 母题',badgeClass:'open',title:'光照条件下K⁺内流驱动气孔开放',ref:'EC-20260525-440 · 子问题 (1)(2)',stem:`研究表明，保卫细胞在光照条件下会主动积累K⁺，导致渗透压升高，进而吸水膨胀使气孔开放。\n\n(1) K⁺内流保卫细胞的运输方式是什么？需要哪些条件？ATP由哪种细胞器提供？\n(2) 若用质子泵（H⁺-ATPase）抑制剂处理保卫细胞，预测气孔的开闭状态，并解释原因。`,focus:'(1) K⁺内流是主动运输（逆浓度梯度，需要载体蛋白和ATP）。ATP由叶绿体（光合磷酸化）和线粒体（细胞呼吸）提供，光照时叶绿体是主要来源。\n(2) H⁺泵抑制剂→H⁺不能泵出→细胞膜内负电位不能建立→K⁺内流通道不能激活→K⁺不内流→渗透压不升→不吸水→气孔不开放（保持关闭）。',answer:'(1) K⁺内流的运输方式：主动运输（active transport）。\n需要的条件：①载体蛋白（K⁺通道蛋白）；②ATP（能量）；③K⁺浓度梯度（K⁺在保卫细胞外浓度较高）。\nATP来源：光照时主要由叶绿体通过光合磷酸化（光反应中光合作用的光反应阶段）产生；线粒体通过细胞呼吸也提供少量ATP。\n(2) 预测：气孔不开放（保持关闭状态）。\n原因：H⁺-ATPase（质子泵）负责将H⁺主动泵出细胞膜，建立细胞膜内侧的负电位；抑制质子泵后，H⁺不能外泵→膜内负电位不能形成→依赖于负电位驱动的K⁺内流通道无法激活→K⁺不能大量内流→保卫细胞渗透压不升高→不吸水膨胀→气孔维持关闭。'},
+  'mq-ec444':{badge:'气孔关闭（ABA）· 母题',badgeClass:'close',title:'干旱胁迫下ABA促使气孔关闭机制',ref:'EC-20260525-444 · 子问题 (2)(3)',stem:`研究发现，植物在干旱胁迫时，叶片ABA含量显著升高，随后气孔迅速关闭。\n\n(2) ABA如何促使保卫细胞K⁺外流，进而导致气孔关闭？写出完整的信号链。\n(3) 气孔关闭对植物在干旱条件下的生存有何意义？这会对光合作用产生什么影响？`,focus:'(2) ABA信号链：水分亏缺→叶肉细胞合成ABA→ABA运输到保卫细胞→ABA与膜上受体（PYR/RCAR）结合→PP2C磷酸酶被抑制→SnRK2激酶激活→胞内Ca²⁺浓度升高→K⁺外流通道激活→K⁺外流→渗透压↓→失水收缩→气孔关闭。\n(3) 意义：减少水分通过气孔散失（蒸腾减少），有助于维持植物体内水分平衡，是抗旱适应机制。影响光合：气孔关闭→CO₂供应减少→暗反应速率↓→光合速率↓。两者存在矛盾（节水 vs 光合），植物在干旱时优先选择节水（生存优先）。',answer:'(2) ABA促使气孔关闭的完整信号链：\n干旱→叶片失水→叶肉细胞合成ABA↑→ABA通过维管束运输至保卫细胞→ABA与保卫细胞膜上ABA受体（PYR家族）结合→胞内Ca²⁺浓度升高（通过第二信使传递）→激活K⁺外流通道（外向K⁺通道GORK等）→K⁺大量外流→保卫细胞渗透压↓→细胞失水收缩→气孔关闭。\n(3) 气孔关闭的意义：减少水分通过气孔的蒸腾散失，维持植物体内水分平衡，帮助植物在水分亏缺条件下存活，是植物应对干旱胁迫的重要适应性反应。\n对光合作用的影响：气孔关闭→叶片外CO₂无法通过气孔进入叶肉细胞→叶肉细胞CO₂供应减少→暗反应（卡尔文循环）中CO₂固定速率下降→光合速率降低。因此，在干旱条件下，植物面临"节水"与"维持光合"的矛盾，通常优先采取关闭气孔保水（生存优先策略）。'},
+  'mq-ec447':{badge:'ABA信号通路 · 母题',badgeClass:'aba',title:'ABA受体突变体气孔不关闭的实验分析',ref:'EC-20260525-447 · 子问题 (1)(3)',stem:`科学家筛选出一株拟南芥突变体（aba-receptor-1），该突变体叶片ABA含量正常，但ABA受体功能丧失。实验发现，野生型拟南芥在干旱处理后气孔关闭，但该突变体气孔不能正常关闭。\n\n(1) 分析该突变体在干旱时气孔不能关闭的原因。\n(3) 与野生型相比，预测该突变体在持续干旱条件下的存活率，并说明理由。`,focus:'(1) 突变体ABA受体功能丧失→即使ABA含量正常，ABA也无法与受体结合→Ca²⁺信号无法激活→K⁺外流通道不被激活→K⁺不外流→渗透压不下降→保卫细胞不失水收缩→气孔不关闭。关键：问题在受体层面，而非ABA含量。\n(3) 突变体存活率低于野生型。理由：干旱时气孔不关闭→蒸腾持续进行→水分大量散失→植物失水萎蔫→存活率低。野生型因气孔关闭减少蒸腾，能更长时间维持水分，存活率更高。',answer:'(1) 突变体在干旱时气孔不能关闭的原因：\n该突变体ABA受体功能丧失，即使干旱时叶片ABA浓度正常升高，ABA也无法与保卫细胞膜上的受体结合（受体-配体识别失败）→胞内Ca²⁺浓度不能升高→K⁺外流通道无法被激活→K⁺不发生外流→保卫细胞渗透压维持不变→不失水收缩→气孔不关闭。本质：信号通路在受体环节中断，导致下游所有效应均无法实现。\n(3) 预测：该突变体在持续干旱条件下存活率低于野生型。\n理由：突变体气孔不能关闭→蒸腾作用持续进行，水分不断通过气孔散失→植物失水速率远高于野生型（野生型干旱时气孔关闭，蒸腾大幅减少）→突变体叶片加速萎蔫脱水→细胞失水死亡→整株植物更快死亡→存活率显著低于野生型。'},
+  'mq-ec450':{badge:'蒸腾速率影响 · 母题',badgeClass:'transp',title:'各环境因子对蒸腾速率影响的综合分析',ref:'EC-20260525-450 · 子问题 (2)(3)',stem:`某研究测定了植物在不同条件下的蒸腾速率：①正常条件（对照）；②CO₂浓度从0.04%升至0.1%；③相对湿度从50%升至90%；④风速从0升至2 m/s。\n\n(2) CO₂浓度升高导致蒸腾速率下降，请从气孔调节角度解释原因，并说明为何与直觉相反。\n(3) 相对湿度升高和风速升高对蒸腾速率的影响是否相同？分别解释原因。`,focus:'(2) CO₂升高→保卫细胞感知CO₂浓度升高信号→触发K⁺外流信号（与ABA类似的下游通路）→气孔关闭→蒸腾↓。看起来"反直觉"：CO₂多应该促进光合→开气孔；但实际上高CO₂是"CO₂已足够"的信号，触发气孔关闭节省水分，这是进化出来的节水策略。\n(3) 湿度↑：叶片内外水蒸气浓度差↓→蒸腾驱动力↓→蒸腾速率↓。风速↑：带走气孔外侧水蒸气→叶片外水蒸气浓度↓→内外浓度差↑→蒸腾速率↑。两者对蒸腾的影响方向相反。',answer:'(2) CO₂浓度升高导致蒸腾下降的原因：\n保卫细胞能感知叶肉细胞间隙CO₂浓度的变化；CO₂浓度升高→保卫细胞内CO₂信号传递→激活与ABA信号类似的K⁺外流通路→K⁺外流→保卫细胞渗透压↓→失水收缩→气孔开度减小→蒸腾速率下降。\n"反直觉"解释：直觉上认为CO₂多对光合有利，气孔应开放；但从进化角度，高CO₂意味着暗反应底物充足，植物此时减小气孔开度以节约水分，是一种适应性节水策略，CO₂浓度是触发气孔关闭的信号之一。\n(3) 两种因子的影响方向相反：\n①相对湿度升高（50%→90%）：叶片细胞间隙水蒸气接近饱和，叶片内外水蒸气浓度梯度（蒸腾驱动力）减小→水分扩散出气孔的速率↓→蒸腾速率降低。\n②风速升高（0→2 m/s）：气流不断带走气孔外侧积累的水蒸气，维持叶片外低水蒸气浓度→叶片内外浓度梯度增大→蒸腾驱动力↑→蒸腾速率升高。'},
+  'v-ec440-1':{badge:'L1 基础变式 · 气孔开放',badgeClass:'open',title:'写出光照下气孔开放的K⁺内流机制',ref:'EC-20260525-440 · (1)',stem:'（同母题 mq-ec440 (1)）',focus:'同母题分析。',answer:'见母题 EC-440 答案。'},
+  'v-ec444-2':{badge:'L1 基础变式 · 气孔关闭',badgeClass:'close',title:'ABA促使气孔关闭信号链',ref:'EC-20260525-444 · (2)',stem:'（同母题 mq-ec444 (2)）',focus:'同母题分析。',answer:'见母题 EC-444 答案。'},
+  'v-ec450-1':{badge:'L1 基础变式 · 蒸腾意义',badgeClass:'transp',title:'蒸腾作用的两大生理意义',ref:'EC-20260525-450 · (1)',stem:`请说明蒸腾作用对植物的两个主要生理意义，并解释蒸腾拉力如何驱动水分运输。`,focus:'①散热：水分蒸发吸热，降低叶面温度，防止高温灼伤。②蒸腾拉力：叶片水分蒸发→导管中水柱产生张力（负压）→从根部"拉"水向上运输；同时无机盐也随水流向上运输到各部位。',answer:'蒸腾作用的两个主要生理意义：\n①降低叶片温度（散热）：水分蒸发是吸热过程（蒸发潜热），叶片通过蒸腾散失热量，使叶面温度维持在适合光合和酶活性的范围，防止强光下过热造成的光氧化损伤。\n②产生蒸腾拉力，驱动水分和无机盐的向上运输：叶片水分蒸发→叶肉细胞水势降低→从叶脉木质部导管吸水→导管内水柱产生向上的张力（负压，蒸腾拉力）→将根部吸收的水分和无机盐沿木质部导管向上运输至茎、叶；这是高大植物克服重力实现水分长距离向上运输的主要动力。'},
+  'v-ec447-13':{badge:'L2 进阶变式 · 突变体',badgeClass:'aba',title:'ABA受体突变体分析与耐旱表型预测',ref:'EC-20260525-447 · (1)+(3)',stem:'（同母题 mq-ec447 (1)(3)）',focus:'同母题分析。',answer:'见母题 EC-447 答案。'},
+  'v-ec450-23':{badge:'L2 进阶变式 · CO₂与气孔',badgeClass:'transp',title:'CO₂浓度升高导致气孔关闭的原因',ref:'EC-20260525-450 · (2)+(3)',stem:'（同母题 mq-ec450 (2)(3)）',focus:'同母题分析。',answer:'见母题 EC-450 答案。'},
+  'v-ec444-34':{badge:'L2 进阶变式 · 实验设计',badgeClass:'aba',title:'验证ABA促进K⁺外流的实验设计',ref:'EC-20260525-444 · (3)+(4)',stem:`请设计一个实验，验证ABA能促进保卫细胞中K⁺的外流（而非内流）。说明实验材料、自变量、因变量和对照设置。`,focus:'实验设计要点：①取离体气孔或保卫细胞原生质体；②实验组：添加ABA；对照组：不添加（其他条件相同）；③用K⁺荧光探针或微电极测定胞内/胞外K⁺浓度变化；④预期：实验组胞内K⁺浓度↓，胞外↑（K⁺外流）。若用完整叶片，也可以直接观察气孔开度变化。',answer:'实验设计：\n实验目的：验证ABA能促进保卫细胞K⁺外流，导致气孔关闭。\n材料：新鲜蚕豆或拟南芥叶片表皮（含完整保卫细胞），ABA溶液，K⁺选择性微电极或K⁺荧光染料（如Asante Potassium Green），显微镜，光照培养箱。\n实验步骤：\n①取相同大小的叶片表皮碎片，置于恒温（25°C）、光照（促进气孔开放）的缓冲液中培养30 min，使气孔充分开放。\n②实验组：加入终浓度10 μM ABA；对照组：加等量溶剂（乙醇，不含ABA）；其他条件相同。\n③处理30 min后，用K⁺荧光探针检测保卫细胞胞内K⁺浓度变化，同时在光学显微镜下测量气孔开度。\n预期结果：实验组保卫细胞胞内K⁺浓度显著低于对照组（K⁺外流），气孔开度减小（关闭）；对照组胞内K⁺浓度维持较高水平，气孔保持开放。\n结论：若实验组胞内K⁺↓且气孔关闭，而对照组无变化，则证明ABA促进了K⁺外流，验证假说成立。'},
+  'v-ec455-135':{badge:'L3 综合变式',badgeClass:'close',title:'干旱→气孔关闭→光合变化→产量影响→抗旱策略',ref:'EC-20260525-455 · (1)+(3)+(5)',stem:`农业生产中，干旱是影响作物产量的主要非生物胁迫之一。某研究小组测定了正常灌溉（对照）和中度干旱处理下水稻的气孔导度、光合速率和籽粒产量。\n\n(1) 干旱条件下，气孔导度下降对光合速率产生什么影响？写出完整的因果链。\n(3) 研究人员培育了一种"超级保水"突变体水稻，该突变体叶片ABA含量是野生型的3倍，气孔在干旱时关闭更快。预测该突变体在正常灌溉和干旱条件下的光合速率和产量表现（与野生型比较）。\n(5) 从气孔调节角度，提出两条提高水稻抗旱性同时不过度降低产量的育种或栽培策略。`,focus:'(1) 干旱→气孔导度↓（气孔关闭）→CO₂进入叶片减少→叶肉细胞间CO₂浓度↓→卡尔文循环CO₂固定速率↓→暗反应↓→光合速率↓→有机物积累↓。\n(3) 正常灌溉：ABA↑→气孔开度↓（与野生型相比）→CO₂供应减少→光合↓→产量低于野生型（在水分充足时不需要高度节水，高ABA反而是副作用）；干旱条件：气孔关闭更快→失水更少→存活率更高，但光合也受影响更大→籽粒产量可能与野生型接近或略低（受气孔关闭对光合的限制）。\n(5) 策略：①培育"弹性气孔"品种：正常时气孔保持较大开度（保证光合），干旱信号强时迅速关闭（节水）；②喷施外源ABA缓释剂（农业应用）：在干旱预警时施用，诱导气孔关闭，减少蒸腾；③优化灌溉（亏缺灌溉）：在不影响光合的前提下，维持轻度水分亏缺使内源ABA维持适度水平，既节水又不过度降低光合。',answer:'(1) 干旱→气孔导度下降对光合速率影响的完整因果链：\n干旱胁迫→叶片失水→保卫细胞ABA升高→K⁺外流→气孔关闭→气孔导度↓→叶片外CO₂通过气孔扩散进入叶肉细胞的速率↓→叶肉细胞间隙CO₂浓度↓→叶绿体基质RuBisCO酶固定CO₂的速率↓→卡尔文循环速率↓→C3生成↓→有机物合成↓→光合速率↓→有机物净积累量↓。\n(3) 超高ABA突变体的表现预测：\n正常灌溉条件：ABA含量是野生型3倍→即使水分充足，也会触发气孔部分关闭→CO₂供应减少→光合速率低于野生型→籽粒产量低于野生型（过度节水的代价）。\n干旱条件：气孔关闭更快→蒸腾失水速率低于野生型→植株失水速率慢→在干旱初中期存活率更高→但气孔关闭也更彻底，CO₂严重不足→光合受到更大抑制→籽粒产量可能不高于野生型（节水和光合的矛盾加剧）。综合：抗旱存活能力更强，但产量在正常和干旱条件下均可能低于野生型。\n(5) 提高水稻抗旱性同时不过度降低产量的策略：\n①培育"动态气孔调节"品种：通过基因工程优化保卫细胞ABA受体的灵敏度和响应阈值，使气孔在水分充足时维持较大开度（保证CO₂和光合），仅在水分胁迫信号明确时迅速关闭（节水），实现"精准"的气孔调控，减少不必要的光合损失；\n②推广"亏缺灌溉（regulated deficit irrigation）"技术：在不影响关键生育期（孕穗期、灌浆期）光合需求的前提下，其他时期维持轻度亏缺，诱导适度内源ABA积累，提高气孔对干旱信号的应答准备度，同时减少灌溉用水。'}
+};
+let answerShown=false;
+function openDrawer(key){const q=QUESTIONS[key];if(!q)return;const badge=document.getElementById('drawer-badge');badge.textContent=q.badge;badge.className='drawer-badge mq-badge '+(q.badgeClass||'');document.getElementById('drawer-title').textContent=q.title;document.getElementById('drawer-ref').innerHTML='<i class="ti ti-source-code" style="font-size:13px;"></i> '+q.ref;document.getElementById('drawer-stem').textContent=q.stem;const sub=document.getElementById('drawer-sub');if(q.focus){document.getElementById('drawer-sub-text').textContent=q.focus;sub.style.display='';}else{sub.style.display='none';}answerShown=false;document.getElementById('drawer-answer').classList.remove('show');document.getElementById('drawer-answer-text').textContent=q.answer||'';const btn=document.getElementById('drawer-ans-btn');btn.textContent='显示答案';btn.style.display=q.answer?'':'none';document.getElementById('overlay').classList.add('open');document.getElementById('drawer').classList.add('open');document.body.style.overflow='hidden';}
+function closeDrawer(){document.getElementById('overlay').classList.remove('open');document.getElementById('drawer').classList.remove('open');document.body.style.overflow='';}
+function toggleAnswer(){answerShown=!answerShown;document.getElementById('drawer-answer').classList.toggle('show',answerShown);document.getElementById('drawer-ans-btn').textContent=answerShown?'隐藏答案':'显示答案';}
+function openLightbox(src,alt){document.getElementById('lb-img').src=src;document.getElementById('lb-img').alt=alt;document.getElementById('lb-overlay').classList.add('open');document.body.style.overflow='hidden';}
+function closeLightbox(){document.getElementById('lb-overlay').classList.remove('open');document.body.style.overflow='';}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(document.getElementById('lb-overlay').classList.contains('open'))closeLightbox();else closeDrawer();}});
+</script>
+</body>
+</html>

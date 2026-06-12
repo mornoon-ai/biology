@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T06_M2 · 生物物质鉴定实验</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent:#185FA5; --accent-l:#E6F1FB; --accent-m:#88BAE8; --accent-d:#0C447C;
+  --teal:#0F6E56; --teal-l:#E1F5EE; --teal-d:#085041;
+  --amber:#BA7517; --amber-l:#FAEEDA; --amber-d:#633806;
+  --coral:#993C1D; --coral-l:#FAECE7; --coral-d:#712B13;
+  --bg:#ffffff; --bg2:#f7f7f5; --bg3:#f1efe8;
+  --tx:#1a1a18; --tx2:#5f5e5a; --tx3:#888780;
+  --bd:rgba(0,0,0,0.10); --bd2:rgba(0,0,0,0.18);
+  --r-sm:6px; --r-md:8px; --r-lg:12px; --r-xl:16px;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#1c1c1a;--bg2:#252523;--bg3:#2c2c2a;
+    --tx:#f0efea;--tx2:#b4b2a9;--tx3:#888780;
+    --bd:rgba(255,255,255,0.09);--bd2:rgba(255,255,255,0.16);
+    --accent-l:#042C53;--accent-d:#B5D4F4;
+    --teal-l:#04342C;--teal-d:#9FE1CB;
+    --amber-l:#412402;--amber-d:#FAC775;
+    --coral-l:#4A1B0C;--coral-d:#F5C4B3;
+  }
+}
+body{font-family:var(--font);font-size:15px;line-height:1.6;color:var(--tx);background:var(--bg3);min-height:100vh;}
+.app{max-width:800px;margin:0 auto;background:var(--bg);min-height:100vh;}
+.site-header{padding:1.25rem 1.5rem 0;background:var(--bg);border-bottom:0.5px solid var(--bd);position:sticky;top:0;z-index:20;}
+.header-top{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.header-icon{background:var(--accent-l);border-radius:var(--r-md);padding:6px 8px;display:flex;align-items:center;justify-content:center;}
+.header-icon i{font-size:20px;color:var(--accent);}
+.header-meta{font-size:12px;color:var(--tx3);}
+.header-title{font-size:17px;font-weight:500;color:var(--tx);}
+.header-id{margin-left:auto;font-size:11px;color:var(--tx3);background:var(--bg2);padding:3px 9px;border-radius:var(--r-sm);}
+.nav-tabs{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.nav-tab{padding:.6rem 1.1rem;font-size:13px;color:var(--tx2);cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;font-family:var(--font);white-space:nowrap;transition:color .15s,border-color .15s;}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500;}
+.nav-tab:hover:not(.active){color:var(--tx);}
+.page{display:none;padding:1.5rem;}
+.page.active{display:block;}
+.memory-section{margin-bottom:1.5rem;}
+.memory-card{border:0.5px solid var(--bd);border-radius:var(--r-xl);overflow:hidden;background:var(--bg);}
+.memory-img{width:100%;display:block;max-height:300px;object-fit:contain;background:var(--bg3);cursor:zoom-in;transition:opacity .15s;}
+.memory-img:hover{opacity:.9;}
+.memory-footer{padding:.85rem 1rem;display:flex;align-items:center;gap:10px;border-top:0.5px solid var(--bd);}
+.memory-label{font-size:13px;font-weight:500;color:var(--tx);flex:1;}
+.audio-player{display:flex;align-items:center;gap:8px;}
+audio{height:32px;width:220px;}
+audio::-webkit-media-controls-panel{background:var(--bg2);}
+.lb-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:200;display:none;align-items:center;justify-content:center;cursor:zoom-out;}
+.lb-overlay.open{display:flex;}
+.lb-img{max-width:92vw;max-height:92vh;object-fit:contain;border-radius:var(--r-md);box-shadow:0 8px 40px rgba(0,0,0,.5);}
+.lb-close{position:fixed;top:16px;right:20px;background:none;border:none;color:#fff;font-size:28px;cursor:pointer;line-height:1;opacity:.7;transition:opacity .15s;}
+.lb-close:hover{opacity:1;}
+.section-title{font-size:13px;font-weight:500;color:var(--tx2);display:flex;align-items:center;gap:7px;margin-bottom:1rem;text-transform:uppercase;letter-spacing:.04em;}
+.section-divider{height:0.5px;background:var(--bd);margin:1.5rem 0;}
+.signal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:1.5rem;}
+.signal-card{background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;}
+.signal-label{font-size:11px;color:var(--tx3);letter-spacing:.04em;margin-bottom:.4rem;text-transform:uppercase;}
+.signal-tag{font-size:13px;color:var(--tx);margin-bottom:3px;}
+.mode-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:1.5rem;}
+.mode-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.85rem 1rem;border-left-width:3px;}
+.mode-card-label{font-size:11px;font-weight:500;margin-bottom:.3rem;}
+.mode-card-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.trap-list{display:flex;flex-direction:column;gap:7px;}
+.trap-item{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.55;}
+.trap-icon{color:#E24B4A;font-size:15px;flex-shrink:0;margin-top:1px;}
+.filter-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem;}
+.filter-btn{padding:5px 13px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx2);font-family:var(--font);transition:all .15s;}
+.filter-btn.active{background:var(--accent-l);color:var(--accent-d);border-color:var(--accent-m);font-weight:500;}
+.mq-card{border:0.5px solid var(--bd);border-radius:var(--r-lg);background:var(--bg);margin-bottom:.85rem;overflow:hidden;}
+.mq-header{padding:.9rem 1.1rem;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;transition:background .15s;}
+.mq-header:hover{background:var(--bg2);}
+.mq-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);white-space:nowrap;}
+.mq-badge.sugar{background:var(--accent-l);color:var(--accent-d);}
+.mq-badge.protein{background:var(--teal-l);color:var(--teal-d);}
+.mq-badge.lipid{background:var(--amber-l);color:var(--amber-d);}
+.mq-badge.dna{background:var(--coral-l);color:var(--coral-d);}
+.mq-name{font-size:14px;font-weight:500;color:var(--tx);flex:1;}
+.mq-purity{font-size:12px;color:var(--tx3);flex-shrink:0;}
+.mq-chevron{color:var(--tx3);font-size:16px;transition:transform .2s;flex-shrink:0;}
+.mq-chevron.open{transform:rotate(180deg);}
+.mq-body{display:none;padding:.75rem 1.1rem 1.1rem;border-top:0.5px solid var(--bd);}
+.mq-body.open{display:block;}
+.mq-source{font-size:12px;color:var(--tx3);margin-bottom:.65rem;}
+.rule-box{background:var(--accent-l);border-left:3px solid var(--accent);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:.65rem .9rem;font-size:13px;color:var(--accent-d);margin:.75rem 0;line-height:1.65;}
+.chain-label{font-size:12px;font-weight:500;color:var(--tx2);margin:.75rem 0 .4rem;text-transform:uppercase;letter-spacing:.04em;}
+.signal-chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:6px;}
+.sc-node{background:var(--bg2);border-radius:var(--r-sm);padding:3px 9px;font-size:13px;color:var(--tx);}
+.sc-node.sugar{background:var(--accent-l);color:var(--accent-d);}
+.sc-node.protein{background:var(--teal-l);color:var(--teal-d);}
+.sc-node.lipid{background:var(--amber-l);color:var(--amber-d);}
+.sc-node.dna{background:var(--coral-l);color:var(--coral-d);}
+.sc-arrow{color:var(--tx3);font-size:13px;}
+.mq-note{font-size:13px;color:var(--tx2);margin-top:.75rem;line-height:1.6;}
+.q-trigger{display:inline-flex;align-items:center;gap:5px;margin-top:.75rem;padding:6px 12px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;color:var(--tx2);cursor:pointer;font-family:var(--font);transition:all .15s;}
+.q-trigger:hover{background:var(--bg2);color:var(--tx);}
+.q-trigger i{font-size:14px;}
+.ladder-section-label{font-size:13px;font-weight:500;color:var(--tx2);margin-bottom:.85rem;display:flex;align-items:center;gap:7px;}
+.ladder-rows{display:flex;flex-direction:column;gap:8px;margin-bottom:1rem;}
+.ladder-row{display:grid;grid-template-columns:64px 1fr;gap:10px;align-items:start;}
+.ladder-level{font-size:11px;font-weight:500;padding:6px 4px;border-radius:var(--r-sm);text-align:center;line-height:1.4;}
+.l1{background:var(--teal-l);color:var(--teal-d);}
+.l2{background:var(--accent-l);color:var(--accent-d);}
+.l3{background:var(--amber-l);color:var(--amber-d);}
+.ladder-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.65rem .9rem;background:var(--bg);}
+.ladder-card-name{font-size:13px;font-weight:500;color:var(--tx);}
+.ladder-card-sub{font-size:12px;color:var(--tx3);margin-top:3px;line-height:1.5;}
+.ladder-note{background:var(--bg2);border-radius:var(--r-md);padding:.65rem .9rem;font-size:12px;color:var(--tx2);margin-bottom:1rem;line-height:1.55;}
+.progress-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem;}
+.progress-bar{height:5px;border-radius:3px;background:var(--bg2);margin-bottom:1.25rem;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;background:var(--accent);width:0%;transition:width .3s;}
+.checklist{display:flex;flex-direction:column;gap:7px;}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:.7rem .9rem;border:0.5px solid var(--bd);border-radius:var(--r-md);background:var(--bg);cursor:pointer;transition:background .15s;}
+.check-item.done{background:var(--bg2);}
+.check-box{width:18px;height:18px;border:1.5px solid var(--bd2);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .15s;}
+.check-item.done .check-box{background:var(--accent);border-color:var(--accent);}
+.check-box i{font-size:11px;color:#fff;display:none;}
+.check-item.done .check-box i{display:block;}
+.check-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.check-item.done .check-text{color:var(--tx3);text-decoration:line-through;}
+.action-row{margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:8px;}
+.action-btn{padding:7px 14px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.action-btn:hover{background:var(--bg2);}
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s;}
+.drawer-overlay.open{opacity:1;pointer-events:all;}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100vw);background:var(--bg);z-index:101;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden;}
+.drawer.open{transform:translateX(0);}
+.drawer-header{padding:1rem 1.25rem;border-bottom:0.5px solid var(--bd);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.drawer-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);}
+.drawer-title{font-size:14px;font-weight:500;color:var(--tx);flex:1;line-height:1.4;}
+.drawer-close{background:none;border:none;cursor:pointer;color:var(--tx2);padding:4px;border-radius:var(--r-sm);display:flex;align-items:center;transition:background .15s;}
+.drawer-close:hover{background:var(--bg2);}
+.drawer-body{flex:1;overflow-y:auto;padding:1.25rem;}
+.drawer-ec-ref{font-size:12px;color:var(--tx3);margin-bottom:1rem;display:flex;align-items:center;gap:6px;}
+.drawer-stem{font-size:14px;color:var(--tx);line-height:1.75;white-space:pre-wrap;}
+.drawer-sub{font-size:13px;color:var(--tx2);background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:1rem;line-height:1.65;}
+.drawer-sub-label{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-answer{font-size:13px;color:var(--tx);background:var(--accent-l);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:.75rem;line-height:1.65;display:none;}
+.drawer-answer.show{display:block;}
+.drawer-answer-label{font-size:11px;font-weight:500;color:var(--accent-d);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-footer{padding:.85rem 1.25rem;border-top:0.5px solid var(--bd);display:flex;gap:8px;flex-shrink:0;}
+.drawer-btn{flex:1;padding:8px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.drawer-btn:hover{background:var(--bg2);}
+.drawer-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+.drawer-btn.primary:hover{background:var(--accent-d);}
+@media(max-width:600px){
+  .site-header{padding:1rem 1rem 0;}
+  .page{padding:1rem;}
+  .header-title{font-size:15px;}
+  .mode-grid{grid-template-columns:1fr 1fr;}
+  .ladder-row{grid-template-columns:52px 1fr;gap:8px;}
+  .action-row{flex-direction:column;}
+  .action-btn{width:100%;text-align:center;}
+  .drawer{width:100vw;}
+  audio{width:160px;}
+}
+@media(max-width:380px){
+  .mode-grid,.signal-grid{grid-template-columns:1fr;}
+}
+
+.back-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;font-size:12px;color:var(--tx2);background:var(--bg2);border:0.5px solid var(--bd2);border-radius:var(--r-md);text-decoration:none;font-family:var(--font);transition:background .15s,color .15s;white-space:nowrap;flex-shrink:0;}
+.back-btn:hover{background:var(--bg3);color:var(--tx);}
+.back-btn i{font-size:14px;}
+.memory-video{width:100%;max-height:220px;display:block;border-radius:var(--r-md);background:#000;margin-top:8px;}
+</style>
+</head>
+<body>
+<div class="app">
+
+<header class="site-header">
+  <div class="header-top">
+    <div class="header-icon"><i class="ti ti-droplet-half-2" aria-hidden="true"></i></div>
+    <div>
+      <div class="header-meta">06 实验设计 · M2 物质鉴定</div>
+      <div class="header-title">生物物质鉴定实验</div>
+    </div>
+    <a class="back-btn" href="index.html" aria-label="返回首页"><i class="ti ti-arrow-left"></i> 首页</a>
+    <div class="header-id">T06_M2</div>
+  </div>
+  <nav class="nav-tabs" role="tablist">
+    <button class="nav-tab active" role="tab" onclick="switchTab('overview',this)">概览</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('mothers',this)">母题精讲</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('ladder',this)">变式阶梯</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('self',this)">自查清单</button>
+  </nav>
+</header>
+
+<div id="tab-overview" class="page active" role="tabpanel">
+
+  <div class="memory-section">
+    <div class="memory-card">
+      <img class="memory-img" src="记忆卡/T06_M2_memory.png" alt="生物物质鉴定实验记忆卡" onclick="openLightbox(this.src,this.alt)" onerror="this.style.display='none'">
+      <div class="memory-footer">
+        <div>
+          <div class="memory-label">记忆卡 · 六大鉴定试剂一览表（试剂名·颜色·操作条件）</div>
+          <div style="font-size:12px;color:var(--tx3);">点击图片可放大</div>
+        </div>
+        <div class="audio-player">
+          <div id="audio-wrap">
+            <video class="memory-video" controls controlsList="nodownload" preload="metadata" style="display:none">
+              <source src="audio/T06_M2.mp4" type="video/mp4">
+            </video>
+            <div class="audio-placeholder" style="display:flex"><i class="ti ti-video-off"></i>视频待放入</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title"><i class="ti ti-scan" aria-hidden="true"></i> 触发信号速查</div>
+  <div class="signal-grid">
+    <div class="signal-card">
+      <div class="signal-label">图像信号</div>
+      <div class="signal-tag">试管颜色变化图</div>
+      <div class="signal-tag">显微镜下染色结果图</div>
+      <div class="signal-tag">实验操作流程框图</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">文字信号</div>
+      <div class="signal-tag">本尼迪特试剂 / 斐林试剂</div>
+      <div class="signal-tag">双缩脲试剂 / 碘液 / 苏丹染料</div>
+      <div class="signal-tag">鉴定糖/蛋白质/脂肪/DNA</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">任务关键词</div>
+      <div class="signal-tag">选择鉴定试剂及操作步骤</div>
+      <div class="signal-tag">解释颜色变化的原理</div>
+      <div class="signal-tag">评价鉴定实验方案</div>
+    </div>
+  </div>
+
+  <div class="section-title"><i class="ti ti-arrow-fork" aria-hidden="true"></i> 六大鉴定系统 · 核心对应</div>
+  <div class="mode-grid">
+    <div class="mode-card" style="border-left-color:var(--accent);">
+      <div class="mode-card-label" style="color:var(--accent-d);">还原糖（葡萄糖/麦芽糖）</div>
+      <div class="mode-card-text">斐林试剂（NaOH+CuSO₄混合）→ 50~65°C水浴→砖红色沉淀；注意：蔗糖不反应（非还原糖）；需水浴加热</div>
+    </div>
+    <div class="mode-card" style="border-left-color:var(--teal);">
+      <div class="mode-card-label" style="color:var(--teal-d);">蛋白质</div>
+      <div class="mode-card-text">双缩脲试剂（先加NaOH再加CuSO₄）→ 紫色反应；不需加热；试剂加入顺序不可颠倒；氨基酸（2个以下肽键）不反应</div>
+    </div>
+    <div class="mode-card" style="border-left-color:var(--amber);">
+      <div class="mode-card-label" style="color:var(--amber-d);">脂肪</div>
+      <div class="mode-card-text">苏丹Ⅲ→橘黄色；苏丹Ⅳ→红色；需制临时切片，酒精洗去浮色；显微镜下观察脂肪颗粒着色</div>
+    </div>
+    <div class="mode-card" style="border-left-color:var(--coral);">
+      <div class="mode-card-label" style="color:var(--coral-d);">淀粉 / DNA / RNA</div>
+      <div class="mode-card-text">淀粉→碘液→蓝紫色；DNA→龙胆紫/醋酸洋红→深红色（染色体）；RNA→吡罗红→红色；DNA→甲基绿→绿色</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-alert-triangle" aria-hidden="true"></i> 高频陷阱（5 个）</div>
+  <div class="trap-list">
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon" aria-hidden="true"></i><div>斐林试剂和双缩脲试剂的配制顺序不同——斐林试剂：NaOH与CuSO₄体积比2:1<strong>混合后使用</strong>；双缩脲试剂：<strong>先加NaOH，后加少量CuSO₄</strong>，顺序不可颠倒</div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon" aria-hidden="true"></i><div>斐林试剂鉴定必须水浴加热——不加热不出现砖红色沉淀；而双缩脲反应不需加热，室温即可出现紫色</div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon" aria-hidden="true"></i><div>蔗糖是非还原糖，不能用斐林试剂直接鉴定——需先水解成葡萄糖和果糖（用盐酸水解，中和后再加斐林试剂）</div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon" aria-hidden="true"></i><div>DNA和RNA染色试剂混淆——DNA用<strong>甲基绿</strong>（绿色）；RNA用<strong>吡罗红</strong>（红色）；龙胆紫/醋酸洋红染的是<strong>染色体</strong>（主要染DNA，用于有丝分裂观察）</div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon" aria-hidden="true"></i><div>鉴定实验的阳性对照常被遗漏——鉴定未知样品时应同时用已知阳性样本（如标准葡萄糖液）验证试剂有效性；结果阴性时需先检查试剂是否失效</div></div>
+  </div>
+</div>
+
+<div id="tab-mothers" class="page" role="tabpanel">
+  <div class="filter-tabs" role="group">
+    <button class="filter-btn active" onclick="filterMode('all',this)">全部（4 类）</button>
+    <button class="filter-btn" onclick="filterMode('sugar',this)">还原糖鉴定</button>
+    <button class="filter-btn" onclick="filterMode('protein',this)">蛋白质鉴定</button>
+    <button class="filter-btn" onclick="filterMode('lipid',this)">脂肪鉴定</button>
+    <button class="filter-btn" onclick="filterMode('dna',this)">核酸染色</button>
+  </div>
+
+  <div class="mq-card" data-mode="sugar">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge sugar">还原糖鉴定</span>
+      <span class="mq-name">斐林试剂鉴定葡萄糖——试剂配制、操作步骤与颜色变化原理</span>
+      <span class="mq-purity">10/10</span>
+      <i class="ti ti-chevron-down mq-chevron" aria-hidden="true"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-540 · 子问题 (1)(2)</div>
+      <div class="rule-box">核心信号：题目要求鉴定某溶液中是否含有还原糖，或要求解释为什么蔗糖液不能用斐林试剂直接鉴定，或要求比较斐林试剂与双缩脲试剂的操作差异。</div>
+      <div class="chain-label">斐林试剂操作流程</div>
+      <div class="signal-chain"><span class="sc-node">配制</span><span class="sc-arrow">：</span><span class="sc-node sugar">0.1g/mL NaOH（A液）+ 0.05g/mL CuSO₄（B液）→ 按2:1混合</span></div>
+      <div class="signal-chain"><span class="sc-node">加入待测液</span><span class="sc-arrow">→</span><span class="sc-node sugar">50~65°C水浴加热2分钟</span><span class="sc-arrow">→</span><span class="sc-node sugar">观察颜色变化 ✓</span></div>
+      <div class="signal-chain"><span class="sc-node">阳性结果</span><span class="sc-arrow">：</span><span class="sc-node sugar">砖红色沉淀（Cu(OH)₂被还原为Cu₂O）</span></div>
+      <div class="signal-chain"><span class="sc-node">阴性结果</span><span class="sc-arrow">：</span><span class="sc-node">溶液保持蓝色（Cu²⁺不被还原）</span></div>
+      <p class="mq-note">⚠️ 蔗糖鉴定特殊步骤：蔗糖→加稀盐酸加热水解→冷却→加NaOH中和（使pH恢复碱性）→再加斐林试剂水浴→若出现砖红色，说明蔗糖已水解为还原糖（葡萄糖+果糖）。若跳过中和步骤，酸性条件下Cu(OH)₂不会形成→无法反应。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec540')">
+        <i class="ti ti-file-text" aria-hidden="true"></i> 查看完整题干
+      </button>
+    </div>
+  </div>
+
+  <div class="mq-card" data-mode="protein">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge protein">蛋白质鉴定</span>
+      <span class="mq-name">双缩脲试剂鉴定蛋白质——加液顺序、反应原理及与斐林试剂的区别</span>
+      <span class="mq-purity">10/10</span>
+      <i class="ti ti-chevron-down mq-chevron" aria-hidden="true"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-544 · 子问题 (1)(3)</div>
+      <div class="rule-box">核心信号：题目要求鉴定某液体中是否含有蛋白质，或要求比较双缩脲试剂与斐林试剂的操作异同，或要求解释"氨基酸不能用双缩脲试剂鉴定"的原因。</div>
+      <div class="chain-label">双缩脲试剂操作流程（顺序不可错）</div>
+      <div class="signal-chain"><span class="sc-node">步骤一</span><span class="sc-arrow">：</span><span class="sc-node protein">向待测液中加入0.1g/mL NaOH溶液2mL，振荡混匀</span></div>
+      <div class="signal-chain"><span class="sc-node">步骤二</span><span class="sc-arrow">：</span><span class="sc-node protein">再加入0.01g/mL CuSO₄溶液3~4滴，振荡混匀</span></div>
+      <div class="signal-chain"><span class="sc-node">步骤三</span><span class="sc-arrow">：</span><span class="sc-node protein">室温静置2分钟，观察颜色→紫色=阳性 ✓</span></div>
+      <div class="chain-label">与斐林试剂的核心区别</div>
+      <div class="signal-chain"><span class="sc-node">斐林试剂</span><span class="sc-arrow">：</span><span class="sc-node">A液B液混合后使用；需水浴加热；砖红色</span></div>
+      <div class="signal-chain"><span class="sc-node">双缩脲试剂</span><span class="sc-arrow">：</span><span class="sc-node protein">NaOH先加，CuSO₄后加；不需加热；紫色 ✓</span></div>
+      <p class="mq-note">原理：双缩脲反应检测的是肽键（—CO—NH—），两个及以上肽键形成的配位化合物呈紫色；氨基酸只有—NH₂和—COOH，无肽键，不能与双缩脲试剂反应。二肽（一个肽键）也不反应，需要三肽以上才能出现紫色。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec544')">
+        <i class="ti ti-file-text" aria-hidden="true"></i> 查看完整题干
+      </button>
+    </div>
+  </div>
+
+  <div class="mq-card" data-mode="lipid">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge lipid">脂肪鉴定</span>
+      <span class="mq-name">苏丹染料鉴定脂肪——切片制作、酒精洗涤与显微观察全流程</span>
+      <span class="mq-purity">9/10</span>
+      <i class="ti ti-chevron-down mq-chevron" aria-hidden="true"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-548 · 子问题 (1)(2)</div>
+      <div class="rule-box">核心信号：题目要求说明检测花生种子中脂肪的实验步骤，或要求解释"为什么要用50%酒精洗涤切片"，或要求指出在显微镜下观察到的脂肪颗粒颜色（苏丹Ⅲ/Ⅳ）。</div>
+      <div class="chain-label">脂肪鉴定全流程</div>
+      <div class="signal-chain"><span class="sc-node">制切片</span><span class="sc-arrow">：</span><span class="sc-node lipid">花生种子临时切片（徒手切片法），切尽量薄</span></div>
+      <div class="signal-chain"><span class="sc-node">苏丹Ⅲ染色</span><span class="sc-arrow">：</span><span class="sc-node lipid">染色2~3分钟→50%酒精洗去浮色→制成临时玻片</span></div>
+      <div class="signal-chain"><span class="sc-node">显微观察</span><span class="sc-arrow">：</span><span class="sc-node lipid">低倍镜找到细胞→高倍镜观察→橘黄色圆形颗粒=脂肪 ✓</span></div>
+      <div class="chain-label">苏丹Ⅲ vs 苏丹Ⅳ</div>
+      <div class="signal-chain"><span class="sc-node">苏丹Ⅲ</span><span class="sc-arrow">→</span><span class="sc-node lipid">脂肪颗粒呈橘黄色</span><span class="sc-arrow">；</span><span class="sc-node">苏丹Ⅳ</span><span class="sc-arrow">→</span><span class="sc-node">脂肪颗粒呈红色</span></div>
+      <p class="mq-note">⚠️ 50%酒精洗涤的原因：溶解切片表面多余的苏丹Ⅲ染料（浮色），使背景变清晰，只保留结合在脂肪颗粒内的染料，提高对比度。注意：不能用水洗（苏丹Ⅲ不溶于水），必须用酒精；但酒精浓度不能太高（如纯酒精）会破坏切片结构。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec548')">
+        <i class="ti ti-file-text" aria-hidden="true"></i> 查看完整题干
+      </button>
+    </div>
+  </div>
+
+  <div class="mq-card" data-mode="dna">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge dna">核酸染色</span>
+      <span class="mq-name">甲基绿-吡罗红染色法区分DNA和RNA的分布</span>
+      <span class="mq-purity">9/10</span>
+      <i class="ti ti-chevron-down mq-chevron" aria-hidden="true"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-552 · 子问题 (1)(2)(3)</div>
+      <div class="rule-box">核心信号：题目要求说明观察DNA和RNA在细胞中分布的实验步骤，或要求解释实验中"盐酸水解"和"用吡罗红甲基绿染色"的目的，或要求描述细胞中染色结果的预期。</div>
+      <div class="chain-label">甲基绿-吡罗红实验操作关键步骤</div>
+      <div class="signal-chain"><span class="sc-node">制临时涂片</span><span class="sc-arrow">→</span><span class="sc-node dna">8%盐酸水解（60°C，处理10min）</span><span class="sc-arrow">→</span><span class="sc-node">冲洗</span></div>
+      <div class="signal-chain"><span class="sc-node">甲基绿-吡罗红混合染色</span><span class="sc-arrow">→</span><span class="sc-node dna">吸水纸吸去多余染料→盖盖玻片→低倍镜观察</span></div>
+      <div class="chain-label">预期结果</div>
+      <div class="signal-chain"><span class="sc-node">细胞核</span><span class="sc-arrow">→</span><span class="sc-node dna">绿色（甲基绿染DNA，DNA主要在细胞核）✓</span></div>
+      <div class="signal-chain"><span class="sc-node">细胞质</span><span class="sc-arrow">→</span><span class="sc-node">红色（吡罗红染RNA，RNA主要在细胞质）✓</span></div>
+      <p class="mq-note">盐酸的作用：① 水解细胞，使染色体中DNA与蛋白质分离，利于染料渗透；② 改变细胞膜通透性；③ 加速染色液渗入细胞。注意：甲基绿与吡罗红要混合使用（同时染色），不能分开用；龙胆紫/醋酸洋红是染色体染料（用于观察有丝分裂），与甲基绿不同——龙胆紫染整条染色体，不专门区分DNA/RNA。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec552')">
+        <i class="ti ti-file-text" aria-hidden="true"></i> 查看完整题干
+      </button>
+    </div>
+  </div>
+</div>
+
+<div id="tab-ladder" class="page" role="tabpanel">
+  <div class="ladder-note">按 L1 基础 → L2 进阶 → L3 综合三级递进。每级掌握后再进入下一级。点击卡片可查看完整题干。</div>
+
+  <div class="ladder-section-label"><span class="ladder-level l1" style="width:auto;padding:3px 8px;">L1 基础</span> 试剂选择与操作步骤书写</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1-1<br>糖</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec540-1')" style="cursor:pointer;">
+        <div class="ladder-card-name">用斐林试剂鉴定葡萄糖溶液——完整操作步骤与预期颜色</div>
+        <div class="ladder-card-sub">EC-540 (1) · 配制→加入→水浴→观察；阳性对照与阴性对照设置 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1-2<br>蛋白</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec544-1')" style="cursor:pointer;">
+        <div class="ladder-card-name">用双缩脲试剂鉴定蛋白质——加液顺序与不需加热的原因</div>
+        <div class="ladder-card-sub">EC-544 (1) · 先NaOH后CuSO₄；室温显紫色；与斐林试剂操作对比 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1-3<br>脂肪</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec548-1')" style="cursor:pointer;">
+        <div class="ladder-card-name">苏丹Ⅲ鉴定花生脂肪——切片制作与酒精洗涤的理由</div>
+        <div class="ladder-card-sub">EC-548 (1) · 为何要用50%酒精洗涤；苏丹Ⅲ/Ⅳ颜色区别 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1-4<br>核酸</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec552-1')" style="cursor:pointer;">
+        <div class="ladder-card-name">甲基绿-吡罗红染色预期结果——细胞核绿色/细胞质红色解释</div>
+        <div class="ladder-card-sub">EC-552 (1) · 甲基绿→DNA→细胞核绿；吡罗红→RNA→细胞质红 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="ladder-section-label"><span class="ladder-level l2" style="width:auto;padding:3px 8px;">L2 进阶</span> 鉴定实验方案评价与特殊样品处理</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2-1<br>蔗糖</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec540-2')" style="cursor:pointer;">
+        <div class="ladder-card-name">蔗糖水解后用斐林试剂检测——中和步骤的必要性分析</div>
+        <div class="ladder-card-sub">EC-540 (2) · 盐酸水解→NaOH中和→加斐林→水浴；跳过中和为何失败 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2-2<br>方案评价</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec544-3')" style="cursor:pointer;">
+        <div class="ladder-card-name">评价双缩脲试剂鉴定实验方案——找出错误操作并说明后果</div>
+        <div class="ladder-card-sub">EC-544 (3) · "先加CuSO₄再加NaOH"的错误及"不出现紫色"的原因 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2-3<br>盐酸</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec552-23')" style="cursor:pointer;">
+        <div class="ladder-card-name">核酸鉴定实验中盐酸处理的多重作用分析</div>
+        <div class="ladder-card-sub">EC-552 (2)+(3) · 盐酸的三个作用；处理时间、温度对结果的影响 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="ladder-section-label"><span class="ladder-level l3" style="width:auto;padding:3px 8px;">L3 综合</span> 未知样品鉴定方案设计 + 多试剂综合应用</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l3">L3-1</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec558-135')" style="cursor:pointer;">
+        <div class="ladder-card-name">综合题：设计方案鉴定"某白色粉末"含有哪种生物大分子（糖/蛋白质/脂肪）</div>
+        <div class="ladder-card-sub">EC-558 (1)+(3)+(5) · 选择多种鉴定试剂→逐一检验→根据颜色结果推断成分；阳性对照设计与结果解读 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="tab-self" class="page" role="tabpanel">
+  <div class="progress-row">
+    <span style="font-size:13px;color:var(--tx2);">学习自查清单</span>
+    <span style="font-size:13px;color:var(--tx2);" id="progress-text">0 / 7 完成</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="pbar"></div></div>
+  <div class="checklist" id="checklist">
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能默写斐林试剂和双缩脲试剂的配制方法，并说明两者加液顺序和是否需要加热的区别</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能区分苏丹Ⅲ（橘黄色）和苏丹Ⅳ（红色）对脂肪的染色结果，并说明50%酒精洗涤的原因</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能说明甲基绿染DNA（细胞核绿色）、吡罗红染RNA（细胞质红色）的预期结果，并区别于龙胆紫（染色体染料）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能解释为什么蔗糖不能直接用斐林试剂鉴定，以及水解后鉴定的完整步骤（加盐酸→水解→中和→斐林→水浴）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能评价鉴定实验方案，指出常见错误（试剂顺序颠倒、未水浴加热、未设阳性对照）并说明后果</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">完成 L1 全部 4 道基础变式（还原糖、蛋白质、脂肪、核酸鉴定各 1 道）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">完成至少 2 道 L2 进阶变式，能对有缺陷的鉴定方案提出改进意见</div>
+    </div>
+  </div>
+  <div class="action-row">
+    <button class="action-btn" onclick="window.scrollTo(0,0);switchTab('mothers',document.querySelectorAll('.nav-tab')[1])">返回母题精讲 →</button>
+    <button class="action-btn" onclick="window.scrollTo(0,0);switchTab('ladder',document.querySelectorAll('.nav-tab')[2])">进入变式阶梯 →</button>
+  </div>
+</div>
+
+</div><!-- .app -->
+
+<div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
+  <div class="drawer-header">
+    <span class="drawer-badge" id="drawer-badge"></span>
+    <span class="drawer-title" id="drawer-title"></span>
+    <button class="drawer-close" onclick="closeDrawer()" aria-label="关闭题干面板">
+      <i class="ti ti-x" style="font-size:18px;" aria-hidden="true"></i>
+    </button>
+  </div>
+  <div class="drawer-body">
+    <div class="drawer-ec-ref" id="drawer-ref"></div>
+    <div class="drawer-stem" id="drawer-stem"></div>
+    <div class="drawer-sub" id="drawer-sub" style="display:none;">
+      <div class="drawer-sub-label">本题考查重点</div>
+      <div id="drawer-sub-text"></div>
+    </div>
+    <div class="drawer-answer" id="drawer-answer">
+      <div class="drawer-answer-label">参考答案</div>
+      <div id="drawer-answer-text"></div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="drawer-btn" id="drawer-ans-btn" onclick="toggleAnswer()">显示答案</button>
+    <button class="drawer-btn primary" onclick="closeDrawer()">完成阅读</button>
+  </div>
+</div>
+
+<script>
+function switchTab(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+function toggleMQ(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.mq-chevron');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chevron.classList.toggle('open', !isOpen);
+}
+function filterMode(mode, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.mq-card').forEach(card => {
+    card.style.display = (mode === 'all' || card.dataset.mode === mode) ? '' : 'none';
+  });
+}
+function toggleCheck(item) {
+  item.classList.toggle('done');
+  updateProgress();
+  saveChecklist();
+}
+function updateProgress() {
+  const total = document.querySelectorAll('.check-item').length;
+  const done = document.querySelectorAll('.check-item.done').length;
+  document.getElementById('pbar').style.width = (done / total * 100) + '%';
+  document.getElementById('progress-text').textContent = done + ' / ' + total + ' 完成';
+}
+function saveChecklist() {
+  try {
+    const states = Array.from(document.querySelectorAll('.check-item')).map(el => el.classList.contains('done'));
+    localStorage.setItem('T06_M2_checklist', JSON.stringify(states));
+  } catch(e) {}
+}
+(function() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('T06_M2_checklist') || '[]');
+    document.querySelectorAll('.check-item').forEach((item, i) => { if (saved[i]) item.classList.add('done'); });
+    updateProgress();
+  } catch(e) {}
+})();
+
+const QUESTIONS = {
+  'mq-ec540': {
+    badge: '还原糖鉴定 · 母题', badgeClass: 'sugar',
+    title: '斐林试剂鉴定葡萄糖——配制、操作与颜色原理',
+    ref: 'EC-20260525-540 · 子问题 (1)(2)',
+    stem: `某同学配制了以下溶液进行还原糖鉴定实验：\n溶液A：1%葡萄糖溶液（已知含还原糖）\n溶液B：1%蔗糖溶液（已知不含还原糖）\n溶液C：未知溶液（待鉴定）\n\n(1) 请写出用斐林试剂鉴定上述溶液的完整操作步骤（包括试剂配制、加入顺序、加热条件、观察指标）。\n(2) 如果对溶液B先进行酸水解处理，再用斐林试剂检测，预期结果如何？完整操作步骤是什么？`,
+    focus: '(1) 斐林试剂：A液(0.1g/mL NaOH)和B液(0.05g/mL CuSO₄)按2:1体积比混合后使用；加入待测液→50~65°C水浴2分钟→观察颜色（砖红色=含还原糖）。\n(2) 蔗糖水解：加稀盐酸→水浴水解→冷却→加NaOH中和至碱性→再加斐林试剂→水浴→出现砖红色（蔗糖已水解为葡萄糖和果糖）。',
+    answer: '(1) 操作步骤：\n①配制斐林试剂：取0.1g/mL NaOH溶液（A液）2份，取0.05g/mL CuSO₄溶液（B液）1份，将A液和B液按2:1体积比混合，即得新鲜斐林试剂（现配现用）。\n②向3支试管（A、B、C）中分别加入2mL各待测溶液。\n③各试管中加入1~2mL新鲜配制的斐林试剂，轻轻振荡混匀。\n④将3支试管置于50~65°C水浴中加热2分钟。\n⑤取出试管，观察颜色变化，记录结果。\n预期结果：溶液A（葡萄糖）→砖红色沉淀（含还原糖）；溶液B（蔗糖）→溶液保持蓝色（无还原糖）；溶液C→根据颜色判断。\n(2) 蔗糖水解后检测步骤：\n①取2mL蔗糖溶液，加入少量稀盐酸（约0.5mL），60~65°C水浴加热10分钟，使蔗糖水解为葡萄糖和果糖。\n②冷却至室温，向水解液中逐滴加入0.1g/mL NaOH溶液，边加边用pH试纸检测，至溶液变为碱性（pH 8~9）（中和目的：斐林试剂需在碱性条件下才能形成Cu(OH)₂，酸性条件下无法反应）。\n③加入新鲜斐林试剂，50~65°C水浴2分钟，观察颜色。\n预期结果：出现砖红色沉淀，说明蔗糖已被水解为还原糖（葡萄糖和果糖）。'
+  },
+  'mq-ec544': {
+    badge: '蛋白质鉴定 · 母题', badgeClass: 'protein',
+    title: '双缩脲试剂鉴定蛋白质——加液顺序与氨基酸不反应的原因',
+    ref: 'EC-20260525-544 · 子问题 (1)(3)',
+    stem: `(1) 请说明用双缩脲试剂鉴定蛋白质的完整操作步骤，并解释为什么双缩脲试剂必须先加NaOH再加CuSO₄（而非混合后加入，与斐林试剂配制方式不同）。\n\n(3) 某同学在进行双缩脲试剂鉴定实验时，不小心将步骤颠倒，先向蛋白液中加入了CuSO₄溶液，再加入NaOH溶液，结果未出现预期的紫色，而是出现了蓝色沉淀。请解释出现这一现象的原因。`,
+    focus: '(1) 步骤：先加2mL NaOH→振荡→再加3~4滴CuSO₄→振荡→室温2min→观察紫色。理由：需先在碱性环境中使蛋白质展开，再加入Cu²⁺形成配位化合物；若先加CuSO₄，酸性或中性条件下Cu²⁺直接与OH⁻结合形成Cu(OH)₂蓝色沉淀，而非与肽键形成配位化合物。\n(3) 先加CuSO₄→无碱性环境→加NaOH后Cu²⁺直接与OH⁻反应→生成Cu(OH)₂蓝色沉淀→Cu²⁺被消耗无法与肽键形成配位化合物→不出现紫色。',
+    answer: '(1) 操作步骤：\n①向待测蛋白液中加入0.1g/mL NaOH溶液2mL，振荡混匀（提供碱性环境，使蛋白质肽键暴露，并使溶液呈碱性）。\n②再向溶液中加入0.01g/mL CuSO₄溶液3~4滴，振荡混匀（少量Cu²⁺在碱性环境中与肽键形成紫色配位化合物）。\n③室温静置2分钟，观察颜色变化（出现紫色=含蛋白质，无色变化=不含蛋白质或含量极少）。\n必须先加NaOH的原因：NaOH提供碱性环境，将蛋白质展开，使肽键(-CO-NH-)充分暴露；在碱性条件下，Cu²⁺才能与肽键中的氮原子形成配位化合物，呈现紫色。若先加CuSO₄（中性/弱酸性），Cu²⁺无法与肽键有效结合；后加NaOH时，Cu²⁺会优先与OH⁻结合生成Cu(OH)₂沉淀，而不是与肽键结合，故无法出现紫色。\n(3) 现象解释：先加CuSO₄（酸性或中性）时，Cu²⁺不与肽键结合；后加NaOH提供OH⁻后，Cu²⁺立即与OH⁻反应：Cu²⁺ + 2OH⁻ → Cu(OH)₂↓（蓝色沉淀）；Cu²⁺几乎全部以Cu(OH)₂形式沉淀，无法与蛋白质肽键形成配位化合物，因此不出现紫色，只出现蓝色沉淀。'
+  },
+  'mq-ec548': {
+    badge: '脂肪鉴定 · 母题', badgeClass: 'lipid',
+    title: '苏丹Ⅲ鉴定脂肪——切片制作、洗涤步骤与显微观察',
+    ref: 'EC-20260525-548 · 子问题 (1)(2)',
+    stem: `某同学设计了鉴定花生种子中脂肪含量的实验，步骤如下：\n①将花生种子浸泡过夜，剥去种皮，切成薄片；\n②将切片置于载玻片上，滴加苏丹Ⅲ染液，静置3分钟；\n③直接盖上盖玻片，在显微镜下观察。\n\n(1) 该实验步骤中缺少了一个重要操作，请指出并说明原因。\n(2) 在正确操作后，用低倍镜和高倍镜分别观察到什么结果？脂肪颗粒是什么颜色？`,
+    focus: '(1) 缺少"50%酒精洗去浮色"步骤——步骤③应先用50%酒精（约2~3滴）洗去切片表面多余的苏丹Ⅲ染料，吸去多余酒精，再盖盖玻片观察；原因：不洗则背景染料残留，无法清晰观察到特异性染色的脂肪颗粒，对比度差。\n(2) 低倍镜：找到细胞区域，脂肪颗粒较多；高倍镜：可见圆形/椭圆形橘黄色颗粒，即脂肪颗粒（苏丹Ⅲ染橘黄色）。',
+    answer: '(1) 缺少步骤：在步骤②静置染色后、步骤③盖盖玻片观察前，应加入"用50%酒精洗涤切片"的步骤：向切片滴加2~3滴50%酒精，使酒精覆盖切片约1分钟，再用吸水纸吸去多余酒精和溶于酒精中的多余苏丹Ⅲ染料（洗去浮色）。\n原因：苏丹Ⅲ是脂溶性染料，可溶于酒精；洗涤去除切片表面非特异性结合的浮色（背景染料），使仅结合在脂肪颗粒上的苏丹Ⅲ留存，从而提高对比度，在显微镜下清晰看到橘黄色脂肪颗粒。若不洗涤，整个切片背景均被染色，无法与脂肪颗粒区分。\n(2) 正确操作后显微镜观察结果：\n低倍镜（×100）：可见花生子叶细胞，细胞较大，细胞质中可见大量染成橘黄色的圆形颗粒（脂肪颗粒），细胞壁和其他细胞结构不着色（无色/浅色）；选取颗粒较多的区域移至视野中央。\n高倍镜（×400）：清晰可见圆形或椭圆形的橘黄色脂肪颗粒，颗粒大小不一，分布于细胞质中（部分存在于液泡区域）；脂肪颗粒呈橘黄色（苏丹Ⅲ染色结果）。'
+  },
+  'mq-ec552': {
+    badge: '核酸染色 · 母题', badgeClass: 'dna',
+    title: '甲基绿-吡罗红染色法——盐酸处理目的与DNA/RNA分布观察',
+    ref: 'EC-20260525-552 · 子问题 (1)(2)(3)',
+    stem: `观察DNA和RNA在细胞中的分布实验（以洋葱鳞片叶表皮细胞为材料）：\n步骤一：制作洋葱表皮临时玻片（撕取表皮→展平→加清水制片）\n步骤二：在解离液（8% HCl）中浸泡处理→水洗→吸水纸吸干\n步骤三：用甲基绿-吡罗红混合染液染色5分钟\n步骤四：吸去多余染液→盖盖玻片→显微观察\n\n(1) 步骤三中使用的是甲基绿和吡罗红的混合染液，为什么不分开单独染色（先甲基绿，后吡罗红）？\n(2) 步骤二中8%盐酸处理的主要目的是什么（列出2~3个目的）？\n(3) 在正确操作后，显微镜下观察到细胞的颜色分布是怎样的？解释原因。`,
+    focus: '(1) 混合染色原因：若分开染，先用甲基绿染DNA（绿色），再用吡罗红染RNA（红色），第二次染色时会洗去部分第一次的染料；混合同时染色，两种染料竞争性地分别与DNA和RNA结合，互不干扰，且结果更稳定。\n(2) 盐酸作用：①使染色质中DNA与蛋白质分离（水解蛋白质），利于染料渗入；②改变细胞膜通透性，促进染料渗透；③适度水解DNA，使其结构伸展，有利于与甲基绿结合（注意盐酸不完全水解DNA）。\n(3) 结果：细胞核呈绿色（甲基绿与DNA结合，DNA主要在细胞核中）；细胞质呈红色（吡罗红与RNA结合，RNA主要在细胞质中）。',
+    answer: '(1) 必须混合染色的原因：若分步染色（先甲基绿→再吡罗红），第二次用吡罗红染色时需要漂洗步骤，会冲洗掉部分已结合的甲基绿，导致细胞核颜色不准确；同时分步染色时间更长，细胞状态可能改变。混合染色时，甲基绿和吡罗红同时竞争性地与DNA和RNA结合，各自选择性地结合亲和力更高的底物，结果更准确稳定，操作也更简便。\n(2) 8%盐酸（60°C）处理的主要目的：\n①改变细胞膜（及核膜）的通透性：使染液更容易进入细胞，与细胞内DNA/RNA充分结合，提高染色效率。\n②使染色质中蛋白质与DNA分离（水解部分组蛋白）：消除蛋白质对染料与核酸结合的阻碍，使甲基绿能够更直接地与DNA接触并结合，染色更特异。\n③使细胞内各组分的DNA/RNA充分暴露：利于两种染料分别与DNA、RNA结合，结果对比更清晰。\n(3) 显微镜下颜色分布及原因：\n细胞核：呈绿色——原因：细胞核中主要含有DNA（染色体、核仁DNA等），甲基绿与DNA有更高亲和力，优先与DNA结合，使细胞核显示绿色。\n细胞质：呈红色——原因：细胞质中主要含有RNA（核糖体RNA、mRNA、tRNA等），吡罗红与RNA有更高亲和力，与细胞质中大量RNA结合，使细胞质显示红色。\n（核仁区域：若清晰可见，核仁中RNA较多，可能呈较深的红色）'
+  },
+  'v-ec540-1': {
+    badge: 'L1 基础变式 · 还原糖', badgeClass: 'sugar',
+    title: '斐林试剂鉴定葡萄糖完整操作',
+    ref: 'EC-20260525-540 · (1)',
+    stem: '（同母题 mq-ec540 (1)）',
+    focus: '同母题分析。关键：A液B液2:1混合→加样→50~65°C水浴→砖红色=含还原糖。',
+    answer: '见母题 EC-540 答案。'
+  },
+  'v-ec544-1': {
+    badge: 'L1 基础变式 · 蛋白质', badgeClass: 'protein',
+    title: '双缩脲试剂鉴定蛋白质操作步骤',
+    ref: 'EC-20260525-544 · (1)',
+    stem: '（同母题 mq-ec544 (1)）',
+    focus: '同母题分析。关键：先NaOH→后CuSO₄→不加热→紫色=含蛋白质。',
+    answer: '见母题 EC-544 答案。'
+  },
+  'v-ec548-1': {
+    badge: 'L1 基础变式 · 脂肪', badgeClass: 'lipid',
+    title: '苏丹Ⅲ脂肪鉴定切片制作与洗涤',
+    ref: 'EC-20260525-548 · (1)',
+    stem: '（同母题 mq-ec548 (1)）',
+    focus: '同母题分析。关键缺失步骤：50%酒精洗去浮色；原因：苏丹Ⅲ溶于酒精，洗去非特异性背景染色。',
+    answer: '见母题 EC-548 答案。'
+  },
+  'v-ec552-1': {
+    badge: 'L1 基础变式 · 核酸', badgeClass: 'dna',
+    title: '甲基绿-吡罗红染色预期结果描述',
+    ref: 'EC-20260525-552 · (1)',
+    stem: '（同母题 mq-ec552 (3)——描述显微镜下颜色分布）',
+    focus: '同母题分析。细胞核绿色（甲基绿+DNA）；细胞质红色（吡罗红+RNA）。',
+    answer: '见母题 EC-552 答案。'
+  },
+  'v-ec540-2': {
+    badge: 'L2 进阶变式 · 蔗糖水解', badgeClass: 'sugar',
+    title: '蔗糖水解后斐林试剂检测——中和步骤的必要性',
+    ref: 'EC-20260525-540 · (2)',
+    stem: '（同母题 mq-ec540 (2)）',
+    focus: '同母题分析。核心：水解后必须NaOH中和至碱性，才能形成Cu(OH)₂进而与还原糖反应出现砖红色。',
+    answer: '见母题 EC-540 答案。'
+  },
+  'v-ec544-3': {
+    badge: 'L2 进阶变式 · 方案评价', badgeClass: 'protein',
+    title: '双缩脲实验操作颠倒——蓝色沉淀原因分析',
+    ref: 'EC-20260525-544 · (3)',
+    stem: '（同母题 mq-ec544 (3)）',
+    focus: '同母题分析。先CuSO₄→后NaOH→Cu²⁺+OH⁻→Cu(OH)₂蓝色沉淀，无Cu²⁺与肽键结合→不出紫色。',
+    answer: '见母题 EC-544 答案。'
+  },
+  'v-ec552-23': {
+    badge: 'L2 进阶变式 · 盐酸处理', badgeClass: 'dna',
+    title: '核酸鉴定实验中盐酸处理的多重作用分析',
+    ref: 'EC-20260525-552 · (2)+(3)',
+    stem: '（同母题 mq-ec552 (2)(3)）',
+    focus: '同母题分析。盐酸三个作用：改变膜通透性；使DNA与蛋白质分离；使核酸充分暴露与染料结合。',
+    answer: '见母题 EC-552 答案。'
+  },
+  'v-ec558-135': {
+    badge: 'L3 综合变式', badgeClass: 'sugar',
+    title: '未知白色粉末多试剂综合鉴定方案设计',
+    ref: 'EC-20260525-558 · (1)+(3)+(5)',
+    stem: `实验室有一瓶白色粉末，标签模糊，可能是以下物质之一：淀粉、葡萄糖、蛋白质（白蛋白）、或其混合物。\n\n(1) 请设计实验方案，用已学的鉴定试剂逐步鉴定该白色粉末中含有哪些生物大分子（说明：白色粉末可溶于水，已制成溶液）。要求：①列出所用试剂；②写出操作步骤；③写出预期结果及结论。\n(3) 如果在以上鉴定中，使用斐林试剂时出现砖红色，但用碘液检测时溶液变蓝，能否判断溶液中同时含有葡萄糖和淀粉？说明理由，并说明如何进一步确认。\n(5) 在实验中，对照组如何设置才最为严谨？（分别针对斐林试剂、双缩脲试剂各设置一组阳性和阴性对照）`,
+    focus: '(1) 分步鉴定：①碘液检测淀粉（蓝紫色=含淀粉）；②斐林试剂检测还原糖（水浴后砖红色=含葡萄糖）；③双缩脲试剂检测蛋白质（紫色=含蛋白质）。\n(3) 可以初步判断，但斐林试剂砖红色也可能是淀粉水解产物；需要：①只用碘液检测，排除葡萄糖干扰淀粉检测；②用透析或离心去除淀粉，再用斐林试剂检测是否还有砖红色，才能确认同时含两者。\n(5) 斐林试剂：阳性对照=1%葡萄糖液；阴性对照=1%蔗糖液。双缩脲：阳性对照=蛋白液；阴性对照=蒸馏水。',
+    answer: '(1) 综合鉴定方案：\n所用试剂：碘液；斐林试剂（A液+B液）；双缩脲试剂（NaOH+CuSO₄）；水浴锅（50~65°C）\n步骤：\n①取3支试管，各加入1mL待测溶液。\n②试管1：加2滴碘液，观察颜色。若出现蓝紫色→含淀粉；无变色→不含淀粉。\n③试管2：加入1mL新鲜配制的斐林试剂，50~65°C水浴2分钟，观察颜色。若出现砖红色沉淀→含还原糖（葡萄糖等）；溶液仍蓝色→不含还原糖。\n④试管3：加入2mL NaOH溶液，振荡；再加入3~4滴CuSO₄溶液，振荡，室温静置2分钟，观察颜色。若出现紫色→含蛋白质；无紫色→不含蛋白质。\n⑤根据三支试管的结果，综合判断白色粉末的成分。\n(3) 虽然两个结果都阳性，但不能直接得出"同时含葡萄糖和淀粉"的结论，因为：若溶液中只有淀粉，在高温水浴过程中，淀粉可能部分水解为麦芽糖（还原糖）→导致斐林试剂出现砖红色（假阳性）。进一步确认方法：①用透析袋（半透膜）透析溶液，大分子淀粉留在袋内，小分子葡萄糖透出→分别检测袋内（碘液）和袋外（斐林试剂）；②或用碘液检测后再用斐林试剂（可能淀粉在水浴时部分降解），同时设立对照—纯淀粉液也用斐林试剂处理，观察是否也出现砖红色（若也出现则为淀粉降解所致，非原液中含葡萄糖）。\n(5) 对照设置：\n斐林试剂对照：阳性对照=1%葡萄糖溶液（已知含还原糖，预期砖红色，验证试剂有效）；阴性对照=1%蔗糖溶液（已知不含还原糖，预期溶液保持蓝色，验证无假阳性）。\n双缩脲试剂对照：阳性对照=1%白蛋白溶液（已知含蛋白质，预期紫色，验证试剂有效）；阴性对照=蒸馏水或1%葡萄糖液（不含蛋白质，预期无紫色，验证无假阳性）。'
+  }
+};
+
+let answerShown = false;
+function openDrawer(key) {
+  const q = QUESTIONS[key];
+  if (!q) return;
+  const badge = document.getElementById('drawer-badge');
+  badge.textContent = q.badge;
+  badge.className = 'drawer-badge mq-badge ' + (q.badgeClass || '');
+  document.getElementById('drawer-title').textContent = q.title;
+  const ref = document.getElementById('drawer-ref');
+  ref.innerHTML = '<i class="ti ti-source-code" style="font-size:13px;" aria-hidden="true"></i> ' + q.ref;
+  document.getElementById('drawer-stem').textContent = q.stem;
+  const subEl = document.getElementById('drawer-sub');
+  const subText = document.getElementById('drawer-sub-text');
+  if (q.focus) {
+    subText.textContent = q.focus;
+    subEl.style.display = '';
+  } else {
+    subEl.style.display = 'none';
+  }
+  answerShown = false;
+  const ans = document.getElementById('drawer-answer');
+  ans.classList.remove('show');
+  document.getElementById('drawer-answer-text').textContent = q.answer || '';
+  const btn = document.getElementById('drawer-ans-btn');
+  btn.textContent = '显示答案';
+  btn.style.display = q.answer ? '' : 'none';
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('drawer').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeDrawer() {
+  document.getElementById('overlay').classList.remove('open');
+  document.getElementById('drawer').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function toggleAnswer() {
+  answerShown = !answerShown;
+  document.getElementById('drawer-answer').classList.toggle('show', answerShown);
+  document.getElementById('drawer-ans-btn').textContent = answerShown ? '隐藏答案' : '显示答案';
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (document.getElementById('lb-overlay').classList.contains('open')) closeLightbox();
+    else closeDrawer();
+  }
+});
+</script>
+
+<div class="lb-overlay" id="lb-overlay" onclick="closeLightbox()">
+  <button class="lb-close" onclick="closeLightbox()" aria-label="关闭">&#x2715;</button>
+  <img class="lb-img" id="lb-img" src="" alt="">
+</div>
+<script>
+function openLightbox(src, alt) {
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lb-img').alt = alt || '';
+  document.getElementById('lb-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lb-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('lb-img').addEventListener('click', e => e.stopPropagation());
+</script>
+</body>
+</html>

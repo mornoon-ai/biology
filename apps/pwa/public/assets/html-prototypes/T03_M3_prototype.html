@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T03_M3 · 减数分裂染色体追踪</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent:#0F6E56; --accent-l:#E1F5EE; --accent-m:#7DCFBB; --accent-d:#085041;
+  --purple:#534AB7; --purple-l:#EEEDFE; --purple-d:#3C3489;
+  --amber:#BA7517; --amber-l:#FAEEDA; --amber-d:#633806;
+  --coral:#993C1D; --coral-l:#FAECE7; --coral-d:#712B13;
+  --bg:#ffffff; --bg2:#f7f7f5; --bg3:#f1efe8;
+  --tx:#1a1a18; --tx2:#5f5e5a; --tx3:#888780;
+  --bd:rgba(0,0,0,0.10); --bd2:rgba(0,0,0,0.18);
+  --r-sm:6px; --r-md:8px; --r-lg:12px; --r-xl:16px;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#1c1c1a;--bg2:#252523;--bg3:#2c2c2a;
+    --tx:#f0efea;--tx2:#b4b2a9;--tx3:#888780;
+    --bd:rgba(255,255,255,0.09);--bd2:rgba(255,255,255,0.16);
+    --accent-l:#04342C;--accent-d:#9FE1CB;
+    --purple-l:#26215C;--purple-d:#CECBF6;
+    --amber-l:#412402;--amber-d:#FAC775;
+    --coral-l:#4A1B0C;--coral-d:#F5C4B3;
+  }
+}
+body{font-family:var(--font);font-size:15px;line-height:1.6;color:var(--tx);background:var(--bg3);min-height:100vh;}
+.app{max-width:800px;margin:0 auto;background:var(--bg);min-height:100vh;}
+.site-header{padding:1.25rem 1.5rem 0;background:var(--bg);border-bottom:0.5px solid var(--bd);position:sticky;top:0;z-index:20;}
+.header-top{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.header-icon{background:var(--accent-l);border-radius:var(--r-md);padding:6px 8px;display:flex;align-items:center;justify-content:center;}
+.header-icon i{font-size:20px;color:var(--accent);}
+.header-meta{font-size:12px;color:var(--tx3);}
+.header-title{font-size:17px;font-weight:500;color:var(--tx);}
+.header-id{margin-left:auto;font-size:11px;color:var(--tx3);background:var(--bg2);padding:3px 9px;border-radius:var(--r-sm);}
+.nav-tabs{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.nav-tab{padding:.6rem 1.1rem;font-size:13px;color:var(--tx2);cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;font-family:var(--font);white-space:nowrap;transition:color .15s,border-color .15s;}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500;}
+.nav-tab:hover:not(.active){color:var(--tx);}
+.page{display:none;padding:1.5rem;}
+.page.active{display:block;}
+.memory-section{margin-bottom:1.5rem;}
+.memory-card{border:0.5px solid var(--bd);border-radius:var(--r-xl);overflow:hidden;background:var(--bg);}
+.memory-placeholder{min-height:200px;background:var(--bg2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--tx3);padding:2rem;}
+.memory-placeholder i{font-size:32px;color:var(--bd2);}
+.memory-placeholder-text{font-size:13px;text-align:center;line-height:1.6;}
+.memory-placeholder-filename{font-size:11px;background:var(--bg3);border:0.5px solid var(--bd);border-radius:var(--r-sm);padding:4px 10px;font-family:monospace;color:var(--tx2);}
+.memory-img{width:100%;display:block;max-height:320px;object-fit:contain;background:var(--bg3);cursor:zoom-in;transition:opacity .15s;}
+.memory-img:hover{opacity:.9;}
+.memory-footer{padding:.85rem 1rem;display:flex;align-items:center;gap:10px;border-top:0.5px solid var(--bd);}
+.memory-label{font-size:13px;font-weight:500;color:var(--tx);flex:1;}
+audio{height:32px;width:220px;}
+.audio-placeholder{font-size:12px;color:var(--tx3);display:flex;align-items:center;gap:5px;background:var(--bg2);padding:6px 10px;border-radius:var(--r-sm);}
+.section-title{font-size:13px;font-weight:500;color:var(--tx2);display:flex;align-items:center;gap:7px;margin-bottom:1rem;text-transform:uppercase;letter-spacing:.04em;}
+.section-divider{height:0.5px;background:var(--bd);margin:1.5rem 0;}
+.signal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:1.5rem;}
+.signal-card{background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;}
+.signal-label{font-size:11px;color:var(--tx3);letter-spacing:.04em;margin-bottom:.4rem;text-transform:uppercase;}
+.signal-tag{font-size:13px;color:var(--tx);margin-bottom:2px;}
+.subtopic-list{display:flex;flex-direction:column;gap:10px;margin-bottom:1.5rem;}
+.subtopic-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.9rem 1.1rem;border-left:3px solid var(--accent);}
+.subtopic-card.s2{border-left-color:var(--purple);}
+.subtopic-num{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.3rem;}
+.subtopic-name{font-size:14px;font-weight:500;color:var(--tx);margin-bottom:.3rem;}
+.subtopic-signal{font-size:13px;color:var(--tx2);line-height:1.6;}
+.trap-list{display:flex;flex-direction:column;gap:7px;}
+.trap-item{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.55;}
+.trap-icon{color:#E24B4A;font-size:15px;flex-shrink:0;margin-top:1px;}
+.filter-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem;}
+.filter-btn{padding:5px 13px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx2);font-family:var(--font);transition:all .15s;}
+.filter-btn.active{background:var(--accent-l);color:var(--accent-d);border-color:var(--accent);font-weight:500;}
+.mq-card{border:0.5px solid var(--bd);border-radius:var(--r-lg);background:var(--bg);margin-bottom:.85rem;overflow:hidden;}
+.mq-header{padding:.9rem 1.1rem;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;transition:background .15s;}
+.mq-header:hover{background:var(--bg2);}
+.mq-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);white-space:nowrap;}
+.mq-badge.s1{background:var(--accent-l);color:var(--accent-d);}
+.mq-badge.s2{background:var(--purple-l);color:var(--purple-d);}
+.mq-name{font-size:14px;font-weight:500;color:var(--tx);flex:1;}
+.mq-purity{font-size:12px;color:var(--tx3);flex-shrink:0;}
+.mq-chevron{color:var(--tx3);font-size:16px;transition:transform .2s;flex-shrink:0;}
+.mq-chevron.open{transform:rotate(180deg);}
+.mq-body{display:none;padding:.75rem 1.1rem 1.1rem;border-top:0.5px solid var(--bd);}
+.mq-body.open{display:block;}
+.mq-source{font-size:12px;color:var(--tx3);margin-bottom:.65rem;}
+.rule-box{background:var(--accent-l);border-left:3px solid var(--accent);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:.65rem .9rem;font-size:13px;color:var(--accent-d);margin:.75rem 0;line-height:1.65;}
+.rule-box.s2{background:var(--purple-l);border-left-color:var(--purple);color:var(--purple-d);}
+.chain-label{font-size:12px;font-weight:500;color:var(--tx2);margin:.75rem 0 .4rem;text-transform:uppercase;letter-spacing:.04em;}
+.signal-chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:6px;}
+.sc-node{background:var(--bg2);border-radius:var(--r-sm);padding:3px 9px;font-size:13px;color:var(--tx);}
+.sc-node.s1{background:var(--accent-l);color:var(--accent-d);}
+.sc-node.s2{background:var(--purple-l);color:var(--purple-d);}
+.sc-arrow{color:var(--tx3);font-size:13px;}
+.mq-note{font-size:13px;color:var(--tx2);margin-top:.75rem;line-height:1.6;}
+.q-trigger{display:inline-flex;align-items:center;gap:5px;margin-top:.75rem;padding:6px 12px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;color:var(--tx2);cursor:pointer;font-family:var(--font);transition:all .15s;}
+.q-trigger:hover{background:var(--bg2);color:var(--tx);}
+.q-trigger i{font-size:14px;}
+.ladder-section-label{font-size:13px;font-weight:500;color:var(--tx2);margin-bottom:.85rem;display:flex;align-items:center;gap:7px;}
+.ladder-rows{display:flex;flex-direction:column;gap:8px;margin-bottom:1rem;}
+.ladder-row{display:grid;grid-template-columns:64px 1fr;gap:10px;align-items:start;}
+.ladder-level{font-size:11px;font-weight:500;padding:6px 4px;border-radius:var(--r-sm);text-align:center;line-height:1.4;}
+.l0{background:var(--accent-l);color:var(--accent-d);}
+.l1{background:var(--purple-l);color:var(--purple-d);}
+.l2{background:var(--amber-l);color:var(--amber-d);}
+.l3{background:var(--coral-l);color:var(--coral-d);}
+.ladder-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.65rem .9rem;background:var(--bg);cursor:pointer;transition:background .15s;}
+.ladder-card:hover{background:var(--bg2);}
+.ladder-card-name{font-size:13px;font-weight:500;color:var(--tx);}
+.ladder-card-sub{font-size:12px;color:var(--tx3);margin-top:3px;line-height:1.5;}
+.ladder-note{background:var(--bg2);border-radius:var(--r-md);padding:.65rem .9rem;font-size:12px;color:var(--tx2);margin-bottom:1rem;line-height:1.55;}
+.progress-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem;}
+.progress-bar{height:5px;border-radius:3px;background:var(--bg2);margin-bottom:1.25rem;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;background:var(--accent);width:0%;transition:width .3s;}
+.checklist{display:flex;flex-direction:column;gap:7px;}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:.7rem .9rem;border:0.5px solid var(--bd);border-radius:var(--r-md);background:var(--bg);cursor:pointer;transition:background .15s;}
+.check-item.done{background:var(--bg2);}
+.check-box{width:18px;height:18px;border:1.5px solid var(--bd2);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .15s;}
+.check-item.done .check-box{background:var(--accent);border-color:var(--accent);}
+.check-box i{font-size:11px;color:#fff;display:none;}
+.check-item.done .check-box i{display:block;}
+.check-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.check-item.done .check-text{color:var(--tx3);text-decoration:line-through;}
+.action-row{margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:8px;}
+.action-btn{padding:7px 14px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.action-btn:hover{background:var(--bg2);}
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s;}
+.drawer-overlay.open{opacity:1;pointer-events:all;}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100vw);background:var(--bg);z-index:101;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden;}
+.drawer.open{transform:translateX(0);}
+.drawer-header{padding:1rem 1.25rem;border-bottom:0.5px solid var(--bd);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.drawer-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);}
+.drawer-title{font-size:14px;font-weight:500;color:var(--tx);flex:1;line-height:1.4;}
+.drawer-close{background:none;border:none;cursor:pointer;color:var(--tx2);padding:4px;border-radius:var(--r-sm);display:flex;align-items:center;transition:background .15s;}
+.drawer-close:hover{background:var(--bg2);}
+.drawer-body{flex:1;overflow-y:auto;padding:1.25rem;}
+.drawer-ec-ref{font-size:12px;color:var(--tx3);margin-bottom:1rem;display:flex;align-items:center;gap:6px;}
+.drawer-stem{font-size:14px;color:var(--tx);line-height:1.75;white-space:pre-wrap;}
+.drawer-sub{font-size:13px;color:var(--tx2);background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:1rem;line-height:1.65;}
+.drawer-sub-label{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-answer{font-size:13px;color:var(--tx);background:var(--accent-l);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:.75rem;line-height:1.65;display:none;}
+.drawer-answer.show{display:block;}
+.drawer-answer-label{font-size:11px;font-weight:500;color:var(--accent-d);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-footer{padding:.85rem 1.25rem;border-top:0.5px solid var(--bd);display:flex;gap:8px;flex-shrink:0;}
+.drawer-btn{flex:1;padding:8px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.drawer-btn:hover{background:var(--bg2);}
+.drawer-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+.drawer-btn.primary:hover{background:var(--accent-d);}
+.lb-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:200;display:none;align-items:center;justify-content:center;cursor:zoom-out;}
+.lb-overlay.open{display:flex;}
+.lb-img{max-width:92vw;max-height:92vh;object-fit:contain;border-radius:var(--r-md);box-shadow:0 8px 40px rgba(0,0,0,.5);}
+.lb-close{position:fixed;top:16px;right:20px;background:none;border:none;color:#fff;font-size:28px;cursor:pointer;line-height:1;opacity:.7;transition:opacity .15s;}
+.lb-close:hover{opacity:1;}
+@media(max-width:600px){
+  .site-header{padding:1rem 1rem 0;}.page{padding:1rem;}.header-title{font-size:15px;}
+  .signal-grid{grid-template-columns:1fr 1fr;}.ladder-row{grid-template-columns:52px 1fr;gap:8px;}
+  .action-row{flex-direction:column;}.action-btn{width:100%;text-align:center;}
+  .drawer{width:100vw;}audio{width:160px;}
+}
+@media(max-width:380px){.signal-grid{grid-template-columns:1fr;}}
+
+.back-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;font-size:12px;color:var(--tx2);background:var(--bg2);border:0.5px solid var(--bd2);border-radius:var(--r-md);text-decoration:none;font-family:var(--font);transition:background .15s,color .15s;white-space:nowrap;flex-shrink:0;}
+.back-btn:hover{background:var(--bg3);color:var(--tx);}
+.back-btn i{font-size:14px;}
+.memory-video{width:100%;max-height:220px;display:block;border-radius:var(--r-md);background:#000;margin-top:8px;}
+</style>
+</head>
+<body>
+<div class="app">
+
+<header class="site-header">
+  <div class="header-top">
+    <div class="header-icon"><i class="ti ti-dna" aria-hidden="true"></i></div>
+    <div>
+      <div class="header-meta">03 遗传分析 · M3 染色体行为</div>
+      <div class="header-title">减数分裂染色体追踪</div>
+    </div>
+    <a class="back-btn" href="index.html" aria-label="返回首页"><i class="ti ti-arrow-left"></i> 首页</a>
+    <div class="header-id">T03_M3</div>
+  </div>
+  <nav class="nav-tabs" role="tablist">
+    <button class="nav-tab active" role="tab" onclick="switchTab('overview',this)">概览</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('mothers',this)">母题精讲</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('ladder',this)">变式阶梯</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('check',this)">自查清单</button>
+  </nav>
+</header>
+
+<!-- ══ 概览 ══ -->
+<div id="page-overview" class="page active">
+  <div class="memory-section">
+    <div class="memory-card">
+      <img class="memory-img" src="记忆卡/T03_M3_memory.png" alt="T03_M3 减数分裂染色体追踪 记忆卡"
+           onclick="openLightbox(this.src,this.alt)"
+           onerror="this.style.display='none';document.getElementById('mem-placeholder').style.display='flex'">
+      <div id="mem-placeholder" class="memory-placeholder" style="display:none;">
+        <i class="ti ti-photo-up"></i>
+        <div class="memory-placeholder-text">记忆卡图片放置于此</div>
+        <div class="memory-placeholder-filename">记忆卡/T03_M3_memory.png</div>
+      </div>
+      <div class="memory-footer">
+        <span class="memory-label"><i class="ti ti-brain" style="margin-right:5px;color:var(--accent);"></i>记忆卡 · 染色体异常两路径</span>
+        <video class="memory-video" controls controlsList="nodownload" preload="metadata" style="display:none">
+        <source src="audio/T03_M3.mp4" type="video/mp4">
+      </video>
+      <div class="audio-placeholder" style="display:flex"><i class="ti ti-video-off"></i>视频待放入</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title"><i class="ti ti-radar"></i>核心触发信号</div>
+  <div class="signal-grid">
+    <div class="signal-card">
+      <div class="signal-label">视觉信号</div>
+      <div class="signal-tag">减数分裂后期/末期图</div>
+      <div class="signal-tag">滞后染色体（落在赤道板外）</div>
+      <div class="signal-tag">配子染色体数 n+1/n-1/0</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">文字信号</div>
+      <div class="signal-tag">不分离 / 同源染色体未分离</div>
+      <div class="signal-tag">姐妹染色单体未分离</div>
+      <div class="signal-tag">滞后染色体 / 染色体消减</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">分子机制</div>
+      <div class="signal-tag">CyclinB3 / 调控蛋白缺失</div>
+      <div class="signal-tag">纺锤体异常 / 秋水仙素</div>
+      <div class="signal-tag">三倍体 / 非整倍体</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">计算任务</div>
+      <div class="signal-tag">判断不分离发生阶段</div>
+      <div class="signal-tag">推测配子染色体数</div>
+      <div class="signal-tag">推断受精后染色体数</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-alert-triangle"></i>一票否决信号（最高优先级）</div>
+  <div class="trap-list" style="margin-bottom:1.5rem;">
+    <div class="trap-item">
+      <i class="ti ti-circle-check trap-icon" style="color:var(--amber);"></i>
+      <span><strong>配子含 AA（两个相同显性）→ 减Ⅱ不分离</strong>（A与A是姐妹染色单体，只能来自减Ⅱ）</span>
+    </div>
+    <div class="trap-item">
+      <i class="ti ti-circle-check trap-icon" style="color:var(--amber);"></i>
+      <span><strong>配子含 Aa（一对等位基因）→ 减Ⅰ不分离</strong>（同源染色体A和a未分开）</span>
+    </div>
+    <div class="trap-item">
+      <i class="ti ti-circle-check trap-icon" style="color:var(--amber);"></i>
+      <span><strong>出现"滞后染色体""消减"字眼 → 染色体数一定减少，不会增加</strong>（与不分离方向相反）</span>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-sitemap"></i>两条异常路径</div>
+  <div class="subtopic-list">
+    <div class="subtopic-card">
+      <div class="subtopic-num">路径 A · 不分离</div>
+      <div class="subtopic-name">同源染色体/姐妹染色单体不分离→配子 n+1/n-1</div>
+      <div class="subtopic-signal">配子染色体数多（n+1）→ 看等位基因组成：含Aa→减Ⅰ同源染色体未分；含AA/aa→减Ⅱ姐妹染色单体未分。受精后→三体(2n+1)/单体(2n-1)</div>
+    </div>
+    <div class="subtopic-card s2">
+      <div class="subtopic-num">路径 B · 染色体消减</div>
+      <div class="subtopic-name">滞后染色体降解→假配子→配子染色体数 0~n</div>
+      <div class="subtopic-signal">减Ⅱ后期出现滞后染色体→不被包入子细胞核→降解消减→配子染色体数少于n（随机缺失）。与不分离方向相反——不分离多了，消减少了</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-alert-triangle"></i>高频易错</div>
+  <div class="trap-list">
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>混淆减Ⅰ与减Ⅱ不分离——含Aa(等位基因对)=减Ⅰ；含AA/aa(相同等位基因)=减Ⅱ。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>把染色体消减等同于不分离——消减=少了(0~n)；不分离=多了(n+1)。方向相反，机制完全不同。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>秋水仙素抑制着丝粒分裂（错）——秋水仙素=微管解聚剂，抑制纺锤体形成，着丝粒照常分裂，染色体无法移向两极→染色体数加倍。</span></div>
+  </div>
+</div>
+
+<!-- ══ 母题精讲 ══ -->
+<div id="page-mothers" class="page">
+  <div class="filter-tabs">
+    <button class="filter-btn active" onclick="filterMQ('all',this)">全部 (2母题)</button>
+    <button class="filter-btn" onclick="filterMQ('s1',this)">路径A·不分离</button>
+    <button class="filter-btn" onclick="filterMQ('s2',this)">路径B·消减</button>
+  </div>
+
+  <!-- MQ1: EC-204 不分离 -->
+  <div class="mq-card" data-topic="s1">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge s1">路径A 母题</span>
+      <span class="mq-name">CyclinB3缺失·同源染色体不分离·三倍体受精卵</span>
+      <span class="mq-purity">★ 10/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-204 · CyclinB3缺失雌鼠同源染色体不分离减数分裂异常及受精卵三倍体染色体整倍化变异综合 · 子问题(4)(5)</div>
+      <div class="rule-box">核心考查：CyclinB3功能→缺失→减Ⅰ同源染色体不分离→次级卵母细胞含2n→减Ⅱ正常进行→卵细胞含2n→与正常精子(n)受精→3n三倍体</div>
+      <div class="chain-label">四步因果链</div>
+      <div class="signal-chain">
+        <span class="sc-node s1">CyclinB3缺失</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">减Ⅰ同源染色体不分离</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">次级卵母细胞含2n</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node s1">减Ⅱ正常进行</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">卵细胞含2n</span><span class="sc-arrow">+</span>
+        <span class="sc-node">正常精子n</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">3n 三倍体受精卵</span>
+      </div>
+      <div class="mq-note">
+        <strong>(4) CyclinB3功能推断：</strong>CyclinB3缺失→减Ⅰ不分离→说明CyclinB3调控减Ⅰ同源染色体分离（负责驱动同源染色体向两极运动）。<br>
+        <strong>(5) 变异类型命名：</strong>受精卵3n→三倍体。属于染色体数目变异（整倍体变异）。<br>
+        <strong>关键认知：</strong>减Ⅱ即使正常进行，也无法补救减Ⅰ的异常——减Ⅱ将已经含2n的次级卵母细胞平均分配，结果仍是n（其实是n）×2→卵细胞n？不对——次级卵母细胞含2n，减Ⅱ正常→平均分配→每个卵细胞含n条（实际上是比正常多，但此题说卵细胞含2n是因为减Ⅰ完全不分离）。
+      </div>
+      <button class="q-trigger" onclick="openDrawer('mq-204')"><i class="ti ti-eye"></i>查看完整题干与答案</button>
+    </div>
+  </div>
+
+  <!-- MQ2: EC-180 消减 -->
+  <div class="mq-card" data-topic="s2">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge s2">路径B 母题</span>
+      <span class="mq-name">棉花抑制剂X·染色体消减·假配子·单倍体育种</span>
+      <span class="mq-purity">★ 10/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-180 · 棉花减数分裂抑制剂X染色体消减假配子单倍体育种及GgNn连锁遗传与纤维颜色抗虫杂交综合 · 子问题(2)</div>
+      <div class="rule-box s2">核心考查：抑制剂X→减Ⅱ后期出现滞后染色体→不被包入核→降解消减→配子染色体数0~n（随机）→"假配子"不能正常发育</div>
+      <div class="chain-label">消减机制逻辑链</div>
+      <div class="signal-chain">
+        <span class="sc-node s2">抑制剂X处理</span><span class="sc-arrow">→</span>
+        <span class="sc-node s2">减Ⅱ后期染色体滞后</span><span class="sc-arrow">→</span>
+        <span class="sc-node s2">未被包入子细胞核</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node s2">染色体降解（消减）</span><span class="sc-arrow">→</span>
+        <span class="sc-node s2">配子染色体数 0~n（随机缺失）</span><span class="sc-arrow">→</span>
+        <span class="sc-node s2">假配子（不能正常受精）</span>
+      </div>
+      <div class="mq-note">
+        <strong>(2) 配子染色体数：</strong>由于消减数量随机，配子可含0到n条染色体。<br>
+        <strong>"滞后"≠延迟到达：</strong>滞后染色体最终被降解，而非暂时落后最终到达。<br>
+        <strong>单倍体育种应用：</strong>消减→染色体数目减半→配子发育成单倍体→秋水仙素加倍→纯合二倍体（育种价值）。<br>
+        <strong>与不分离对比：</strong>不分离→多（n+1）；消减→少（0~n）。题目出现"滞后""消减"时一定是少了，不能写n+1。
+      </div>
+      <button class="q-trigger" onclick="openDrawer('mq-180')"><i class="ti ti-eye"></i>查看完整题干与答案</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 变式阶梯 ══ -->
+<div id="page-ladder" class="page">
+  <div class="ladder-note">从"减Ⅱ不分离区分"到"不分离+发育后果"到"X染色体来源推断+异源多倍体"，逐步强化染色体行为追踪能力。</div>
+
+  <div class="ladder-section-label"><i class="ti ti-stairs"></i>路径A · 不分离 变式阶梯</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l0">母题<br>10/10</div>
+      <div class="ladder-card" onclick="openDrawer('mq-204')">
+        <div class="ladder-card-name">EC-204 CyclinB3缺失·减Ⅰ不分离·三倍体</div>
+        <div class="ladder-card-sub">子问题(4)(5)·分子机制→配子异常→受精后变异类型命名</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">基础变式<br>8/10</div>
+      <div class="ladder-card" onclick="openDrawer('v-207-4')">
+        <div class="ladder-card-name">EC-207 AaBb减Ⅱ不分离·AAb异常配子</div>
+        <div class="ladder-card-sub">子问题(4)·减Ⅱ姐妹染色单体不分离→AAb卵细胞——检验能否区分减Ⅰ与减Ⅱ不分离</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">进阶变式<br>8/10</div>
+      <div class="ladder-card" onclick="openDrawer('v-089-45')">
+        <div class="ladder-card-name">EC-089 不分离+绕过减Ⅰ→胚胎死亡</div>
+        <div class="ladder-card-sub">子问题(4)(5)·不分离后果延伸到受精后胚胎发育异常——异常→发育后果完整因果链</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l3">综合变式<br>6/10</div>
+      <div class="ladder-card" onclick="openDrawer('v-204-6')">
+        <div class="ladder-card-name">EC-204 三倍体X染色体亲本来源推断</div>
+        <div class="ladder-card-sub">子问题(6)·三倍体中X染色体来源推断——减Ⅰ不分离+减Ⅱ行为+有丝分裂对比，跨模型M3+M1</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ladder-section-label"><i class="ti ti-stairs"></i>路径B · 消减 变式阶梯</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l0">母题<br>10/10</div>
+      <div class="ladder-card" onclick="openDrawer('mq-180')">
+        <div class="ladder-card-name">EC-180 棉花抑制剂X·染色体消减·假配子</div>
+        <div class="ladder-card-sub">子问题(2)·滞后染色体→降解消减→配子染色体数0~n</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">基础变式<br>8/10</div>
+      <div class="ladder-card" onclick="openDrawer('v-180-1')">
+        <div class="ladder-card-name">EC-180 正常减Ⅱ后期基线·建立对照</div>
+        <div class="ladder-card-sub">子问题(1)·正常减Ⅱ后期及末期Ⅱ特征——先建立正常基线，再引入消减异常对比</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">进阶变式<br>6/10</div>
+      <div class="ladder-card" onclick="openDrawer('v-180-5')">
+        <div class="ladder-card-name">EC-180 假配子+GgNn连锁互换·F2表型</div>
+        <div class="ladder-card-sub">子问题(5)·消减+连锁互换双重约束——假配子与连锁遗传叠加，跨M2配子概率</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l3">综合变式<br>5/10</div>
+      <div class="ladder-card" onclick="openDrawer('v-187-6')">
+        <div class="ladder-card-name">EC-187 假配子单倍体→秋水仙素→异源四倍体</div>
+        <div class="ladder-card-sub">子问题(6)·消减→单倍体→秋水仙素加倍→异源四倍体育种完整流程</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 自查清单 ══ -->
+<div id="page-check" class="page">
+  <div class="progress-row">
+    <span style="font-size:13px;color:var(--tx2);">掌握进度</span>
+    <span id="check-count" style="font-size:13px;color:var(--tx2);">0 / 4</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="check-bar"></div></div>
+
+  <div class="checklist" id="checklist">
+    <div class="check-item" onclick="toggleCheck(this,0)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能从异常配子等位基因组成判断不分离阶段：含Aa→减Ⅰ；含AA/aa→减Ⅱ（→ 路径A·一票否决信号1/2）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,1)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能区分不分离（配子染色体数多=n+1）和消减（配子染色体数少=0~n），方向相反机制不同（→ 路径B·两条路径对比）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,2)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我知道秋水仙素抑制纺锤体（微管解聚）而非着丝粒分裂——着丝粒照常分裂，染色体因无纺锤丝而不能移向两极（→ 高频易错3）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,3)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能推断异常配子受精后的染色体数：减Ⅰ不分离卵细胞(2n)+正常精子(n)=3n三倍体（→ 路径A母题EC-204）</div>
+    </div>
+  </div>
+  <div class="action-row">
+    <button class="action-btn" onclick="checkAll()">全部勾选</button>
+    <button class="action-btn" onclick="clearAll()">清空重来</button>
+  </div>
+</div>
+
+</div><!-- /.app -->
+
+<!-- 抽屉 -->
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <span class="drawer-badge" id="drawer-badge"></span>
+    <span class="drawer-title" id="drawer-title"></span>
+    <button class="drawer-close" onclick="closeDrawer()"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="drawer-ec-ref" id="drawer-ref"><i class="ti ti-file-description"></i><span></span></div>
+    <div class="drawer-stem" id="drawer-stem"></div>
+    <div class="drawer-sub" id="drawer-focus">
+      <div class="drawer-sub-label">考查重点</div>
+      <div id="drawer-focus-text"></div>
+    </div>
+    <div class="drawer-answer" id="drawer-answer">
+      <div class="drawer-answer-label">核心答案</div>
+      <div id="drawer-answer-text"></div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="drawer-btn" onclick="toggleAnswer()">显示 / 隐藏答案</button>
+    <button class="drawer-btn primary" onclick="closeDrawer()">关闭</button>
+  </div>
+</div>
+
+<!-- 灯箱 -->
+<div class="lb-overlay" id="lb-overlay" onclick="closeLightbox()">
+  <button class="lb-close" onclick="closeLightbox()">×</button>
+  <img class="lb-img" id="lb-img" src="" alt="">
+</div>
+
+<script>
+const QUESTIONS = {
+  'mq-204': {
+    badge: '路径A 母题',
+    badgeStyle: 'background:var(--accent-l);color:var(--accent-d);',
+    name: 'EC-204 CyclinB3缺失·同源染色体不分离·三倍体',
+    ref: 'EC-20260521-204 · CyclinB3缺失雌鼠同源染色体不分离减数分裂异常及受精卵三倍体染色体整倍化变异综合 · (4)(5)',
+    stem: `小鼠中，CyclinB3是一种参与减数分裂调控的蛋白。研究发现，CyclinB3缺失的雌鼠减数分裂出现异常，后代中出现三倍体小鼠。
+
+(4) 推断CyclinB3的功能。CyclinB3缺失后，减数第一次分裂出现了什么异常？
+
+(5) 三倍体小鼠的受精卵来自异常卵细胞与正常精子的结合。该受精卵的变异类型属于什么？`,
+    focus: `① CyclinB3功能：调控减Ⅰ同源染色体分离（CyclinB3缺失→减Ⅰ不分离）
+② 减Ⅰ不分离→次级卵母细胞含全套同源染色体（2n）→减Ⅱ正常进行→卵细胞含2n
+③ 三倍体：2n(异常卵细胞)+n(正常精子)=3n→三倍体
+④ 变异类型：染色体数目变异（整倍体变异，染色体组数从2→3）`,
+    answer: `(4) CyclinB3的功能：调控减数第一次分裂（减Ⅰ）中同源染色体向细胞两极分离。
+
+CyclinB3缺失导致的异常：减Ⅰ后期同源染色体未能正常分离（同源染色体不分离），两条同源染色体都进入同一个次级卵母细胞，导致次级卵母细胞含有2n条染色体（正常应为n）。
+
+(5) 三倍体受精卵的变异类型：
+染色体数目变异（属于整倍体变异）。
+受精卵含3组染色体组（3n），是三倍体——染色体组数由正常二倍体的2组变为3组，属于染色体数目变异。`
+  },
+  'mq-180': {
+    badge: '路径B 母题',
+    badgeStyle: 'background:var(--purple-l);color:var(--purple-d);',
+    name: 'EC-180 棉花抑制剂X·染色体消减·假配子',
+    ref: 'EC-20260520-180 · 棉花减数分裂抑制剂X染色体消减假配子单倍体育种及GgNn连锁遗传与纤维颜色抗虫杂交综合 · (2)',
+    stem: `研究棉花减数分裂时，用抑制剂X处理棉花卵原细胞。显微镜观察到：减数第二次分裂后期，部分染色体未能移向两极，出现"滞后染色体"，最终这些滞后染色体消减（降解）。
+
+(2) 经抑制剂X处理后，产生的配子中染色体数目为____。
+
+请解释为什么称这类配子为"假配子"？`,
+    focus: `① 滞后染色体：减Ⅱ后期多数染色体已移向两极，少数"滞留"在赤道板附近
+② 消减机制：滞后染色体不被包入子细胞核→在细胞质中降解（消减）
+③ 配子染色体数：n减去消减数目，消减数随机→配子含0~n条染色体
+④ "假配子"：染色体数不足n，不能正常发育或受精`,
+    answer: `(2) 配子中染色体数目：0~n（或写"小于等于n"）。
+
+解释：由于消减的染色体数目不确定（滞后染色体数目随机），每个子细胞获得的染色体数目不同——可能丢失1条、多条，甚至所有染色体，因此配子染色体数从0到n不等。
+
+"假配子"原因：
+正常配子含n条染色体，能够正常参与受精并发育。而消减后的配子染色体数少于n，缺少部分遗传信息，不能正常发育成个体，也不能正常参与受精（即使受精也无法正常发育），因此称为"假配子"。`
+  },
+  'v-207-4': {
+    badge: 'L1 基础变式',
+    badgeStyle: 'background:var(--purple-l);color:var(--purple-d);',
+    name: 'EC-207 减Ⅱ不分离·AAb异常配子',
+    ref: 'EC-20260521-207 · AaBb卵原细胞减数分裂异常AAb卵细胞形成及矮生突变体a基因剂量效应与花粉败育遗传综合 · (4)',
+    stem: `植物AaBb个体（A/a位于1号染色体，B/b位于2号染色体）卵原细胞在减数分裂时发生异常，产生了基因型为AAb的卵细胞。
+
+(4) 该AAb卵细胞是如何产生的？分析减数分裂的哪个阶段发生了异常，异常的具体表现是什么？`,
+    focus: `① AAb含两个A（相同等位基因）+一个b→等位基因A与A来源是姐妹染色单体→减Ⅱ不分离
+② 判断依据：含AA/aa=减Ⅱ；含Aa=减Ⅰ（本题含AA→减Ⅱ）
+③ 正常AaBb减Ⅱ：次级卵母细胞含A或a（1条）+B或b（1条）→卵细胞正常含1条A或a
+④ 减Ⅱ异常：含A的那条染色体着丝粒分裂后两条染色单体（AA）未分向两极→都进入同一个卵细胞`,
+    answer: `减数第二次分裂（减Ⅱ）发生了异常。
+
+具体分析：
+正常情况：次级卵母细胞含A染色体1条（着丝粒分裂后分成2条单体分向两极）和b染色体1条，产生卵细胞基因型为Ab或aB（来自减Ⅰ分配）。
+
+异常情况：
+1号染色体（含A基因）在减Ⅱ后期，着丝粒照常分裂，但两条姐妹染色单体（A和A）未能分向两极，而是都进入同一个卵细胞→该卵细胞含AA（1号染色体2条）+b（正常分配）=AAb。
+
+结论：减Ⅱ后期，含A基因的同一条染色体的姐妹染色单体未分离（减Ⅱ不分离），导致AAb异常卵细胞产生。`
+  },
+  'v-089-45': {
+    badge: 'L2 进阶变式',
+    badgeStyle: 'background:var(--amber-l);color:var(--amber-d);',
+    name: 'EC-089 减Ⅰ不分离+绕过减Ⅰ→胚胎死亡',
+    ref: 'EC-20260519-089 · 雌性动物减数分裂各时期细胞识别与CyclinB3调控同源染色体分离及缺失致受精后胚胎发育异常分析 · (4)(5)',
+    stem: `某雌性动物（2n=4，含两对同源染色体）CyclinB3蛋白缺失。研究发现该动物减数分裂存在两种异常：
+① 减Ⅰ中同源染色体不分离→产生2n卵细胞
+② 部分卵原细胞直接进行减Ⅱ（绕过减Ⅰ）→产生n卵细胞（染色体组合随机）
+
+(4) 2n卵细胞与正常精子(n)受精，受精卵染色体数是多少？发育后代是否能存活？
+(5) 绕过减Ⅰ直接减Ⅱ的卵细胞与正常精子受精，后代基因组成有什么特点？`,
+    focus: `① 不分离延伸到发育后果——三倍体后代是否能存活
+② 绕过减Ⅰ直接减Ⅱ：卵细胞含随机1条（来自每对同源染色体随机选一条），不保证每对同源染色体均有代表
+③ 关键：三倍体动物（2n+n=3n）通常不能正常减数分裂→不育，但能否存活取决于物种`,
+    answer: `(4) 2n卵细胞+n精子=3n受精卵（三倍体）。
+该动物2n=4，异常受精卵含3n=6条染色体。
+发育情况：三倍体个体通常能存活，但不育（无法进行正常减数分裂产生配子）。
+
+(5) 绕过减Ⅰ直接减Ⅱ的卵细胞特点：
+减Ⅰ负责同源染色体分离，绕过减Ⅰ→卵细胞未经过同源染色体分离，而是直接将次级卵母细胞（还是2n）进行减Ⅱ（姐妹染色单体分离）→产生n卵细胞，但每条染色体来自哪条同源染色体是随机的。
+
+与正常精子受精后：后代基因组正常（2n），但遗传组合与正常减数分裂不同——母方贡献的配子染色体组合不经过正常减Ⅰ重组，遗传多样性可能不同。`
+  },
+  'v-204-6': {
+    badge: 'L3 综合变式',
+    badgeStyle: 'background:var(--coral-l);color:var(--coral-d);',
+    name: 'EC-204 三倍体X染色体来源推断',
+    ref: 'EC-20260521-204 · CyclinB3缺失雌鼠同源染色体不分离减数分裂异常及受精卵三倍体染色体整倍化变异综合 · (6)',
+    stem: `CyclinB3缺失雌鼠（基因型XX）减Ⅰ同源染色体不分离，产生2n卵细胞（含2条X染色体）。
+与正常雄鼠精子（含X或Y染色体）受精：
+
+(6) 若三倍体受精卵含2条X（来自母方）+1条Y（来自父方），该个体性染色体组成为XXY，是否能正常发育为雄性？
+若减Ⅱ也发生不分离（姐妹染色单体X和X未分离），产生的卵细胞含XX，推断受精后后代染色体组成。`,
+    focus: `① X染色体来源推断：母方贡献XX（减Ⅰ不分离）+父方贡献Y→XXY
+② 减Ⅱ再次不分离：含XX姐妹染色单体的卵细胞+精子→更多X
+③ 综合减Ⅰ+减Ⅱ行为+有丝分裂→跨模型（M3+M1家系判型）`,
+    answer: `(6) XXY个体分析：
+XXY受精卵含3条性染色体（2X来自母方不分离卵细胞+Y来自精子）。
+在小鼠等哺乳动物中，性别由Y染色体决定，含Y→发育为雄性。XXY个体通常能发育，但可能不育（类似克氏综合征）。
+
+减Ⅱ再次不分离的情况：
+如果减Ⅱ后期，含XX染色单体（减Ⅰ不分离的X+X）再次不分离：
+→ 卵细胞含XX（两条X都进入同一卵细胞）
+→ 与含X的精子受精：XXX（三体，超雌综合征）
+→ 与含Y的精子受精：XXY（雄性，但不育）
+
+X染色体来源判断：
+若XXX个体，两条X来自母方（减Ⅰ或减Ⅱ不分离），一条来自父方精子。
+若XXY，两条X可能：①均来自母方（减Ⅰ不分离，X和X同源对未分）；②一条来自母方，一条来自父方。`
+  },
+  'v-180-1': {
+    badge: 'L1 基础变式',
+    badgeStyle: 'background:var(--purple-l);color:var(--purple-d);',
+    name: 'EC-180 正常减Ⅱ后期·建立基线',
+    ref: 'EC-20260520-180 · 棉花减数分裂抑制剂X染色体消减假配子单倍体育种及GgNn连锁遗传与纤维颜色抗虫杂交综合 · (1)',
+    stem: `棉花（2n=52，n=26）正常减数第二次分裂后期的细胞中：
+
+(1) 该时期细胞中应含多少条染色体？多少个DNA分子？着丝粒是否已分裂？
+
+（此题为消减母题的正常对照，先建立正常基线）`,
+    focus: `① 减Ⅱ后期：着丝粒分裂→姐妹染色单体分开→染色体数=2n（暂时加倍）
+② 但DNA数不变（因为是两条单体分离，每条单体含1个DNA分子）
+③ 正常减Ⅱ后期基线：染色体数=2n=52，DNA数=2n=52（每条染色体1个DNA）`,
+    answer: `(1) 正常减Ⅱ后期细胞参数（棉花2n=52，n=26）：
+
+减Ⅱ后期特征：着丝粒分裂，姐妹染色单体分开→染色体数暂时加倍。
+
+染色体数：减Ⅱ开始时细胞含n=26条染色体（每条由2个染色单体组成）；减Ⅱ后期着丝粒分裂→26×2=52条染色体（各为单条）。
+
+DNA数：减Ⅱ后期每条染色体含1个DNA分子→52个DNA分子。
+
+着丝粒：已经分裂（减Ⅱ后期的标志）。
+
+注：这是正常基线。消减题目中，减Ⅱ后期部分染色体滞后→与正常52条不同。`
+  },
+  'v-180-5': {
+    badge: 'L2 进阶变式',
+    badgeStyle: 'background:var(--amber-l);color:var(--amber-d);',
+    name: 'EC-180 假配子+GgNn连锁·F2表型',
+    ref: 'EC-20260520-180 · 棉花减数分裂抑制剂X染色体消减假配子单倍体育种及GgNn连锁遗传与纤维颜色抗虫杂交综合 · (5)',
+    stem: `棉花中，G/g（纤维颜色）和N/n（抗虫性）连锁遗传（GN连锁/gn连锁）。
+某植株基因型为GgNn，经抑制剂X处理后部分卵细胞产生消减，形成"假配子"。
+
+(5) 若正常配子（GN:gn=1:1）与正常花粉（GN:gn=1:1）受精，F2表型比是多少？
+若消减配子（缺少N/n染色体，只含G/g）参与受精，后代表型会如何变化？`,
+    focus: `① 假配子+连锁互换双重约束——消减只影响部分染色体，连锁遗传不受消减影响（影响的是不同染色体）
+② 正常配子GN/gn（两种），花粉GN/gn（两种）→棋盘法：GGNN:GGnn:ggNN:ggnn=1:1:1:1（简化）
+③ 消减卵细胞缺N/n染色体→只含G或g→与花粉受精后代只含一份N/n基因（半合子）`,
+    answer: `(5) 正常配子受精F2表型（GN/gn连锁）：
+配子种类：GN（1/2），gn（1/2）（完全连锁无互换假设）
+棋盘：GGNN(1):GgNn(2):ggnn(1) → 3种基因型
+表型：G_N_（有色抗虫）:ggnn（无色不抗虫）= 3:1（若显隐性关系如此）
+具体比例取决于G和N的显隐性关系，完全连锁时比例为1:2:1基因型→表型合并。
+
+消减卵细胞（缺N/n染色体）参与受精：
+卵细胞只含G或g（N/n染色体缺失）→与花粉（GN或gn）受精：
+- G卵+GN花粉 → GG N（半合子，只有一份N/n）
+- G卵+gn花粉 → Gg n（半合子，无N）
+后代缺少完整的N/n基因对→抗虫性状表现异常（半合子，N单份存在时表现取决于是否有剂量效应）。`
+  },
+  'v-187-6': {
+    badge: 'L3 综合变式',
+    badgeStyle: 'background:var(--coral-l);color:var(--coral-d);',
+    name: 'EC-187 假配子单倍体→秋水仙素→异源四倍体',
+    ref: 'EC-20260520-187 · 棉花减数分裂抑制剂X假配子单倍体及萝卜甘蓝异源多倍体育种与连锁遗传综合 · (6)',
+    stem: `棉花（2n=52，4个染色体组）× 野生种（2n=26，2个染色体组）
+假配子（消减，含n=13条）受精后发育为单倍体植株。
+
+(6) 单倍体棉花植株染色体组成是什么？
+用秋水仙素处理该单倍体，获得的多倍体植株染色体组数和染色体数是多少？
+该多倍体属于同源多倍体还是异源多倍体？`,
+    focus: `① 消减→假配子→受精后单倍体育种：含n=13条染色体的假配子受精→单倍体（但此题涉及不同物种）
+② 秋水仙素处理单倍体：染色体加倍→2倍→含原来2倍的染色体组
+③ 异源多倍体：来自不同物种（棉花+野生种）的染色体组合并→异源多倍体`,
+    answer: `(6) 单倍体棉花植株染色体组成：
+棉花（2n=52）的假配子含n=26条染色体（包含4个染色体组各1条）。
+若涉及野生种（2n=26）配子（含n=13），则杂交后代含26+13=39条（单倍体，含3个染色体组？）。
+具体需看亲本参数——此处按单倍体=n=26或13分析。
+
+秋水仙素处理（染色体数加倍）：
+处理含26条的单倍体 → 52条（恢复二倍体水平，2个染色体组变4个）
+处理含13条的单倍体 → 26条（恢复二倍体，2个染色体组）
+
+多倍体类型：
+若来自棉花×野生种（不同物种），秋水仙素加倍后含来自两个不同物种的染色体组→异源多倍体（含多个来源不同的染色体组）。
+同源多倍体：同一物种染色体加倍（如秋水仙素处理二倍体）。
+异源多倍体：不同物种杂交后代染色体加倍（如萝卜甘蓝）。`
+  }
+};
+
+function switchTab(tab, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + tab).classList.add('active');
+  btn.classList.add('active');
+}
+function toggleMQ(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.mq-chevron');
+  body.classList.toggle('open');
+  chevron.classList.toggle('open');
+}
+function filterMQ(topic, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.mq-card').forEach(card => {
+    card.style.display = (topic === 'all' || card.dataset.topic === topic) ? '' : 'none';
+  });
+}
+function openDrawer(key) {
+  const q = QUESTIONS[key];
+  if (!q) return;
+  document.getElementById('drawer-badge').textContent = q.badge;
+  document.getElementById('drawer-badge').style.cssText = q.badgeStyle;
+  document.getElementById('drawer-title').textContent = q.name;
+  document.getElementById('drawer-ref').querySelector('span').textContent = q.ref;
+  document.getElementById('drawer-stem').textContent = q.stem;
+  document.getElementById('drawer-focus-text').textContent = q.focus;
+  document.getElementById('drawer-answer-text').textContent = q.answer;
+  document.getElementById('drawer-answer').classList.remove('show');
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawer-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeDrawer() {
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('drawer-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function toggleAnswer() {
+  document.getElementById('drawer-answer').classList.toggle('show');
+}
+function openLightbox(src, alt) {
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lb-img').alt = alt;
+  document.getElementById('lb-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lb-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+const STORAGE_KEY = 'T03_M3_checks';
+const TOTAL = 4;
+function loadChecks() {
+  try { const d = JSON.parse(localStorage.getItem(STORAGE_KEY)); return Array.isArray(d) ? d : Array(TOTAL).fill(false); }
+  catch { return Array(TOTAL).fill(false); }
+}
+function saveChecks(arr) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)); } catch {} }
+function updateProgress() {
+  const items = document.querySelectorAll('.check-item');
+  const done = Array.from(items).filter(i => i.classList.contains('done')).length;
+  document.getElementById('check-count').textContent = done + ' / ' + TOTAL;
+  document.getElementById('check-bar').style.width = (done / TOTAL * 100) + '%';
+}
+function toggleCheck(item, idx) {
+  item.classList.toggle('done');
+  const arr = loadChecks(); arr[idx] = item.classList.contains('done'); saveChecks(arr); updateProgress();
+}
+function checkAll() {
+  document.querySelectorAll('.check-item').forEach((item, i) => { item.classList.add('done'); });
+  saveChecks(Array(TOTAL).fill(true)); updateProgress();
+}
+function clearAll() {
+  document.querySelectorAll('.check-item').forEach(item => item.classList.remove('done'));
+  saveChecks(Array(TOTAL).fill(false)); updateProgress();
+}
+(function() {
+  const arr = loadChecks();
+  document.querySelectorAll('.check-item').forEach((item, i) => { if (arr[i]) item.classList.add('done'); });
+  updateProgress();
+})();
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (document.getElementById('lb-overlay').classList.contains('open')) closeLightbox();
+    else if (document.getElementById('drawer').classList.contains('open')) closeDrawer();
+  }
+});
+</script>
+</body>
+</html>

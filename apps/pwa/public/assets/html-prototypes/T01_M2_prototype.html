@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T01_M2 · 酶缺陷与代谢阻塞型</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent:#534AB7; --accent-l:#EEEDFE; --accent-m:#AFA9EC; --accent-d:#3C3489;
+  --teal:#0F6E56; --teal-l:#E1F5EE; --teal-d:#085041;
+  --amber:#BA7517; --amber-l:#FAEEDA; --amber-d:#633806;
+  --coral:#993C1D; --coral-l:#FAECE7; --coral-d:#712B13;
+  --rose:#9E1D5A; --rose-l:#FAEDF4; --rose-d:#6B1040;
+  --bg:#ffffff; --bg2:#f7f7f5; --bg3:#f1efe8;
+  --tx:#1a1a18; --tx2:#5f5e5a; --tx3:#888780;
+  --bd:rgba(0,0,0,0.10); --bd2:rgba(0,0,0,0.18);
+  --r-sm:6px; --r-md:8px; --r-lg:12px; --r-xl:16px;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#1c1c1a;--bg2:#252523;--bg3:#2c2c2a;
+    --tx:#f0efea;--tx2:#b4b2a9;--tx3:#888780;
+    --bd:rgba(255,255,255,0.09);--bd2:rgba(255,255,255,0.16);
+    --accent-l:#26215C;--accent-d:#CECBF6;
+    --teal-l:#04342C;--teal-d:#9FE1CB;
+    --amber-l:#412402;--amber-d:#FAC775;
+    --coral-l:#4A1B0C;--coral-d:#F5C4B3;
+    --rose-l:#3A0A25;--rose-d:#F0A8CF;
+  }
+}
+body{font-family:var(--font);font-size:15px;line-height:1.6;color:var(--tx);background:var(--bg3);min-height:100vh;}
+.app{max-width:800px;margin:0 auto;background:var(--bg);min-height:100vh;}
+
+.site-header{padding:1.25rem 1.5rem 0;background:var(--bg);border-bottom:0.5px solid var(--bd);position:sticky;top:0;z-index:20;}
+.header-top{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.header-icon{background:var(--accent-l);border-radius:var(--r-md);padding:6px 8px;display:flex;align-items:center;justify-content:center;}
+.header-icon i{font-size:20px;color:var(--accent);}
+.header-meta{font-size:12px;color:var(--tx3);}
+.header-title{font-size:17px;font-weight:500;color:var(--tx);}
+.header-id{margin-left:auto;font-size:11px;color:var(--tx3);background:var(--bg2);padding:3px 9px;border-radius:var(--r-sm);}
+.nav-tabs{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.nav-tab{padding:.6rem 1.1rem;font-size:13px;color:var(--tx2);cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;font-family:var(--font);white-space:nowrap;transition:color .15s,border-color .15s;}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500;}
+.nav-tab:hover:not(.active){color:var(--tx);}
+
+.page{display:none;padding:1.5rem;}
+.page.active{display:block;}
+
+.memory-section{margin-bottom:1.5rem;}
+.memory-card{border:0.5px solid var(--bd);border-radius:var(--r-xl);overflow:hidden;background:var(--bg);}
+.memory-placeholder{min-height:200px;background:var(--bg2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--tx3);padding:2rem;}
+.memory-placeholder i{font-size:32px;color:var(--bd2);}
+.memory-placeholder-text{font-size:13px;text-align:center;line-height:1.6;}
+.memory-placeholder-filename{font-size:11px;background:var(--bg3);border:0.5px solid var(--bd);border-radius:var(--r-sm);padding:4px 10px;font-family:monospace;color:var(--tx2);}
+.memory-img{width:100%;display:block;max-height:320px;object-fit:contain;background:var(--bg3);cursor:zoom-in;transition:opacity .15s;}
+.memory-img:hover{opacity:.9;}
+.memory-footer{padding:.85rem 1rem;display:flex;align-items:center;gap:10px;border-top:0.5px solid var(--bd);}
+.memory-label{font-size:13px;font-weight:500;color:var(--tx);flex:1;}
+audio{height:32px;width:220px;}
+.audio-placeholder{font-size:12px;color:var(--tx3);display:flex;align-items:center;gap:5px;background:var(--bg2);padding:6px 10px;border-radius:var(--r-sm);}
+
+.section-title{font-size:13px;font-weight:500;color:var(--tx2);display:flex;align-items:center;gap:7px;margin-bottom:1rem;text-transform:uppercase;letter-spacing:.04em;}
+.section-divider{height:0.5px;background:var(--bd);margin:1.5rem 0;}
+.signal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:1.5rem;}
+.signal-card{background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;}
+.signal-label{font-size:11px;color:var(--tx3);letter-spacing:.04em;margin-bottom:.4rem;text-transform:uppercase;}
+.signal-tag{font-size:13px;color:var(--tx);margin-bottom:2px;}
+
+.subtopic-list{display:flex;flex-direction:column;gap:10px;margin-bottom:1.5rem;}
+.subtopic-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.9rem 1.1rem;border-left:3px solid var(--accent);}
+.subtopic-card.s2{border-left-color:var(--teal);}
+.subtopic-num{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.3rem;}
+.subtopic-name{font-size:14px;font-weight:500;color:var(--tx);margin-bottom:.3rem;}
+.subtopic-signal{font-size:13px;color:var(--tx2);line-height:1.6;}
+
+.trap-list{display:flex;flex-direction:column;gap:7px;}
+.trap-item{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.55;}
+.trap-icon{color:#E24B4A;font-size:15px;flex-shrink:0;margin-top:1px;}
+
+.filter-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem;}
+.filter-btn{padding:5px 13px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx2);font-family:var(--font);transition:all .15s;}
+.filter-btn.active{background:var(--accent-l);color:var(--accent-d);border-color:var(--accent);font-weight:500;}
+
+.mq-card{border:0.5px solid var(--bd);border-radius:var(--r-lg);background:var(--bg);margin-bottom:.85rem;overflow:hidden;}
+.mq-header{padding:.9rem 1.1rem;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;transition:background .15s;}
+.mq-header:hover{background:var(--bg2);}
+.mq-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);white-space:nowrap;}
+.mq-badge.s1{background:var(--accent-l);color:var(--accent-d);}
+.mq-badge.s2{background:var(--teal-l);color:var(--teal-d);}
+.mq-badge.v{background:var(--bg3);color:var(--tx2);}
+.mq-name{font-size:14px;font-weight:500;color:var(--tx);flex:1;}
+.mq-purity{font-size:12px;color:var(--tx3);flex-shrink:0;}
+.mq-chevron{color:var(--tx3);font-size:16px;transition:transform .2s;flex-shrink:0;}
+.mq-chevron.open{transform:rotate(180deg);}
+.mq-body{display:none;padding:.75rem 1.1rem 1.1rem;border-top:0.5px solid var(--bd);}
+.mq-body.open{display:block;}
+.mq-source{font-size:12px;color:var(--tx3);margin-bottom:.65rem;}
+.rule-box{background:var(--accent-l);border-left:3px solid var(--accent);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:.65rem .9rem;font-size:13px;color:var(--accent-d);margin:.75rem 0;line-height:1.65;}
+.rule-box.s2{background:var(--teal-l);border-left-color:var(--teal);color:var(--teal-d);}
+.chain-label{font-size:12px;font-weight:500;color:var(--tx2);margin:.75rem 0 .4rem;text-transform:uppercase;letter-spacing:.04em;}
+.signal-chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:6px;}
+.sc-node{background:var(--bg2);border-radius:var(--r-sm);padding:3px 9px;font-size:13px;color:var(--tx);}
+.sc-node.s1{background:var(--accent-l);color:var(--accent-d);}
+.sc-node.s2{background:var(--teal-l);color:var(--teal-d);}
+.sc-arrow{color:var(--tx3);font-size:13px;}
+.mq-note{font-size:13px;color:var(--tx2);margin-top:.75rem;line-height:1.6;}
+.q-trigger{display:inline-flex;align-items:center;gap:5px;margin-top:.75rem;padding:6px 12px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;color:var(--tx2);cursor:pointer;font-family:var(--font);transition:all .15s;}
+.q-trigger:hover{background:var(--bg2);color:var(--tx);}
+.q-trigger i{font-size:14px;}
+
+.ladder-section-label{font-size:13px;font-weight:500;color:var(--tx2);margin-bottom:.85rem;display:flex;align-items:center;gap:7px;}
+.ladder-rows{display:flex;flex-direction:column;gap:8px;margin-bottom:1rem;}
+.ladder-row{display:grid;grid-template-columns:64px 1fr;gap:10px;align-items:start;}
+.ladder-level{font-size:11px;font-weight:500;padding:6px 4px;border-radius:var(--r-sm);text-align:center;line-height:1.4;}
+.l0{background:var(--accent-l);color:var(--accent-d);}
+.l1{background:var(--teal-l);color:var(--teal-d);}
+.l2{background:var(--amber-l);color:var(--amber-d);}
+.ladder-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.65rem .9rem;background:var(--bg);cursor:pointer;transition:background .15s;}
+.ladder-card:hover{background:var(--bg2);}
+.ladder-card-name{font-size:13px;font-weight:500;color:var(--tx);}
+.ladder-card-sub{font-size:12px;color:var(--tx3);margin-top:3px;line-height:1.5;}
+.ladder-note{background:var(--bg2);border-radius:var(--r-md);padding:.65rem .9rem;font-size:12px;color:var(--tx2);margin-bottom:1rem;line-height:1.55;}
+
+.progress-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem;}
+.progress-bar{height:5px;border-radius:3px;background:var(--bg2);margin-bottom:1.25rem;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;background:var(--accent);width:0%;transition:width .3s;}
+.checklist{display:flex;flex-direction:column;gap:7px;}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:.7rem .9rem;border:0.5px solid var(--bd);border-radius:var(--r-md);background:var(--bg);cursor:pointer;transition:background .15s;}
+.check-item.done{background:var(--bg2);}
+.check-box{width:18px;height:18px;border:1.5px solid var(--bd2);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .15s;}
+.check-item.done .check-box{background:var(--accent);border-color:var(--accent);}
+.check-box i{font-size:11px;color:#fff;display:none;}
+.check-item.done .check-box i{display:block;}
+.check-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.check-item.done .check-text{color:var(--tx3);text-decoration:line-through;}
+.action-row{margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:8px;}
+.action-btn{padding:7px 14px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.action-btn:hover{background:var(--bg2);}
+
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s;}
+.drawer-overlay.open{opacity:1;pointer-events:all;}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100vw);background:var(--bg);z-index:101;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden;}
+.drawer.open{transform:translateX(0);}
+.drawer-header{padding:1rem 1.25rem;border-bottom:0.5px solid var(--bd);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.drawer-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);}
+.drawer-title{font-size:14px;font-weight:500;color:var(--tx);flex:1;line-height:1.4;}
+.drawer-close{background:none;border:none;cursor:pointer;color:var(--tx2);padding:4px;border-radius:var(--r-sm);display:flex;align-items:center;transition:background .15s;}
+.drawer-close:hover{background:var(--bg2);}
+.drawer-body{flex:1;overflow-y:auto;padding:1.25rem;}
+.drawer-ec-ref{font-size:12px;color:var(--tx3);margin-bottom:1rem;display:flex;align-items:center;gap:6px;}
+.drawer-stem{font-size:14px;color:var(--tx);line-height:1.75;white-space:pre-wrap;}
+.drawer-sub{font-size:13px;color:var(--tx2);background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:1rem;line-height:1.65;}
+.drawer-sub-label{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-answer{font-size:13px;color:var(--tx);background:var(--accent-l);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:.75rem;line-height:1.65;display:none;}
+.drawer-answer.show{display:block;}
+.drawer-answer-label{font-size:11px;font-weight:500;color:var(--accent-d);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-footer{padding:.85rem 1.25rem;border-top:0.5px solid var(--bd);display:flex;gap:8px;flex-shrink:0;}
+.drawer-btn{flex:1;padding:8px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.drawer-btn:hover{background:var(--bg2);}
+.drawer-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+.drawer-btn.primary:hover{background:var(--accent-d);}
+
+.lb-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:200;display:none;align-items:center;justify-content:center;cursor:zoom-out;}
+.lb-overlay.open{display:flex;}
+.lb-img{max-width:92vw;max-height:92vh;object-fit:contain;border-radius:var(--r-md);box-shadow:0 8px 40px rgba(0,0,0,.5);}
+.lb-close{position:fixed;top:16px;right:20px;background:none;border:none;color:#fff;font-size:28px;cursor:pointer;line-height:1;opacity:.7;transition:opacity .15s;}
+.lb-close:hover{opacity:1;}
+
+@media(max-width:600px){
+  .site-header{padding:1rem 1rem 0;}
+  .page{padding:1rem;}
+  .header-title{font-size:15px;}
+  .signal-grid{grid-template-columns:1fr 1fr;}
+  .ladder-row{grid-template-columns:52px 1fr;gap:8px;}
+  .action-row{flex-direction:column;}
+  .action-btn{width:100%;text-align:center;}
+  .drawer{width:100vw;}
+  audio{width:160px;}
+}
+@media(max-width:380px){.signal-grid{grid-template-columns:1fr;}}
+
+.back-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;font-size:12px;color:var(--tx2);background:var(--bg2);border:0.5px solid var(--bd2);border-radius:var(--r-md);text-decoration:none;font-family:var(--font);transition:background .15s,color .15s;white-space:nowrap;flex-shrink:0;}
+.back-btn:hover{background:var(--bg3);color:var(--tx);}
+.back-btn i{font-size:14px;}
+.memory-video{width:100%;max-height:200px;display:block;border-radius:var(--r-md);background:#000;margin-top:0;}
+</style>
+</head>
+<body>
+<div class="app">
+
+<header class="site-header">
+  <div class="header-top">
+    <div class="header-icon"><i class="ti ti-flask" aria-hidden="true"></i></div>
+    <div>
+      <div class="header-meta">01 分子病理 · M2 酶缺陷与代谢阻塞型</div>
+      <div class="header-title">酶缺陷与代谢阻塞型疾病</div>
+    </div>
+    <a class="back-btn" href="index.html" aria-label="返回首页"><i class="ti ti-arrow-left"></i> 首页</a>
+    <div class="header-id">T01_M2</div>
+  </div>
+  <nav class="nav-tabs" role="tablist">
+    <button class="nav-tab active" role="tab" onclick="switchTab('overview',this)">概览</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('mothers',this)">母题精讲</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('ladder',this)">变式阶梯</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('check',this)">自查清单</button>
+  </nav>
+</header>
+
+<!-- ══ 概览 ══ -->
+<div id="page-overview" class="page active">
+  <div class="memory-section">
+    <div class="memory-card">
+      <img class="memory-img" src="记忆卡/T01_M2_memory.png" alt="T01_M2 酶缺陷与代谢阻塞型 记忆卡"
+           onclick="openLightbox(this.src,this.alt)"
+           onerror="this.style.display='none';document.getElementById('mem-placeholder').style.display='flex'">
+      <div id="mem-placeholder" class="memory-placeholder" style="display:none;">
+        <i class="ti ti-photo-up"></i>
+        <div class="memory-placeholder-text">记忆卡图片放置于此</div>
+        <div class="memory-placeholder-filename">记忆卡/T01_M2_memory.png</div>
+      </div>
+      <div class="memory-footer">
+        <span class="memory-label"><i class="ti ti-brain" style="margin-right:5px;color:var(--accent);"></i>记忆卡 · 两类代谢阻塞后果</span>
+        <video class="memory-video" controls controlsList="nodownload" preload="metadata">
+        <source src="audio/T01_M2.mp4" type="video/mp4">
+      </video>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title"><i class="ti ti-radar"></i>核心识别信号</div>
+  <div class="signal-grid">
+    <div class="signal-card">
+      <div class="signal-label">题型触发词</div>
+      <div class="signal-tag">酶基因突变 / 酶活性丧失</div>
+      <div class="signal-tag">底物堆积 / 产物匮乏</div>
+      <div class="signal-tag">代谢阻断 / 不能转化</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">典型疾病</div>
+      <div class="signal-tag">苯丙酮尿症（PKU）</div>
+      <div class="signal-tag">黏多糖贮积症（IDUA）</div>
+      <div class="signal-tag">半乳糖血症（酶1/酶2）</div>
+      <div class="signal-tag">高尿酸血症（尿酸氧化酶）</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">两类后果</div>
+      <div class="signal-tag">① 底物堆积→毒性症状</div>
+      <div class="signal-tag">② 产物匮乏→功能缺陷</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">考查逻辑</div>
+      <div class="signal-tag">基因突变→酶缺失→代谢通路阻断→双重后果→遗传咨询</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-sitemap"></i>两条子专题</div>
+  <div class="subtopic-list">
+    <div class="subtopic-card">
+      <div class="subtopic-num">子专题 1</div>
+      <div class="subtopic-name">酶缺失 → 底物堆积 + 产物匮乏</div>
+      <div class="subtopic-signal">单酶（PAH/IDUA/GALT）基因突变→酶活性丧失→上游底物无法转化为下游产物→底物堆积（神经毒性/大分子贮积）+产物匮乏（黑色素/神经递质/葡萄糖缺乏）→临床症状</div>
+    </div>
+    <div class="subtopic-card s2">
+      <div class="subtopic-num">子专题 2</div>
+      <div class="subtopic-name">酶缺陷 → 并发遗传概率</div>
+      <div class="subtopic-signal">酶缺陷代谢病（常隐）与另一遗传病（伴X隐）在同一系谱并发→分别判断遗传方式→分别计算概率→乘法原理叠加→双病概率</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-alert-triangle"></i>高频易错</div>
+  <div class="trap-list">
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>mRNA长度不变 → 碱基数目不变 → 排除增添/缺失 → 确定为碱基替换。这是IDUA题的关键第一步。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>同一酶缺陷可以同时导致底物堆积AND产物匮乏，两者不互斥。PKU中：苯丙氨酸堆积（神经毒性）+ 酪氨酸不足（黑色素/多巴胺缺乏）同时存在。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>半乳糖血症中，酶1（基因1/9号染色体）与酶2（基因2/17号染色体）位于不同常染色体，两对基因独立遗传。I型（缺酶2）与II型（缺酶1）互补——两型患者婚配后代均正常。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>sup-tRNA作用机制：反密码子与提前出现的终止密码子配对 → 携带氨基酸插入 → 核糖体继续翻译 → 获得全长蛋白。注意：基因敲除小鼠无mRNA，sup-tRNA无效（对照）。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>手术治疗改变表型，但不改变基因型。致病基因仍存在于生殖细胞，后代仍有患病风险。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>PKU饮食治疗：严格限制苯丙氨酸（高蛋白食物），而非限制所有食物。果蔬蛋白含量低，适合PKU患者。既患白化病又患PKU的患者可通过补充酪氨酸预防白化病。</span></div>
+  </div>
+</div>
+
+<!-- ══ 母题精讲 ══ -->
+<div id="page-mothers" class="page">
+  <div class="filter-tabs">
+    <button class="filter-btn active" onclick="filterMQ('all',this)">全部 (2母题)</button>
+    <button class="filter-btn" onclick="filterMQ('s1',this)">子专题1·代谢阻塞</button>
+    <button class="filter-btn" onclick="filterMQ('s2',this)">子专题2·并发概率</button>
+  </div>
+
+  <!-- MQ1: EC-023 -->
+  <div class="mq-card" data-topic="s1">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge s1">子专题1 母题</span>
+      <span class="mq-name">苯丙酮尿症PKU·PAH酶缺失·底物堆积+产物匮乏</span>
+      <span class="mq-purity">★ 10/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-023 · (1)(2)(3)(4)(5)(6) · 2026-05-18</div>
+      <div class="rule-box">核心因果链：PAH基因突变 → 苯丙氨酸羟化酶缺失 → 苯丙氨酸（Phe）→ 酪氨酸（Tyr）阻断 → Phe堆积（神经毒性+苯丙酮酸"鼠臭味"）+ Tyr不足（黑色素/神经递质缺乏）→ PKU</div>
+      <div class="chain-label">完整代谢通路</div>
+      <div class="signal-chain">
+        <span class="sc-node s1">Phe（过多）</span><span class="sc-arrow">→酶1（PAH）缺失→</span>
+        <span class="sc-node">阻断</span><span class="sc-arrow">↓</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node s1">苯丙酮酸（有毒）</span><span class="sc-arrow">积累</span>
+        <span class="sc-node">Tyr匮乏</span><span class="sc-arrow">→</span>
+        <span class="sc-node">黑色素↓</span><span class="sc-arrow">+</span>
+        <span class="sc-node">神经递质↓</span>
+      </div>
+      <div class="chain-label">代谢途径分支（考点5、6）</div>
+      <div class="signal-chain">
+        <span class="sc-node">Phe</span><span class="sc-arrow">→酶1→</span>
+        <span class="sc-node">Tyr</span><span class="sc-arrow">→酶2→</span>
+        <span class="sc-node">...</span><span class="sc-arrow">→酶5→</span>
+        <span class="sc-node">尿黑酸</span><span class="sc-arrow">→</span>
+        <span class="sc-node">乙酰乙酸</span>
+      </div>
+      <div class="mq-note">
+        <strong>考点(2)碱基推导：</strong>精氨酸密码子CGG（mRNA）→编码链CGG；色氨酸密码子UGG（mRNA）→编码链TGG。第408位单个氨基酸改变→碱基替换（选A）。<br><br>
+        <strong>考点(3)基因型推断：</strong>II-2患病(dd)，I-1/I-2正常→均Dd。基因检测：D片段1717bp，d片段1508bp。II-1显示两条带→Dd。II-3(Dd)×II-4(dd)→子代患病概率1/2。<br><br>
+        <strong>考点(5)基因型数计算：</strong>表现正常且含两对基因(P/p和E/e)：PPEE、PpEE、PPEe、PpEe共4种。基因P碱基对数目：酶2含n个氨基酸2条肽链→需3n个密码子→至少6n个碱基(3n对碱基对)。<br><br>
+        <strong>考点(6):</strong> 缺酶5→尿黑酸积累→尿黑酸症；缺酶2→无酪氨酸→白化病+PKU并发→补充酪氨酸可预防白化病。
+      </div>
+      <button class="q-trigger" onclick="openDrawer('mq-ec023')"><i class="ti ti-eye"></i>查看完整题干与答案</button>
+    </div>
+  </div>
+
+  <!-- MQ2: EC-496 (子专题2) -->
+  <div class="mq-card" data-topic="s2">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge s2">子专题2 进阶变式</span>
+      <span class="mq-name">半乳糖血症（常隐）+血友病（伴X隐）·双病并发概率</span>
+      <span class="mq-purity">★ 7/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-496 · (1)(2)(3)(4) · 2026-05-24</div>
+      <div class="rule-box s2">核心：半乳糖血症（常隐，设a）+血友病（伴X隐，设Xb）两病并发系谱→分别判型→乘法原理叠加。Ⅲ11基因型：2/3 Aa × 1/2 XBXb；含两种致病基因卵细胞(aXb)概率=2/3×1/2×1/2×1/2=1/12；生两病兼患男孩(aaXbY)概率=1/16（标准答案）</div>
+      <div class="chain-label">双病概率计算框架</div>
+      <div class="signal-chain">
+        <span class="sc-node s2">半乳糖血症判型</span><span class="sc-arrow">→</span>
+        <span class="sc-node s2">Ⅲ11半乳糖血症基因型</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node s2">血友病判型</span><span class="sc-arrow">→</span>
+        <span class="sc-node s2">Ⅲ11血友病基因型</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node">两病概率相乘</span><span class="sc-arrow">→</span>
+        <span class="sc-node s2">双病兼患概率</span>
+      </div>
+      <div class="mq-note">
+        <strong>判型依据：</strong>"无中生有为隐性，生女患病为常隐"→半乳糖血症为常染色体隐性。血友病基因位于X染色体→伴X隐性。<br><br>
+        <strong>关键考点(4)：</strong>Ⅲ10手术治疗恢复健康，但手术只改变表型，不改变基因型。致病基因仍存在于生殖细胞，后代仍可能患病。这是基因治疗≠手术治疗的典型考查。
+      </div>
+      <button class="q-trigger" onclick="openDrawer('mq-ec496')"><i class="ti ti-eye"></i>查看完整题干与答案</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 变式阶梯 ══ -->
+<div id="page-ladder" class="page">
+  <div class="ladder-note">从"单酶代谢阻塞"到"新型治疗机制"到"双病并发概率"，逐步提升跨模型综合能力。</div>
+
+  <!-- 子专题1 阶梯 -->
+  <div class="ladder-section-label"><i class="ti ti-stairs"></i>子专题1 · 酶缺失→代谢阻塞 变式阶梯</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l0">母题<br>10/10</div>
+      <div class="ladder-card" onclick="openDrawer('mq-ec023')">
+        <div class="ladder-card-name">EC-023 苯丙酮尿症PKU</div>
+        <div class="ladder-card-sub">PAH酶缺失→Phe堆积+Tyr匮乏→完整代谢通路分析+遗传系谱</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">基础变式<br>9/10</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec026')">
+        <div class="ladder-card-name">EC-026 黏多糖贮积症IDUA</div>
+        <div class="ladder-card-sub">IDUA基因碱基替换→终止密码子提前→翻译提前终止→酶失活→大分子贮积；sup-tRNA新型治疗机制</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">基础变式2<br>9/10</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec493')">
+        <div class="ladder-card-name">EC-493 半乳糖血症I型/II型</div>
+        <div class="ladder-card-sub">双酶（酶1/9号；酶2/17号）分别缺陷→两型半乳糖血症；两型互补婚配→后代正常的遗传逻辑</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">进阶变式<br>8/10</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec037')">
+        <div class="ladder-card-name">EC-037 尿酸氧化酶缺乏与URAT1转运</div>
+        <div class="ladder-card-sub">人类特有酶缺失→尿酸堆积→高尿酸血症/痛风；细胞膜结构与功能综合考查</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 子专题2 阶梯 -->
+  <div class="ladder-section-label"><i class="ti ti-stairs"></i>子专题2 · 并发遗传概率 变式阶梯</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l2">进阶变式<br>7/10</div>
+      <div class="ladder-card" onclick="openDrawer('mq-ec496')">
+        <div class="ladder-card-name">EC-496 半乳糖血症+血友病双病概率</div>
+        <div class="ladder-card-sub">常隐×伴X隐并发系谱→分别判型→乘法叠加→产生含双致病基因卵细胞概率→生双病男孩概率</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 自查清单 ══ -->
+<div id="page-check" class="page">
+  <div class="progress-row">
+    <span style="font-size:13px;color:var(--tx2);">掌握进度</span>
+    <span id="check-count" style="font-size:13px;color:var(--tx2);">0 / 10</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="check-bar"></div></div>
+
+  <div class="checklist" id="checklist">
+    <div class="check-item" onclick="toggleCheck(this,0)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能说出M2的"两类后果"——底物堆积（毒性）+ 产物匮乏（功能缺陷），并举PKU实例</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,1)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能从"mRNA长度不变"推断碱基替换，排除增添/缺失（IDUA题型识别）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,2)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能推导PKU中密码子→编码链序列（CGG→TGG对应精氨酸→色氨酸）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,3)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能解释sup-tRNA的作用机制：反密码子与终止密码子配对→携带氨基酸→继续翻译→全长蛋白</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,4)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能说明为什么基因敲除小鼠对sup-tRNA治疗无响应（无mRNA → sup-tRNA无靶点）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,5)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能解释半乳糖血症I型与II型的遗传互补现象（不同基因→同一表型→两型婚配后代正常）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,6)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能用乘法原理计算双病并发概率：先分别计算各病概率，再相乘</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,7)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能区分手术治疗（改变表型，不改变基因型）与基因治疗，并说明致病基因仍可遗传</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,8)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能解释PKU既患白化病又患PKU时：缺酶2→无酪氨酸→无黑色素；可通过补充酪氨酸预防白化病</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,9)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能判断PKU饮食治疗策略：限苯丙氨酸（限高蛋白）而非限所有食物；果蔬低蛋白适合PKU患者</div>
+    </div>
+  </div>
+
+  <div class="action-row">
+    <button class="action-btn" onclick="checkAll()">全部勾选</button>
+    <button class="action-btn" onclick="clearAll()">清空重来</button>
+  </div>
+</div>
+
+</div><!-- .app -->
+
+<!-- 抽屉 -->
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <span class="drawer-badge" id="drawer-badge" style="background:var(--accent-l);color:var(--accent-d);"></span>
+    <span class="drawer-title" id="drawer-title"></span>
+    <button class="drawer-close" onclick="closeDrawer()"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="drawer-ec-ref"><i class="ti ti-database"></i><span id="drawer-ref"></span></div>
+    <div class="drawer-stem" id="drawer-stem"></div>
+    <div class="drawer-sub" id="drawer-focus">
+      <div class="drawer-sub-label">解题关注点</div>
+      <div id="drawer-focus-text"></div>
+    </div>
+    <div class="drawer-answer" id="drawer-answer">
+      <div class="drawer-answer-label">参考答案</div>
+      <div id="drawer-answer-text"></div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="drawer-btn" onclick="toggleAnswer()">显示 / 隐藏答案</button>
+    <button class="drawer-btn primary" onclick="closeDrawer()">关闭</button>
+  </div>
+</div>
+
+<!-- 灯箱 -->
+<div class="lb-overlay" id="lb-overlay" onclick="closeLightbox()">
+  <button class="lb-close" onclick="closeLightbox()" aria-label="关闭">&#x2715;</button>
+  <img class="lb-img" id="lb-img" src="" alt="">
+</div>
+
+<script>
+// ── 题目数据库 ──
+const QUESTIONS = {
+  'mq-ec023': {
+    badge: '子专题1 母题',
+    badgeStyle: 'background:var(--accent-l);color:var(--accent-d);',
+    name: 'EC-023 苯丙酮尿症PKU分子机制与代谢阻断',
+    ref: 'EC-20260518-023 · 组成细胞的分子·综合题',
+    stem: `苯丙酮尿症（PKU）是由于苯丙氨酸羟化酶基因突变导致苯丙氨酸不能转化为酪氨酸而引起的遗传病。PKU患者体内苯丙氨酸累积，引起智力发育障碍，产生含苯丙酮酸的"鼠臭味"尿等症状。
+
+(1) PKU患者需要严格控制苯丙氨酸的摄入，适合PKU患者日常饮食的食物是____
+A．鱼肉  B．鸡蛋  C．牛奶  D．果蔬
+
+(2) 有1种突变导致苯丙氨酸羟化酶仅第408位精氨酸变为色氨酸，与基因突变后改变的氨基酸对应的DNA编码链序列为____（精氨酸密码子为CGG，色氨酸密码子为UGG），该基因突变属于____。
+A．替换  B．插入  C．缺失
+
+(3) Ⅱ-1、Ⅱ-2和Ⅱ-3在婚前进行了PKU致病基因的检测，根据检测结果确定Ⅱ-1的基因型为____（分别用D、d表示显性、隐性基因）。Ⅱ-3和Ⅱ-4再生育一个孩子，患病的概率是____。
+
+(4) Ⅱ-1准备与女友小芸结婚，为预防PKU患儿出生，产前诊断技术有帮助的是____
+A．B超  B．染色体组成分析  C．小芸基因检测  D．胎儿基因检测
+
+人体内苯丙氨酸的代谢途径：Phe→（酶1）→Tyr→（酶2）→...→（酶5）→尿黑酸→乙酰乙酸
+
+(5) 在此途径中表现正常的人，若仅考虑基因P/p和E/e，其基因型可能有____种。若酶2是由含n个氨基酸的2条肽链组成，则基因P的碱基对数目至少为____。
+
+(6) 有些病人只出现尿黑酸症，其直接原因是缺少酶____（填数字），使尿黑酸积累过多；有些病人既患白化病又患苯丙酮尿症，其直接原因是酶____（填数字）合成受阻，没有酪氨酸和黑色素生成，同时苯丙酮酸增多，但这些患者可以通过____来预防黑色素合成受阻而出现白化病症状。`,
+    focus: `关键①：mRNA密码子→编码链推导（CGG→TGG，注意编码链与模板链的关系）
+关键②：基因检测条带数判断基因型（两条带=杂合子Dd，一条带=纯合子）
+关键③：代谢通路中不同酶缺陷对应不同疾病表型（酶1→PKU；酶2→白化病；酶5→尿黑酸症）
+关键④：PKU+白化病并发时，补充酪氨酸可绕过酶2缺陷，恢复黑色素合成
+关键⑤：基因P碱基对计算：n个氨基酸2条肽链→n个密码子→3n个碱基→至少3n个碱基对（但需×2双链→6n，题目问"碱基对"则为3n对）`,
+    answer: `(1) D（果蔬蛋白质含量低，苯丙氨酸少）
+(2) TGG；A（碱基替换，数目不变）
+(3) Dd；1/2
+(4) CD（B超和染色体分析不适用于单基因病）
+(5) 4种（PPEE、PpEE、PPEe、PpEe）；6n个碱基对（注：n个氨基酸的2条肽链→需3n个密码子→至少3n对碱基对，若问碱基对数目是3n对；若问碱基数是6n）
+(6) 5；2；多食用富含酪氨酸的食物（或多补充酪氨酸）`
+  },
+  'mq-ec496': {
+    badge: '子专题2 进阶变式',
+    badgeStyle: 'background:var(--teal-l);color:var(--teal-d);',
+    name: 'EC-496 半乳糖血症+血友病双病并发概率',
+    ref: 'EC-20260524-496 · 遗传与人类健康',
+    stem: `半乳糖血症为血半乳糖增高的中毒性临床代谢综合征，血友病为一组遗传性凝血功能障碍的出血性疾病，已知血友病基因位于X染色体上。下图为半乳糖血症和血友病的家族系谱图。
+
+(1) 据图分析，半乳糖血症为________遗传病，原因是________。
+
+(2) Ⅲ11产生含两种遗传病基因卵细胞的概率为________，Ⅲ11和Ⅲ12生一个两病兼患男孩的概率为________。
+
+(3) Ⅲ11和Ⅲ12结婚后，Ⅲ11怀孕后到医院进行遗传咨询，若在妊娠早期对胎儿脱屑进行检查，需要做以下哪些措施？____
+A．染色体数目检测
+B．检测基因是否正常
+C．性别检测
+D．无需进行上述检测
+
+(4) Ⅲ10男孩经手术治疗后恢复了健康，若他成年后与一表型正常的女子结婚，其后代还有可能患该病吗？为什么？________。`,
+    focus: `关键①：判型——"无中生有，生女患病"确定半乳糖血症为常染色体隐性
+关键②：Ⅲ11基因型分析：半乳糖血症部分2/3 Aa；血友病部分1/2 XBXb
+关键③：含双致病基因卵细胞(aXb)概率=P(a卵)×P(Xb卵)=（2/3×1/2）×（1/2）=1/6×1/2=1/12（注意携带者本身也需概率）
+关键④：双病男孩概率=P(aa)×P(XbY)——需分别从两对等位基因计算后相乘
+关键⑤：手术治疗≠基因治疗，表型改变但基因型不变，致病基因仍可通过配子遗传`,
+    answer: `(1) 常染色体隐性遗传；表型正常的双亲（Ⅰ3和Ⅰ4）生有患半乳糖血症的女儿（Ⅱ9）
+(2) 1/12（含两种致病基因卵细胞aXb概率）；1/16（两病兼患男孩概率）
+(3) B（半乳糖血症和血友病均为基因病，需检测基因是否正常）
+(4) 有可能。手术治疗只改变了表型（症状），并没有改变其基因型。致病基因仍会通过生殖细胞传递给后代。`
+  },
+  'v-ec026': {
+    badge: '子专题1 基础变式',
+    badgeStyle: 'background:var(--accent-l);color:var(--accent-d);',
+    name: 'EC-026 黏多糖贮积症IDUA基因突变与遗传分析',
+    ref: 'EC-20260518-026 · 组成细胞的分子·综合题',
+    stem: `黏多糖贮积症是由IDUA基因突变导致的遗传病。黏多糖贮积症患者细胞中IDUA基因转录出的mRNA长度不变但提前出现终止密码子，最终导致合成的IDUA酶失去活性，引发黏多糖积累过多而无法及时清除，造成人体多系统功能障碍。
+
+(1) 造成IDUA基因突变的原因是由于碱基对_________。（选填编号）
+① 缺失  ② 增添  ③ 替换
+
+(2) 异常IDUA酶与正常IDUA酶的差异体现在__________。（选填编号）
+① 氨基酸的数目不同  ② 活性中心结构不同  ③ 催化的底物种类不同
+
+抑制性tRNA（sup-tRNA）的反密码子可以与终止密码子配对。在IDUA突变基因的翻译过程中，加入sup-tRNA可获得有功能的全长蛋白。
+
+(3) 抑制性tRNA的功能是_________。
+A．使翻译提前终止
+B．抑制氨基酸脱水缩合
+C．改变mRNA的序列
+D．使终止密码子编码氨基酸
+
+(4) 科研人员将携带不同氨基酸的sup-tRNA导入实验动物体内，检测IDUA蛋白的分子量。结果显示携带酪氨酸的sup-tRNA组获得的全长IDUA蛋白分子量最大。据此分析，可继续探究用于治疗的sup-tRNA携带的氨基酸是_________。
+① 色氨酸  ② 酪氨酸  ③ 丝氨酸  ④ 亮氨酸  ⑤ 赖氨酸  ⑥ 谷氨酸
+
+(5) 科研人员利用选定的sup-tRNA对IDUA突变基因纯合小鼠及IDUA基因敲除小鼠进行治疗。与不治疗的小鼠相比，可说明治疗有效的预期实验结果是__________。
+A．IDUA突变基因纯合小鼠IDUA酶活性高，组织黏多糖积累量少
+B．IDUA基因敲除小鼠IDUA酶活性与组织黏多糖积累量无明显差异
+C．IDUA基因敲除小鼠IDUA酶活性高，组织黏多糖积累量少
+D．IDUA突变基因纯合小鼠IDUA酶活性与组织黏多糖积累量无明显差异`,
+    focus: `关键①：mRNA长度不变→碱基数目不变→排除增添/缺失→确定碱基替换
+关键②：提前终止→肽链变短→氨基酸数目不同（①）；空间结构改变→活性中心不同（②）；催化底物种类不变（不选③）
+关键③：sup-tRNA与终止密码子配对→携带氨基酸插入→继续翻译→全长蛋白（D）
+关键④：携带酪氨酸组分子量最大→效果最好→选②酪氨酸
+关键⑤：突变基因纯合小鼠有mRNA→sup-tRNA有效→酶活性恢复+黏多糖减少（A对）；基因敲除小鼠无mRNA→sup-tRNA无靶点→无变化（B对，这是对照逻辑）`,
+    answer: `(1) ③（碱基替换）
+(2) ①②（氨基酸数目不同；活性中心结构不同）
+(3) D（使终止密码子编码氨基酸）
+(4) ②（酪氨酸，分子量最大说明效果最好）
+(5) AB`
+  },
+  'v-ec493': {
+    badge: '子专题1 基础变式2',
+    badgeStyle: 'background:var(--accent-l);color:var(--accent-d);',
+    name: 'EC-493 半乳糖血症I型/II型·双基因代谢阻塞·遗传互补',
+    ref: 'EC-20260524-493 · 遗传与人类健康',
+    stem: `半乳糖血症是由于半乳糖不能正常代谢而引起的一类遗传病，治疗方案以饮食治疗为主。已知第17号染色体上的基因2突变会使个体缺乏酶2而患I型半乳糖血症；第9号染色体上的基因1发生隐性突变会使个体缺乏酶1而患II型半乳糖血症。
+
+半乳糖代谢途径：半乳糖→（酶1）→半乳糖-1-磷酸→（酶2）→葡萄糖-1-磷酸→进一步代谢
+
+(1) 依据水解产物划分，半乳糖属于_________；依据是否具有还原性，半乳糖属于_________。
+
+(2) 某表型正常男子（甲）有一个患I型半乳糖血症的妹妹（乙），其父母均正常，则I型半乳糖血症的遗传方式为______遗传。乙的血检结果显示半乳糖-1-磷酸浓度高于正常值，葡萄糖-1-磷酸浓度低于正常值，推测乙的基因型是______（基因1用M/m表示，基因2用N/n表示）。你对乙的饮食有什么合理建议？______。
+
+(3) 乙和另一位半乳糖血症患者丙婚配后，后代子女均表现正常，可以判断丙的半乳糖血症类型是______（填"I型"或"II型"）。`,
+    focus: `关键①：半乳糖不能水解→单糖；含醛基→还原糖
+关键②：酶2缺陷→半乳糖-1-磷酸（上游底物）堆积 + 葡萄糖-1-磷酸（下游产物）匮乏→确认I型
+关键③：父母正常生患病女儿→常染色体隐性；乙（I型患者）基因2为nn；基因1不患II型→MM或Mm→乙基因型MMnn或Mmnn
+关键④：乙（I型，缺酶2，基因型?-nn）× 丙（后代全正常）→若丙也是I型（?-nn），后代全患→矛盾；若丙为II型（mm-?），则两型互补（酶1和酶2互补），后代均具有酶1和酶2→均正常→丙为II型`,
+    answer: `(1) 单糖；还原糖
+(2) 常染色体隐性遗传；MMnn或Mmnn；饮食上应合理减少乳制品，可选择黄豆制品、酸牛奶等无乳糖食物
+(3) II型（两型互补，乙(nn)×丙(mm)后代均至少有一个正常酶1和一个正常酶2）`
+  },
+  'v-ec037': {
+    badge: '子专题1 进阶变式',
+    badgeStyle: 'background:var(--amber-l);color:var(--amber-d);',
+    name: 'EC-037 尿酸氧化酶缺乏与肾小管尿酸盐转运机制',
+    ref: 'EC-20260518-037 · 组成细胞的分子·综合题',
+    stem: `人体缺乏尿酸氧化酶，导致体内嘌呤分解代谢的终产物是尿酸（存在形式为尿酸盐）。尿酸盐经肾小球滤过后，部分被肾小管细胞质膜上具有尿酸盐转运功能的蛋白URAT1和GLUT9重吸收，最终回到血液。尿酸盐重吸收过量会导致高尿酸血症或痛风。
+
+(1) 下列叙述正确的是（    ）
+A．磷脂和糖脂分子形成的脂双层是完全对称的
+B．酵母固醇插在磷脂之间有利于增强质膜的流动性
+C．质膜的选择透过性是质膜流动性的基础
+D．有些膜蛋白能识别并接受来自细胞外的化学信号
+
+(2) 对细胞核结构描述错误的是（    ）
+A．染色质的主要成分是DNA和蛋白质
+B．核膜由两层磷脂分子构成
+C．核仁与核糖体的形成有关
+D．mRNA通过核孔从细胞核进入细胞质
+
+(3)~(11) 涉及细胞结构、膜的选择透过性、物质跨膜运输方式等综合考查。
+
+(9) 肾小管细胞通过URAT1和GLUT9蛋白重吸收尿酸盐，体现了细胞质膜具有______的功能特性。该特性与质膜上的______（物质）有关。
+
+(12) 肾小管细胞刷状缘形态增加了细胞膜的表面积，使转运蛋白URAT1能更多地存在于细胞膜中，促进对尿酸盐重吸收，体现了结构与功能相适应。`,
+    focus: `关键①：人类特有酶缺失（尿酸氧化酶）→尿酸堆积→高尿酸血症/痛风（酶缺失+底物堆积的进化视角）
+关键②：核膜由4层磷脂分子（2层膜×2层磷脂分子/每层膜）构成，不是2层
+关键③：酵母固醇插入磷脂间→增强膜的刚性，降低流动性（不是增强）
+关键④：选择透过性的结构基础是膜蛋白的种类和数量，而非磷脂层
+关键⑤：URAT1和GLUT9合成加工需要：核糖体（合成）→内质网（加工）→高尔基体（再加工）→线粒体（供能）`,
+    answer: `(1) D
+(2) B（核膜由4层磷脂分子构成，不是2层）
+(3) D（氨基酸）
+(4) ABD（核糖体、线粒体、内质网）
+(5) ABC
+(6) C（细胞骨架主要成分是蛋白质，不含磷脂）
+(7) C
+(8) C
+(9) 选择透过性；蛋白质的种类和数量
+(10) BC
+(11) C
+(12) 刷状缘增大表面积→更多URAT1→促进重吸收；GLUT9将尿酸盐转运至血液→体现结构与功能相适应`
+  }
+};
+
+// ── Tab 切换 ──
+function switchTab(tab, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + tab).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── MQ 折叠 ──
+function toggleMQ(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.mq-chevron');
+  body.classList.toggle('open');
+  chevron.classList.toggle('open');
+}
+
+// ── 筛选 ──
+function filterMQ(topic, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.mq-card').forEach(card => {
+    card.style.display = (topic === 'all' || card.dataset.topic === topic) ? '' : 'none';
+  });
+}
+
+// ── 抽屉 ──
+function openDrawer(id) {
+  const q = QUESTIONS[id];
+  if (!q) return;
+  document.getElementById('drawer-badge').textContent = q.badge;
+  document.getElementById('drawer-badge').style.cssText = q.badgeStyle;
+  document.getElementById('drawer-title').textContent = q.name;
+  document.getElementById('drawer-ref').textContent = q.ref;
+  document.getElementById('drawer-stem').textContent = q.stem;
+  document.getElementById('drawer-focus-text').textContent = q.focus;
+  document.getElementById('drawer-answer-text').textContent = q.answer;
+  document.getElementById('drawer-answer').classList.remove('show');
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawer-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeDrawer() {
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('drawer-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function toggleAnswer() {
+  document.getElementById('drawer-answer').classList.toggle('show');
+}
+
+// ── 灯箱 ──
+function openLightbox(src, alt) {
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lb-img').alt = alt || '';
+  document.getElementById('lb-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lb-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('lb-img').addEventListener('click', e => e.stopPropagation());
+
+// ── 自查清单 ──
+const STORAGE_KEY = 'T01_M2_checks';
+const TOTAL = 10;
+function loadChecks() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch(e) { return []; }
+}
+function saveChecks(arr) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)); } catch(e) {}
+}
+function updateProgress() {
+  const done = document.querySelectorAll('.check-item.done').length;
+  document.getElementById('check-count').textContent = done + ' / ' + TOTAL;
+  document.getElementById('check-bar').style.width = (done / TOTAL * 100) + '%';
+}
+function toggleCheck(item, idx) {
+  item.classList.toggle('done');
+  const arr = loadChecks();
+  arr[idx] = item.classList.contains('done');
+  saveChecks(arr);
+  updateProgress();
+}
+function checkAll() {
+  const arr = [];
+  document.querySelectorAll('.check-item').forEach((item, i) => {
+    item.classList.add('done');
+    arr[i] = true;
+  });
+  saveChecks(arr);
+  updateProgress();
+}
+function clearAll() {
+  const arr = [];
+  document.querySelectorAll('.check-item').forEach((item, i) => {
+    item.classList.remove('done');
+    arr[i] = false;
+  });
+  saveChecks(arr);
+  updateProgress();
+}
+// 初始化
+(function() {
+  const arr = loadChecks();
+  document.querySelectorAll('.check-item').forEach((item, i) => {
+    if (arr[i]) item.classList.add('done');
+  });
+  updateProgress();
+})();
+
+// ESC 关闭
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (document.getElementById('lb-overlay').classList.contains('open')) {
+      closeLightbox();
+    } else if (document.getElementById('drawer').classList.contains('open')) {
+      closeDrawer();
+    }
+  }
+});
+</script>
+</body>
+</html>

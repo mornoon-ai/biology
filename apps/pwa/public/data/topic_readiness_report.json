@@ -1,0 +1,551 @@
+[
+  {
+    "topic_id": "T01_M1",
+    "title": "蛋白质错误折叠与疾病",
+    "status": "ready",
+    "asset_counts": {
+      "memory_card": 1,
+      "diagram": 2,
+      "lecture_audio": 1,
+      "lecture_script": 1,
+      "html_prototype": 1,
+      "gate_card": 5
+    },
+    "gate_ids": [
+      "G03",
+      "G04",
+      "G09",
+      "G32",
+      "G33"
+    ],
+    "issues": []
+  },
+  {
+    "topic_id": "T01_M2",
+    "title": "酶缺陷与代谢阻塞",
+    "status": "ready",
+    "asset_counts": {
+      "memory_card": 1,
+      "diagram": 1,
+      "lecture_audio": 1,
+      "lecture_script": 1,
+      "html_prototype": 1,
+      "gate_card": 4
+    },
+    "gate_ids": [
+      "G03",
+      "G08",
+      "G32",
+      "G33"
+    ],
+    "issues": []
+  },
+  {
+    "topic_id": "T01_M3",
+    "title": "表观遗传与表达调控",
+    "status": "ready",
+    "asset_counts": {
+      "memory_card": 1,
+      "diagram": 2,
+      "lecture_audio": 1,
+      "lecture_script": 1,
+      "html_prototype": 1,
+      "gate_card": 2
+    },
+    "gate_ids": [
+      "G04",
+      "G09"
+    ],
+    "issues": []
+  },
+  {
+    "topic_id": "T01_M4",
+    "title": "基因编辑与RNA干扰",
+    "status": "ready",
+    "asset_counts": {
+      "memory_card": 1,
+      "diagram": 2,
+      "lecture_audio": 1,
+      "lecture_script": 1,
+      "html_prototype": 1,
+      "gate_card": 3
+    },
+    "gate_ids": [
+      "G04",
+      "G06",
+      "G09"
+    ],
+    "issues": []
+  },
+  {
+    "topic_id": "T02_M1",
+    "title": "细胞结构识别与功能匹配",
+    "status": "ready",
+    "asset_counts": {
+      "memory_card": 1,
+      "diagram": 5,
+      "lecture_audio": 1,
+      "lecture_script": 1,
+      "html_prototype": 1,
+      "gate_card": 3
+    },
+    "gate_ids": [
+      "G01",
+      "G12",
+      "G45"
+    ],
+    "issues": []
+  },
+  {
+    "topic_id": "T02_M2",
+    "title": "内膜系统与分泌蛋白运输",
+    "status": "ready",
+    "asset_counts": {
+      "memory_card": 1,
+      "diagram": 2,
+      "lecture_audio": 1,
+      "lecture_script": 1,
+      "html_prototype": 1,
+      "gate_card": 3
+    },
+    "gate_ids": [
+      "G03",
+      "G12",
+      "G18"
+    ],
+    "issues": []
+  },
+  {
+    "topic_id": "T02_M3",
+    "title": "跨膜运输方式判定",
+    "status": "ready",
+    "asset_counts": {
+      "memory_card": 1,
+      "diagram": 4,
+      "lecture_audio": 1,
+      "lecture_script": 1,
+      "html_prototype": 1,
+      "gate_card": 4
+    },
+    "gate_ids": [
+      "G22",
+      "G31",
+      "G40",
+      "G47"
+    ],
+    "issues": []
+  },
+  {
+    "topic_id": "T02_M4",
+    "title": "细胞结构变化与功能适应",
+    "status": "ready",
+    "asset_counts": {
+      "memory_card": 1,
+      "diagram": 3,
+      "lecture_audio": 1,
+      "lecture_script": 1,
+      "html_prototype": 1,
+      "gate_card": 3
+    },
+    "gate_ids": [
+      "G12",
+      "G19",
+      "G26"
+    ],
+    "issues": []
+  },
+  {
+    "topic_id": "T03_M1",
+    "title": "系谱图遗传方式判定",
+    "status": "ready",
+    "asset_counts": {
+      "memory_card": 1,
+      "diagram": 3,
+      "lecture_audio": 1,
+      "lecture_script": 1,
+      "html_prototype": 1,
+      "gate_card": 5
+    },
+    "gate_ids": [
+      "G14",
+      "G15",
+      "G17",
+      "G20",
+      "G30"
+    ],
+    "issues": []
+  },
+  {
+    "topic_id": "T03_M2",
+    "title": "后代概率精算",
+    "status": "ready",
+    "asset_counts": {
+      "memory_card": 1,
+      "diagram": 1,
+      "lecture_audio": 1,
+      "lecture_script": 1,
+      "html_prototype": 1,
+      "gate_card": 2
+    },
+    "gate_ids": [
+      "G15",
+      "G30"
+    ],
+    "issues": []
+  },
+  {
+    "topic_id": "T03_M3",
+    "title": "减数分裂染色体追踪",
+    "status": "ready",
+    "asset_counts": {
+      "memory_card": 1,
+      "diagram": 2,
+      "lecture_audio": 1,
+      "lecture_script": 1,
+      "html_prototype": 1,
+      "gate_card": 1
+    },
+    "gate_ids": [
+      "G16"
+    ],
+    "issues": []
+  },
+  {
+    "topic_id": "T03_M4",
+    "title": "电泳分子证据判读",
+    "status": "ready",
+    "asset_counts": {
+      "memory_card": 1,
+      "diagram": 2,
+      "lecture_audio": 1,
+      "lecture_script": 1,
+      "html_prototype": 1,
+      "gate_card": 3
+    },
+    "gate_ids": [
+      "G04",
+      "G06",
+      "G15"
+    ],
+    "issues": []
+  },
+  {
+    "topic_id": "T04_M1",
+    "title": "神经体液稳态调节",
+    "status": "ready",
+    "asset_counts": {
+      "memory_card": 1,
+      "diagram": 3,
+      "lecture_audio": 1,
+      "lecture_script": 1,
+      "html_prototype": 1,
+      "gate_card": 5
+    },
+    "gate_ids": [
+      "G10",
+      "G21",
+      "G23",
+      "G34",
+      "G40"
+    ],
+    "issues": []
+  },
+  {
+    "topic_id": "T04_M2",
+    "title": "内分泌分级调节",
+    "status": "ready",
+    "asset_counts": {
+      "memory_card": 1,
+      "diagram": 1,
+      "lecture_audio": 1,
+      "lecture_script": 1,
+      "html_prototype": 1,
+      "gate_card": 2
+    },
+    "gate_ids": [
+      "G23",
+      "G34"
+    ],
+    "issues": []
+  },
+  {
+    "topic_id": "T04_M3",
+    "title": "免疫识别与应答",
+    "status": "ready",
+    "asset_counts": {
+      "memory_card": 1,
+      "diagram": 1,
+      "lecture_audio": 1,
+      "lecture_script": 1,
+      "html_prototype": 1,
+      "gate_card": 1
+    },
+    "gate_ids": [
+      "G02"
+    ],
+    "issues": []
+  },
+  {
+    "topic_id": "T04_M4",
+    "title": "昼夜节律与褪黑素",
+    "status": "ready",
+    "asset_counts": {
+      "memory_card": 1,
+      "diagram": 1,
+      "lecture_audio": 1,
+      "lecture_script": 1,
+      "html_prototype": 1,
+      "gate_card": 2
+    },
+    "gate_ids": [
+      "G10",
+      "G34"
+    ],
+    "issues": []
+  },
+  {
+    "topic_id": "T05_M1",
+    "title": "光合速率与限制因子",
+    "status": "ready",
+    "asset_counts": {
+      "memory_card": 1,
+      "diagram": 5,
+      "lecture_audio": 1,
+      "lecture_script": 1,
+      "html_prototype": 1,
+      "gate_card": 6
+    },
+    "gate_ids": [
+      "G07",
+      "G11",
+      "G13",
+      "G29",
+      "G35",
+      "G41"
+    ],
+    "issues": []
+  },
+  {
+    "topic_id": "T05_M2",
+    "title": "气孔开闭与蒸腾调节",
+    "status": "ready",
+    "asset_counts": {
+      "memory_card": 1,
+      "diagram": 1,
+      "lecture_audio": 1,
+      "lecture_script": 1,
+      "html_prototype": 1,
+      "gate_card": 4
+    },
+    "gate_ids": [
+      "G22",
+      "G28",
+      "G31",
+      "G47"
+    ],
+    "issues": []
+  },
+  {
+    "topic_id": "T05_M3",
+    "title": "呼吸方式与产物比例",
+    "status": "ready",
+    "asset_counts": {
+      "memory_card": 1,
+      "diagram": 4,
+      "lecture_audio": 1,
+      "lecture_script": 1,
+      "html_prototype": 1,
+      "gate_card": 3
+    },
+    "gate_ids": [
+      "G08",
+      "G43",
+      "G46"
+    ],
+    "issues": []
+  },
+  {
+    "topic_id": "T05_M4",
+    "title": "植物激素与生长调控",
+    "status": "ready",
+    "asset_counts": {
+      "memory_card": 1,
+      "diagram": 1,
+      "lecture_audio": 1,
+      "lecture_script": 1,
+      "html_prototype": 1,
+      "gate_card": 1
+    },
+    "gate_ids": [
+      "G28"
+    ],
+    "issues": []
+  },
+  {
+    "topic_id": "T06_M1",
+    "title": "实验变量与对照设计",
+    "status": "ready",
+    "asset_counts": {
+      "memory_card": 1,
+      "diagram": 1,
+      "lecture_audio": 1,
+      "lecture_script": 1,
+      "html_prototype": 1,
+      "gate_card": 2
+    },
+    "gate_ids": [
+      "G05",
+      "G24"
+    ],
+    "issues": []
+  },
+  {
+    "topic_id": "T06_M2",
+    "title": "生物物质鉴定实验",
+    "status": "ready",
+    "asset_counts": {
+      "memory_card": 1,
+      "diagram": 1,
+      "lecture_audio": 1,
+      "lecture_script": 1,
+      "html_prototype": 1,
+      "gate_card": 1
+    },
+    "gate_ids": [
+      "G37"
+    ],
+    "issues": []
+  },
+  {
+    "topic_id": "T06_M3",
+    "title": "数据图表分析与判读",
+    "status": "ready",
+    "asset_counts": {
+      "memory_card": 1,
+      "diagram": 1,
+      "lecture_audio": 1,
+      "lecture_script": 1,
+      "html_prototype": 1,
+      "gate_card": 3
+    },
+    "gate_ids": [
+      "G24",
+      "G41",
+      "G45"
+    ],
+    "issues": []
+  },
+  {
+    "topic_id": "T06_M4",
+    "title": "PCR技术与电泳分析",
+    "status": "ready",
+    "asset_counts": {
+      "memory_card": 1,
+      "diagram": 1,
+      "lecture_audio": 1,
+      "lecture_script": 1,
+      "html_prototype": 1,
+      "gate_card": 2
+    },
+    "gate_ids": [
+      "G04",
+      "G06"
+    ],
+    "issues": []
+  },
+  {
+    "topic_id": "T06_M5",
+    "title": "实验结论评价",
+    "status": "ready",
+    "asset_counts": {
+      "memory_card": 1,
+      "diagram": 1,
+      "lecture_audio": 1,
+      "lecture_script": 1,
+      "html_prototype": 1,
+      "gate_card": 3
+    },
+    "gate_ids": [
+      "G05",
+      "G24",
+      "G45"
+    ],
+    "issues": []
+  },
+  {
+    "topic_id": "T07_M1",
+    "title": "食物链与营养级分析",
+    "status": "ready",
+    "asset_counts": {
+      "memory_card": 1,
+      "diagram": 2,
+      "lecture_audio": 1,
+      "lecture_script": 1,
+      "html_prototype": 1,
+      "gate_card": 3
+    },
+    "gate_ids": [
+      "G25",
+      "G36",
+      "G44"
+    ],
+    "issues": []
+  },
+  {
+    "topic_id": "T07_M2",
+    "title": "能量流动计算",
+    "status": "ready",
+    "asset_counts": {
+      "memory_card": 1,
+      "diagram": 2,
+      "lecture_audio": 1,
+      "lecture_script": 1,
+      "html_prototype": 1,
+      "gate_card": 2
+    },
+    "gate_ids": [
+      "G25",
+      "G27"
+    ],
+    "issues": []
+  },
+  {
+    "topic_id": "T07_M3",
+    "title": "物质循环与碳氮循环",
+    "status": "ready",
+    "asset_counts": {
+      "memory_card": 1,
+      "diagram": 1,
+      "lecture_audio": 1,
+      "lecture_script": 1,
+      "html_prototype": 1,
+      "gate_card": 3
+    },
+    "gate_ids": [
+      "G25",
+      "G27",
+      "G39"
+    ],
+    "issues": []
+  },
+  {
+    "topic_id": "T07_M4",
+    "title": "群落演替与生态稳定性",
+    "status": "ready",
+    "asset_counts": {
+      "memory_card": 1,
+      "diagram": 2,
+      "lecture_audio": 1,
+      "lecture_script": 1,
+      "html_prototype": 1,
+      "gate_card": 4
+    },
+    "gate_ids": [
+      "G38",
+      "G39",
+      "G42",
+      "G44"
+    ],
+    "issues": []
+  }
+]

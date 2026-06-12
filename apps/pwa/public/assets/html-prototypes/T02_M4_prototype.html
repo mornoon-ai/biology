@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T02_M4 · 结构变化与功能适应</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent:#534AB7; --accent-l:#EEEDFE; --accent-m:#AFA9EC; --accent-d:#3C3489;
+  --teal:#0F6E56; --teal-l:#E1F5EE; --teal-d:#085041;
+  --amber:#BA7517; --amber-l:#FAEEDA; --amber-d:#633806;
+  --coral:#993C1D; --coral-l:#FAECE7; --coral-d:#712B13;
+  --green:#1D9E75; --green-l:#E0F5ED; --green-d:#0A5C42;
+  --bg:#ffffff; --bg2:#f7f7f5; --bg3:#f1efe8;
+  --tx:#1a1a18; --tx2:#5f5e5a; --tx3:#888780;
+  --bd:rgba(0,0,0,0.10); --bd2:rgba(0,0,0,0.18);
+  --r-sm:6px; --r-md:8px; --r-lg:12px; --r-xl:16px;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#1c1c1a;--bg2:#252523;--bg3:#2c2c2a;
+    --tx:#f0efea;--tx2:#b4b2a9;--tx3:#888780;
+    --bd:rgba(255,255,255,0.09);--bd2:rgba(255,255,255,0.16);
+    --accent-l:#26215C;--accent-d:#CECBF6;
+    --teal-l:#04342C;--teal-d:#9FE1CB;
+    --amber-l:#412402;--amber-d:#FAC775;
+    --coral-l:#4A1B0C;--coral-d:#F5C4B3;
+    --green-l:#062E1C;--green-d:#9FE1CB;
+  }
+}
+body{font-family:var(--font);font-size:15px;line-height:1.6;color:var(--tx);background:var(--bg3);min-height:100vh;}
+.app{max-width:800px;margin:0 auto;background:var(--bg);min-height:100vh;}
+
+/* ── Header & Nav ── */
+.site-header{padding:1.25rem 1.5rem 0;background:var(--bg);border-bottom:0.5px solid var(--bd);position:sticky;top:0;z-index:20;}
+.header-top{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.header-icon{background:var(--teal-l);border-radius:var(--r-md);padding:6px 8px;display:flex;align-items:center;justify-content:center;}
+.header-icon i{font-size:20px;color:var(--teal);}
+.header-meta{font-size:12px;color:var(--tx3);}
+.header-title{font-size:17px;font-weight:500;color:var(--tx);}
+.header-id{margin-left:auto;font-size:11px;color:var(--tx3);background:var(--bg2);padding:3px 9px;border-radius:var(--r-sm);}
+.nav-tabs{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.nav-tab{padding:.6rem 1.1rem;font-size:13px;color:var(--tx2);cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;font-family:var(--font);white-space:nowrap;transition:color .15s,border-color .15s;}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500;}
+.nav-tab:hover:not(.active){color:var(--tx);}
+
+/* ── Pages ── */
+.page{display:none;padding:1.5rem;}
+.page.active{display:block;}
+
+/* ── Memory Card ── */
+.memory-section{margin-bottom:1.5rem;}
+.memory-card{border:0.5px solid var(--bd);border-radius:var(--r-xl);overflow:hidden;background:var(--bg);}
+.memory-placeholder{min-height:200px;background:var(--bg2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--tx3);padding:2rem;}
+.memory-placeholder i{font-size:32px;color:var(--bd2);}
+.memory-placeholder-text{font-size:13px;text-align:center;line-height:1.6;}
+.memory-placeholder-filename{font-size:11px;background:var(--bg3);border:0.5px solid var(--bd);border-radius:var(--r-sm);padding:4px 10px;font-family:monospace;color:var(--tx2);}
+.memory-img{width:100%;display:block;max-height:320px;object-fit:contain;background:var(--bg3);cursor:zoom-in;transition:opacity .15s;}
+.memory-img:hover{opacity:.9;}
+.memory-footer{padding:.85rem 1rem;display:flex;align-items:center;gap:10px;border-top:0.5px solid var(--bd);}
+.memory-label{font-size:13px;font-weight:500;color:var(--tx);flex:1;}
+.audio-placeholder{font-size:12px;color:var(--tx3);display:flex;align-items:center;gap:5px;background:var(--bg2);padding:6px 10px;border-radius:var(--r-sm);}
+audio{height:32px;width:220px;}
+/* ── Lightbox ── */
+.lb-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:200;display:none;align-items:center;justify-content:center;cursor:zoom-out;}
+.lb-overlay.open{display:flex;}
+.lb-img{max-width:92vw;max-height:92vh;object-fit:contain;border-radius:var(--r-md);box-shadow:0 8px 40px rgba(0,0,0,.5);}
+.lb-close{position:fixed;top:16px;right:20px;background:none;border:none;color:#fff;font-size:28px;cursor:pointer;line-height:1;opacity:.7;transition:opacity .15s;}
+.lb-close:hover{opacity:1;}
+
+/* ── Overview ── */
+.section-title{font-size:13px;font-weight:500;color:var(--tx2);display:flex;align-items:center;gap:7px;margin-bottom:1rem;text-transform:uppercase;letter-spacing:.04em;}
+.section-divider{height:0.5px;background:var(--bd);margin:1.5rem 0;}
+.signal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:1.5rem;}
+.signal-card{background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;}
+.signal-label{font-size:11px;color:var(--tx3);letter-spacing:.04em;margin-bottom:.4rem;text-transform:uppercase;}
+.signal-tag{font-size:13px;color:var(--tx);}
+.subtopic-list{display:flex;flex-direction:column;gap:10px;margin-bottom:1.5rem;}
+.subtopic-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.9rem 1.1rem;border-left:3px solid var(--teal);}
+.subtopic-card.s2{border-left-color:var(--accent);}
+.subtopic-card.s3{border-left-color:var(--amber);}
+.subtopic-num{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.3rem;}
+.subtopic-name{font-size:14px;font-weight:500;color:var(--tx);margin-bottom:.3rem;}
+.subtopic-signal{font-size:13px;color:var(--tx2);line-height:1.6;}
+.trap-list{display:flex;flex-direction:column;gap:7px;}
+.trap-item{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.55;}
+.trap-icon{color:#E24B4A;font-size:15px;flex-shrink:0;margin-top:1px;}
+
+/* ── Mother Questions ── */
+.filter-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem;}
+.filter-btn{padding:5px 13px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx2);font-family:var(--font);transition:all .15s;}
+.filter-btn.active{background:var(--teal-l);color:var(--teal-d);border-color:var(--teal);font-weight:500;}
+.mq-card{border:0.5px solid var(--bd);border-radius:var(--r-lg);background:var(--bg);margin-bottom:.85rem;overflow:hidden;}
+.mq-header{padding:.9rem 1.1rem;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;transition:background .15s;}
+.mq-header:hover{background:var(--bg2);}
+.mq-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);white-space:nowrap;}
+.mq-badge.s1{background:var(--teal-l);color:var(--teal-d);}
+.mq-badge.s2{background:var(--accent-l);color:var(--accent-d);}
+.mq-badge.s3{background:var(--amber-l);color:var(--amber-d);}
+.mq-badge.v{background:var(--bg3);color:var(--tx2);}
+.mq-name{font-size:14px;font-weight:500;color:var(--tx);flex:1;}
+.mq-purity{font-size:12px;color:var(--tx3);flex-shrink:0;}
+.mq-chevron{color:var(--tx3);font-size:16px;transition:transform .2s;flex-shrink:0;}
+.mq-chevron.open{transform:rotate(180deg);}
+.mq-body{display:none;padding:.75rem 1.1rem 1.1rem;border-top:0.5px solid var(--bd);}
+.mq-body.open{display:block;}
+.mq-source{font-size:12px;color:var(--tx3);margin-bottom:.65rem;}
+.rule-box{background:var(--teal-l);border-left:3px solid var(--teal);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:.65rem .9rem;font-size:13px;color:var(--teal-d);margin:.75rem 0;line-height:1.65;}
+.rule-box.s2{background:var(--accent-l);border-left-color:var(--accent);color:var(--accent-d);}
+.rule-box.s3{background:var(--amber-l);border-left-color:var(--amber);color:var(--amber-d);}
+.chain-label{font-size:12px;font-weight:500;color:var(--tx2);margin:.75rem 0 .4rem;text-transform:uppercase;letter-spacing:.04em;}
+.signal-chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:6px;}
+.sc-node{background:var(--bg2);border-radius:var(--r-sm);padding:3px 9px;font-size:13px;color:var(--tx);}
+.sc-node.s1{background:var(--teal-l);color:var(--teal-d);}
+.sc-node.s2{background:var(--accent-l);color:var(--accent-d);}
+.sc-node.s3{background:var(--amber-l);color:var(--amber-d);}
+.sc-arrow{color:var(--tx3);font-size:13px;}
+.mq-note{font-size:13px;color:var(--tx2);margin-top:.75rem;line-height:1.6;}
+
+/* ── Trigger Button ── */
+.q-trigger{display:inline-flex;align-items:center;gap:5px;margin-top:.75rem;padding:6px 12px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;color:var(--tx2);cursor:pointer;font-family:var(--font);transition:all .15s;}
+.q-trigger:hover{background:var(--bg2);color:var(--tx);}
+.q-trigger i{font-size:14px;}
+
+/* ── Ladder ── */
+.ladder-section-label{font-size:13px;font-weight:500;color:var(--tx2);margin-bottom:.85rem;display:flex;align-items:center;gap:7px;}
+.ladder-rows{display:flex;flex-direction:column;gap:8px;margin-bottom:1rem;}
+.ladder-row{display:grid;grid-template-columns:64px 1fr;gap:10px;align-items:start;}
+.ladder-level{font-size:11px;font-weight:500;padding:6px 4px;border-radius:var(--r-sm);text-align:center;line-height:1.4;}
+.l1{background:var(--teal-l);color:var(--teal-d);}
+.l2{background:var(--accent-l);color:var(--accent-d);}
+.l3{background:var(--amber-l);color:var(--amber-d);}
+.ladder-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.65rem .9rem;background:var(--bg);cursor:pointer;transition:background .15s;}
+.ladder-card:hover{background:var(--bg2);}
+.ladder-card-name{font-size:13px;font-weight:500;color:var(--tx);}
+.ladder-card-sub{font-size:12px;color:var(--tx3);margin-top:3px;line-height:1.5;}
+.ladder-note{background:var(--bg2);border-radius:var(--r-md);padding:.65rem .9rem;font-size:12px;color:var(--tx2);margin-bottom:1rem;line-height:1.55;}
+
+/* ── Self-check ── */
+.progress-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem;}
+.progress-bar{height:5px;border-radius:3px;background:var(--bg2);margin-bottom:1.25rem;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;background:var(--teal);width:0%;transition:width .3s;}
+.checklist{display:flex;flex-direction:column;gap:7px;}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:.7rem .9rem;border:0.5px solid var(--bd);border-radius:var(--r-md);background:var(--bg);cursor:pointer;transition:background .15s;}
+.check-item.done{background:var(--bg2);}
+.check-box{width:18px;height:18px;border:1.5px solid var(--bd2);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .15s;}
+.check-item.done .check-box{background:var(--teal);border-color:var(--teal);}
+.check-box i{font-size:11px;color:#fff;display:none;}
+.check-item.done .check-box i{display:block;}
+.check-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.check-item.done .check-text{color:var(--tx3);text-decoration:line-through;}
+.action-row{margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:8px;}
+.action-btn{padding:7px 14px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.action-btn:hover{background:var(--bg2);}
+
+/* ── Drawer ── */
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s;}
+.drawer-overlay.open{opacity:1;pointer-events:all;}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100vw);background:var(--bg);z-index:101;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden;}
+.drawer.open{transform:translateX(0);}
+.drawer-header{padding:1rem 1.25rem;border-bottom:0.5px solid var(--bd);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.drawer-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);}
+.drawer-title{font-size:14px;font-weight:500;color:var(--tx);flex:1;line-height:1.4;}
+.drawer-close{background:none;border:none;cursor:pointer;color:var(--tx2);padding:4px;border-radius:var(--r-sm);display:flex;align-items:center;transition:background .15s;}
+.drawer-close:hover{background:var(--bg2);}
+.drawer-body{flex:1;overflow-y:auto;padding:1.25rem;}
+.drawer-ec-ref{font-size:12px;color:var(--tx3);margin-bottom:1rem;display:flex;align-items:center;gap:6px;}
+.drawer-stem{font-size:14px;color:var(--tx);line-height:1.75;white-space:pre-wrap;}
+.drawer-sub{font-size:13px;color:var(--tx2);background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:1rem;line-height:1.65;}
+.drawer-sub-label{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-answer{font-size:13px;color:var(--tx);background:var(--teal-l);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:.75rem;line-height:1.65;display:none;}
+.drawer-answer.show{display:block;}
+.drawer-answer-label{font-size:11px;font-weight:500;color:var(--teal-d);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-footer{padding:.85rem 1.25rem;border-top:0.5px solid var(--bd);display:flex;gap:8px;flex-shrink:0;}
+.drawer-btn{flex:1;padding:8px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.drawer-btn:hover{background:var(--bg2);}
+.drawer-btn.primary{background:var(--teal);color:#fff;border-color:var(--teal);}
+.drawer-btn.primary:hover{background:var(--teal-d);}
+
+/* ── Mobile ── */
+@media(max-width:600px){
+  .site-header{padding:1rem 1rem 0;}
+  .page{padding:1rem;}
+  .header-title{font-size:15px;}
+  .signal-grid{grid-template-columns:1fr 1fr;}
+  .ladder-row{grid-template-columns:52px 1fr;gap:8px;}
+  .action-row{flex-direction:column;}
+  .action-btn{width:100%;text-align:center;}
+  .drawer{width:100vw;}
+}
+@media(max-width:380px){
+  .signal-grid{grid-template-columns:1fr;}
+}
+
+.back-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;font-size:12px;color:var(--tx2);background:var(--bg2);border:0.5px solid var(--bd2);border-radius:var(--r-md);text-decoration:none;font-family:var(--font);transition:background .15s,color .15s;white-space:nowrap;flex-shrink:0;}
+.back-btn:hover{background:var(--bg3);color:var(--tx);}
+.back-btn i{font-size:14px;}
+.memory-video{width:100%;max-height:220px;display:block;border-radius:var(--r-md);background:#000;margin-top:8px;}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- Header -->
+<header class="site-header">
+  <div class="header-top">
+    <div class="header-icon"><i class="ti ti-cell" aria-hidden="true"></i></div>
+    <div>
+      <div class="header-meta">02 细胞结构 · M4 结构变化与功能适应</div>
+      <div class="header-title">结构变化与功能适应</div>
+    </div>
+    <a class="back-btn" href="index.html" aria-label="返回首页"><i class="ti ti-arrow-left"></i> 首页</a>
+    <div class="header-id">T02_M4</div>
+  </div>
+  <nav class="nav-tabs" role="tablist">
+    <button class="nav-tab active" role="tab" onclick="switchTab('overview',this)">概览</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('mothers',this)">母题精讲</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('ladder',this)">变式阶梯</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('check',this)">自查清单</button>
+  </nav>
+</header>
+
+<!-- ══ PAGE: Overview ══ -->
+<div id="page-overview" class="page active">
+
+  <!-- Memory Card -->
+  <div class="memory-section">
+    <div class="memory-card">
+      <img class="memory-img" src="记忆卡/T02_M4_memory.png" alt="T02_M4 结构变化与功能适应 记忆卡"
+           onclick="openLightbox(this.src,this.alt)"
+           onerror="this.style.display='none';document.getElementById('mem-placeholder').style.display='flex'">
+      <div id="mem-placeholder" class="memory-placeholder" style="display:none;">
+        <i class="ti ti-photo-up"></i>
+        <div class="memory-placeholder-text">记忆卡图片放置于此<br>将你生成的图片命名为：</div>
+        <div class="memory-placeholder-filename">记忆卡/T02_M4_memory.png</div>
+        <div style="font-size:11px;color:var(--tx3);margin-top:4px;">PNG 格式，放入「记忆卡」文件夹即可</div>
+      </div>
+      <div class="memory-footer">
+        <span class="memory-label"><i class="ti ti-brain" style="margin-right:5px;color:var(--teal);"></i>记忆卡 · 三条因果链</span>
+        <video class="memory-video" controls controlsList="nodownload" preload="metadata" style="display:none">
+        <source src="audio/T02_M4.mp4" type="video/mp4">
+      </video>
+      <div class="audio-placeholder" style="display:flex"><i class="ti ti-video-off"></i>视频待放入</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Signal Cards -->
+  <div class="section-title"><i class="ti ti-radar"></i>核心识别信号</div>
+  <div class="signal-grid">
+    <div class="signal-card">
+      <div class="signal-label">题型触发词</div>
+      <div class="signal-tag">细胞骨架异常 / 微管蛋白突变</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">关键结构</div>
+      <div class="signal-tag">微管 · 囊泡 · 纺锤体 · 细胞膜</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">下游后果</div>
+      <div class="signal-tag">运输瘫痪 / 分裂异常 / 凋亡</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">考查逻辑</div>
+      <div class="signal-tag">结构变化 → 功能丧失 → 因果链推演</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- Sub-topics -->
+  <div class="section-title"><i class="ti ti-sitemap"></i>三条子专题</div>
+  <div class="subtopic-list">
+    <div class="subtopic-card">
+      <div class="subtopic-num">子专题 1</div>
+      <div class="subtopic-name">微管受损 → 囊泡运输瘫痪</div>
+      <div class="subtopic-signal">TUB / OTOF 基因突变 → 细胞骨架异常 → 分泌囊泡无法沿微管轨道运输 → 靶细胞功能衰竭（不育 / 耳聋）</div>
+    </div>
+    <div class="subtopic-card s2">
+      <div class="subtopic-num">子专题 2</div>
+      <div class="subtopic-name">微管受损 → 纺锤体 / 分裂异常</div>
+      <div class="subtopic-signal">TUBB8 / TRIP13 突变 → 纺锤体不能正常组装或无法完成双极化 → 减数分裂停滞 → 卵子成熟障碍</div>
+    </div>
+    <div class="subtopic-card s3">
+      <div class="subtopic-num">子专题 3</div>
+      <div class="subtopic-name">膜结构变化 → 凋亡小体形成</div>
+      <div class="subtopic-signal">凋亡信号 → 细胞皱缩 → 细胞膜内陷（体现流动性）→ 形成凋亡小体 → 被吞噬 → 溶酶体水解降解</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- Traps -->
+  <div class="section-title"><i class="ti ti-alert-triangle"></i>高频易错</div>
+  <div class="trap-list">
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>微管受损 ≠ DNA复制障碍。突变只影响细胞骨架，DNA复制功能正常——突变细胞能进入分裂，只是纺锤体缺失导致停滞。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>囊泡无法运输 → Ca²⁺浓度升高而非降低。囊泡积压在细胞内，Ca²⁺无法正常释放，内部浓度反而偏高。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>凋亡小体由细胞膜内陷断裂形成，体现膜的流动性；但溶酶体降解不体现流动性，而体现酶的催化性。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>纺锤体"形成失败"（子专题2母题）vs"双极化失败"（进阶变式）是不同阶段缺陷，需根据题目信息区分。</span></div>
+  </div>
+</div>
+
+<!-- ══ PAGE: Mother Questions ══ -->
+<div id="page-mothers" class="page">
+
+  <div class="filter-tabs">
+    <button class="filter-btn active" onclick="filterMQ('all',this)">全部 (3母题)</button>
+    <button class="filter-btn" onclick="filterMQ('s1',this)">子专题1·囊泡</button>
+    <button class="filter-btn" onclick="filterMQ('s2',this)">子专题2·纺锤体</button>
+    <button class="filter-btn" onclick="filterMQ('s3',this)">子专题3·凋亡</button>
+  </div>
+
+  <!-- MQ1: EC-191 -->
+  <div class="mq-card" data-topic="s1">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge s1">子专题1母题</span>
+      <span class="mq-name">TUB基因突变→囊泡运输瘫痪→卵子成熟障碍</span>
+      <span class="mq-purity">★ 10/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-191 · (3)(4)(5) · 2026-05-21</div>
+      <div class="rule-box">核心因果链：TUB蛋白是纤毛内转运（IFT）信号系统组分 → TUB突变 → IFT信号异常 → 卵巢信号囊泡无法正确导向 → 卵子发育异常</div>
+      <div class="chain-label">信号因果链</div>
+      <div class="signal-chain">
+        <span class="sc-node s1">TUB基因突变</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">IFT蛋白异常</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">微管轨道信号受损</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">囊泡无法定向运输</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">卵母细胞成熟障碍</span>
+      </div>
+      <div class="mq-note">常染色体隐性遗传（正常父母生患病女儿）。(3)问机制推演：TUB蛋白缺失 → 卵母细胞减数分裂受阻。(4)问基因检测伦理。(5)问生育概率。</div>
+      <button class="q-trigger" onclick="openDrawer('mq-ec191')"><i class="ti ti-file-text"></i>查看完整题干</button>
+    </div>
+  </div>
+
+  <!-- MQ2: EC-166 -->
+  <div class="mq-card" data-topic="s2">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge s2">子专题2母题</span>
+      <span class="mq-name">TUBB8突变→纺锤体缺失→减Ⅰ停滞</span>
+      <span class="mq-purity">★ 9/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-166 · (1)(2) · 2026-05-20</div>
+      <div class="rule-box s2">核心因果链：TUBB8突变 → 纺锤体相关蛋白合成受阻 → 纺锤体缺失（荧光标记无绿色信号）→ 卵母细胞停留在减Ⅰ中期不能继续分裂 → 第一极体产生量下降</div>
+      <div class="chain-label">荧光实验关键</div>
+      <div class="signal-chain">
+        <span class="sc-node">正常卵母细胞：绿色+蓝色荧光</span><span class="sc-arrow">vs</span>
+        <span class="sc-node s2">突变卵母细胞：只有蓝色荧光（无纺锤体）</span>
+      </div>
+      <div class="signal-chain" style="margin-top:6px;">
+        <span class="sc-node">DNA已复制（蓝色+）</span><span class="sc-arrow">但</span>
+        <span class="sc-node s2">细胞不能分裂（纺锤体-）</span><span class="sc-arrow">→选ACD</span>
+      </div>
+      <div class="mq-note">(3)题：致病TUBB8基因来自父亲 → 说明该基因在精子形成过程中不表达（B正确），而非影响精子成熟或位于Y染色体上。</div>
+      <button class="q-trigger" onclick="openDrawer('mq-ec166')"><i class="ti ti-file-text"></i>查看完整题干</button>
+    </div>
+  </div>
+
+  <!-- MQ3: EC-494 -->
+  <div class="mq-card" data-topic="s3">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge s3">子专题3母题</span>
+      <span class="mq-name">凋亡蛋白→细胞膜内陷→凋亡小体形成→溶酶体降解</span>
+      <span class="mq-purity">★ 8/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-494 · (3)(4) · 2026-05-24</div>
+      <div class="rule-box s3">核心因果链：促凋亡蛋白激活 → 细胞皱缩 → 细胞膜向内凹陷形成小囊泡 → 断裂形成凋亡小体 → 被相邻细胞或吞噬细胞吞噬 → 溶酶体水解酶彻底降解</div>
+      <div class="chain-label">两个考查点</div>
+      <div class="signal-chain">
+        <span class="sc-node s3">(3) 凋亡过程顺序</span><span class="sc-arrow">|</span>
+        <span class="sc-node s3">(4) 膜内陷→体现流动性</span>
+      </div>
+      <div class="mq-note">区分：内陷形成凋亡小体体现膜的流动性；溶酶体酶水解体现酶的专一性/高效性，不体现流动性。不释放胞内物质 → 不引起炎症反应（区别于坏死）。</div>
+      <button class="q-trigger" onclick="openDrawer('mq-ec494')"><i class="ti ti-file-text"></i>查看完整题干</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ PAGE: Variant Ladder ══ -->
+<div id="page-ladder" class="page">
+
+  <!-- Sub-topic 1 -->
+  <div class="ladder-section-label"><span class="mq-badge s1" style="font-size:12px;">子专题1 · 囊泡运输</span>母题 + 1 基础变式</div>
+  <div class="ladder-note">母题框架：基因突变→骨架蛋白异常→囊泡无法运输→功能衰竭。变式只换场景（卵巢→耳蜗），核心因果链不变。</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l1">母题<br>L0</div>
+      <div class="ladder-card" onclick="openDrawer('mq-ec191')">
+        <div class="ladder-card-name">EC-191 · TUB基因突变→卵巢囊泡运输瘫痪</div>
+        <div class="ladder-card-sub">(3)(4)(5) · 纯净度10/10 · 考查IFT信号系统+减数分裂机制</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">基础<br>L1</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec181')">
+        <div class="ladder-card-name">EC-181 · OTOF突变→耳蜗囊泡运输障碍→耳聋</div>
+        <div class="ladder-card-sub">(2)(3) · 纯净度8/10 · 同框架换场景，叠加密码子读取+系谱分析</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- Sub-topic 2 -->
+  <div class="ladder-section-label"><span class="mq-badge s2" style="font-size:12px;">子专题2 · 纺锤体</span>母题 + 1 进阶变式</div>
+  <div class="ladder-note">母题："纺锤体形成失败"（TUBB8缺失）。进阶变式："纺锤体组装成功但双极化失败"（TRIP13突变）。同类机制，不同缺陷阶段。</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l1">母题<br>L0</div>
+      <div class="ladder-card" onclick="openDrawer('mq-ec166')">
+        <div class="ladder-card-name">EC-166 · TUBB8突变→纺锤体缺失→减Ⅰ停滞</div>
+        <div class="ladder-card-sub">(1)(2) · 纯净度9/10 · 荧光标记法读图+多选推断</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">进阶<br>L2</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec206')">
+        <div class="ladder-card-name">EC-206 · TRIP13突变→多极纺锤体无法双极化</div>
+        <div class="ladder-card-sub">(6)(7) · 纯净度7/10 · 纺锤体双极化阶段排序+微管调控基因功能推断</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- Sub-topic 3 -->
+  <div class="ladder-section-label"><span class="mq-badge s3" style="font-size:12px;">子专题3 · 凋亡小体</span>母题 + 1 基础变式</div>
+  <div class="ladder-note">母题考查完整凋亡因果链；变式在子专题3基础上叠加"内质网质量监控失败→触发凋亡"的上游因果链。</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l1">母题<br>L0</div>
+      <div class="ladder-card" onclick="openDrawer('mq-ec494')">
+        <div class="ladder-card-name">EC-494 · 促凋亡蛋白→细胞膜内陷→凋亡小体→溶酶体</div>
+        <div class="ladder-card-sub">(3)(4) · 纯净度8/10 · 考查凋亡顺序+膜流动性</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">基础<br>L1</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec497')">
+        <div class="ladder-card-name">EC-497 · 内质网应激→错误折叠蛋白积累→触发凋亡小体</div>
+        <div class="ladder-card-sub">(4) · 纯净度7/10 · 叠加内质网质量监控失败→凋亡的上游因果链</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ PAGE: Self-check ══ -->
+<div id="page-check" class="page">
+  <div class="progress-row">
+    <span class="section-title" style="margin:0"><i class="ti ti-checkbox"></i>自查进度</span>
+    <span id="check-counter" style="font-size:13px;color:var(--tx3);">0 / 9</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="check-bar"></div></div>
+
+  <div class="checklist" id="checklist">
+    <div class="check-item" onclick="toggleCheck(this)" data-key="c02m4-1">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">能说出"微管受损→囊泡运输瘫痪"的完整因果链（TUB/IFT→囊泡轨道受损→功能细胞衰竭）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)" data-key="c02m4-2">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">能区分TUBB8突变（纺锤体完全缺失）vs TRIP13突变（多极→双极转化失败）的不同缺陷阶段</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)" data-key="c02m4-3">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">知道TUB基因来自父亲且父亲正常 → 说明该基因在精子形成中不表达（≠影响精子成熟）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)" data-key="c02m4-4">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">EC-166荧光实验：正常细胞"绿+蓝"，突变细胞"只蓝" → DNA已复制但纺锤体缺失 → 选ACD</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)" data-key="c02m4-5">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">能说出凋亡小体形成过程：促凋亡蛋白→细胞皱缩→膜内陷→小囊泡→断裂→凋亡小体→吞噬→溶酶体降解</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)" data-key="c02m4-6">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">凋亡小体形成体现膜的流动性；溶酶体水解体现酶的高效性和专一性（不体现流动性）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)" data-key="c02m4-7">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">囊泡无法运输时，Ca²⁺浓度升高（积压于胞内），而非降低——不能误选"Ca²⁺浓度降低"</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)" data-key="c02m4-8">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">纺锤体双极化阶段正确顺序：②小极形成→③多极纺锤体→④小极汇聚→①双极完成（EC-206答案C）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)" data-key="c02m4-9">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">内质网应激→错误折叠蛋白超量→内质网质量监控失败→触发凋亡（EC-497上游延伸链）</div>
+    </div>
+  </div>
+
+  <div class="action-row">
+    <button class="action-btn" onclick="resetChecks()"><i class="ti ti-refresh"></i> 重置</button>
+    <button class="action-btn" onclick="checkAll()"><i class="ti ti-check-all"></i> 全部勾选</button>
+  </div>
+</div>
+
+</div><!-- /app -->
+
+<!-- ── Drawer ── -->
+<div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer" role="dialog" aria-modal="true">
+  <div class="drawer-header">
+    <span class="drawer-badge" id="d-badge"></span>
+    <span class="drawer-title" id="d-title"></span>
+    <button class="drawer-close" onclick="closeDrawer()" aria-label="关闭"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="drawer-ec-ref"><i class="ti ti-link"></i><span id="d-ref"></span></div>
+    <div class="drawer-stem" id="d-stem"></div>
+    <div class="drawer-sub" id="d-sub">
+      <div class="drawer-sub-label">考查焦点</div>
+      <div id="d-focus"></div>
+    </div>
+    <div class="drawer-answer" id="d-answer">
+      <div class="drawer-answer-label">参考答案</div>
+      <div id="d-answer-text"></div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="drawer-btn" onclick="closeDrawer()">关闭</button>
+    <button class="drawer-btn primary" id="d-answer-btn" onclick="toggleAnswer()">显示答案</button>
+  </div>
+</div>
+
+<script>
+/* ── Tab switching ── */
+function switchTab(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+/* ── MQ accordion ── */
+function toggleMQ(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.mq-chevron');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chevron.classList.toggle('open', !isOpen);
+}
+
+/* ── Filter ── */
+function filterMQ(topic, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.mq-card').forEach(card => {
+    card.style.display = (topic === 'all' || card.dataset.topic === topic) ? '' : 'none';
+  });
+}
+
+/* ── Question data ── */
+const QUESTIONS = {
+  'mq-ec191': {
+    badge: '子专题1 母题', badgeClass: 's1',
+    title: 'TUB基因突变致女性不育·系谱分析·卵母细胞成熟障碍',
+    ref: 'EC-20260521-191 · (3)(4)(5)',
+    stem: `24. 生殖障碍：TUB基因突变可导致女性不育。甲家族系谱图（图1）及部分成员的TUB基因检测结果如图。图2为正常女性卵母细胞成熟过程示意。
+
+（图1：正常父母生患病女儿 → 常染色体隐性遗传）
+（图2：卵母细胞成熟各阶段，TUB蛋白参与IFT信号调控）
+
+(1) TUB基因突变导致的女性不育遗传方式为________。
+
+(2) Ⅱ-2的基因型为________，其卵母细胞成熟障碍的可能机制是________。
+
+(3) Ⅱ-3与正常男性婚后生育正常孩子的概率为________。
+
+(4) 关于TUB基因突变致不育的基因检测，正确的是________。`,
+    focus: '(2)核心考查：TUB蛋白是IFT（纤毛内转运）信号组分→TUB突变→IFT信号异常→卵巢囊泡无法正确导向→卵子发育停滞。(3)Ⅱ-3基因型推算+子代概率。',
+    answer: '(1) 常染色体隐性遗传\n(2) aa；TUB蛋白功能丧失→IFT信号异常→分泌囊泡无法正确运输→卵母细胞减数分裂受阻→成熟障碍\n(3) 1（Ⅱ-3为Aa，正常男性均无aa致病纯合，子代不出现aa）\n(4) 基因检测可确定携带者；产前诊断可筛查患病后代'
+  },
+  'mq-ec166': {
+    badge: '子专题2 母题', badgeClass: 's2',
+    title: 'TUBB8基因突变·荧光标记减Ⅰ中期·纺锤体缺失·父源突变分析',
+    ref: 'EC-20260520-166 · (1)(2)(3)',
+    stem: `90. 研究者用荧光标记法在显微镜下观察减数第一次分裂中期细胞内各结构的形态，结果如下表。
+
+| 监测细胞 | 纺锤体（绿色荧光） | DNA（蓝色荧光） |
+|---------|-----------------|--------------|
+| 正常卵母细胞减Ⅰ中期 | +（有） | +（有） |
+| 突变卵母细胞减Ⅰ中期 | −（无） | +（有） |
+
+注：+表示有荧光，−表示没有荧光
+
+(1) 根据已有知识，可推断显微镜下正常卵母细胞减Ⅰ中期的蓝色荧光在细胞中的分布特点是______。
+
+(2) 经检测，突变卵母细胞的第一极体产生量下降。结合上表分析可知，TUBB8基因突变抑制卵细胞成熟的过程可能表现为______。（多选）
+A. 纺锤体相关蛋白合成受阻
+B. DNA不发生复制
+C. 同源染色体未分离
+D. DNA发生复制但细胞未分裂
+
+(3) 在研究中发现，不孕女性的突变TUBB8基因来自父亲，由此说明（  ）
+A. TUBB8基因突变会影响精子的成熟
+B. TUBB8基因在精子形成过程中不表达
+C. TUBB8基因在Y染色体上
+D. 含突变TUBB8基因的精子没有参与受精`,
+    focus: '(2)多选：突变细胞有蓝色荧光（DNA已复制）、无绿色荧光（纺锤体缺失）→细胞不能分裂。(3)父亲正常却携带突变基因 → 该基因在精子形成中不表达（选B）',
+    answer: '(1) 蓝色荧光（DNA）排列在赤道板两侧（同源染色体排列在赤道板两侧，DNA主要分布于染色体上）\n(2) ACD\n（A：纺锤体蛋白合成受阻→纺锤体缺失；C：纺锤体缺失→同源染色体无法分离；D：DNA已复制但细胞因纺锤体缺失而不能分裂）\n(3) B（不孕女性的突变基因来自父亲，说明父亲精子中含有该基因但父亲表现正常→精子形成过程中该基因不表达）'
+  },
+  'mq-ec494': {
+    badge: '子专题3 母题', badgeClass: 's3',
+    title: '细胞凋亡机制·促凋亡蛋白·凋亡小体形成·溶酶体降解',
+    ref: 'EC-20260524-494 · (3)(4)',
+    stem: `（细胞凋亡综合题）
+
+研究发现，细胞内存在促凋亡蛋白和抗凋亡蛋白，两类蛋白的相对含量决定细胞是否发生凋亡。图示促凋亡信号激活后，细胞形态发生一系列变化。
+
+（图示：细胞接收促凋亡信号→细胞皱缩→细胞膜向内凹陷形成小囊泡→断裂形成凋亡小体→相邻细胞或巨噬细胞吞噬→溶酶体与之融合→水解酶彻底降解）
+
+(3) 根据图，细胞凋亡过程中，细胞形态变化的正确顺序是______。
+① 细胞破裂释放胞内容物
+② 细胞膜向内凹陷
+③ 细胞皱缩
+④ 凋亡小体被吞噬细胞吞噬
+⑤ 形成凋亡小体
+
+(4) 细胞膜向内凹陷形成小囊泡的过程，体现了细胞膜的______特性。溶酶体与凋亡小体融合后，水解酶可彻底降解凋亡小体中的有机物，这体现了______。`,
+    focus: '(3)顺序：促凋亡→细胞皱缩③→膜内陷②→形成凋亡小体⑤→被吞噬④（注意：不释放胞内容物，①错误）。(4)膜内陷体现流动性；水解酶降解体现酶的专一性和高效性。',
+    answer: '(3) ③②⑤④（细胞皱缩→膜内陷→形成凋亡小体→被吞噬；凋亡不释放胞内容物，①不包含）\n(4) 流动性（膜内陷形成囊泡，膜发生形变，需要膜的流动性）；酶的专一性和高效性（溶酶体中水解酶针对性地彻底水解）'
+  },
+  'v-ec181': {
+    badge: '子专题1 基础变式', badgeClass: 'v',
+    title: 'OTOF基因突变·耳蜗耳畸蛋白·囊泡运输障碍·遗传性耳聋',
+    ref: 'EC-20260520-181 · (2)(3)',
+    stem: `9. 声波经耳廓收集，传至声波感受器"耳蜗"。图1为耳蜗内部Corti氏器发生的生理活动。其中，耳畸蛋白是内毛细胞中囊泡膜上的蛋白质，协助囊泡运输至质膜。研究发现，编码耳畸蛋白的OTOF基因存在多位点突变，可能引发遗传性耳聋。对耳聋患者小明的父母体细胞中OTOF基因的编码链进行测序，部分结果如图2所示。
+
+（图1：声波→纤毛摆动→机械信号→电信号→Ca²⁺内流→囊泡运输至质膜→神经递质释放）
+（图2：父亲杂合子G/A，母亲杂合子，存在碱基替换）
+
+(2) 据图1推测，由OTOF基因突变引发耳聋的机制可能有______。（编号选填）
+① 内毛细胞内Ca²⁺浓度降低
+② 耳畸蛋白无法与囊泡结合
+③ 耳畸蛋白的肽链无法正确折叠
+④ 囊泡无法迁移至内毛细胞质膜
+
+(3) 据图2推断，小明父亲次级精母细胞中OTOF致病基因有______个。（不考虑交叉互换）
+
+（附加题）图2母亲OTOF致病基因编码的耳畸蛋白第698位氨基酸是______。
+（密码子：精氨酸5'-AGG-3'；苏氨酸5'-ACG-3'；谷氨酸5'-GAG-3'；赖氨酸5'-AAG-3'）`,
+    focus: '(2) 囊泡运输障碍机制推断（②③④正确；①错误因为囊泡积压会使Ca²⁺升高而非降低）。(3) 父亲杂合子→减Ⅰ后期等位基因分离→次级精母细胞含0或2个致病基因。',
+    answer: '(2) ②③④（①错：囊泡无法运输→神经递质释放受阻→Ca²⁺积压升高而非降低）\n(3) 0或2（父亲Aa，减Ⅰ后同源染色体分离，次级精母细胞可能含AA或aa，即0或2个致病基因）\n氨基酸题：母亲突变为A，编码链A→mRNA上A，对应苏氨酸（ACG，选A苏氨酸）'
+  },
+  'v-ec206': {
+    badge: '子专题2 进阶变式', badgeClass: 'v',
+    title: 'TRIP13突变·多极纺锤体→双极转化阶段排序·微管调控基因功能推断',
+    ref: 'EC-20260521-206 · (6)(7)',
+    stem: `46. 卵子成熟障碍（续：纺锤体双极化机制部分）
+
+最新研究显示，人类卵母细胞内含有一套独特的纺锤体组装机制。在卵母细胞正常发育中，细胞核膜破裂后，微管于染色体着丝粒周遭聚合并初步形成称为"小极"的纺锤体部分。进入第一次减数分裂前中期，多个"小极"逐步组装，形成独特的"多极纺锤体"，并保持此状态约7至9小时。期间，小极数量递增并汇聚，直至第一次减数分裂中期形成两个"大极"，标志着纺锤体由多极向双极的转化完成。
+
+（图：②小极形成 → ③多极纺锤体 → ④小极汇聚 → ①双极纺锤体完成）
+
+(6) 请根据上述资料，对以下纺锤体形成的各个阶段进行正确排序______。（单选）
+A. ②④①③
+B. ③②④①
+C. ②③④①
+D. ②④③①
+
+(7) 以下与分裂相关的基因中，功能缺失后可能造成卵子成熟障碍的有______。（编号选填）
+① HAUS6：促进微管的扩增
+② KIF11：调控微管间的交联和相对滑动
+③ KIF18A：抑制微管的过度生长`,
+    focus: '(6) 正确顺序：小极形成②→多极纺锤体③→小极汇聚④→双极完成①，选C。(7) 三种基因功能缺失均影响纺锤体双极化：微管扩增↓/交联失调/过度生长→均导致纺锤体异常→卵子成熟障碍，全选①②③。',
+    answer: '(6) C（②→③→④→①：小极形成→多极纺锤体→小极汇聚→双极完成）\n(7) ①②③（HAUS6功能缺失→微管扩增不足→多极无法汇聚；KIF11功能缺失→微管交联滑动异常→双极化失败；KIF18A功能缺失→微管过度生长→纺锤体结构紊乱）'
+  },
+  'v-ec497': {
+    badge: '子专题3 基础变式', badgeClass: 'v',
+    title: '内质网应激·错误折叠蛋白·伴侣蛋白·受体活化·凋亡小体清除',
+    ref: 'EC-20260524-497 · (4)',
+    stem: `（内质网质量监控与凋亡综合题）
+
+内质网具有质量监控功能，当内质网腔内错误折叠蛋白超过阈值时，内质网无法通过伴侣蛋白等机制恢复正常，会激活特定受体，触发凋亡信号通路。
+
+（图示：内质网应激→错误折叠蛋白积累→超过伴侣蛋白修复能力→内质网受体活化→促凋亡信号→细胞皱缩→膜内陷→凋亡小体→溶酶体降解→维持内环境稳定）
+
+(4) 依据图示，内质网应激触发细胞凋亡、最终形成凋亡小体并被溶酶体降解的意义是______。
+
+细胞膜皱缩内陷形成凋亡小体的过程，与子专题3母题相同，均体现细胞膜的______特性。`,
+    focus: '上游延伸：内质网错误折叠蛋白积累→触发凋亡（而非直接受损触发）。意义：通过凋亡小体途径清除功能异常细胞，不引起炎症，维持内环境稳定。膜内陷仍体现流动性。',
+    answer: '(4) 通过凋亡途径清除功能异常的细胞（内质网应激细胞），凋亡小体被溶酶体彻底降解，不释放有害物质，不引起炎症反应，从而维持机体内环境稳定（稳态）\n膜内陷体现：细胞膜的流动性'
+  }
+};
+
+/* ── Drawer functions ── */
+function openDrawer(key) {
+  const q = QUESTIONS[key];
+  if (!q) return;
+  document.getElementById('d-badge').textContent = q.badge;
+  document.getElementById('d-badge').className = 'drawer-badge mq-badge ' + q.badgeClass;
+  document.getElementById('d-title').textContent = q.title;
+  document.getElementById('d-ref').textContent = q.ref;
+  document.getElementById('d-stem').textContent = q.stem;
+  document.getElementById('d-focus').textContent = q.focus;
+  document.getElementById('d-answer-text').textContent = q.answer;
+  document.getElementById('d-answer').classList.remove('show');
+  document.getElementById('d-answer-btn').textContent = '显示答案';
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeDrawer() {
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function toggleAnswer() {
+  const ans = document.getElementById('d-answer');
+  const btn = document.getElementById('d-answer-btn');
+  const show = ans.classList.toggle('show');
+  btn.textContent = show ? '隐藏答案' : '显示答案';
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (document.getElementById('lb-overlay').classList.contains('open')) closeLightbox();
+    else closeDrawer();
+  }
+});
+
+/* ── Self-check ── */
+const STORAGE_KEY = 'T02_M4_checks';
+function loadChecks() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { return {}; }
+}
+function saveChecks(data) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch {}
+}
+function updateProgress() {
+  const items = document.querySelectorAll('.check-item');
+  const done = document.querySelectorAll('.check-item.done').length;
+  document.getElementById('check-counter').textContent = done + ' / ' + items.length;
+  document.getElementById('check-bar').style.width = (done / items.length * 100) + '%';
+}
+function toggleCheck(el) {
+  el.classList.toggle('done');
+  const data = loadChecks();
+  data[el.dataset.key] = el.classList.contains('done');
+  saveChecks(data);
+  updateProgress();
+}
+function resetChecks() {
+  document.querySelectorAll('.check-item').forEach(el => el.classList.remove('done'));
+  saveChecks({});
+  updateProgress();
+}
+function checkAll() {
+  const data = {};
+  document.querySelectorAll('.check-item').forEach(el => {
+    el.classList.add('done');
+    data[el.dataset.key] = true;
+  });
+  saveChecks(data);
+  updateProgress();
+}
+// Init checks from storage
+(function() {
+  const data = loadChecks();
+  document.querySelectorAll('.check-item').forEach(el => {
+    if (data[el.dataset.key]) el.classList.add('done');
+  });
+  updateProgress();
+})();
+</script>
+
+<!-- Lightbox -->
+<div class="lb-overlay" id="lb-overlay" onclick="closeLightbox()">
+  <button class="lb-close" onclick="closeLightbox()" aria-label="关闭">&#x2715;</button>
+  <img class="lb-img" id="lb-img" src="" alt="">
+</div>
+<script>
+function openLightbox(src, alt) {
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lb-img').alt = alt || '';
+  document.getElementById('lb-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lb-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('lb-img').addEventListener('click', e => e.stopPropagation());
+</script>
+</body>
+</html>

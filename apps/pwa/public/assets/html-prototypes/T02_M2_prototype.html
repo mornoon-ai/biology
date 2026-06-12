@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T02_M2 · 内膜系统与分泌蛋白运输</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent:#0F6E56; --accent-l:#E1F5EE; --accent-m:#7DCFBB; --accent-d:#085041;
+  --purple:#534AB7; --purple-l:#EEEDFE; --purple-d:#3C3489;
+  --amber:#BA7517; --amber-l:#FAEEDA; --amber-d:#633806;
+  --coral:#993C1D; --coral-l:#FAECE7; --coral-d:#712B13;
+  --bg:#ffffff; --bg2:#f7f7f5; --bg3:#f1efe8;
+  --tx:#1a1a18; --tx2:#5f5e5a; --tx3:#888780;
+  --bd:rgba(0,0,0,0.10); --bd2:rgba(0,0,0,0.18);
+  --r-sm:6px; --r-md:8px; --r-lg:12px; --r-xl:16px;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#1c1c1a;--bg2:#252523;--bg3:#2c2c2a;
+    --tx:#f0efea;--tx2:#b4b2a9;--tx3:#888780;
+    --bd:rgba(255,255,255,0.09);--bd2:rgba(255,255,255,0.16);
+    --accent-l:#04342C;--accent-d:#9FE1CB;
+    --purple-l:#26215C;--purple-d:#CECBF6;
+    --amber-l:#412402;--amber-d:#FAC775;
+    --coral-l:#4A1B0C;--coral-d:#F5C4B3;
+  }
+}
+body{font-family:var(--font);font-size:15px;line-height:1.6;color:var(--tx);background:var(--bg3);min-height:100vh;}
+.app{max-width:800px;margin:0 auto;background:var(--bg);min-height:100vh;}
+.site-header{padding:1.25rem 1.5rem 0;background:var(--bg);border-bottom:0.5px solid var(--bd);position:sticky;top:0;z-index:20;}
+.header-top{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.header-icon{background:var(--accent-l);border-radius:var(--r-md);padding:6px 8px;display:flex;align-items:center;justify-content:center;}
+.header-icon i{font-size:20px;color:var(--accent);}
+.header-meta{font-size:12px;color:var(--tx3);}
+.header-title{font-size:17px;font-weight:500;color:var(--tx);}
+.header-id{margin-left:auto;font-size:11px;color:var(--tx3);background:var(--bg2);padding:3px 9px;border-radius:var(--r-sm);}
+.nav-tabs{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.nav-tab{padding:.6rem 1.1rem;font-size:13px;color:var(--tx2);cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;font-family:var(--font);white-space:nowrap;transition:color .15s,border-color .15s;}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500;}
+.nav-tab:hover:not(.active){color:var(--tx);}
+.page{display:none;padding:1.5rem;}
+.page.active{display:block;}
+.memory-section{margin-bottom:1.5rem;}
+.memory-card{border:0.5px solid var(--bd);border-radius:var(--r-xl);overflow:hidden;background:var(--bg);}
+.memory-placeholder{min-height:200px;background:var(--bg2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--tx3);padding:2rem;}
+.memory-placeholder i{font-size:32px;color:var(--bd2);}
+.memory-placeholder-text{font-size:13px;text-align:center;line-height:1.6;}
+.memory-placeholder-filename{font-size:11px;background:var(--bg3);border:0.5px solid var(--bd);border-radius:var(--r-sm);padding:4px 10px;font-family:monospace;color:var(--tx2);}
+.memory-img{width:100%;display:block;max-height:320px;object-fit:contain;background:var(--bg3);cursor:zoom-in;transition:opacity .15s;}
+.memory-img:hover{opacity:.9;}
+.memory-footer{padding:.85rem 1rem;display:flex;align-items:center;gap:10px;border-top:0.5px solid var(--bd);}
+.memory-label{font-size:13px;font-weight:500;color:var(--tx);flex:1;}
+audio{height:32px;width:220px;}
+.audio-placeholder{font-size:12px;color:var(--tx3);display:flex;align-items:center;gap:5px;background:var(--bg2);padding:6px 10px;border-radius:var(--r-sm);}
+.section-title{font-size:13px;font-weight:500;color:var(--tx2);display:flex;align-items:center;gap:7px;margin-bottom:1rem;text-transform:uppercase;letter-spacing:.04em;}
+.section-divider{height:0.5px;background:var(--bd);margin:1.5rem 0;}
+.signal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:1.5rem;}
+.signal-card{background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;}
+.signal-label{font-size:11px;color:var(--tx3);letter-spacing:.04em;margin-bottom:.4rem;text-transform:uppercase;}
+.signal-tag{font-size:13px;color:var(--tx);margin-bottom:2px;}
+.subtopic-list{display:flex;flex-direction:column;gap:10px;margin-bottom:1.5rem;}
+.subtopic-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.9rem 1.1rem;border-left:3px solid var(--accent);}
+.subtopic-card.s2{border-left-color:var(--purple);}
+.subtopic-num{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.3rem;}
+.subtopic-name{font-size:14px;font-weight:500;color:var(--tx);margin-bottom:.3rem;}
+.subtopic-signal{font-size:13px;color:var(--tx2);line-height:1.6;}
+.trap-list{display:flex;flex-direction:column;gap:7px;}
+.trap-item{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.55;}
+.trap-icon{color:#E24B4A;font-size:15px;flex-shrink:0;margin-top:1px;}
+.filter-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem;}
+.filter-btn{padding:5px 13px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx2);font-family:var(--font);transition:all .15s;}
+.filter-btn.active{background:var(--accent-l);color:var(--accent-d);border-color:var(--accent);font-weight:500;}
+.mq-card{border:0.5px solid var(--bd);border-radius:var(--r-lg);background:var(--bg);margin-bottom:.85rem;overflow:hidden;}
+.mq-header{padding:.9rem 1.1rem;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;transition:background .15s;}
+.mq-header:hover{background:var(--bg2);}
+.mq-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);white-space:nowrap;}
+.mq-badge.s1{background:var(--accent-l);color:var(--accent-d);}
+.mq-badge.s2{background:var(--purple-l);color:var(--purple-d);}
+.mq-badge.l1{background:var(--amber-l);color:var(--amber-d);}
+.mq-badge.l2{background:var(--coral-l);color:var(--coral-d);}
+.mq-name{font-size:14px;font-weight:500;color:var(--tx);flex:1;}
+.mq-purity{font-size:12px;color:var(--tx3);flex-shrink:0;}
+.mq-chevron{color:var(--tx3);font-size:16px;transition:transform .2s;flex-shrink:0;}
+.mq-chevron.open{transform:rotate(180deg);}
+.mq-body{display:none;padding:.75rem 1.1rem 1.1rem;border-top:0.5px solid var(--bd);}
+.mq-body.open{display:block;}
+.mq-source{font-size:12px;color:var(--tx3);margin-bottom:.65rem;}
+.rule-box{background:var(--accent-l);border-left:3px solid var(--accent);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:.65rem .9rem;font-size:13px;color:var(--accent-d);margin:.75rem 0;line-height:1.65;}
+.rule-box.s2{background:var(--purple-l);border-left-color:var(--purple);color:var(--purple-d);}
+.chain-label{font-size:12px;font-weight:500;color:var(--tx2);margin:.75rem 0 .4rem;text-transform:uppercase;letter-spacing:.04em;}
+.signal-chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:6px;}
+.sc-node{background:var(--bg2);border-radius:var(--r-sm);padding:3px 9px;font-size:13px;color:var(--tx);}
+.sc-node.s1{background:var(--accent-l);color:var(--accent-d);}
+.sc-node.s2{background:var(--purple-l);color:var(--purple-d);}
+.sc-arrow{color:var(--tx3);font-size:13px;}
+.mq-note{font-size:13px;color:var(--tx2);margin-top:.75rem;line-height:1.6;}
+.q-trigger{display:inline-flex;align-items:center;gap:5px;margin-top:.75rem;padding:6px 12px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;color:var(--tx2);cursor:pointer;font-family:var(--font);transition:all .15s;}
+.q-trigger:hover{background:var(--bg2);color:var(--tx);}
+.q-trigger i{font-size:14px;}
+.ladder-section-label{font-size:13px;font-weight:500;color:var(--tx2);margin-bottom:.85rem;display:flex;align-items:center;gap:7px;}
+.ladder-rows{display:flex;flex-direction:column;gap:8px;margin-bottom:1rem;}
+.ladder-row{display:grid;grid-template-columns:64px 1fr;gap:10px;align-items:start;}
+.ladder-level{font-size:11px;font-weight:500;padding:6px 4px;border-radius:var(--r-sm);text-align:center;line-height:1.4;}
+.l0{background:var(--accent-l);color:var(--accent-d);}
+.l1{background:var(--amber-l);color:var(--amber-d);}
+.l2{background:var(--coral-l);color:var(--coral-d);}
+.ladder-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.65rem .9rem;background:var(--bg);cursor:pointer;transition:background .15s;}
+.ladder-card:hover{background:var(--bg2);}
+.ladder-card-name{font-size:13px;font-weight:500;color:var(--tx);}
+.ladder-card-sub{font-size:12px;color:var(--tx3);margin-top:3px;line-height:1.5;}
+.ladder-note{background:var(--bg2);border-radius:var(--r-md);padding:.65rem .9rem;font-size:12px;color:var(--tx2);margin-bottom:1rem;line-height:1.55;}
+.progress-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem;}
+.progress-bar{height:5px;border-radius:3px;background:var(--bg2);margin-bottom:1.25rem;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;background:var(--accent);width:0%;transition:width .3s;}
+.checklist{display:flex;flex-direction:column;gap:7px;}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:.7rem .9rem;border:0.5px solid var(--bd);border-radius:var(--r-md);background:var(--bg);cursor:pointer;transition:background .15s;}
+.check-item.done{background:var(--bg2);}
+.check-box{width:18px;height:18px;border:1.5px solid var(--bd2);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .15s;}
+.check-item.done .check-box{background:var(--accent);border-color:var(--accent);}
+.check-box i{font-size:11px;color:#fff;display:none;}
+.check-item.done .check-box i{display:block;}
+.check-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.check-item.done .check-text{color:var(--tx3);text-decoration:line-through;}
+.action-row{margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:8px;}
+.action-btn{padding:7px 14px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.action-btn:hover{background:var(--bg2);}
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s;}
+.drawer-overlay.open{opacity:1;pointer-events:all;}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100vw);background:var(--bg);z-index:101;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden;}
+.drawer.open{transform:translateX(0);}
+.drawer-header{padding:1rem 1.25rem;border-bottom:0.5px solid var(--bd);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.drawer-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);}
+.drawer-title{font-size:14px;font-weight:500;color:var(--tx);flex:1;line-height:1.4;}
+.drawer-close{background:none;border:none;cursor:pointer;color:var(--tx2);padding:4px;border-radius:var(--r-sm);display:flex;align-items:center;transition:background .15s;}
+.drawer-close:hover{background:var(--bg2);}
+.drawer-body{flex:1;overflow-y:auto;padding:1.25rem;}
+.drawer-ec-ref{font-size:12px;color:var(--tx3);margin-bottom:1rem;display:flex;align-items:center;gap:6px;}
+.drawer-stem{font-size:14px;color:var(--tx);line-height:1.75;white-space:pre-wrap;}
+.drawer-sub{font-size:13px;color:var(--tx2);background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:1rem;line-height:1.65;}
+.drawer-sub-label{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-answer{font-size:13px;color:var(--tx);background:var(--accent-l);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:.75rem;line-height:1.65;display:none;}
+.drawer-answer.show{display:block;}
+.drawer-answer-label{font-size:11px;font-weight:500;color:var(--accent-d);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-footer{padding:.85rem 1.25rem;border-top:0.5px solid var(--bd);display:flex;gap:8px;flex-shrink:0;}
+.drawer-btn{flex:1;padding:8px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.drawer-btn:hover{background:var(--bg2);}
+.drawer-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+.drawer-btn.primary:hover{background:var(--accent-d);}
+.lb-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:200;display:none;align-items:center;justify-content:center;cursor:zoom-out;}
+.lb-overlay.open{display:flex;}
+.lb-img{max-width:92vw;max-height:92vh;object-fit:contain;border-radius:var(--r-md);box-shadow:0 8px 40px rgba(0,0,0,.5);}
+.lb-close{position:fixed;top:16px;right:20px;background:none;border:none;color:#fff;font-size:28px;cursor:pointer;line-height:1;opacity:.7;transition:opacity .15s;}
+.lb-close:hover{opacity:1;}
+@media(max-width:600px){
+  .site-header{padding:1rem 1rem 0;}.page{padding:1rem;}.header-title{font-size:15px;}
+  .signal-grid{grid-template-columns:1fr 1fr;}.ladder-row{grid-template-columns:52px 1fr;gap:8px;}
+  .action-row{flex-direction:column;}.action-btn{width:100%;text-align:center;}
+  .drawer{width:100vw;}audio{width:160px;}
+}
+@media(max-width:380px){.signal-grid{grid-template-columns:1fr;}}
+
+.back-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;font-size:12px;color:var(--tx2);background:var(--bg2);border:0.5px solid var(--bd2);border-radius:var(--r-md);text-decoration:none;font-family:var(--font);transition:background .15s,color .15s;white-space:nowrap;flex-shrink:0;}
+.back-btn:hover{background:var(--bg3);color:var(--tx);}
+.back-btn i{font-size:14px;}
+.memory-video{width:100%;max-height:220px;display:block;border-radius:var(--r-md);background:#000;margin-top:8px;}
+</style>
+</head>
+<body>
+<div class="app">
+
+<header class="site-header">
+  <div class="header-top">
+    <div class="header-icon"><i class="ti ti-route" aria-hidden="true"></i></div>
+    <div>
+      <div class="header-meta">02 细胞结构 · M2 内膜系统流程</div>
+      <div class="header-title">内膜系统与分泌蛋白运输</div>
+    </div>
+    <a class="back-btn" href="index.html" aria-label="返回首页"><i class="ti ti-arrow-left"></i> 首页</a>
+    <div class="header-id">T02_M2</div>
+  </div>
+  <nav class="nav-tabs" role="tablist">
+    <button class="nav-tab active" role="tab" onclick="switchTab('overview',this)">概览</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('mothers',this)">母题精讲</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('ladder',this)">变式阶梯</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('check',this)">自查清单</button>
+  </nav>
+</header>
+
+<!-- ══ 概览 ══ -->
+<div id="page-overview" class="page active">
+  <div class="memory-section">
+    <div class="memory-card">
+      <img class="memory-img" src="记忆卡/T02_M2_memory.png" alt="T02_M2 内膜系统与分泌蛋白运输 记忆卡"
+           onclick="openLightbox(this.src,this.alt)"
+           onerror="this.style.display='none';document.getElementById('mem-placeholder').style.display='flex'">
+      <div id="mem-placeholder" class="memory-placeholder" style="display:none;">
+        <i class="ti ti-photo-up"></i>
+        <div class="memory-placeholder-text">记忆卡图片放置于此</div>
+        <div class="memory-placeholder-filename">记忆卡/T02_M2_memory.png</div>
+      </div>
+      <div class="memory-footer">
+        <span class="memory-label"><i class="ti ti-brain" style="margin-right:5px;color:var(--accent);"></i>记忆卡 · 内膜系统两条路径</span>
+        <video class="memory-video" controls controlsList="nodownload" preload="metadata" style="display:none">
+        <source src="audio/T02_M2.mp4" type="video/mp4">
+      </video>
+      <div class="audio-placeholder" style="display:flex"><i class="ti ti-video-off"></i>视频待放入</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title"><i class="ti ti-radar"></i>核心识别信号</div>
+  <div class="signal-grid">
+    <div class="signal-card">
+      <div class="signal-label">分泌路径触发词</div>
+      <div class="signal-tag">分泌蛋白 / 胞吐</div>
+      <div class="signal-tag">囊泡运输 / COPII囊泡</div>
+      <div class="signal-tag">信号肽 / SRP / 易位子</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">自噬路径触发词</div>
+      <div class="signal-tag">自噬 / 自噬体</div>
+      <div class="signal-tag">自噬溶酶体 / 溶酶体融合</div>
+      <div class="signal-tag">泛素化 / 选择性自噬</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">分泌分叉触发词</div>
+      <div class="signal-tag">组成型分泌 / 可调节型分泌</div>
+      <div class="signal-tag">TGN分拣</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">pH维持触发词</div>
+      <div class="signal-tag">溶酶体 pH / H⁺-ATPase</div>
+      <div class="signal-tag">主动运输 / H⁺泵</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-alert-triangle"></i>一票否决信号</div>
+  <div class="subtopic-list">
+    <div class="subtopic-card">
+      <div class="subtopic-num">否决信号 1</div>
+      <div class="subtopic-name">跨膜次数计算</div>
+      <div class="subtopic-signal">跨膜次数 = 穿过完整生物膜的次数。ER膜进1次 + 出1次 = 2次跨膜。不要把双层磷脂当成两次跨膜。分泌蛋白从合成到胞吐全程在膜包被的腔内运输，从不进入细胞质基质。</div>
+    </div>
+    <div class="subtopic-card s2">
+      <div class="subtopic-num">否决信号 2</div>
+      <div class="subtopic-name">自噬体膜来源</div>
+      <div class="subtopic-signal">自噬体膜来自内质网（ER），不是全新合成的，也不是来自高尔基体。自噬体 = ER来源的双层膜 包裹待降解物 → 与溶酶体融合 → 水解酶降解 → 小分子回收到胞质。</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-sitemap"></i>两条膜流路径</div>
+  <div class="subtopic-list">
+    <div class="subtopic-card">
+      <div class="subtopic-num">路径 1 · 分泌路径</div>
+      <div class="subtopic-name">核糖体 → ER → 高尔基体 → 胞吐</div>
+      <div class="subtopic-signal">核糖体（信号肽引导）→ ER腔（折叠/初加工）→ COPII囊泡 → 高尔基体（修饰/TGN分拣）→ 分泌囊泡 → 细胞膜 → 胞吐。TGN分叉：组成型直接分泌；可调节型储存于分泌囊泡，受信号刺激后释放。</div>
+    </div>
+    <div class="subtopic-card s2">
+      <div class="subtopic-num">路径 2 · 自噬路径</div>
+      <div class="subtopic-name">自噬体膜（来自ER）包裹 → 溶酶体融合 → 降解回收</div>
+      <div class="subtopic-signal">ER来源的膜 → 双层膜包裹待降解物（受损细胞器/聚集蛋白）→ 自噬体 → 与溶酶体融合 → 自噬溶酶体（水解酶 pH 4.5~5.0）→ 大分子降解为小分子（氨基酸/核苷酸）→ 回收到胞质再利用。</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-alert-triangle"></i>高频易错</div>
+  <div class="trap-list">
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span><strong>跨膜次数多算：</strong>一层生物膜 = 一次跨膜（双层磷脂 = 一层膜）。ER进 + ER出 = 2次，不是4次。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span><strong>自噬体膜来源错误：</strong>自噬体膜来自内质网，不是从头合成，不是来自高尔基体。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span><strong>溶酶体来源混淆：</strong>溶酶体由高尔基体出芽形成（高尔基体加工水解酶并包装）。溶酶体 ≠ 自噬体；溶酶体是提供水解酶的一方。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span><strong>忘记TGN分拣：</strong>组成型分泌（如抗体）不需要刺激信号持续分泌；可调节型分泌（如神经递质）储存在囊泡中，受信号触发才释放——两者在TGN处分叉。</span></div>
+  </div>
+</div>
+
+<!-- ══ 母题精讲 ══ -->
+<div id="page-mothers" class="page">
+  <div class="filter-tabs">
+    <button class="filter-btn active" onclick="filterMQ('all',this)">全部 (2母题)</button>
+    <button class="filter-btn" onclick="filterMQ('s1',this)">路径1·分泌路径</button>
+    <button class="filter-btn" onclick="filterMQ('s2',this)">路径2·自噬路径</button>
+  </div>
+
+  <div class="mq-card" data-topic="s1">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge s1">路径1 母题</span>
+      <span class="mq-name">乳糜微粒分泌路径·跨膜次数·囊泡运输方向</span>
+      <span class="mq-purity">★ 9/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-013 · (1)(2)(3) · 乳糜微粒形成与脂肪胆固醇转运路径</div>
+      <div class="rule-box">核心考查：①肠上皮细胞合成乳糜微粒的完整路径 ②分泌蛋白跨膜次数计算 ③COPII囊泡介导的顺向运输方向（ER→高尔基体）</div>
+      <div class="chain-label">分泌蛋白合成路径</div>
+      <div class="signal-chain">
+        <span class="sc-node s1">核糖体（信号肽引导）</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">ER腔（进1次膜）</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">COPII囊泡（出ER膜1次）</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node s1">高尔基体（修饰/TGN分拣）</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">分泌囊泡</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">细胞膜融合→胞吐</span>
+      </div>
+      <div class="mq-note">
+        <strong>跨膜计数关键：</strong>信号肽引导核糖体附着ER→新生肽穿过ER膜进入ER腔（跨1次）；COPII囊泡出芽带走蛋白→穿出ER膜（跨1次）。之后全程在囊泡腔内运输，不再跨膜。总计 = 2次。<br><br>
+        <strong>乳糜微粒特点：</strong>脂蛋白颗粒（脂质+蛋白质），在ER腔内组装。从合成到分泌全程不进入细胞质基质。分泌至淋巴管（胞吐方式），体现生物膜流动性。
+      </div>
+      <button class="q-trigger" onclick="openDrawer('mq-013')"><i class="ti ti-eye"></i>查看完整题干与答案</button>
+    </div>
+  </div>
+
+  <div class="mq-card" data-topic="s2">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge s2">路径2 母题</span>
+      <span class="mq-name">细胞自噬机制·自噬体膜来源·溶酶体融合与降解产物去向</span>
+      <span class="mq-purity">★ 9/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-002 · (1)(2)(3) · 细胞自噬机制与溶酶体功能分析</div>
+      <div class="rule-box s2">核心考查：①自噬体膜来源（ER，非高尔基体）②自噬体-溶酶体融合形成自噬溶酶体 ③降解产物（氨基酸/核苷酸等）回收到胞质再利用</div>
+      <div class="chain-label">自噬路径</div>
+      <div class="signal-chain">
+        <span class="sc-node s2">ER来源的膜</span><span class="sc-arrow">→</span>
+        <span class="sc-node s2">双层膜包裹待降解物</span><span class="sc-arrow">→</span>
+        <span class="sc-node s2">自噬体</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node s2">与溶酶体融合</span><span class="sc-arrow">→</span>
+        <span class="sc-node s2">自噬溶酶体（水解酶激活）</span><span class="sc-arrow">→</span>
+        <span class="sc-node s2">小分子回收胞质</span>
+      </div>
+      <div class="mq-note">
+        <strong>自噬体膜来源：</strong>内质网（ER）提供双层膜——注意不是高尔基体，也不是全新合成。<br><br>
+        <strong>降解产物去向：</strong>水解酶将大分子（蛋白质/核酸/脂质）降解为小分子（氨基酸/核苷酸/脂肪酸）→ 穿过溶酶体膜 → 回到胞质 → 被细胞再利用（循环再生）。<br><br>
+        <strong>溶酶体酸性环境：</strong>溶酶体内 pH 4.5~5.0，H⁺由H⁺-ATPase主动泵入维持。酸性环境是水解酶发挥活性的必要条件（若pH升高，水解酶活性下降）。
+      </div>
+      <button class="q-trigger" onclick="openDrawer('mq-002')"><i class="ti ti-eye"></i>查看完整题干与答案</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 变式阶梯 ══ -->
+<div id="page-ladder" class="page">
+  <div class="ladder-note">从"分泌路径完整追踪"到"路径分叉与选择性自噬"到"pH调节机制"，逐步深化内膜系统的动态协作理解。</div>
+
+  <div class="ladder-section-label"><i class="ti ti-stairs"></i>路径1 · 分泌路径 变式阶梯</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l0">母题<br>9/10</div>
+      <div class="ladder-card" onclick="openDrawer('mq-013')">
+        <div class="ladder-card-name">EC-013 乳糜微粒分泌路径</div>
+        <div class="ladder-card-sub">核糖体→ER→高尔基体→胞吐完整路径 + 跨膜次数计算陷阱</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">基础变式<br>8/10</div>
+      <div class="ladder-card" onclick="openDrawer('v-066')">
+        <div class="ladder-card-name">EC-066 组成型与可调节型分泌途径</div>
+        <div class="ladder-card-sub">TGN分拣两条分叉——组成型持续分泌 vs 可调节型储存后受信号释放</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ladder-section-label"><i class="ti ti-stairs"></i>路径2 · 自噬路径 变式阶梯</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l0">母题<br>9/10</div>
+      <div class="ladder-card" onclick="openDrawer('mq-002')">
+        <div class="ladder-card-name">EC-002 细胞自噬机制与溶酶体功能</div>
+        <div class="ladder-card-sub">自噬体膜来源→融合过程→降解产物去向完整路径</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">基础变式<br>8/10</div>
+      <div class="ladder-card" onclick="openDrawer('v-017')">
+        <div class="ladder-card-name">EC-017 细胞自噬与选择性自噬</div>
+        <div class="ladder-card-sub">泛素化标记→受体识别→选择性识别特定底物进行降解</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">进阶变式<br>8/10</div>
+      <div class="ladder-card" onclick="openDrawer('v-085')">
+        <div class="ladder-card-name">EC-085 溶酶体pH维持机制</div>
+        <div class="ladder-card-sub">H⁺-ATPase主动泵入H⁺维持溶酶体酸性环境——联动M3跨膜运输</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 自查清单 ══ -->
+<div id="page-check" class="page">
+  <div class="progress-row">
+    <span style="font-size:13px;color:var(--tx2);">掌握进度</span>
+    <span id="check-count" style="font-size:13px;color:var(--tx2);">0 / 7</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="check-bar"></div></div>
+
+  <div class="checklist" id="checklist">
+    <div class="check-item" onclick="toggleCheck(this,0)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能完整描述分泌蛋白从合成到胞吐的路径：核糖体（信号肽引导）→ ER腔（初加工）→ COPII囊泡 → 高尔基体（修饰/TGN分拣）→ 分泌囊泡 → 细胞膜 → 胞吐</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,1)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能正确计算分泌蛋白跨膜次数：一层生物膜 = 一次跨膜；ER进1次 + 出1次 = 2次，之后全程在囊泡腔内不再跨膜</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,2)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能区分组成型分泌和可调节型分泌：前者在TGN直接分泌（持续），后者储存于分泌囊泡中，受信号刺激后才释放</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,3)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我知道自噬体膜来自内质网（ER），不是从头合成，不是来自高尔基体</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,4)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能描述自噬路径：ER来源双层膜包裹待降解物 → 自噬体 → 与溶酶体融合 → 自噬溶酶体 → 水解酶降解 → 小分子回收胞质再利用</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,5)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我知道溶酶体酸性环境（pH 4.5~5.0）由H⁺-ATPase消耗ATP主动泵入H⁺维持，是水解酶发挥活性的必要条件</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,6)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能说明溶酶体的来源：由高尔基体出芽形成（高尔基体加工水解酶并包装），溶酶体是提供水解酶的一方，不是自噬体</div>
+    </div>
+  </div>
+
+  <div class="action-row">
+    <button class="action-btn" onclick="checkAll()">全部勾选</button>
+    <button class="action-btn" onclick="clearAll()">清空重来</button>
+  </div>
+</div>
+
+</div><!-- .app -->
+
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <span class="drawer-badge" id="drawer-badge"></span>
+    <span class="drawer-title" id="drawer-title"></span>
+    <button class="drawer-close" onclick="closeDrawer()"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="drawer-ec-ref"><i class="ti ti-database"></i><span id="drawer-ref"></span></div>
+    <div class="drawer-stem" id="drawer-stem"></div>
+    <div class="drawer-sub" id="drawer-focus">
+      <div class="drawer-sub-label">解题关注点</div>
+      <div id="drawer-focus-text"></div>
+    </div>
+    <div class="drawer-answer" id="drawer-answer">
+      <div class="drawer-answer-label">参考答案</div>
+      <div id="drawer-answer-text"></div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="drawer-btn" onclick="toggleAnswer()">显示 / 隐藏答案</button>
+    <button class="drawer-btn primary" onclick="closeDrawer()">关闭</button>
+  </div>
+</div>
+
+<div class="lb-overlay" id="lb-overlay" onclick="closeLightbox()">
+  <button class="lb-close" onclick="closeLightbox()" aria-label="关闭">&#x2715;</button>
+  <img class="lb-img" id="lb-img" src="" alt="">
+</div>
+
+<script>
+const QUESTIONS = {
+  'mq-013': {
+    badge: '路径1 母题',
+    badgeStyle: 'background:var(--accent-l);color:var(--accent-d);',
+    name: 'EC-013 乳糜微粒形成与分泌路径',
+    ref: 'EC-20260518-013 · 乳糜微粒形成与脂肪胆固醇转运路径',
+    stem: `小肠上皮细胞吸收脂肪酸后，在细胞内合成乳糜微粒（脂蛋白颗粒），通过分泌路径分泌至淋巴管。
+
+(1) 乳糜微粒中的蛋白质成分在哪里合成？进入内质网腔需要跨过几层膜？
+
+(2) 乳糜微粒从合成到分泌至淋巴管，经过了哪些细胞结构？请按顺序排列。
+
+(3) 在上述运输过程中，乳糜微粒共跨过几层生物膜？体现了生物膜的哪种特性？`,
+    focus: `关键①：蛋白质在核糖体合成→信号肽引导穿过ER膜进入ER腔 = 1次跨膜（一层膜 = 一次）
+关键②：路径顺序：核糖体→内质网（进1次膜/出1次膜）→高尔基体→分泌囊泡→细胞膜→胞吐→淋巴管
+关键③：跨膜计数：进ER膜1次 + 出ER膜1次 = 2次。之后乳糜微粒在囊泡腔内运输，囊泡与高尔基体/细胞膜融合均是膜融合，不是跨膜，故总计2次
+关键④：胞吐体现生物膜的流动性（膜的可融合性）`,
+    answer: `(1) 在内质网膜上的核糖体合成；跨过1层膜（ER膜为一层生物膜，一次跨膜）
+(2) 核糖体→内质网→（COPII囊泡）→高尔基体→（分泌囊泡）→细胞膜→胞吐至淋巴管
+(3) 共跨过2层生物膜（进ER膜1次 + 出ER膜1次）；体现了生物膜的流动性`
+  },
+  'mq-002': {
+    badge: '路径2 母题',
+    badgeStyle: 'background:var(--purple-l);color:var(--purple-d);',
+    name: 'EC-002 细胞自噬机制与溶酶体功能',
+    ref: 'EC-20260518-002 · 细胞自噬机制与溶酶体功能分析',
+    stem: `细胞自噬是细胞降解自身成分的重要机制。
+
+(1) 自噬体的膜来源于哪个细胞器？自噬体的膜结构特点是什么？
+
+(2) 自噬体如何与溶酶体融合？融合后形成什么结构？溶酶体内的酸性环境由什么机制维持？
+
+(3) 自噬溶酶体中降解的产物（氨基酸、核苷酸等）的去向是什么？这对细胞有何意义？`,
+    focus: `关键①：自噬体膜来自内质网（ER）——不是高尔基体，不是全新合成。自噬体具有双层膜（ER来源双层膜包裹底物）
+关键②：自噬体与溶酶体融合→自噬溶酶体。溶酶体内H⁺由H⁺-ATPase（质子泵）消耗ATP主动泵入→维持pH 4.5~5.0酸性环境→水解酶在酸性条件下激活
+关键③：降解产物（小分子）穿过溶酶体膜→回到细胞质基质→被细胞再利用（循环再生利用，降低能量消耗）`,
+    answer: `(1) 自噬体膜来源于内质网（ER）；具有双层膜结构（ER来源的两层膜包裹底物）
+(2) 自噬体与溶酶体膜融合（体现膜的流动性）形成自噬溶酶体；溶酶体酸性环境由H⁺-ATPase消耗ATP主动将H⁺泵入溶酶体腔内维持
+(3) 降解产物（氨基酸/核苷酸/脂肪酸等）穿过溶酶体膜回到细胞质基质，被细胞再利用；意义：实现细胞内物质的循环再生，在营养匮乏时为细胞提供能量和原料，同时清除受损细胞器维持细胞稳态`
+  },
+  'v-066': {
+    badge: '路径1 基础变式',
+    badgeStyle: 'background:var(--amber-l);color:var(--amber-d);',
+    name: 'EC-066 高尔基体组成型与可调节型分泌途径',
+    ref: 'EC-20260518-066 · 高尔基体组成型与可调节型分泌途径及蛋白质定向转运',
+    stem: `高尔基体的反面网络（TGN）是蛋白质分拣的重要位点。
+
+(1) 什么是组成型分泌？什么是可调节型分泌？两者在TGN处如何分拣？
+
+(2) 若抑制可调节型分泌囊泡与细胞膜的融合，会对细胞功能产生什么影响？请举一个可调节型分泌的具体例子。`,
+    focus: `关键①：组成型分泌=在TGN直接出芽形成分泌囊泡→持续分泌到胞外（如细胞外基质蛋白、抗体等），不需要刺激信号
+关键②：可调节型分泌=在TGN出芽→形成储存囊泡→平时储存，受细胞外信号（如神经冲动/激素）刺激→囊泡与细胞膜融合→胞吐
+关键③：若抑制可调节型囊泡融合→蛋白质（如胰岛素/神经递质）无法分泌→影响信号传导/代谢调节`,
+    answer: `(1) 组成型分泌：蛋白质在TGN包装后直接持续分泌到胞外，不需要刺激信号。可调节型分泌：蛋白质先储存于分泌囊泡中，需要特定信号（如神经冲动/激素）刺激才会释放（如胰岛素）。TGN通过分拣信号将两类蛋白导向不同囊泡
+(2) 若抑制可调节型囊泡融合：储存囊泡中的信号蛋白（如胰岛素、神经递质）无法释放→信号传导中断。例：胰岛B细胞分泌胰岛素属于可调节型分泌，抑制后血糖无法降低`
+  },
+  'v-017': {
+    badge: '路径2 基础变式',
+    badgeStyle: 'background:var(--amber-l);color:var(--amber-d);',
+    name: 'EC-017 细胞自噬与选择性自噬机制',
+    ref: 'EC-20260518-017 · 细胞自噬过程与溶酶体降解再利用机制',
+    stem: `选择性自噬是细胞精确降解特定底物的机制。
+
+(1) 选择性自噬中，细胞如何识别需要降解的特定底物（如受损线粒体）？泛素化在其中起什么作用？
+
+(3) 若溶酶体膜通透性异常升高，水解酶泄漏到细胞质中，会发生什么？这说明溶酶体膜的哪种特性很重要？`,
+    focus: `关键①：选择性自噬识别机制：受损蛋白/细胞器被泛素标记→自噬受体（如p62）识别泛素化底物→同时结合自噬体膜上的LC3蛋白→将底物招募到自噬体中→精确降解特定底物
+关键②：泛素化 = "降解标签"
+关键③：溶酶体膜通透性异常→水解酶泄漏到细胞质→细胞内蛋白质/核酸被降解→细胞凋亡或坏死。说明溶酶体膜的选择透过性对保护细胞极其重要`,
+    answer: `(1) 受损底物被泛素分子链式标记（多聚泛素化）→自噬受体（p62等）同时识别多聚泛素链和自噬体膜上的LC3蛋白→将底物连接到正在形成的自噬体膜→自噬体闭合包裹特定底物。泛素化是降解信号，确保只有被标记的底物才被选择性降解
+(3) 水解酶泄漏→消化细胞质中正常蛋白质/DNA→触发细胞凋亡。说明溶酶体膜的选择透过性（膜蛋白控制水解酶不能自由穿出）对维持细胞内稳态至关重要`
+  },
+  'v-085': {
+    badge: '路径2 进阶变式',
+    badgeStyle: 'background:var(--coral-l);color:var(--coral-d);',
+    name: 'EC-085 溶酶体pH维持机制与H⁺主动运输',
+    ref: 'EC-20260518-085 · 细胞自噬溶酶体形成机制与pH维持的H⁺主动运输',
+    stem: `溶酶体内部pH约为4.5~5.0，远低于细胞质基质pH（约7.2）。
+
+(2) 溶酶体内的酸性环境是如何维持的？该过程属于哪种跨膜运输方式？需要什么能量来源？
+
+(3) 若使用弱碱性药物（如氯喹）处理细胞，溶酶体pH升高，会对细胞自噬产生什么影响？`,
+    focus: `关键①：溶酶体酸性维持=H⁺-ATPase（质子泵）将H⁺从细胞质（低H⁺浓度/高pH）泵入溶酶体腔（高H⁺浓度/低pH）→逆浓度梯度运输 = 主动运输 → 消耗ATP
+关键②：H⁺运输方向=逆浓度梯度 = 主动运输（联动M3跨膜运输方式）
+关键③：弱碱性药物（氯喹）进入溶酶体→中和H⁺→pH升高→水解酶活性降低→自噬降解受阻→底物积累`,
+    answer: `(2) H⁺-ATPase（质子泵）消耗ATP，将H⁺从细胞质基质（pH≈7.2）主动泵入溶酶体腔（pH 4.5~5.0），逆浓度梯度运输。运输方式=主动运输；能量来源=ATP水解
+(3) 氯喹进入溶酶体→与H⁺结合→pH升高→酸性水解酶活性大幅下降（最适pH 4~5）→自噬底物无法被降解→自噬溶酶体内底物积累→细胞无法有效清除受损组分`
+  }
+};
+
+function switchTab(tab, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + tab).classList.add('active');
+  btn.classList.add('active');
+}
+function toggleMQ(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.mq-chevron');
+  body.classList.toggle('open');
+  chevron.classList.toggle('open');
+}
+function filterMQ(topic, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.mq-card').forEach(card => {
+    card.style.display = (topic === 'all' || card.dataset.topic === topic) ? '' : 'none';
+  });
+}
+function openDrawer(id) {
+  const q = QUESTIONS[id];
+  if (!q) return;
+  document.getElementById('drawer-badge').textContent = q.badge;
+  document.getElementById('drawer-badge').style.cssText = q.badgeStyle;
+  document.getElementById('drawer-title').textContent = q.name;
+  document.getElementById('drawer-ref').textContent = q.ref;
+  document.getElementById('drawer-stem').textContent = q.stem;
+  document.getElementById('drawer-focus-text').textContent = q.focus;
+  document.getElementById('drawer-answer-text').textContent = q.answer;
+  document.getElementById('drawer-answer').classList.remove('show');
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawer-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeDrawer() {
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('drawer-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function toggleAnswer() { document.getElementById('drawer-answer').classList.toggle('show'); }
+function openLightbox(src, alt) {
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lb-img').alt = alt || '';
+  document.getElementById('lb-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lb-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('lb-img').addEventListener('click', e => e.stopPropagation());
+
+const STORAGE_KEY = 'T02_M2_checks';
+const TOTAL = 7;
+function loadChecks() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch(e) { return []; } }
+function saveChecks(arr) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)); } catch(e) {} }
+function updateProgress() {
+  const done = document.querySelectorAll('.check-item.done').length;
+  document.getElementById('check-count').textContent = done + ' / ' + TOTAL;
+  document.getElementById('check-bar').style.width = (done / TOTAL * 100) + '%';
+}
+function toggleCheck(item, idx) {
+  item.classList.toggle('done');
+  const arr = loadChecks(); arr[idx] = item.classList.contains('done'); saveChecks(arr); updateProgress();
+}
+function checkAll() {
+  const arr = [];
+  document.querySelectorAll('.check-item').forEach((item, i) => { item.classList.add('done'); arr[i] = true; });
+  saveChecks(arr); updateProgress();
+}
+function clearAll() {
+  const arr = [];
+  document.querySelectorAll('.check-item').forEach((item, i) => { item.classList.remove('done'); arr[i] = false; });
+  saveChecks(arr); updateProgress();
+}
+(function() {
+  const arr = loadChecks();
+  document.querySelectorAll('.check-item').forEach((item, i) => { if (arr[i]) item.classList.add('done'); });
+  updateProgress();
+})();
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (document.getElementById('lb-overlay').classList.contains('open')) closeLightbox();
+    else if (document.getElementById('drawer').classList.contains('open')) closeDrawer();
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>高中生物 · 互动学习站</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #ffffff;
+  --bg-secondary: #f7f7f5;
+  --bg-tertiary: #f1efe8;
+  --text: #1a1a18;
+  --text-secondary: #5f5e5a;
+  --text-tertiary: #888780;
+  --border: rgba(0,0,0,0.10);
+  --border-md: rgba(0,0,0,0.18);
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+
+  /* Scenario accent colors */
+  --c01: #534AB7; --c01-l: #EEEDFE; --c01-d: #3C3489;
+  --c02: #0F6E56; --c02-l: #E1F5EE; --c02-d: #085041;
+  --c03: #BA7517; --c03-l: #FAEEDA; --c03-d: #633806;
+  --c04: #993C1D; --c04-l: #FAECE7; --c04-d: #712B13;
+  --c05: #639922; --c05-l: #EAF3DE; --c05-d: #27500A;
+  --c06: #185FA5; --c06-l: #E6F1FB; --c06-d: #0C447C;
+  --c07: #3B6D11; --c07-l: #EAF3DE; --c07-d: #173404;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1c1c1a; --bg-secondary: #252523; --bg-tertiary: #2c2c2a;
+    --text: #f0efea; --text-secondary: #b4b2a9; --text-tertiary: #888780;
+    --border: rgba(255,255,255,0.09); --border-md: rgba(255,255,255,0.16);
+    --c01-l: #26215C; --c01-d: #CECBF6;
+    --c02-l: #04342C; --c02-d: #9FE1CB;
+    --c03-l: #412402; --c03-d: #FAC775;
+    --c04-l: #4A1B0C; --c04-d: #F5C4B3;
+    --c05-l: #173404; --c05-d: #C0DD97;
+    --c06-l: #042C53; --c06-d: #B5D4F4;
+    --c07-l: #173404; --c07-d: #C0DD97;
+  }
+}
+body {
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg-tertiary);
+  min-height: 100vh;
+}
+
+/* ── Site shell ── */
+.site { max-width: 860px; margin: 0 auto; padding: 0 0 3rem; }
+
+/* ── Masthead ── */
+.masthead {
+  background: var(--bg);
+  border-bottom: 0.5px solid var(--border);
+  padding: 1.5rem 1.5rem 1.25rem;
+  position: sticky; top: 0; z-index: 20;
+}
+.masthead-inner { display: flex; align-items: center; gap: 12px; }
+.masthead-logo {
+  width: 36px; height: 36px; border-radius: var(--radius-md);
+  background: var(--c03-l); display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.masthead-logo i { font-size: 20px; color: var(--c03); }
+.masthead-title { font-size: 17px; font-weight: 500; color: var(--text); }
+.masthead-sub { font-size: 12px; color: var(--text-tertiary); }
+.masthead-stats {
+  margin-left: auto; display: flex; gap: 16px; align-items: center; flex-shrink: 0;
+}
+.stat-item { text-align: right; }
+.stat-num { font-size: 18px; font-weight: 500; color: var(--text); line-height: 1.2; }
+.stat-label { font-size: 11px; color: var(--text-tertiary); }
+
+/* ── Search bar ── */
+.search-wrap { padding: 1rem 1.5rem .5rem; }
+.search-inner { position: relative; }
+.search-icon {
+  position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
+  color: var(--text-tertiary); font-size: 16px; pointer-events: none;
+}
+#search {
+  width: 100%; padding: 9px 12px 9px 36px;
+  border: 0.5px solid var(--border-md); border-radius: var(--radius-md);
+  background: var(--bg); color: var(--text);
+  font-size: 14px; font-family: var(--font);
+  outline: none; transition: border-color .15s;
+}
+#search:focus { border-color: var(--c01); }
+#search::placeholder { color: var(--text-tertiary); }
+
+/* ── Filter chips ── */
+.filter-wrap {
+  padding: .5rem 1.5rem .75rem;
+  display: flex; gap: 6px; flex-wrap: wrap;
+}
+.chip {
+  padding: 4px 12px; font-size: 12px; border-radius: 100px;
+  border: 0.5px solid var(--border-md); background: none;
+  cursor: pointer; color: var(--text-secondary); font-family: var(--font);
+  transition: all .15s; white-space: nowrap;
+}
+.chip.active { font-weight: 500; }
+.chip[data-s="all"].active { background: var(--bg-secondary); color: var(--text); border-color: var(--border-md); }
+.chip[data-s="01"].active { background: var(--c01-l); color: var(--c01-d); border-color: var(--c01); }
+.chip[data-s="02"].active { background: var(--c02-l); color: var(--c02-d); border-color: var(--c02); }
+.chip[data-s="03"].active { background: var(--c03-l); color: var(--c03-d); border-color: var(--c03); }
+.chip[data-s="04"].active { background: var(--c04-l); color: var(--c04-d); border-color: var(--c04); }
+.chip[data-s="05"].active { background: var(--c05-l); color: var(--c05-d); border-color: var(--c05); }
+.chip[data-s="06"].active { background: var(--c06-l); color: var(--c06-d); border-color: var(--c06); }
+.chip[data-s="07"].active { background: var(--c07-l); color: var(--c07-d); border-color: var(--c07); }
+
+/* ── Scenario sections ── */
+.scenario-section { padding: 0 1.5rem; margin-bottom: 1.75rem; }
+.scenario-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: .85rem 0 .65rem;
+  border-bottom: 0.5px solid var(--border); margin-bottom: .85rem;
+}
+.scenario-dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+}
+.scenario-name { font-size: 13px; font-weight: 500; color: var(--text-secondary); letter-spacing: .03em; }
+.scenario-id { font-size: 11px; color: var(--text-tertiary); }
+.scenario-count {
+  margin-left: auto; font-size: 11px; color: var(--text-tertiary);
+  background: var(--bg-secondary); padding: 2px 8px; border-radius: var(--radius-sm);
+}
+
+/* ── Card grid ── */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 10px;
+}
+.topic-card {
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg);
+  padding: 1rem 1rem .85rem;
+  cursor: pointer;
+  transition: border-color .15s, background .15s;
+  text-decoration: none;
+  display: block;
+  position: relative;
+  overflow: hidden;
+}
+.topic-card:hover { border-color: var(--border-md); background: var(--bg-secondary); }
+.topic-card.available:hover { border-color: var(--card-accent, var(--border-md)); }
+.topic-card-accent {
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--card-accent);
+  opacity: 0;
+  transition: opacity .15s;
+}
+.topic-card.available .topic-card-accent { opacity: 1; }
+.card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 6px; margin-bottom: .6rem; }
+.card-model {
+  font-size: 10px; font-weight: 500; padding: 2px 7px;
+  border-radius: var(--radius-sm); flex-shrink: 0;
+}
+.card-status { font-size: 11px; display: flex; align-items: center; gap: 3px; }
+.status-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.status-ready .status-dot, .status-live .status-dot { background: #639922; }
+.status-ready, .status-live { color: #27500A; }
+.status-pending .status-dot { background: var(--text-tertiary); }
+.status-pending { color: var(--text-tertiary); }
+@media (prefers-color-scheme: dark) {
+  .status-ready, .status-live { color: #C0DD97; }
+}
+.card-title { font-size: 14px; font-weight: 500; color: var(--text); line-height: 1.4; margin-bottom: .35rem; }
+.card-id { font-size: 11px; color: var(--text-tertiary); }
+
+/* ── Empty state ── */
+.empty-state {
+  text-align: center; padding: 3rem 1.5rem;
+  color: var(--text-tertiary); font-size: 14px;
+  display: none;
+}
+.empty-state i { font-size: 32px; display: block; margin-bottom: .75rem; }
+
+/* ── Footer ── */
+.site-footer {
+  text-align: center; padding: 1.5rem;
+  font-size: 12px; color: var(--text-tertiary);
+  border-top: 0.5px solid var(--border);
+  margin: 0 1.5rem;
+}
+
+/* ── Mobile ── */
+@media (max-width: 600px) {
+  .masthead { padding: 1rem 1rem .9rem; }
+  .masthead-stats { display: none; }
+  .search-wrap, .filter-wrap, .scenario-section { padding-left: 1rem; padding-right: 1rem; }
+  .card-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .card-title { font-size: 13px; }
+}
+@media (max-width: 360px) {
+  .card-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="site">
+
+<!-- Masthead -->
+<header class="masthead">
+  <div class="masthead-inner">
+    <div class="masthead-logo"><i class="ti ti-microscope" aria-hidden="true"></i></div>
+    <div>
+      <div class="masthead-title">高中生物 · 互动学习站</div>
+      <div class="masthead-sub">母题精讲 · 变式阶梯 · 自查清单</div>
+    </div>
+    <div class="masthead-stats">
+      <div class="stat-item"><div class="stat-num">7</div><div class="stat-label">场景</div></div>
+      <div class="stat-item"><div class="stat-num">29</div><div class="stat-label">专题</div></div>
+      <div class="stat-item"><div class="stat-num" id="ready-count">18</div><div class="stat-label">已上线</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- Search -->
+<div class="search-wrap">
+  <div class="search-inner">
+    <i class="ti ti-search search-icon" aria-hidden="true"></i>
+    <input type="search" id="search" placeholder="搜索专题名称，如"系谱图"、"能量流动"…" autocomplete="off">
+  </div>
+</div>
+
+<!-- Filter chips -->
+<div class="filter-wrap" role="group" aria-label="按场景筛选">
+  <button class="chip active" data-s="all" onclick="setFilter('all', this)">全部</button>
+  <button class="chip" data-s="01" onclick="setFilter('01', this)">01 分子病理</button>
+  <button class="chip" data-s="02" onclick="setFilter('02', this)">02 细胞结构</button>
+  <button class="chip" data-s="03" onclick="setFilter('03', this)">03 遗传分析</button>
+  <button class="chip" data-s="04" onclick="setFilter('04', this)">04 生理调节</button>
+  <button class="chip" data-s="05" onclick="setFilter('05', this)">05 植物生理</button>
+  <button class="chip" data-s="06" onclick="setFilter('06', this)">06 实验设计</button>
+  <button class="chip" data-s="07" onclick="setFilter('07', this)">07 生物与环境</button>
+</div>
+
+<!-- Scenarios -->
+<main id="main">
+
+  <!-- 01 分子病理 -->
+  <section class="scenario-section" data-scenario="01">
+    <div class="scenario-header">
+      <span class="scenario-dot" style="background: var(--c01);"></span>
+      <span class="scenario-name">分子病理</span>
+      <span class="scenario-id">场景 01</span>
+      <span class="scenario-count">4 个专题</span>
+    </div>
+    <div class="card-grid">
+      <a class="topic-card available" data-s="01" data-title="蛋白质错误折叠与疾病" data-available="true" href="T01_M1_分子空间畸变型.html">
+        <div class="topic-card-accent" style="--card-accent: var(--c01);"></div>
+        <div class="card-header">
+          <span class="card-model" style="background: var(--c01-l); color: var(--c01-d);">M1</span>
+          <span class="card-status status-live"><span class="status-dot"></span>已上线</span>
+        </div>
+        <div class="card-title">蛋白质错误折叠与疾病</div>
+        <div class="card-id">T01_M1</div>
+      </a>
+      <a class="topic-card available" data-s="01" data-title="酶缺陷与代谢阻塞" data-available="true" href="T01_M2_酶缺陷与代谢阻塞型.html">
+        <div class="topic-card-accent" style="--card-accent: var(--c01);"></div>
+        <div class="card-header">
+          <span class="card-model" style="background: var(--c01-l); color: var(--c01-d);">M2</span>
+          <span class="card-status status-live"><span class="status-dot"></span>已上线</span>
+        </div>
+        <div class="card-title">酶缺陷与代谢阻塞</div>
+        <div class="card-id">T01_M2</div>
+      </a>
+      <a class="topic-card available" data-s="01" data-title="表观遗传与表达调控" data-available="true" href="T01_M3_表观遗传与表达调控型.html">
+        <div class="topic-card-accent" style="--card-accent: var(--c01);"></div>
+        <div class="card-header">
+          <span class="card-model" style="background: var(--c01-l); color: var(--c01-d);">M3</span>
+          <span class="card-status status-live"><span class="status-dot"></span>已上线</span>
+        </div>
+        <div class="card-title">表观遗传与表达调控</div>
+        <div class="card-id">T01_M3</div>
+      </a>
+      <a class="topic-card available" data-s="01" data-title="基因编辑与RNA干扰" data-available="true" href="T01_M4_前沿分子干预与治疗型.html">
+        <div class="topic-card-accent" style="--card-accent: var(--c01);"></div>
+        <div class="card-header">
+          <span class="card-model" style="background: var(--c01-l); color: var(--c01-d);">M4</span>
+          <span class="card-status status-live"><span class="status-dot"></span>已上线</span>
+        </div>
+        <div class="card-title">基因编辑与RNA干扰</div>
+        <div class="card-id">T01_M4</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- 02 细胞结构 -->
+  <section class="scenario-section" data-scenario="02">
+    <div class="scenario-header">
+      <span class="scenario-dot" style="background: var(--c02);"></span>
+      <span class="scenario-name">细胞结构</span>
+      <span class="scenario-id">场景 02</span>
+      <span class="scenario-count">4 个专题</span>
+    </div>
+    <div class="card-grid">
+      <a class="topic-card available" data-s="02" data-title="细胞结构识别与功能匹配" data-available="true" href="T02_M1_识别与功能匹配型.html">
+        <div class="topic-card-accent" style="--card-accent: var(--c02);"></div>
+        <div class="card-header">
+          <span class="card-model" style="background: var(--c02-l); color: var(--c02-d);">M1</span>
+          <span class="card-status status-live"><span class="status-dot"></span>已上线</span>
+        </div>
+        <div class="card-title">细胞结构识别与功能匹配</div>
+        <div class="card-id">T02_M1</div>
+      </a>
+      <a class="topic-card available" data-s="02" data-title="内膜系统与分泌蛋白运输" data-available="true" href="T02_M2_内膜系统与分泌蛋白运输.html">
+        <div class="topic-card-accent" style="--card-accent: var(--c02);"></div>
+        <div class="card-header">
+          <span class="card-model" style="background: var(--c02-l); color: var(--c02-d);">M2</span>
+          <span class="card-status status-live"><span class="status-dot"></span>已上线</span>
+        </div>
+        <div class="card-title">内膜系统与分泌蛋白运输</div>
+        <div class="card-id">T02_M2</div>
+      </a>
+      <a class="topic-card available" data-s="02" data-title="跨膜运输方式判定" data-available="true" href="T02_M3_跨膜运输方式判定.html">
+        <div class="topic-card-accent" style="--card-accent: var(--c02);"></div>
+        <div class="card-header">
+          <span class="card-model" style="background: var(--c02-l); color: var(--c02-d);">M3</span>
+          <span class="card-status status-live"><span class="status-dot"></span>已上线</span>
+        </div>
+        <div class="card-title">跨膜运输方式判定</div>
+        <div class="card-id">T02_M3</div>
+      </a>
+      <a class="topic-card available" data-s="02" data-title="细胞结构变化与功能适应" data-available="true" href="T02_M4_结构变化与功能适应.html">
+        <div class="topic-card-accent" style="--card-accent: var(--c02);"></div>
+        <div class="card-header">
+          <span class="card-model" style="background: var(--c02-l); color: var(--c02-d);">M4</span>
+          <span class="card-status status-live"><span class="status-dot"></span>已上线</span>
+        </div>
+        <div class="card-title">细胞结构变化与功能适应</div>
+        <div class="card-id">T02_M4</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- 03 遗传分析 -->
+  <section class="scenario-section" data-scenario="03">
+    <div class="scenario-header">
+      <span class="scenario-dot" style="background: var(--c03);"></span>
+      <span class="scenario-name">遗传分析</span>
+      <span class="scenario-id">场景 03</span>
+      <span class="scenario-count">4 个专题</span>
+    </div>
+    <div class="card-grid">
+      <a class="topic-card available" data-s="03" data-title="系谱图遗传方式判定" data-available="true"
+         href="T03_M1_系谱图遗传方式判定.html" style="--card-accent: var(--c03);">
+        <div class="topic-card-accent"></div>
+        <div class="card-header">
+          <span class="card-model" style="background: var(--c03-l); color: var(--c03-d);">M1</span>
+          <span class="card-status status-ready"><span class="status-dot"></span>已上线</span>
+        </div>
+        <div class="card-title">系谱图遗传方式判定</div>
+        <div class="card-id">T03_M1</div>
+      </a>
+      <a class="topic-card available" data-s="03" data-title="后代概率精算" data-available="true" href="T03_M2_后代概率精算.html">
+        <div class="topic-card-accent" style="--card-accent: var(--c03);"></div>
+        <div class="card-header">
+          <span class="card-model" style="background: var(--c03-l); color: var(--c03-d);">M2</span>
+          <span class="card-status status-live"><span class="status-dot"></span>已上线</span>
+        </div>
+        <div class="card-title">后代概率精算</div>
+        <div class="card-id">T03_M2</div>
+      </a>
+      <a class="topic-card available" data-s="03" data-title="减数分裂染色体追踪" data-available="true" href="T03_M3_减数分裂染色体追踪.html">
+        <div class="topic-card-accent" style="--card-accent: var(--c03);"></div>
+        <div class="card-header">
+          <span class="card-model" style="background: var(--c03-l); color: var(--c03-d);">M3</span>
+          <span class="card-status status-live"><span class="status-dot"></span>已上线</span>
+        </div>
+        <div class="card-title">减数分裂染色体追踪</div>
+        <div class="card-id">T03_M3</div>
+      </a>
+      <a class="topic-card available" data-s="03" data-title="电泳分子证据判读" data-available="true" href="T03_M4_电泳分子证据判读.html">
+        <div class="topic-card-accent" style="--card-accent: var(--c03);"></div>
+        <div class="card-header">
+          <span class="card-model" style="background: var(--c03-l); color: var(--c03-d);">M4</span>
+          <span class="card-status status-live"><span class="status-dot"></span>已上线</span>
+        </div>
+        <div class="card-title">电泳分子证据判读</div>
+        <div class="card-id">T03_M4</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- 04 生理调节 -->
+  <section class="scenario-section" data-scenario="04">
+    <div class="scenario-header">
+      <span class="scenario-dot" style="background: var(--c04);"></span>
+      <span class="scenario-name">生理调节</span>
+      <span class="scenario-id">场景 04</span>
+      <span class="scenario-count">4 个专题</span>
+    </div>
+    <div class="card-grid">
+      <a class="topic-card available" data-s="04" data-title="神经体液稳态调节" data-available="true" href="T04_M1_神经体液稳态调节.html">
+        <div class="topic-card-accent" style="--card-accent: var(--c04);"></div>
+        <div class="card-header">
+          <span class="card-model" style="background: var(--c04-l); color: var(--c04-d);">M1</span>
+          <span class="card-status status-live"><span class="status-dot"></span>已上线</span>
+        </div>
+        <div class="card-title">神经体液稳态调节</div>
+        <div class="card-id">T04_M1</div>
+      </a>
+      <a class="topic-card available" data-s="04" data-title="内分泌分级调节" data-available="true" href="T04_M2_内分泌分级调节.html">
+        <div class="topic-card-accent" style="--card-accent: var(--c04);"></div>
+        <div class="card-header">
+          <span class="card-model" style="background: var(--c04-l); color: var(--c04-d);">M2</span>
+          <span class="card-status status-live"><span class="status-dot"></span>已上线</span>
+        </div>
+        <div class="card-title">内分泌分级调节</div>
+        <div class="card-id">T04_M2</div>
+      </a>
+      <a class="topic-card available" data-s="04" data-title="免疫识别与应答" data-available="true" href="T04_M3_免疫识别与应答.html">
+        <div class="topic-card-accent" style="--card-accent: var(--c04);"></div>
+        <div class="card-header">
+          <span class="card-model" style="background: var(--c04-l); color: var(--c04-d);">M3</span>
+          <span class="card-status status-live"><span class="status-dot"></span>已上线</span>
+        </div>
+        <div class="card-title">免疫识别与应答</div>
+        <div class="card-id">T04_M3</div>
+      </a>
+      <a class="topic-card available" data-s="04" data-title="昼夜节律与褪黑素" data-available="true" href="T04_M4_昼夜节律与褪黑素.html">
+        <div class="topic-card-accent" style="--card-accent: var(--c04);"></div>
+        <div class="card-header">
+          <span class="card-model" style="background: var(--c04-l); color: var(--c04-d);">M4</span>
+          <span class="card-status status-live"><span class="status-dot"></span>已上线</span>
+        </div>
+        <div class="card-title">昼夜节律与褪黑素</div>
+        <div class="card-id">T04_M4</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- 05 植物生理 -->
+  <section class="scenario-section" data-scenario="05">
+    <div class="scenario-header">
+      <span class="scenario-dot" style="background: var(--c05);"></span>
+      <span class="scenario-name">植物生理</span>
+      <span class="scenario-id">场景 05</span>
+      <span class="scenario-count">4 个专题</span>
+    </div>
+    <div class="card-grid">
+      <a class="topic-card available" data-s="05" data-title="光合速率与限制因子" data-available="true" href="T05_M1_光合速率与限制因子.html">
+        <div class="topic-card-accent" style="--card-accent: var(--c05);"></div>
+        <div class="card-header">
+          <span class="card-model" style="background: var(--c05-l); color: var(--c05-d);">M1</span>
+          <span class="card-status status-live"><span class="status-dot"></span>已上线</span>
+        </div>
+        <div class="card-title">光合速率与限制因子</div>
+        <div class="card-id">T05_M1</div>
+      </a>
+      <a class="topic-card available" data-s="05" data-title="气孔开闭与蒸腾调节" data-available="true" href="T05_M2_气孔开闭与蒸腾调节.html">
+        <div class="topic-card-accent" style="--card-accent: var(--c05);"></div>
+        <div class="card-header">
+          <span class="card-model" style="background: var(--c05-l); color: var(--c05-d);">M2</span>
+          <span class="card-status status-live"><span class="status-dot"></span>已上线</span>
+        </div>
+        <div class="card-title">气孔开闭与蒸腾调节</div>
+        <div class="card-id">T05_M2</div>
+      </a>
+      <a class="topic-card available" data-s="05" data-title="呼吸方式与产物比例" data-available="true" href="T05_M3_呼吸方式与产物比例.html">
+        <div class="topic-card-accent" style="--card-accent: var(--c05);"></div>
+        <div class="card-header">
+          <span class="card-model" style="background: var(--c05-l); color: var(--c05-d);">M3</span>
+          <span class="card-status status-live"><span class="status-dot"></span>已上线</span>
+        </div>
+        <div class="card-title">呼吸方式与产物比例</div>
+        <div class="card-id">T05_M3</div>
+      </a>
+      <a class="topic-card available" data-s="05" data-title="植物激素与生长调控" data-available="true" href="T05_M4_植物激素与生长调控.html">
+        <div class="topic-card-accent" style="--card-accent: var(--c05);"></div>
+        <div class="card-header">
+          <span class="card-model" style="background: var(--c05-l); color: var(--c05-d);">M4</span>
+          <span class="card-status status-live"><span class="status-dot"></span>已上线</span>
+        </div>
+        <div class="card-title">植物激素与生长调控</div>
+        <div class="card-id">T05_M4</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- 06 实验设计 -->
+  <section class="scenario-section" data-scenario="06">
+    <div class="scenario-header">
+      <span class="scenario-dot" style="background: var(--c06);"></span>
+      <span class="scenario-name">实验设计</span>
+      <span class="scenario-id">场景 06</span>
+      <span class="scenario-count">5 个专题</span>
+    </div>
+    <div class="card-grid">
+      <a class="topic-card available" data-s="06" data-title="实验变量与对照设计" data-available="true" href="T06_M1_实验变量与对照设计.html">
+        <div class="topic-card-accent" style="--card-accent: var(--c06);"></div>
+        <div class="card-header">
+          <span class="card-model" style="background: var(--c06-l); color: var(--c06-d);">M1</span>
+          <span class="card-status status-live"><span class="status-dot"></span>已上线</span>
+        </div>
+        <div class="card-title">实验变量与对照设计</div>
+        <div class="card-id">T06_M1</div>
+      </a>
+      <a class="topic-card available" data-s="06" data-title="生物物质鉴定实验" data-available="true" href="T06_M2_生物物质鉴定实验.html">
+        <div class="topic-card-accent" style="--card-accent: var(--c06);"></div>
+        <div class="card-header">
+          <span class="card-model" style="background: var(--c06-l); color: var(--c06-d);">M2</span>
+          <span class="card-status status-live"><span class="status-dot"></span>已上线</span>
+        </div>
+        <div class="card-title">生物物质鉴定实验</div>
+        <div class="card-id">T06_M2</div>
+      </a>
+      <a class="topic-card available" data-s="06" data-title="数据图表分析与判读" data-available="true" href="T06_M3_数据图表分析与判读.html">
+        <div class="topic-card-accent" style="--card-accent: var(--c06);"></div>
+        <div class="card-header">
+          <span class="card-model" style="background: var(--c06-l); color: var(--c06-d);">M3</span>
+          <span class="card-status status-live"><span class="status-dot"></span>已上线</span>
+        </div>
+        <div class="card-title">数据图表分析与判读</div>
+        <div class="card-id">T06_M3</div>
+      </a>
+      <a class="topic-card available" data-s="06" data-title="PCR技术与电泳分析" data-available="true" href="T06_M4_PCR技术与电泳分析.html">
+        <div class="topic-card-accent" style="--card-accent: var(--c06);"></div>
+        <div class="card-header">
+          <span class="card-model" style="background: var(--c06-l); color: var(--c06-d);">M4</span>
+          <span class="card-status status-live"><span class="status-dot"></span>已上线</span>
+        </div>
+        <div class="card-title">PCR 技术与电泳分析</div>
+        <div class="card-id">T06_M4</div>
+      </a>
+      <a class="topic-card available" data-s="06" data-title="实验结论评价" data-available="true" href="T06_M5_实验结论评价.html">
+        <div class="topic-card-accent" style="--card-accent: var(--c06);"></div>
+        <div class="card-header">
+          <span class="card-model" style="background: var(--c06-l); color: var(--c06-d);">M5</span>
+          <span class="card-status status-live"><span class="status-dot"></span>已上线</span>
+        </div>
+        <div class="card-title">实验结论评价</div>
+        <div class="card-id">T06_M5</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- 07 生物与环境 -->
+  <section class="scenario-section" data-scenario="07">
+    <div class="scenario-header">
+      <span class="scenario-dot" style="background: var(--c07);"></span>
+      <span class="scenario-name">生物与环境</span>
+      <span class="scenario-id">场景 07</span>
+      <span class="scenario-count">4 个专题</span>
+    </div>
+    <div class="card-grid">
+      <a class="topic-card available" data-s="07" data-title="食物链与营养级分析" data-available="true" href="T07_M1_食物链与营养级分析.html">
+        <div class="topic-card-accent" style="--card-accent: var(--c07);"></div>
+        <div class="card-header">
+          <span class="card-model" style="background: var(--c07-l); color: var(--c07-d);">M1</span>
+          <span class="card-status status-live"><span class="status-dot"></span>已上线</span>
+        </div>
+        <div class="card-title">食物链与营养级分析</div>
+        <div class="card-id">T07_M1</div>
+      </a>
+      <a class="topic-card available" data-s="07" data-title="能量流动计算" data-available="true" href="T07_M2_能量流动计算.html">
+        <div class="topic-card-accent" style="--card-accent: var(--c07);"></div>
+        <div class="card-header">
+          <span class="card-model" style="background: var(--c07-l); color: var(--c07-d);">M2</span>
+          <span class="card-status status-live"><span class="status-dot"></span>已上线</span>
+        </div>
+        <div class="card-title">能量流动计算</div>
+        <div class="card-id">T07_M2</div>
+      </a>
+      <a class="topic-card available" data-s="07" data-title="物质循环与碳氮循环" data-available="true" href="T07_M3_物质循环与碳氮循环.html">
+        <div class="topic-card-accent" style="--card-accent: var(--c07);"></div>
+        <div class="card-header">
+          <span class="card-model" style="background: var(--c07-l); color: var(--c07-d);">M3</span>
+          <span class="card-status status-live"><span class="status-dot"></span>已上线</span>
+        </div>
+        <div class="card-title">物质循环与碳氮循环</div>
+        <div class="card-id">T07_M3</div>
+      </a>
+      <a class="topic-card available" data-s="07" data-title="群落演替与生态稳定性" data-available="true" href="T07_M4_群落演替与生态稳定性.html">
+        <div class="topic-card-accent" style="--card-accent: var(--c07);"></div>
+        <div class="card-header">
+          <span class="card-model" style="background: var(--c07-l); color: var(--c07-d);">M4</span>
+          <span class="card-status status-live"><span class="status-dot"></span>已上线</span>
+        </div>
+        <div class="card-title">群落演替与生态稳定性</div>
+        <div class="card-id">T07_M4</div>
+      </a>
+    </div>
+  </section>
+
+  <div class="empty-state" id="empty-state">
+    <i class="ti ti-search-off" aria-hidden="true"></i>
+    没有找到匹配的专题
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  29 个专题 · 7 个场景 · 568 张 EC 题卡 &nbsp;·&nbsp; 高中生物学习题解构系统
+</footer>
+
+</div><!-- .site -->
+
+<script>
+let currentFilter = 'all';
+let currentQuery = '';
+
+function setFilter(s, btn) {
+  currentFilter = s;
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilters();
+}
+
+function applyFilters() {
+  const q = currentQuery.toLowerCase();
+  let anyVisible = false;
+
+  document.querySelectorAll('.scenario-section').forEach(section => {
+    const sId = section.dataset.scenario;
+    const sMatch = currentFilter === 'all' || currentFilter === sId;
+    if (!sMatch) { section.style.display = 'none'; return; }
+
+    let sectionHasVisible = false;
+    section.querySelectorAll('.topic-card').forEach(card => {
+      const title = card.dataset.title || '';
+      const id = card.querySelector('.card-id')?.textContent || '';
+      const qMatch = !q || title.includes(q) || id.toLowerCase().includes(q);
+      card.style.display = qMatch ? '' : 'none';
+      if (qMatch) { sectionHasVisible = true; anyVisible = true; }
+    });
+
+    section.style.display = sectionHasVisible ? '' : 'none';
+  });
+
+  document.getElementById('empty-state').style.display = anyVisible ? 'none' : 'block';
+}
+
+document.getElementById('search').addEventListener('input', function() {
+  currentQuery = this.value.trim();
+  applyFilters();
+});
+
+function comingSoon(e, id) {
+  e.preventDefault();
+  // subtle visual feedback — no alert
+  const card = e.currentTarget;
+  card.style.opacity = '0.6';
+  setTimeout(() => { card.style.opacity = ''; }, 300);
+}
+
+// Count ready cards
+const readyCount = document.querySelectorAll('.topic-card.available').length;
+document.getElementById('ready-count').textContent = readyCount;
+</script>
+</body>
+</html>

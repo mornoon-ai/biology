@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T05_M1 · 光合速率与限制因子</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent:#639922; --accent-l:#EAF3DE; --accent-m:#9DC95C; --accent-d:#27500A;
+  --teal:#0F6E56; --teal-l:#E1F5EE; --teal-d:#085041;
+  --amber:#BA7517; --accent-d2:#27500A; --amber-l:#FAEEDA; --amber-d:#633806;
+  --coral:#993C1D; --coral-l:#FAECE7; --coral-d:#712B13;
+  --blue:#185FA5; --blue-l:#E6F1FB; --blue-d:#0C447C;
+  --bg:#ffffff; --bg2:#f7f7f5; --bg3:#f1efe8;
+  --tx:#1a1a18; --tx2:#5f5e5a; --tx3:#888780;
+  --bd:rgba(0,0,0,0.10); --bd2:rgba(0,0,0,0.18);
+  --r-sm:6px; --r-md:8px; --r-lg:12px; --r-xl:16px;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#1c1c1a;--bg2:#252523;--bg3:#2c2c2a;
+    --tx:#f0efea;--tx2:#b4b2a9;--tx3:#888780;
+    --bd:rgba(255,255,255,0.09);--bd2:rgba(255,255,255,0.16);
+    --accent-l:#173404;--accent-d:#C0DD97;--accent-d2:#C0DD97;
+    --teal-l:#04342C;--teal-d:#9FE1CB;
+    --amber-l:#412402;--amber-d:#FAC775;
+    --coral-l:#4A1B0C;--coral-d:#F5C4B3;
+    --blue-l:#042C53;--blue-d:#B5D4F4;
+  }
+}
+body{font-family:var(--font);font-size:15px;line-height:1.6;color:var(--tx);background:var(--bg3);min-height:100vh;}
+.app{max-width:800px;margin:0 auto;background:var(--bg);min-height:100vh;}
+.site-header{padding:1.25rem 1.5rem 0;background:var(--bg);border-bottom:0.5px solid var(--bd);position:sticky;top:0;z-index:20;}
+.header-top{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.header-icon{background:var(--accent-l);border-radius:var(--r-md);padding:6px 8px;display:flex;align-items:center;justify-content:center;}
+.header-icon i{font-size:20px;color:var(--accent);}
+.header-meta{font-size:12px;color:var(--tx3);}
+.header-title{font-size:17px;font-weight:500;color:var(--tx);}
+.header-id{margin-left:auto;font-size:11px;color:var(--tx3);background:var(--bg2);padding:3px 9px;border-radius:var(--r-sm);}
+.nav-tabs{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.nav-tab{padding:.6rem 1.1rem;font-size:13px;color:var(--tx2);cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;font-family:var(--font);white-space:nowrap;transition:color .15s,border-color .15s;}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500;}
+.nav-tab:hover:not(.active){color:var(--tx);}
+.page{display:none;padding:1.5rem;}
+.page.active{display:block;}
+.memory-section{margin-bottom:1.5rem;}
+.memory-card{border:0.5px solid var(--bd);border-radius:var(--r-xl);overflow:hidden;background:var(--bg);}
+.memory-img{width:100%;display:block;max-height:300px;object-fit:contain;background:var(--bg3);cursor:zoom-in;transition:opacity .15s;}
+.memory-img:hover{opacity:.9;}
+.memory-footer{padding:.85rem 1rem;display:flex;align-items:center;gap:10px;border-top:0.5px solid var(--bd);}
+.memory-label{font-size:13px;font-weight:500;color:var(--tx);flex:1;}
+audio{height:32px;width:220px;}
+audio::-webkit-media-controls-panel{background:var(--bg2);}
+.lb-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:200;display:none;align-items:center;justify-content:center;cursor:zoom-out;}
+.lb-overlay.open{display:flex;}
+.lb-img{max-width:92vw;max-height:92vh;object-fit:contain;border-radius:var(--r-md);}
+.lb-close{position:fixed;top:16px;right:20px;background:none;border:none;color:#fff;font-size:28px;cursor:pointer;opacity:.7;}
+.lb-close:hover{opacity:1;}
+.section-title{font-size:13px;font-weight:500;color:var(--tx2);display:flex;align-items:center;gap:7px;margin-bottom:1rem;text-transform:uppercase;letter-spacing:.04em;}
+.section-divider{height:0.5px;background:var(--bd);margin:1.5rem 0;}
+.signal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:1.5rem;}
+.signal-card{background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;}
+.signal-label{font-size:11px;color:var(--tx3);letter-spacing:.04em;margin-bottom:.4rem;text-transform:uppercase;}
+.signal-tag{font-size:13px;color:var(--tx);margin-bottom:3px;}
+.mode-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:1.5rem;}
+.mode-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.85rem 1rem;border-left-width:3px;}
+.mode-card-label{font-size:11px;font-weight:500;margin-bottom:.3rem;}
+.mode-card-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.trap-list{display:flex;flex-direction:column;gap:7px;}
+.trap-item{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.55;}
+.trap-icon{color:#E24B4A;font-size:15px;flex-shrink:0;margin-top:1px;}
+.filter-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem;}
+.filter-btn{padding:5px 13px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx2);font-family:var(--font);transition:all .15s;}
+.filter-btn.active{background:var(--accent-l);color:var(--accent-d2);border-color:var(--accent-m);font-weight:500;}
+.mq-card{border:0.5px solid var(--bd);border-radius:var(--r-lg);background:var(--bg);margin-bottom:.85rem;overflow:hidden;}
+.mq-header{padding:.9rem 1.1rem;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;transition:background .15s;}
+.mq-header:hover{background:var(--bg2);}
+.mq-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);white-space:nowrap;}
+.mq-badge.curve{background:var(--accent-l);color:var(--accent-d2);}
+.mq-badge.limit{background:var(--teal-l);color:var(--teal-d);}
+.mq-badge.netgross{background:var(--amber-l);color:var(--amber-d);}
+.mq-badge.dark{background:var(--coral-l);color:var(--coral-d);}
+.mq-name{font-size:14px;font-weight:500;color:var(--tx);flex:1;}
+.mq-purity{font-size:12px;color:var(--tx3);flex-shrink:0;}
+.mq-chevron{color:var(--tx3);font-size:16px;transition:transform .2s;flex-shrink:0;}
+.mq-chevron.open{transform:rotate(180deg);}
+.mq-body{display:none;padding:.75rem 1.1rem 1.1rem;border-top:0.5px solid var(--bd);}
+.mq-body.open{display:block;}
+.mq-source{font-size:12px;color:var(--tx3);margin-bottom:.65rem;}
+.rule-box{background:var(--accent-l);border-left:3px solid var(--accent);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:.65rem .9rem;font-size:13px;color:var(--accent-d2);margin:.75rem 0;line-height:1.65;}
+.chain-label{font-size:12px;font-weight:500;color:var(--tx2);margin:.75rem 0 .4rem;text-transform:uppercase;letter-spacing:.04em;}
+.signal-chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:6px;}
+.sc-node{background:var(--bg2);border-radius:var(--r-sm);padding:3px 9px;font-size:13px;color:var(--tx);}
+.sc-node.curve{background:var(--accent-l);color:var(--accent-d2);}
+.sc-node.limit{background:var(--teal-l);color:var(--teal-d);}
+.sc-node.netgross{background:var(--amber-l);color:var(--amber-d);}
+.sc-node.dark{background:var(--coral-l);color:var(--coral-d);}
+.sc-arrow{color:var(--tx3);font-size:13px;}
+.mq-note{font-size:13px;color:var(--tx2);margin-top:.75rem;line-height:1.6;}
+.q-trigger{display:inline-flex;align-items:center;gap:5px;margin-top:.75rem;padding:6px 12px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;color:var(--tx2);cursor:pointer;font-family:var(--font);transition:all .15s;}
+.q-trigger:hover{background:var(--bg2);color:var(--tx);}
+.q-trigger i{font-size:14px;}
+.ladder-section-label{font-size:13px;font-weight:500;color:var(--tx2);margin-bottom:.85rem;display:flex;align-items:center;gap:7px;}
+.ladder-rows{display:flex;flex-direction:column;gap:8px;margin-bottom:1rem;}
+.ladder-row{display:grid;grid-template-columns:64px 1fr;gap:10px;align-items:start;}
+.ladder-level{font-size:11px;font-weight:500;padding:6px 4px;border-radius:var(--r-sm);text-align:center;line-height:1.4;}
+.l1{background:var(--teal-l);color:var(--teal-d);}
+.l2{background:var(--accent-l);color:var(--accent-d2);}
+.l3{background:var(--amber-l);color:var(--amber-d);}
+.ladder-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.65rem .9rem;background:var(--bg);}
+.ladder-card-name{font-size:13px;font-weight:500;color:var(--tx);}
+.ladder-card-sub{font-size:12px;color:var(--tx3);margin-top:3px;line-height:1.5;}
+.ladder-note{background:var(--bg2);border-radius:var(--r-md);padding:.65rem .9rem;font-size:12px;color:var(--tx2);margin-bottom:1rem;line-height:1.55;}
+.progress-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem;}
+.progress-bar{height:5px;border-radius:3px;background:var(--bg2);margin-bottom:1.25rem;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;background:var(--accent);width:0%;transition:width .3s;}
+.checklist{display:flex;flex-direction:column;gap:7px;}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:.7rem .9rem;border:0.5px solid var(--bd);border-radius:var(--r-md);background:var(--bg);cursor:pointer;transition:background .15s;}
+.check-item.done{background:var(--bg2);}
+.check-box{width:18px;height:18px;border:1.5px solid var(--bd2);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .15s;}
+.check-item.done .check-box{background:var(--accent);border-color:var(--accent);}
+.check-box i{font-size:11px;color:#fff;display:none;}
+.check-item.done .check-box i{display:block;}
+.check-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.check-item.done .check-text{color:var(--tx3);text-decoration:line-through;}
+.action-row{margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:8px;}
+.action-btn{padding:7px 14px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.action-btn:hover{background:var(--bg2);}
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s;}
+.drawer-overlay.open{opacity:1;pointer-events:all;}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100vw);background:var(--bg);z-index:101;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden;}
+.drawer.open{transform:translateX(0);}
+.drawer-header{padding:1rem 1.25rem;border-bottom:0.5px solid var(--bd);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.drawer-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);}
+.drawer-title{font-size:14px;font-weight:500;color:var(--tx);flex:1;line-height:1.4;}
+.drawer-close{background:none;border:none;cursor:pointer;color:var(--tx2);padding:4px;border-radius:var(--r-sm);display:flex;align-items:center;transition:background .15s;}
+.drawer-close:hover{background:var(--bg2);}
+.drawer-body{flex:1;overflow-y:auto;padding:1.25rem;}
+.drawer-ec-ref{font-size:12px;color:var(--tx3);margin-bottom:1rem;display:flex;align-items:center;gap:6px;}
+.drawer-stem{font-size:14px;color:var(--tx);line-height:1.75;white-space:pre-wrap;}
+.drawer-sub{font-size:13px;color:var(--tx2);background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:1rem;line-height:1.65;}
+.drawer-sub-label{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-answer{font-size:13px;color:var(--tx);background:var(--accent-l);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:.75rem;line-height:1.65;display:none;}
+.drawer-answer.show{display:block;}
+.drawer-answer-label{font-size:11px;font-weight:500;color:var(--accent-d2);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-footer{padding:.85rem 1.25rem;border-top:0.5px solid var(--bd);display:flex;gap:8px;flex-shrink:0;}
+.drawer-btn{flex:1;padding:8px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.drawer-btn:hover{background:var(--bg2);}
+.drawer-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+.drawer-btn.primary:hover{background:var(--accent-d);}
+@media(max-width:600px){
+  .site-header{padding:1rem 1rem 0;} .page{padding:1rem;}
+  .header-title{font-size:15px;} .mode-grid{grid-template-columns:1fr 1fr;}
+  .ladder-row{grid-template-columns:52px 1fr;gap:8px;}
+  .action-row{flex-direction:column;} .action-btn{width:100%;text-align:center;}
+  .drawer{width:100vw;} audio{width:160px;}
+}
+@media(max-width:380px){.mode-grid,.signal-grid{grid-template-columns:1fr;}}
+
+.back-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;font-size:12px;color:var(--tx2);background:var(--bg2);border:0.5px solid var(--bd2);border-radius:var(--r-md);text-decoration:none;font-family:var(--font);transition:background .15s,color .15s;white-space:nowrap;flex-shrink:0;}
+.back-btn:hover{background:var(--bg3);color:var(--tx);}
+.back-btn i{font-size:14px;}
+.memory-video{width:100%;max-height:220px;display:block;border-radius:var(--r-md);background:#000;margin-top:8px;}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="site-header">
+  <div class="header-top">
+    <div class="header-icon"><i class="ti ti-sun" aria-hidden="true"></i></div>
+    <div>
+      <div class="header-meta">05 植物生理 · M1 光合作用</div>
+      <div class="header-title">光合速率与限制因子</div>
+    </div>
+    <a class="back-btn" href="index.html" aria-label="返回首页"><i class="ti ti-arrow-left"></i> 首页</a>
+    <div class="header-id">T05_M1</div>
+  </div>
+  <nav class="nav-tabs" role="tablist">
+    <button class="nav-tab active" role="tab" onclick="switchTab('overview',this)">概览</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('mothers',this)">母题精讲</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('ladder',this)">变式阶梯</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('self',this)">自查清单</button>
+  </nav>
+</header>
+
+<div id="tab-overview" class="page active" role="tabpanel">
+  <div class="memory-section">
+    <div class="memory-card">
+      <img class="memory-img" src="记忆卡/T05_M1_memory.png" alt="光合速率与限制因子记忆卡" onclick="openLightbox(this.src,this.alt)" onerror="this.style.display='none'">
+      <div class="memory-footer">
+        <div>
+          <div class="memory-label">记忆卡 · 光合速率坐标图解析与限制因子判断框架</div>
+          <div style="font-size:12px;color:var(--tx3);">点击图片可放大</div>
+        </div>
+        <video class="memory-video" controls controlsList="nodownload" preload="metadata" style="display:none">
+          <source src="audio/T05_M1.mp4" type="video/mp4">
+        </video>
+          <div class="audio-placeholder" style="display:flex"><i class="ti ti-video-off"></i>视频待放入</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title"><i class="ti ti-scan" aria-hidden="true"></i> 触发信号速查</div>
+  <div class="signal-grid">
+    <div class="signal-card">
+      <div class="signal-label">图像信号</div>
+      <div class="signal-tag">光照强度-光合速率坐标图</div>
+      <div class="signal-tag">CO₂浓度-光合速率曲线</div>
+      <div class="signal-tag">温度-光合速率折线图</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">文字信号</div>
+      <div class="signal-tag">光合速率 / 净光合 / 总（真正）光合</div>
+      <div class="signal-tag">光饱和点 / 光补偿点 / 暗呼吸</div>
+      <div class="signal-tag">限制因素 / CO₂浓度 / 温度 / 光照</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">任务关键词</div>
+      <div class="signal-tag">计算有机物积累量 / 净光合速率</div>
+      <div class="signal-tag">判断某点的限制因子</div>
+      <div class="signal-tag">设计实验改变单一变量</div>
+    </div>
+  </div>
+
+  <div class="section-title"><i class="ti ti-arrow-fork" aria-hidden="true"></i> 核心概念 · 四个分析维度</div>
+  <div class="mode-grid">
+    <div class="mode-card" style="border-left-color:var(--accent);">
+      <div class="mode-card-label" style="color:var(--accent-d2);">净光合 vs 总光合</div>
+      <div class="mode-card-text"><strong>表观（净）光合速率</strong> = 总（真正）光合速率 − 呼吸速率；坐标图中测得的通常是净光合（O₂释放量或CO₂吸收量）</div>
+    </div>
+    <div class="mode-card" style="border-left-color:var(--teal);">
+      <div class="mode-card-label" style="color:var(--teal-d);">光补偿点与光饱和点</div>
+      <div class="mode-card-text">光补偿点：净光合=0，光合=呼吸；光饱和点：继续增光，光合速率不再升高；超饱和点后，CO₂/温度成为限制因素</div>
+    </div>
+    <div class="mode-card" style="border-left-color:var(--amber);">
+      <div class="mode-card-label" style="color:var(--amber-d);">三大限制因子</div>
+      <div class="mode-card-text">光照强度（光反应限速）、CO₂浓度（暗反应C3合成限速）、温度（酶活性限速）——同一时刻只有一个是最直接的限制因子</div>
+    </div>
+    <div class="mode-card" style="border-left-color:var(--coral);">
+      <div class="mode-card-label" style="color:var(--coral-d);">有机物积累量计算</div>
+      <div class="mode-card-text">白天积累 = 净光合 × 光照时数；夜晚消耗 = 呼吸速率 × 暗处时数；一天净积累 = 白天积累 − 夜晚消耗</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-alert-triangle" aria-hidden="true"></i> 高频陷阱（5 个）</div>
+  <div class="trap-list">
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon"></i><div>坐标图中"O₂释放量"是<strong>净光合速率</strong>，不是总光合速率——要求总光合时必须加上呼吸速率（暗处耗O₂量）</div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon"></i><div>光饱和点之后继续增加光照，光合速率<strong>不再增加</strong>——此时限制因子变成CO₂浓度或温度，不是光照</div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon"></i><div>温度影响光合速率的<strong>两个方向</strong>：温度升高→酶活性↑（促进）；超过最适温度→酶失活（抑制）——呼吸速率也同时随温度变化</div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon"></i><div>计算一天有机物净积累时，别忘了<strong>夜间呼吸消耗</strong>——只用白天净光合量会高估积累量</div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon"></i><div>光补偿点处净光合=0，但植物<strong>仍在进行光合和呼吸</strong>——不能说"植物不进行光合作用"；有机物总量不变但两者速率相等</div></div>
+  </div>
+</div>
+
+<div id="tab-mothers" class="page" role="tabpanel">
+  <div class="filter-tabs" role="group">
+    <button class="filter-btn active" onclick="filterMode('all',this)">全部（4 类）</button>
+    <button class="filter-btn" onclick="filterMode('curve',this)">曲线解读</button>
+    <button class="filter-btn" onclick="filterMode('limit',this)">限制因子</button>
+    <button class="filter-btn" onclick="filterMode('netgross',this)">净/总光合计算</button>
+    <button class="filter-btn" onclick="filterMode('dark',this)">暗处理实验</button>
+  </div>
+
+  <div class="mq-card" data-mode="curve">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge curve">曲线解读</span>
+      <span class="mq-name">光照强度-光合速率坐标图的关键点定义与读取</span>
+      <span class="mq-purity">10/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-410 · 子问题 (1)(2)</div>
+      <div class="rule-box">核心信号：给出"光照强度（x轴）-O₂释放量（y轴）"坐标图，要求识别光补偿点、光饱和点，并读出暗呼吸速率和最大光合速率。标准母题：三点两线解读法。</div>
+      <div class="chain-label">坐标图三关键点</div>
+      <div class="signal-chain"><span class="sc-node">纵轴截距（负值）</span><span class="sc-arrow">→</span><span class="sc-node curve">暗呼吸速率（黑暗中O₂消耗量）</span></div>
+      <div class="signal-chain"><span class="sc-node">曲线与x轴交点</span><span class="sc-arrow">→</span><span class="sc-node curve">光补偿点（净光合=0，光合=呼吸）✓</span></div>
+      <div class="signal-chain"><span class="sc-node">曲线趋于平缓处</span><span class="sc-arrow">→</span><span class="sc-node curve">光饱和点（最大净光合速率）✓</span></div>
+      <div class="chain-label">总光合速率计算</div>
+      <div class="signal-chain"><span class="sc-node">总光合</span><span class="sc-arrow">=</span><span class="sc-node">净光合（图上值）</span><span class="sc-arrow">+</span><span class="sc-node curve">|暗呼吸速率| ✓</span></div>
+      <p class="mq-note">⚠️ 坐标图中测到的O₂释放量 = 净光合速率（总光合已扣除呼吸）；总光合 = 净光合 + 呼吸。这是最常出错的换算关系。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec410')"><i class="ti ti-file-text"></i> 查看完整题干</button>
+    </div>
+  </div>
+
+  <div class="mq-card" data-mode="limit">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge limit">限制因子</span>
+      <span class="mq-name">光饱和点后限制光合速率继续增大的因子判断</span>
+      <span class="mq-purity">10/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-415 · 子问题 (2)(3)</div>
+      <div class="rule-box">核心信号：题目给出"光照强度达到光饱和点后，继续增加光照，光合速率不再升高"，要求判断此时限制光合速率增加的因素，并说明如何验证。</div>
+      <div class="chain-label">限制因子判断逻辑</div>
+      <div class="signal-chain"><span class="sc-node">光照充足（光反应不限速）</span><span class="sc-arrow">→</span><span class="sc-node limit">限制因子转向暗反应</span></div>
+      <div class="signal-chain"><span class="sc-node">增加CO₂浓度</span><span class="sc-arrow">→</span><span class="sc-node limit">光合速率升高 → CO₂是限制因子 ✓</span></div>
+      <div class="signal-chain"><span class="sc-node">适当升温</span><span class="sc-arrow">→</span><span class="sc-node limit">光合速率升高 → 温度是限制因子 ✓</span></div>
+      <p class="mq-note">验证方法（单一变量原则）：在光饱和点光照强度下，分别改变CO₂浓度或温度，观察光合速率是否升高。若升高则该因素是当前限制因子。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec415')"><i class="ti ti-file-text"></i> 查看完整题干</button>
+    </div>
+  </div>
+
+  <div class="mq-card" data-mode="netgross">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge netgross">净/总光合计算</span>
+      <span class="mq-name">一昼夜有机物净积累量的计算（含白昼净光合与夜间呼吸）</span>
+      <span class="mq-purity">10/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-418 · 子问题 (3)(4)</div>
+      <div class="rule-box">核心信号：题目给出光照时数、净光合速率（或O₂释放量）、黑暗时数、呼吸速率，要求计算一昼夜有机物净积累量，或判断植物能否正常生长。标准计算：白天净积累 − 夜晚呼吸消耗。</div>
+      <div class="chain-label">计算公式</div>
+      <div class="signal-chain"><span class="sc-node">白天净积累</span><span class="sc-arrow">=</span><span class="sc-node netgross">净光合速率 × 光照时数</span></div>
+      <div class="signal-chain"><span class="sc-node">夜晚消耗</span><span class="sc-arrow">=</span><span class="sc-node netgross">呼吸速率 × 暗处时数</span></div>
+      <div class="signal-chain"><span class="sc-node">一昼夜净积累</span><span class="sc-arrow">=</span><span class="sc-node netgross">白天净积累 − 夜晚消耗 ✓</span></div>
+      <p class="mq-note">⚠️ 单位统一很重要：速率通常用 μmol·m⁻²·h⁻¹ 或 mg·h⁻¹，计算前确认单位一致。净积累 &gt; 0 植物能生长；&lt; 0 有机物净亏损；= 0 维持不变。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec418')"><i class="ti ti-file-text"></i> 查看完整题干</button>
+    </div>
+  </div>
+
+  <div class="mq-card" data-mode="dark">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge dark">暗处理实验</span>
+      <span class="mq-name">黑暗处理一段时间后转到光照，光合速率的变化分析</span>
+      <span class="mq-purity">9/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-422 · 子问题 (1)(2)</div>
+      <div class="rule-box">核心信号：题目描述"植物先置于黑暗中若干小时，再给予光照"，要求分析ATP、NADPH、C3、C5等物质在转换过程中的变化趋势，或分析光合速率的变化原因。</div>
+      <div class="chain-label">暗转光的物质变化链</div>
+      <div class="signal-chain"><span class="sc-node">黑暗中</span><span class="sc-arrow">→</span><span class="sc-node dark">C5消耗（暗反应持续），C5↓；C3积累↑</span></div>
+      <div class="signal-chain"><span class="sc-node">光照开始瞬间</span><span class="sc-arrow">→</span><span class="sc-node">光反应产生ATP+NADPH→C3被还原</span></div>
+      <div class="signal-chain"><span class="sc-node">短暂后</span><span class="sc-arrow">→</span><span class="sc-node dark">C3↓，C5↑（卡尔文循环加速），光合速率恢复 ✓</span></div>
+      <p class="mq-note">常考变式：遮光后再开光 vs 正常光照。遮光期间C5减少（呼吸继续但光反应停止），开光后需要一定时间"预热"，光合速率不会立刻达到最大值。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec422')"><i class="ti ti-file-text"></i> 查看完整题干</button>
+    </div>
+  </div>
+</div>
+
+<div id="tab-ladder" class="page" role="tabpanel">
+  <div class="ladder-note">按 L1 基础 → L2 进阶 → L3 综合三级递进。点击卡片可查看完整题干。</div>
+  <div class="ladder-section-label"><span class="ladder-level l1" style="width:auto;padding:3px 8px;">L1 基础</span> 坐标图三点读取与净/总光合换算</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1-1<br>读图</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec410-1')" style="cursor:pointer;">
+        <div class="ladder-card-name">从坐标图读出光补偿点、光饱和点和暗呼吸速率</div>
+        <div class="ladder-card-sub">EC-410 (1) · 三点定位练习，识别关键坐标值 <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1-2<br>换算</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec410-2')" style="cursor:pointer;">
+        <div class="ladder-card-name">由净光合速率计算总（真正）光合速率</div>
+        <div class="ladder-card-sub">EC-410 (2) · 总光合 = 净光合 + 呼吸，单位换算练习 <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1-3<br>积累</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec418-3')" style="cursor:pointer;">
+        <div class="ladder-card-name">计算一昼夜有机物净积累量，判断植物能否存活</div>
+        <div class="ladder-card-sub">EC-418 (3) · 白天净积累 − 夜晚消耗，正负判断 <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+  </div>
+  <div class="section-divider"></div>
+  <div class="ladder-section-label"><span class="ladder-level l2" style="width:auto;padding:3px 8px;">L2 进阶</span> 限制因子判断 + 温度/CO₂变量分析</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2-1<br>限制因子</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec415-23')" style="cursor:pointer;">
+        <div class="ladder-card-name">判断光饱和点后限制光合速率的因子并设计验证实验</div>
+        <div class="ladder-card-sub">EC-415 (2)+(3) · 单一变量实验设计，CO₂ vs 温度 <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2-2<br>温度影响</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec420-12')" style="cursor:pointer;">
+        <div class="ladder-card-name">温度变化对光合速率和呼吸速率的双重影响分析</div>
+        <div class="ladder-card-sub">EC-420 (1)+(2) · 温度→酶活性→两者速率变化，最适温度判断 <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2-3<br>暗处理</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec422-12')" style="cursor:pointer;">
+        <div class="ladder-card-name">黑暗处理后转光照，C3/C5/ATP/NADPH的动态变化</div>
+        <div class="ladder-card-sub">EC-422 (1)+(2) · 光暗转换时各物质浓度的短暂变化规律 <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+  </div>
+  <div class="section-divider"></div>
+  <div class="ladder-section-label"><span class="ladder-level l3" style="width:auto;padding:3px 8px;">L3 综合</span> 多曲线比较 + 实验设计 + 生产应用</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l3">L3-1</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec425-135')" style="cursor:pointer;">
+        <div class="ladder-card-name">不同植物（阳生/阴生）光合曲线比较 + 最优种植密度计算 + 增产措施评价</div>
+        <div class="ladder-card-sub">EC-425 (1)+(3)+(5) · 光补偿点/饱和点差异→种植策略→实际应用 <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="tab-self" class="page" role="tabpanel">
+  <div class="progress-row">
+    <span style="font-size:13px;color:var(--tx2);">学习自查清单</span>
+    <span style="font-size:13px;color:var(--tx2);" id="progress-text">0 / 7 完成</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="pbar"></div></div>
+  <div class="checklist" id="checklist">
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">能区分表观（净）光合速率与总（真正）光合速率，并写出换算公式：总光合 = 净光合 + 呼吸</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">能从光照强度-光合速率坐标图中准确读出暗呼吸速率、光补偿点和光饱和点</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">能判断光饱和点之后限制光合速率的因子（CO₂浓度或温度），并说明验证方法</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">能计算一昼夜有机物净积累量（白天净积累 − 夜晚呼吸消耗），并判断植物能否正常生长</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">能分析温度变化对光合速率和呼吸速率的双重影响，知道两者最适温度不同</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">完成 L1 全部 3 道基础变式（读图、换算、积累量计算各 1 道）</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">完成至少 2 道 L2 进阶变式，能运用单一变量原则设计实验验证限制因子</div></div>
+  </div>
+  <div class="action-row">
+    <button class="action-btn" onclick="window.scrollTo(0,0);switchTab('mothers',document.querySelectorAll('.nav-tab')[1])">返回母题精讲 →</button>
+    <button class="action-btn" onclick="window.scrollTo(0,0);switchTab('ladder',document.querySelectorAll('.nav-tab')[2])">进入变式阶梯 →</button>
+  </div>
+</div>
+</div>
+
+<div class="lb-overlay" id="lb-overlay" onclick="closeLightbox()">
+  <button class="lb-close" onclick="closeLightbox()">×</button>
+  <img class="lb-img" id="lb-img" src="" alt="">
+</div>
+<div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer" role="dialog" aria-modal="true">
+  <div class="drawer-header">
+    <span class="drawer-badge" id="drawer-badge"></span>
+    <span class="drawer-title" id="drawer-title"></span>
+    <button class="drawer-close" onclick="closeDrawer()"><i class="ti ti-x" style="font-size:18px;"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="drawer-ec-ref" id="drawer-ref"></div>
+    <div class="drawer-stem" id="drawer-stem"></div>
+    <div class="drawer-sub" id="drawer-sub" style="display:none;"><div class="drawer-sub-label">本题考查重点</div><div id="drawer-sub-text"></div></div>
+    <div class="drawer-answer" id="drawer-answer"><div class="drawer-answer-label">参考答案</div><div id="drawer-answer-text"></div></div>
+  </div>
+  <div class="drawer-footer">
+    <button class="drawer-btn" id="drawer-ans-btn" onclick="toggleAnswer()">显示答案</button>
+    <button class="drawer-btn primary" onclick="closeDrawer()">完成阅读</button>
+  </div>
+</div>
+
+<script>
+function switchTab(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');if(btn)btn.classList.add('active');}
+function toggleMQ(h){const b=h.nextElementSibling,c=h.querySelector('.mq-chevron'),o=b.classList.contains('open');b.classList.toggle('open',!o);c.classList.toggle('open',!o);}
+function filterMode(mode,btn){document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.mq-card').forEach(card=>{card.style.display=(mode==='all'||card.dataset.mode===mode)?'':'none';});}
+function toggleCheck(item){item.classList.toggle('done');updateProgress();saveChecklist();}
+function updateProgress(){const total=document.querySelectorAll('.check-item').length,done=document.querySelectorAll('.check-item.done').length;document.getElementById('pbar').style.width=(done/total*100)+'%';document.getElementById('progress-text').textContent=done+' / '+total+' 完成';}
+function saveChecklist(){try{const s=Array.from(document.querySelectorAll('.check-item')).map(el=>el.classList.contains('done'));localStorage.setItem('T05_M1_checklist',JSON.stringify(s));}catch(e){}}
+(function(){try{const s=JSON.parse(localStorage.getItem('T05_M1_checklist')||'[]');document.querySelectorAll('.check-item').forEach((item,i)=>{if(s[i])item.classList.add('done');});updateProgress();}catch(e){}})();
+
+const QUESTIONS={
+  'mq-ec410':{badge:'曲线解读 · 母题',badgeClass:'curve',title:'光照强度-光合速率坐标图关键点读取',ref:'EC-20260525-410 · 子问题 (1)(2)',stem:`如图为某植物在不同光照强度下净光合速率（O₂释放量，μmol·m⁻²·h⁻¹）的变化曲线。在黑暗条件下，O₂消耗量为2 μmol·m⁻²·h⁻¹；光补偿点时光照强度为1 klux；光饱和点时净光合速率为6 μmol·m⁻²·h⁻¹。\n\n(1) 图中A点（黑暗）的O₂变化量是多少？代表什么生理过程？\n(2) 该植物在光饱和点时，真正光合速率（总光合速率）是多少？`,focus:'(1) A点（黑暗）O₂消耗量 = 暗呼吸速率 = -2 μmol·m⁻²·h⁻¹（负值表示消耗）。代表细胞呼吸（有氧呼吸为主）。\n(2) 总光合速率 = 净光合速率 + 呼吸速率 = 6 + 2 = 8 μmol·m⁻²·h⁻¹。\n关键：坐标图测到的是净光合（O₂释放量），不是总光合；必须加上呼吸速率才得总光合。',answer:'(1) A点（黑暗）：O₂变化量 = -2 μmol·m⁻²·h⁻¹（消耗）。代表的生理过程：细胞呼吸（有氧呼吸），植物在黑暗中只进行呼吸作用，消耗有机物，释放CO₂并消耗O₂。\n(2) 光饱和点时总（真正）光合速率 = 净光合速率 + 暗呼吸速率 = 6 + 2 = 8 μmol·m⁻²·h⁻¹。\n注：坐标图中y轴（O₂释放量）表示净光合速率（总光合已扣除呼吸消耗的O₂）；总光合速率代表叶绿体实际固定CO₂并产生O₂的速率，必须将呼吸消耗的O₂加回来。'},
+  'mq-ec415':{badge:'限制因子 · 母题',badgeClass:'limit',title:'光饱和点后限制光合速率的因子判断与验证',ref:'EC-20260525-415 · 子问题 (2)(3)',stem:`某植物在25°C、CO₂浓度为0.03%的条件下，测得光补偿点为1 klux，光饱和点为5 klux，最大净光合速率为8 μmol·m⁻²·h⁻¹。\n\n(2) 在光照强度超过光饱和点（>5 klux）后，继续增加光照强度，该植物光合速率不再升高。此时限制光合速率继续升高的因素最可能是什么？\n(3) 请设计一个简单实验，验证你在(2)中判断的限制因子。`,focus:'(2) 光照充足后，光反应不再是限速步骤；暗反应（卡尔文循环）成为限速步骤。限制因子最可能是CO₂浓度（0.03%是自然大气浓度，偏低）或温度（影响暗反应酶活性）。\n(3) 验证CO₂是限制因子：在光饱和点光照强度（5 klux）下，保持温度25°C不变，将CO₂浓度从0.03%提高到0.1%或更高，若光合速率升高，则CO₂是限制因子（单一变量实验）。',answer:'(2) 限制因子最可能是：CO₂浓度（当前0.03%，是大气中的自然浓度，偏低，可能成为暗反应的瓶颈）；其次是温度（酶活性限制卡尔文循环速率）。光照强度已充足，光反应不再限速，瓶颈转移到暗反应阶段。\n(3) 验证实验设计：\n实验目的：验证CO₂浓度是限制光合速率的因子。\n实验材料：该植物叶片，密封透明容器，气体分析仪，光源。\n实验步骤：①设置光照强度为5 klux（光饱和点），温度25°C；②实验组：CO₂浓度提高至0.1%；对照组：CO₂浓度维持0.03%；③其他条件相同，测量并比较两组的净光合速率。\n预期结果：若实验组净光合速率显著高于对照组，则CO₂浓度是限制因子，假设成立。'},
+  'mq-ec418':{badge:'净/总光合计算 · 母题',badgeClass:'netgross',title:'一昼夜有机物净积累量计算',ref:'EC-20260525-418 · 子问题 (3)(4)',stem:`某植物叶片在25°C、光照强度为5 klux时，净光合速率为4 μmol CO₂·m⁻²·h⁻¹；黑暗中呼吸速率为2 μmol CO₂·m⁻²·h⁻¹。\n\n(3) 若该植物每天光照12小时，黑暗12小时，计算一昼夜内每平方米叶片有机物的净积累量（以CO₂计）。\n(4) 若将黑暗时间延长至16小时（光照仍为8小时），有机物是否仍能积累？`,focus:'(3) 白天净积累 = 4 × 12 = 48 μmol CO₂·m⁻²；夜晚消耗 = 2 × 12 = 24 μmol CO₂·m⁻²；一昼夜净积累 = 48 - 24 = 24 μmol CO₂·m⁻²（净积累>0，植物正常生长）。\n(4) 光照8小时：白天净积累 = 4×8 = 32 μmol；夜晚（16h）消耗 = 2×16 = 32 μmol；净积累 = 32-32 = 0 μmol（有机物总量不变，勉强维持，不能生长也不能死亡）。',answer:'(3) 计算过程：\n白天（12h）净积累量 = 净光合速率 × 光照时数 = 4 × 12 = 48 μmol CO₂·m⁻²\n夜晚（12h）呼吸消耗量 = 呼吸速率 × 黑暗时数 = 2 × 12 = 24 μmol CO₂·m⁻²\n一昼夜净积累量 = 48 - 24 = 24 μmol CO₂·m⁻²\n结论：净积累为正值，植物有机物总量增加，能正常生长。\n(4) 光照8小时、黑暗16小时：\n白天净积累 = 4 × 8 = 32 μmol CO₂·m⁻²\n夜晚消耗 = 2 × 16 = 32 μmol CO₂·m⁻²\n净积累 = 32 - 32 = 0 μmol CO₂·m⁻²\n结论：净积累为零，有机物总量不变。植物能维持生存，但不能生长（干物质不增加）。若继续减少光照时间，净积累将为负值，植物将逐渐消耗有机物直至死亡。'},
+  'mq-ec422':{badge:'暗处理实验 · 母题',badgeClass:'dark',title:'黑暗处理后转光照，各物质动态变化分析',ref:'EC-20260525-422 · 子问题 (1)(2)',stem:`将正在进行光合作用的植物突然遮光（黑暗处理）若干分钟，随后再恢复光照。\n\n(1) 遮光后短时间内，叶绿体中C3、C5浓度和ATP浓度分别如何变化？说明原因。\n(2) 恢复光照后，C3、C5浓度恢复到正常水平需要一定时间，解释原因。`,focus:'(1) 遮光后：光反应停止→ATP和NADPH不再产生→C3无法被还原→C3积累↑；C5无法由C3还原生成，且继续被CO₂固定消耗→C5↓；ATP因光反应停止→ATP↓（但呼吸仍产生少量ATP）。\n(2) 恢复光照后：光反应重启→ATP和NADPH迅速产生→C3被大量还原→C3↓，C5↑。但达到稳态需要时间：各中间产物浓度的调整、酶的激活需要一定时间（卡尔文循环有一定的反应惰性）。',answer:'(1) 遮光后短时间内的变化：\nC3浓度：升高。原因：光反应停止→ATP和NADPH不再产生→C3无法被还原为C5→C3积累，而CO₂固定仍短暂进行（消耗C5产生C3），故C3升高。\nC5浓度：降低。原因：C5无法由C3还原生成（光反应停止），而CO₂固定仍短暂消耗C5，故C5降低。\nATP浓度：降低。原因：光反应停止后，光合磷酸化不再产生ATP；细胞呼吸虽仍产生ATP，但数量远少于光合正常时，总体ATP减少。\n(2) 恢复光照后各物质恢复正常水平需时原因：\n光照恢复后，光反应重新产生大量ATP和NADPH，C3开始被快速还原为C5，C3浓度逐渐下降，C5浓度逐渐回升。但卡尔文循环中各中间产物（C3、C5）浓度的重新平衡需要多轮循环进行，酶（RuBisCO等）从低活性状态重新激活也需时间，因此需要一定时间才能恢复到正常稳态水平。'},
+  'v-ec410-1':{badge:'L1 基础变式 · 读图',badgeClass:'curve',title:'从坐标图读出三个关键点',ref:'EC-20260525-410 · (1)',stem:'（同母题 mq-ec410 (1)）',focus:'同母题分析。',answer:'见母题 EC-410 答案。'},
+  'v-ec410-2':{badge:'L1 基础变式 · 换算',badgeClass:'netgross',title:'由净光合速率计算总光合速率',ref:'EC-20260525-410 · (2)',stem:'（同母题 mq-ec410 (2)）',focus:'同母题分析。',answer:'见母题 EC-410 答案。'},
+  'v-ec418-3':{badge:'L1 基础变式 · 积累量',badgeClass:'netgross',title:'一昼夜有机物净积累量计算',ref:'EC-20260525-418 · (3)',stem:'（同母题 mq-ec418 (3)）',focus:'同母题分析。',answer:'见母题 EC-418 答案。'},
+  'v-ec415-23':{badge:'L2 进阶变式 · 限制因子',badgeClass:'limit',title:'限制因子判断与验证实验设计',ref:'EC-20260525-415 · (2)+(3)',stem:'（同母题 mq-ec415 (2)(3)）',focus:'同母题分析。',answer:'见母题 EC-415 答案。'},
+  'v-ec420-12':{badge:'L2 进阶变式 · 温度影响',badgeClass:'limit',title:'温度对光合速率和呼吸速率的双重影响',ref:'EC-20260525-420 · (1)+(2)',stem:`某植物在不同温度下进行如下实验（光照强度恒定）：\n温度/°C：10  20  30  40\n净光合速率（μmol O₂·m⁻²·h⁻¹）：1  3  5  2\n呼吸速率（μmol O₂·m⁻²·h⁻¹）：0.5  1  2  3\n\n(1) 在哪个温度下，该植物有机物积累量最多？\n(2) 温度从30°C升至40°C，净光合速率为什么下降？`,focus:'(1) 有机物积累量 = 净光合速率（即表中净光合数据）。30°C时净光合速率最大（5），所以30°C有机物积累最多。\n(2) 温度从30→40°C：光合速率（总）= 5+2=7 vs 2+3=5，总光合↓；呼吸速率↑（3→4非题目数据，但趋势为呼吸随温度升高持续增大）。净光合↓原因：超过最适温度后，光合相关酶（RuBisCO等）活性下降，总光合速率降低；同时呼吸速率仍在升高；两者共同导致净光合速率明显降低。',answer:'(1) 有机物积累量最多的温度：30°C。\n判断依据：有机物积累量 = 净光合速率（坐标图中O₂释放量）。30°C时净光合速率最大（5 μmol·m⁻²·h⁻¹），因此30°C时有机物积累最多。\n(2) 温度从30°C升至40°C，净光合速率下降的原因：\n①光合作用下降：温度超过光合作用最适温度（约30°C）后，卡尔文循环关键酶（如RuBisCO）活性随温度升高而下降，暗反应速率减慢，总（真正）光合速率降低；\n②呼吸作用继续升高：40°C时细胞呼吸相关酶仍在最适温度范围内，呼吸速率继续升高，消耗更多有机物；\n③两种效应叠加：光合降低+呼吸升高→净光合速率（总光合−呼吸）显著下降。'},
+  'v-ec422-12':{badge:'L2 进阶变式 · 暗处理',badgeClass:'dark',title:'遮光后C3/C5/ATP动态变化',ref:'EC-20260525-422 · (1)+(2)',stem:'（同母题 mq-ec422 (1)(2)）',focus:'同母题分析。',answer:'见母题 EC-422 答案。'},
+  'v-ec425-135':{badge:'L3 综合变式',badgeClass:'curve',title:'阳生/阴生植物光合曲线比较+种植策略+增产措施',ref:'EC-20260525-425 · (1)+(3)+(5)',stem:`某农业研究站比较了玉米（阳生植物）和人参（阴生植物）的光合特性：\n玉米：光补偿点5 klux，光饱和点80 klux，光饱和时净光合速率30 μmol·m⁻²·h⁻¹\n人参：光补偿点0.5 klux，光饱和点10 klux，光饱和时净光合速率8 μmol·m⁻²·h⁻¹\n\n(1) 根据上述数据，分析哪种植物更适合在林下（荫蔽环境）种植，说明理由。\n(3) 在正常农业生产中，可以采取哪些措施提高玉米的光合速率？至少写出两条，并说明原理。\n(5) 若将两种植物混合种植在同一块地，可能出现什么竞争结果？`,focus:'(1) 人参（阴生植物）适合林下种植：光补偿点低（0.5 klux），在弱光下即可维持净光合>0；光饱和点也低（10 klux），不需要强光。玉米光补偿点高（5 klux），在荫蔽环境下可能低于补偿点，有机物净亏损。\n(3) 提高玉米光合速率措施：①增加CO₂浓度（施CO₂气肥，促进暗反应）；②提高光照强度（延长光照时间或增加光源）；③适当升温至最适温度；④合理密植（避免相互遮光）。\n(5) 混合种植：玉米高大遮光→荫蔽环境→人参光合正常，玉米光照不足→竞争中玉米可能受影响；但玉米占高处光照更多→玉米仍占优势，人参在林下层生存。',answer:'(1) 人参（阴生植物）更适合林下种植。理由：人参光补偿点极低（0.5 klux），在林下弱光条件下仍能维持正的净光合速率，有机物正常积累；而玉米光补偿点高（5 klux），在荫蔽环境中光照强度低于其光补偿点，净光合速率为负值，有机物净消耗，无法正常生长。\n(3) 提高玉米光合速率的措施：\n①增加CO₂浓度：向农田施放CO₂气肥或采用温室种植提高CO₂，促进卡尔文循环中CO₂固定，加速暗反应，提高总光合速率；\n②合理密植+适当延长光照：降低种植密度或在温室中补充人工光源，减少叶片相互遮挡，使更多叶片处于光饱和点附近，充分利用光能；\n③适当施氮肥：氮是叶绿素、酶（RuBisCO等）的组成元素，充足氮肥促进叶绿素合成，提高光合能力。\n(5) 混合种植的竞争结果：玉米植株高大，占据上层光照，接受充足光照（可达80 klux光饱和点）；人参植株矮小，处于下层荫蔽环境。在高层竞争中玉米具有明显优势；人参利用玉米冠层下的散射光（约5~10 klux），正好在其光饱和点范围内，仍能正常生长。因此，混合种植（间作）实际上可以充分利用不同层次的光照资源，提高总体光能利用率，是合理的农业种植策略。'}
+};
+let answerShown=false;
+function openDrawer(key){const q=QUESTIONS[key];if(!q)return;const badge=document.getElementById('drawer-badge');badge.textContent=q.badge;badge.className='drawer-badge mq-badge '+(q.badgeClass||'');document.getElementById('drawer-title').textContent=q.title;document.getElementById('drawer-ref').innerHTML='<i class="ti ti-source-code" style="font-size:13px;"></i> '+q.ref;document.getElementById('drawer-stem').textContent=q.stem;const sub=document.getElementById('drawer-sub');if(q.focus){document.getElementById('drawer-sub-text').textContent=q.focus;sub.style.display='';}else{sub.style.display='none';}answerShown=false;document.getElementById('drawer-answer').classList.remove('show');document.getElementById('drawer-answer-text').textContent=q.answer||'';const btn=document.getElementById('drawer-ans-btn');btn.textContent='显示答案';btn.style.display=q.answer?'':'none';document.getElementById('overlay').classList.add('open');document.getElementById('drawer').classList.add('open');document.body.style.overflow='hidden';}
+function closeDrawer(){document.getElementById('overlay').classList.remove('open');document.getElementById('drawer').classList.remove('open');document.body.style.overflow='';}
+function toggleAnswer(){answerShown=!answerShown;document.getElementById('drawer-answer').classList.toggle('show',answerShown);document.getElementById('drawer-ans-btn').textContent=answerShown?'隐藏答案':'显示答案';}
+function openLightbox(src,alt){document.getElementById('lb-img').src=src;document.getElementById('lb-img').alt=alt;document.getElementById('lb-overlay').classList.add('open');document.body.style.overflow='hidden';}
+function closeLightbox(){document.getElementById('lb-overlay').classList.remove('open');document.body.style.overflow='';}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(document.getElementById('lb-overlay').classList.contains('open'))closeLightbox();else closeDrawer();}});
+</script>
+</body>
+</html>

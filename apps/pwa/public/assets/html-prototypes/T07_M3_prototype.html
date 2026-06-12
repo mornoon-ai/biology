@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T07_M3 · 物质循环与碳氮循环</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent:#3B6D11; --accent-l:#EAF3DE; --accent-m:#8BBF5A; --accent-d:#173404;
+  --teal:#0F6E56; --teal-l:#E1F5EE; --teal-d:#085041;
+  --amber:#BA7517; --accent-d2:#27500A; --amber-l:#FAEEDA; --amber-d:#633806;
+  --coral:#993C1D; --coral-l:#FAECE7; --coral-d:#712B13;
+  --blue:#185FA5; --blue-l:#E6F1FB; --blue-d:#0C447C;
+  --bg:#ffffff; --bg2:#f7f7f5; --bg3:#f1efe8;
+  --tx:#1a1a18; --tx2:#5f5e5a; --tx3:#888780;
+  --bd:rgba(0,0,0,0.10); --bd2:rgba(0,0,0,0.18);
+  --r-sm:6px; --r-md:8px; --r-lg:12px; --r-xl:16px;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#1c1c1a;--bg2:#252523;--bg3:#2c2c2a;
+    --tx:#f0efea;--tx2:#b4b2a9;--tx3:#888780;
+    --bd:rgba(255,255,255,0.09);--bd2:rgba(255,255,255,0.16);
+    --accent-l:#173404;--accent-d:#C0DD97;--accent-d2:#C0DD97;
+    --teal-l:#04342C;--teal-d:#9FE1CB;
+    --amber-l:#412402;--amber-d:#FAC775;
+    --coral-l:#4A1B0C;--coral-d:#F5C4B3;
+    --blue-l:#042C53;--blue-d:#B5D4F4;
+  }
+}
+body{font-family:var(--font);font-size:15px;line-height:1.6;color:var(--tx);background:var(--bg3);min-height:100vh;}
+.app{max-width:800px;margin:0 auto;background:var(--bg);min-height:100vh;}
+.site-header{padding:1.25rem 1.5rem 0;background:var(--bg);border-bottom:0.5px solid var(--bd);position:sticky;top:0;z-index:20;}
+.header-top{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.header-icon{background:var(--accent-l);border-radius:var(--r-md);padding:6px 8px;display:flex;align-items:center;justify-content:center;}
+.header-icon i{font-size:20px;color:var(--accent);}
+.header-meta{font-size:12px;color:var(--tx3);}
+.header-title{font-size:17px;font-weight:500;color:var(--tx);}
+.header-id{margin-left:auto;font-size:11px;color:var(--tx3);background:var(--bg2);padding:3px 9px;border-radius:var(--r-sm);}
+.nav-tabs{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.nav-tab{padding:.6rem 1.1rem;font-size:13px;color:var(--tx2);cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;font-family:var(--font);white-space:nowrap;transition:color .15s,border-color .15s;}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500;}
+.nav-tab:hover:not(.active){color:var(--tx);}
+.page{display:none;padding:1.5rem;}
+.page.active{display:block;}
+.memory-section{margin-bottom:1.5rem;}
+.memory-card{border:0.5px solid var(--bd);border-radius:var(--r-xl);overflow:hidden;background:var(--bg);}
+.memory-img{width:100%;display:block;max-height:300px;object-fit:contain;background:var(--bg3);cursor:zoom-in;transition:opacity .15s;}
+.memory-img:hover{opacity:.9;}
+.memory-footer{padding:.85rem 1rem;display:flex;align-items:center;gap:10px;border-top:0.5px solid var(--bd);}
+.memory-label{font-size:13px;font-weight:500;color:var(--tx);flex:1;}
+audio{height:32px;width:220px;}
+audio::-webkit-media-controls-panel{background:var(--bg2);}
+.lb-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:200;display:none;align-items:center;justify-content:center;cursor:zoom-out;}
+.lb-overlay.open{display:flex;}
+.lb-img{max-width:92vw;max-height:92vh;object-fit:contain;border-radius:var(--r-md);}
+.lb-close{position:fixed;top:16px;right:20px;background:none;border:none;color:#fff;font-size:28px;cursor:pointer;opacity:.7;}
+.lb-close:hover{opacity:1;}
+.section-title{font-size:13px;font-weight:500;color:var(--tx2);display:flex;align-items:center;gap:7px;margin-bottom:1rem;text-transform:uppercase;letter-spacing:.04em;}
+.section-divider{height:0.5px;background:var(--bd);margin:1.5rem 0;}
+.signal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:1.5rem;}
+.signal-card{background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;}
+.signal-label{font-size:11px;color:var(--tx3);letter-spacing:.04em;margin-bottom:.4rem;text-transform:uppercase;}
+.signal-tag{font-size:13px;color:var(--tx);margin-bottom:3px;}
+.mode-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:1.5rem;}
+.mode-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.85rem 1rem;border-left-width:3px;}
+.mode-card-label{font-size:11px;font-weight:500;margin-bottom:.3rem;}
+.mode-card-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.trap-list{display:flex;flex-direction:column;gap:7px;}
+.trap-item{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.55;}
+.trap-icon{color:#E24B4A;font-size:15px;flex-shrink:0;margin-top:1px;}
+.filter-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem;}
+.filter-btn{padding:5px 13px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx2);font-family:var(--font);transition:all .15s;}
+.filter-btn.active{background:var(--accent-l);color:var(--accent-d2);border-color:var(--accent-m);font-weight:500;}
+.mq-card{border:0.5px solid var(--bd);border-radius:var(--r-lg);background:var(--bg);margin-bottom:.85rem;overflow:hidden;}
+.mq-header{padding:.9rem 1.1rem;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;transition:background .15s;}
+.mq-header:hover{background:var(--bg2);}
+.mq-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);white-space:nowrap;}
+.mq-badge.carbon{background:var(--accent-l);color:var(--accent-d2);}
+.mq-badge.nitrogen{background:var(--teal-l);color:var(--teal-d);}
+.mq-badge.cycle{background:var(--amber-l);color:var(--amber-d);}
+.mq-badge.greenhouse{background:var(--coral-l);color:var(--coral-d);}
+.mq-name{font-size:14px;font-weight:500;color:var(--tx);flex:1;}
+.mq-purity{font-size:12px;color:var(--tx3);flex-shrink:0;}
+.mq-chevron{color:var(--tx3);font-size:16px;transition:transform .2s;flex-shrink:0;}
+.mq-chevron.open{transform:rotate(180deg);}
+.mq-body{display:none;padding:.75rem 1.1rem 1.1rem;border-top:0.5px solid var(--bd);}
+.mq-body.open{display:block;}
+.mq-source{font-size:12px;color:var(--tx3);margin-bottom:.65rem;}
+.rule-box{background:var(--accent-l);border-left:3px solid var(--accent);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:.65rem .9rem;font-size:13px;color:var(--accent-d2);margin:.75rem 0;line-height:1.65;}
+.chain-label{font-size:12px;font-weight:500;color:var(--tx2);margin:.75rem 0 .4rem;text-transform:uppercase;letter-spacing:.04em;}
+.signal-chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:6px;}
+.sc-node{background:var(--bg2);border-radius:var(--r-sm);padding:3px 9px;font-size:13px;color:var(--tx);}
+.sc-node.carbon{background:var(--accent-l);color:var(--accent-d2);}
+.sc-node.nitrogen{background:var(--teal-l);color:var(--teal-d);}
+.sc-node.cycle{background:var(--amber-l);color:var(--amber-d);}
+.sc-node.greenhouse{background:var(--coral-l);color:var(--coral-d);}
+.sc-arrow{color:var(--tx3);font-size:13px;}
+.mq-note{font-size:13px;color:var(--tx2);margin-top:.75rem;line-height:1.6;}
+.q-trigger{display:inline-flex;align-items:center;gap:5px;margin-top:.75rem;padding:6px 12px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;color:var(--tx2);cursor:pointer;font-family:var(--font);transition:all .15s;}
+.q-trigger:hover{background:var(--bg2);color:var(--tx);}
+.q-trigger i{font-size:14px;}
+.ladder-section-label{font-size:13px;font-weight:500;color:var(--tx2);margin-bottom:.85rem;display:flex;align-items:center;gap:7px;}
+.ladder-rows{display:flex;flex-direction:column;gap:8px;margin-bottom:1rem;}
+.ladder-row{display:grid;grid-template-columns:64px 1fr;gap:10px;align-items:start;}
+.ladder-level{font-size:11px;font-weight:500;padding:6px 4px;border-radius:var(--r-sm);text-align:center;line-height:1.4;}
+.l1{background:var(--teal-l);color:var(--teal-d);}
+.l2{background:var(--accent-l);color:var(--accent-d2);}
+.l3{background:var(--amber-l);color:var(--amber-d);}
+.ladder-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.65rem .9rem;background:var(--bg);}
+.ladder-card-name{font-size:13px;font-weight:500;color:var(--tx);}
+.ladder-card-sub{font-size:12px;color:var(--tx3);margin-top:3px;line-height:1.5;}
+.ladder-note{background:var(--bg2);border-radius:var(--r-md);padding:.65rem .9rem;font-size:12px;color:var(--tx2);margin-bottom:1rem;line-height:1.55;}
+.progress-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem;}
+.progress-bar{height:5px;border-radius:3px;background:var(--bg2);margin-bottom:1.25rem;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;background:var(--accent);width:0%;transition:width .3s;}
+.checklist{display:flex;flex-direction:column;gap:7px;}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:.7rem .9rem;border:0.5px solid var(--bd);border-radius:var(--r-md);background:var(--bg);cursor:pointer;transition:background .15s;}
+.check-item.done{background:var(--bg2);}
+.check-box{width:18px;height:18px;border:1.5px solid var(--bd2);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .15s;}
+.check-item.done .check-box{background:var(--accent);border-color:var(--accent);}
+.check-box i{font-size:11px;color:#fff;display:none;}
+.check-item.done .check-box i{display:block;}
+.check-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.check-item.done .check-text{color:var(--tx3);text-decoration:line-through;}
+.action-row{margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:8px;}
+.action-btn{padding:7px 14px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.action-btn:hover{background:var(--bg2);}
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s;}
+.drawer-overlay.open{opacity:1;pointer-events:all;}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100vw);background:var(--bg);z-index:101;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden;}
+.drawer.open{transform:translateX(0);}
+.drawer-header{padding:1rem 1.25rem;border-bottom:0.5px solid var(--bd);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.drawer-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);}
+.drawer-title{font-size:14px;font-weight:500;color:var(--tx);flex:1;line-height:1.4;}
+.drawer-close{background:none;border:none;cursor:pointer;color:var(--tx2);padding:4px;border-radius:var(--r-sm);display:flex;align-items:center;transition:background .15s;}
+.drawer-close:hover{background:var(--bg2);}
+.drawer-body{flex:1;overflow-y:auto;padding:1.25rem;}
+.drawer-ec-ref{font-size:12px;color:var(--tx3);margin-bottom:1rem;display:flex;align-items:center;gap:6px;}
+.drawer-stem{font-size:14px;color:var(--tx);line-height:1.75;white-space:pre-wrap;}
+.drawer-sub{font-size:13px;color:var(--tx2);background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:1rem;line-height:1.65;}
+.drawer-sub-label{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-answer{font-size:13px;color:var(--tx);background:var(--accent-l);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:.75rem;line-height:1.65;display:none;}
+.drawer-answer.show{display:block;}
+.drawer-answer-label{font-size:11px;font-weight:500;color:var(--accent-d2);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-footer{padding:.85rem 1.25rem;border-top:0.5px solid var(--bd);display:flex;gap:8px;flex-shrink:0;}
+.drawer-btn{flex:1;padding:8px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.drawer-btn:hover{background:var(--bg2);}
+.drawer-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+.drawer-btn.primary:hover{background:var(--accent-d);}
+@media(max-width:600px){
+  .site-header{padding:1rem 1rem 0;} .page{padding:1rem;}
+  .header-title{font-size:15px;} .mode-grid{grid-template-columns:1fr 1fr;}
+  .ladder-row{grid-template-columns:52px 1fr;gap:8px;}
+  .action-row{flex-direction:column;} .action-btn{width:100%;text-align:center;}
+  .drawer{width:100vw;} audio{width:160px;}
+}
+@media(max-width:380px){.mode-grid,.signal-grid{grid-template-columns:1fr;}}
+
+.back-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;font-size:12px;color:var(--tx2);background:var(--bg2);border:0.5px solid var(--bd2);border-radius:var(--r-md);text-decoration:none;font-family:var(--font);transition:background .15s,color .15s;white-space:nowrap;flex-shrink:0;}
+.back-btn:hover{background:var(--bg3);color:var(--tx);}
+.back-btn i{font-size:14px;}
+.memory-video{width:100%;max-height:220px;display:block;border-radius:var(--r-md);background:#000;margin-top:8px;}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="site-header">
+  <div class="header-top">
+    <div class="header-icon"><i class="ti ti-arrows-exchange" aria-hidden="true"></i></div>
+    <div>
+      <div class="header-meta">07 生物与环境 · M3 物质循环</div>
+      <div class="header-title">物质循环与碳氮循环</div>
+    </div>
+    <a class="back-btn" href="index.html" aria-label="返回首页"><i class="ti ti-arrow-left"></i> 首页</a>
+    <div class="header-id">T07_M3</div>
+  </div>
+  <nav class="nav-tabs" role="tablist">
+    <button class="nav-tab active" role="tab" onclick="switchTab('overview',this)">概览</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('mothers',this)">母题精讲</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('ladder',this)">变式阶梯</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('self',this)">自查清单</button>
+  </nav>
+</header>
+
+<div id="tab-overview" class="page active" role="tabpanel">
+  <div class="memory-section">
+    <div class="memory-card">
+      <img class="memory-img" src="记忆卡/T07_M3_memory.png" alt="物质循环与碳氮循环记忆卡" onclick="openLightbox(this.src,this.alt)" onerror="this.style.display='none'">
+      <div class="memory-footer">
+        <div>
+          <div class="memory-label">记忆卡 · 碳氮循环关键途径与温室效应分析框架</div>
+          <div style="font-size:12px;color:var(--tx3);">点击图片可放大</div>
+        </div>
+        <video class="memory-video" controls controlsList="nodownload" preload="metadata" style="display:none">
+          <source src="audio/T07_M3.mp4" type="video/mp4">
+        </video>
+          <div class="audio-placeholder" style="display:flex"><i class="ti ti-video-off"></i>视频待放入</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title"><i class="ti ti-scan" aria-hidden="true"></i> 触发信号速查</div>
+  <div class="signal-grid">
+    <div class="signal-card">
+      <div class="signal-label">图像信号</div>
+      <div class="signal-tag">碳循环图（大气→生物→土壤）</div>
+      <div class="signal-tag">氮循环图（固氮→氨化→硝化→反硝化）</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">文字信号</div>
+      <div class="signal-tag">碳循环 / 温室效应 / CO₂</div>
+      <div class="signal-tag">固氮 / 硝化 / 反硝化 / 氨化</div>
+      <div class="signal-tag">物质循环 / 能量流动 / 分解者</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">任务关键词</div>
+      <div class="signal-tag">分析碳的流动途径</div>
+      <div class="signal-tag">判断氮循环各环节微生物</div>
+      <div class="signal-tag">温室效应的原因与对策</div>
+    </div>
+  </div>
+
+  <div class="section-title"><i class="ti ti-arrow-fork" aria-hidden="true"></i> 核心概念 · 四个分析维度</div>
+  <div class="mode-grid">
+    <div class="mode-card" style="border-left-color:var(--accent);">
+      <div class="mode-card-label" style="color:var(--accent-d2);">碳循环途径</div>
+      <div class="mode-card-text">大气CO₂←→生物体（光合/呼吸）；生物体←→土壤（分解者分解）；化石燃料燃烧→大气；海洋吸收CO₂是重要碳库</div>
+    </div>
+    <div class="mode-card" style="border-left-color:var(--teal);">
+      <div class="mode-card-label" style="color:var(--teal-d);">氮循环环节</div>
+      <div class="mode-card-text">固氮（根瘤菌/闪电）→氨化（分解者）→硝化（硝化细菌，有氧）→反硝化（反硝化细菌，无氧）→回到大气N₂</div>
+    </div>
+    <div class="mode-card" style="border-left-color:var(--amber);">
+      <div class="mode-card-label" style="color:var(--amber-d);">物质循环特点</div>
+      <div class="mode-card-text">物质循环是全球性的，元素在生物群落与无机环境之间反复循环；物质循环和能量流动同时进行，相互依存</div>
+    </div>
+    <div class="mode-card" style="border-left-color:var(--coral);">
+      <div class="mode-card-label" style="color:var(--coral-d);">温室效应分析</div>
+      <div class="mode-card-text">原因：化石燃料大量燃烧+森林砍伐→CO₂增多；后果：气温升高、冰川融化、海平面上升；对策：减排+固碳</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-alert-triangle" aria-hidden="true"></i> 高频陷阱（5 个）</div>
+  <div class="trap-list">
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon"></i><div>硝化作用需要<strong>有氧</strong>条件，反硝化作用需要<strong>无氧</strong>条件——不要混淆两个过程的氧气需求</div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon"></i><div>固氮微生物包括根瘤菌（共生）和自生固氮菌（自生），不是所有细菌都能固氮——<strong>固氮是少数微生物的专门功能</strong></div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon"></i><div>碳循环中，有机碳→CO₂的途径有两条：呼吸作用（所有生物）和分解者的分解作用——<strong>不能只写"呼吸"而忽略分解者</strong></div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon"></i><div>物质循环是"反复循环"，能量流动是"单向流动、逐级递减"——<strong>两者方向和特点不同，不能混用</strong></div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon"></i><div>温室气体不只有CO₂，还有CH₄（甲烷）、N₂O等；但高考题主要考CO₂——<strong>表述时注意题目所指的具体气体</strong></div></div>
+  </div>
+</div>
+
+<div id="tab-mothers" class="page" role="tabpanel">
+  <div class="filter-tabs" role="group">
+    <button class="filter-btn active" onclick="filterMode('all',this)">全部（4 类）</button>
+    <button class="filter-btn" onclick="filterMode('carbon',this)">碳循环途径</button>
+    <button class="filter-btn" onclick="filterMode('nitrogen',this)">氮循环环节</button>
+    <button class="filter-btn" onclick="filterMode('cycle',this)">物质循环特点</button>
+    <button class="filter-btn" onclick="filterMode('greenhouse',this)">温室效应</button>
+  </div>
+
+  <div class="mq-card" data-mode="carbon">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge carbon">碳循环途径</span>
+      <span class="mq-name">碳在生物群落与无机环境间的流动途径分析</span>
+      <span class="mq-purity">10/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-310 · 子问题 (1)(2)</div>
+      <div class="rule-box">核心信号：给出碳循环示意图（含大气CO₂库、植物、动物、分解者、化石燃料），要求分析碳从大气进入生物群落的途径，以及碳返回大气的全部途径。标准母题：逐节点分析进出路径。</div>
+      <div class="chain-label">碳进入生物群落的途径</div>
+      <div class="signal-chain"><span class="sc-node">大气CO₂</span><span class="sc-arrow">→</span><span class="sc-node carbon">植物光合作用（绿色植物、藻类）</span></div>
+      <div class="signal-chain"><span class="sc-node">大气CO₂</span><span class="sc-arrow">→</span><span class="sc-node">化能合成作用（少数自养微生物）</span></div>
+      <div class="chain-label">碳返回大气的途径</div>
+      <div class="signal-chain"><span class="sc-node">生物呼吸作用（所有生物）</span><span class="sc-arrow">→</span><span class="sc-node carbon">CO₂ ✓</span></div>
+      <div class="signal-chain"><span class="sc-node">分解者分解有机物</span><span class="sc-arrow">→</span><span class="sc-node carbon">CO₂ ✓</span></div>
+      <div class="signal-chain"><span class="sc-node">化石燃料燃烧</span><span class="sc-arrow">→</span><span class="sc-node carbon">CO₂ ✓</span></div>
+      <p class="mq-note">⚠️ 注意：碳在生物群落内部以<strong>有机物</strong>形式传递（捕食、分解）；在生物群落与无机环境之间以<strong>CO₂</strong>形式传递（光合/呼吸/燃烧）。两种形式不能混淆。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec310')"><i class="ti ti-file-text"></i> 查看完整题干</button>
+    </div>
+  </div>
+
+  <div class="mq-card" data-mode="nitrogen">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge nitrogen">氮循环环节</span>
+      <span class="mq-name">氮循环四个关键环节及对应微生物的识别</span>
+      <span class="mq-purity">10/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-315 · 子问题 (2)(3)</div>
+      <div class="rule-box">核心信号：氮循环图或表格，要求填写各环节名称和对应微生物。四大环节：固氮→氨化→硝化→反硝化，各有特定微生物，且对氧气需求不同。</div>
+      <div class="chain-label">氮循环四环节速记</div>
+      <div class="signal-chain"><span class="sc-node">固氮</span><span class="sc-arrow">：</span><span class="sc-node nitrogen">N₂→NH₃/NH₄⁺（根瘤菌、自生固氮菌）</span></div>
+      <div class="signal-chain"><span class="sc-node">氨化</span><span class="sc-arrow">：</span><span class="sc-node nitrogen">有机氮→NH₃（氨化细菌，分解者）</span></div>
+      <div class="signal-chain"><span class="sc-node">硝化</span><span class="sc-arrow">：</span><span class="sc-node">NH₄⁺→NO₂⁻→NO₃⁻（硝化细菌，<strong>需有氧</strong>）</span></div>
+      <div class="signal-chain"><span class="sc-node">反硝化</span><span class="sc-arrow">：</span><span class="sc-node nitrogen">NO₃⁻→N₂（反硝化细菌，<strong>需无氧</strong>）✓</span></div>
+      <p class="mq-note">选题理由：氮循环是高考"物质循环"中微生物功能考察的核心，硝化/反硝化的氧气需求是高频易错点。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec315')"><i class="ti ti-file-text"></i> 查看完整题干</button>
+    </div>
+  </div>
+
+  <div class="mq-card" data-mode="cycle">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge cycle">物质循环特点</span>
+      <span class="mq-name">物质循环与能量流动的关系及各自特点对比</span>
+      <span class="mq-purity">9/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-318 · 子问题 (3)(4)</div>
+      <div class="rule-box">核心信号：题目要求区分物质循环和能量流动的特点，或说明两者之间的关系。考查对"全球性""反复循环"vs"单向流动、逐级递减"的理解。</div>
+      <div class="chain-label">对比框架</div>
+      <div class="signal-chain"><span class="sc-node cycle">物质循环</span><span class="sc-arrow">：</span><span class="sc-node">全球性 · 反复循环（元素不灭失）</span></div>
+      <div class="signal-chain"><span class="sc-node">能量流动</span><span class="sc-arrow">：</span><span class="sc-node cycle">单向流动 · 逐级递减（热量耗散不可逆）✓</span></div>
+      <div class="signal-chain"><span class="sc-node">两者关系</span><span class="sc-arrow">：</span><span class="sc-node">同时进行 · 相互依存（能量驱动物质循环，物质是能量载体）</span></div>
+      <p class="mq-note">⚠️ "物质可以循环"的根本原因：元素本身不会消失，只会转变形态；而能量以热能形式耗散后无法再利用，所以不能循环。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec318')"><i class="ti ti-file-text"></i> 查看完整题干</button>
+    </div>
+  </div>
+
+  <div class="mq-card" data-mode="greenhouse">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge greenhouse">温室效应</span>
+      <span class="mq-name">温室效应的成因分析与缓解措施的评价</span>
+      <span class="mq-purity">9/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-322 · 子问题 (1)(2)(4)</div>
+      <div class="rule-box">核心信号：题目提供"大气CO₂浓度升高→全球气温升高"的材料，要求分析原因、预测后果，或评价缓解措施（减少化石燃料使用、植树造林、开发新能源等）。</div>
+      <div class="chain-label">温室效应因果链</div>
+      <div class="signal-chain"><span class="sc-node">化石燃料大量燃烧</span><span class="sc-arrow">+</span><span class="sc-node">森林大量砍伐</span></div>
+      <div class="signal-chain"><span class="sc-node">↓</span><span class="sc-arrow"></span><span class="sc-node greenhouse">大气CO₂浓度升高</span></div>
+      <div class="signal-chain"><span class="sc-node">↓</span><span class="sc-arrow"></span><span class="sc-node">温室效应增强→全球气温升高</span></div>
+      <div class="signal-chain"><span class="sc-node">后果</span><span class="sc-arrow">：</span><span class="sc-node greenhouse">冰川融化·海平面升高·极端天气增多 ✓</span></div>
+      <div class="chain-label">缓解措施评价逻辑</div>
+      <div class="signal-chain"><span class="sc-node">减排</span><span class="sc-arrow">→</span><span class="sc-node">减少CO₂产生（治本）</span></div>
+      <div class="signal-chain"><span class="sc-node">植树造林</span><span class="sc-arrow">→</span><span class="sc-node greenhouse">增加固碳（治标兼治本）✓</span></div>
+      <p class="mq-note">命题角度：①分析原因（两个：燃烧+砍伐）②预测后果（三个：温度/冰川/海平面）③评价方案（减排>固碳>适应）。三个子问题常组合出现。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec322')"><i class="ti ti-file-text"></i> 查看完整题干</button>
+    </div>
+  </div>
+</div>
+
+<div id="tab-ladder" class="page" role="tabpanel">
+  <div class="ladder-note">按 L1 基础 → L2 进阶 → L3 综合三级递进。点击卡片可查看完整题干。</div>
+  <div class="ladder-section-label"><span class="ladder-level l1" style="width:auto;padding:3px 8px;">L1 基础</span> 碳/氮循环基本途径与环节识别</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1-1<br>碳循环</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec310-1')" style="cursor:pointer;">
+        <div class="ladder-card-name">在碳循环图中标注各箭头代表的生命活动</div>
+        <div class="ladder-card-sub">EC-310 (1) · 识别光合、呼吸、分解、燃烧四类途径 <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1-2<br>氮循环</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec315-2')" style="cursor:pointer;">
+        <div class="ladder-card-name">判断氮循环各环节名称及对应微生物</div>
+        <div class="ladder-card-sub">EC-315 (2) · 填写固氮/氨化/硝化/反硝化，区分有氧无氧 <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1-3<br>特点</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec318-3')" style="cursor:pointer;">
+        <div class="ladder-card-name">区分物质循环与能量流动的方向性特点</div>
+        <div class="ladder-card-sub">EC-318 (3) · 反复循环 vs 单向递减，写出两者的联系 <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+  </div>
+  <div class="section-divider"></div>
+  <div class="ladder-section-label"><span class="ladder-level l2" style="width:auto;padding:3px 8px;">L2 进阶</span> 温室效应分析 + 氮循环环境应用</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2-1<br>温室</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec322-12')" style="cursor:pointer;">
+        <div class="ladder-card-name">分析温室效应成因并评价缓解方案的有效性</div>
+        <div class="ladder-card-sub">EC-322 (1)+(2) · 原因→后果→应对，三层递进分析 <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2-2<br>氮应用</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec315-34')" style="cursor:pointer;">
+        <div class="ladder-card-name">农田施肥过量导致水体富营养化的机制分析</div>
+        <div class="ladder-card-sub">EC-315 (3)+(4) · 氮循环失衡→藻类爆发→水体缺氧→生物死亡 <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2-3<br>分解者</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec320-2')" style="cursor:pointer;">
+        <div class="ladder-card-name">分解者在物质循环中的作用及缺失后的后果预测</div>
+        <div class="ladder-card-sub">EC-320 (2) · 分解者缺失→有机物积累→碳氮无法回归无机环境 <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+  </div>
+  <div class="section-divider"></div>
+  <div class="ladder-section-label"><span class="ladder-level l3" style="width:auto;padding:3px 8px;">L3 综合</span> 碳氮循环 + 人类活动影响 + 生态对策</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l3">L3-1</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec325-135')" style="cursor:pointer;">
+        <div class="ladder-card-name">碳氮循环联动分析 + 人类活动干扰 + 生态修复方案设计</div>
+        <div class="ladder-card-sub">EC-325 (1)+(3)+(5) · 综合碳/氮两个循环，评估人类活动的系统性影响 <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="tab-self" class="page" role="tabpanel">
+  <div class="progress-row">
+    <span style="font-size:13px;color:var(--tx2);">学习自查清单</span>
+    <span style="font-size:13px;color:var(--tx2);" id="progress-text">0 / 7 完成</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="pbar"></div></div>
+  <div class="checklist" id="checklist">
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">能说出碳进入生物群落的途径（光合作用）和返回大气的全部途径（呼吸/分解/燃烧）</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">能写出氮循环四个环节（固氮→氨化→硝化→反硝化）及各环节的微生物名称</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">能区分硝化作用（有氧）和反硝化作用（无氧）的氧气需求，不混淆</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">能说出物质循环（全球性·反复循环）与能量流动（单向·逐级递减）各自的特点及其关系</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">能分析温室效应的两个成因（化石燃料燃烧+森林砍伐）及三个主要后果</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">完成 L1 全部 3 道基础变式（碳循环图、氮循环填写、物质循环特点各 1 道）</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">完成至少 2 道 L2 进阶变式，能用因果链说明人类活动对物质循环的干扰机制</div></div>
+  </div>
+  <div class="action-row">
+    <button class="action-btn" onclick="window.scrollTo(0,0);switchTab('mothers',document.querySelectorAll('.nav-tab')[1])">返回母题精讲 →</button>
+    <button class="action-btn" onclick="window.scrollTo(0,0);switchTab('ladder',document.querySelectorAll('.nav-tab')[2])">进入变式阶梯 →</button>
+  </div>
+</div>
+</div>
+
+<div class="lb-overlay" id="lb-overlay" onclick="closeLightbox()">
+  <button class="lb-close" onclick="closeLightbox()">×</button>
+  <img class="lb-img" id="lb-img" src="" alt="">
+</div>
+<div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer" role="dialog" aria-modal="true">
+  <div class="drawer-header">
+    <span class="drawer-badge" id="drawer-badge"></span>
+    <span class="drawer-title" id="drawer-title"></span>
+    <button class="drawer-close" onclick="closeDrawer()"><i class="ti ti-x" style="font-size:18px;"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="drawer-ec-ref" id="drawer-ref"></div>
+    <div class="drawer-stem" id="drawer-stem"></div>
+    <div class="drawer-sub" id="drawer-sub" style="display:none;"><div class="drawer-sub-label">本题考查重点</div><div id="drawer-sub-text"></div></div>
+    <div class="drawer-answer" id="drawer-answer"><div class="drawer-answer-label">参考答案</div><div id="drawer-answer-text"></div></div>
+  </div>
+  <div class="drawer-footer">
+    <button class="drawer-btn" id="drawer-ans-btn" onclick="toggleAnswer()">显示答案</button>
+    <button class="drawer-btn primary" onclick="closeDrawer()">完成阅读</button>
+  </div>
+</div>
+
+<script>
+function switchTab(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');if(btn)btn.classList.add('active');}
+function toggleMQ(h){const b=h.nextElementSibling,c=h.querySelector('.mq-chevron'),o=b.classList.contains('open');b.classList.toggle('open',!o);c.classList.toggle('open',!o);}
+function filterMode(mode,btn){document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.mq-card').forEach(card=>{card.style.display=(mode==='all'||card.dataset.mode===mode)?'':'none';});}
+function toggleCheck(item){item.classList.toggle('done');updateProgress();saveChecklist();}
+function updateProgress(){const total=document.querySelectorAll('.check-item').length,done=document.querySelectorAll('.check-item.done').length;document.getElementById('pbar').style.width=(done/total*100)+'%';document.getElementById('progress-text').textContent=done+' / '+total+' 完成';}
+function saveChecklist(){try{const s=Array.from(document.querySelectorAll('.check-item')).map(el=>el.classList.contains('done'));localStorage.setItem('T07_M3_checklist',JSON.stringify(s));}catch(e){}}
+(function(){try{const s=JSON.parse(localStorage.getItem('T07_M3_checklist')||'[]');document.querySelectorAll('.check-item').forEach((item,i)=>{if(s[i])item.classList.add('done');});updateProgress();}catch(e){}})();
+
+const QUESTIONS = {
+  'mq-ec310':{badge:'碳循环途径 · 母题',badgeClass:'carbon',title:'碳在生物群落与无机环境间的流动途径',ref:'EC-20260525-310 · 子问题 (1)(2)',stem:`某生态系统碳循环示意图包含以下组分：大气CO₂库、绿色植物、草食动物、肉食动物、分解者、化石燃料。\n\n(1) 碳从大气CO₂库进入生物群落的途径有哪些？写出相关生理过程名称。\n(2) 碳从生物群落返回大气CO₂库的途径有哪些？各途径中发挥作用的是哪类生物？`,focus:'(1) 进入生物群落：光合作用（绿色植物/藻类）；化能合成作用（少数自养微生物）。\n(2) 返回大气：①所有生物的细胞呼吸（分解有机物→CO₂）；②分解者的分解作用（将遗体/粪便分解为CO₂）；③化石燃料的燃烧（人类活动）。\n关键区分：群落内部碳以有机物形式流动（捕食）；群落←→无机环境以CO₂形式流动。',answer:'(1) 途径：\n①绿色植物通过光合作用将CO₂固定为有机物，使碳进入生物群落；\n②少数自养微生物（如硝化细菌）通过化能合成作用固定CO₂。\n(2) 途径：\n①所有生物（植物、动物、微生物）通过细胞呼吸将有机物分解为CO₂，释放到大气；\n②分解者（细菌、真菌等）将动植物遗体和粪便中的有机碳分解为CO₂，释放到大气；\n③人类燃烧化石燃料（煤、石油、天然气）将储存的碳以CO₂形式释放到大气。'},
+  'mq-ec315':{badge:'氮循环环节 · 母题',badgeClass:'nitrogen',title:'氮循环四个关键环节及对应微生物',ref:'EC-20260525-315 · 子问题 (2)(3)',stem:`如图为氮循环示意图，图中①②③④分别代表不同的生理过程，A~D代表参与各过程的微生物。\n\n(2) 写出图中①②③④对应的过程名称及各过程的典型微生物。\n(3) 哪些过程需要在有氧条件下进行？哪些需要在无氧条件下进行？`,focus:'①固氮：N₂→NH₃/NH₄⁺，微生物为根瘤菌（共生）和自生固氮菌（自由生活）；\n②氨化：含氮有机物→NH₃，微生物为氨化细菌（分解者）；\n③硝化：NH₄⁺→NO₂⁻→NO₃⁻，微生物为硝化细菌，需要有氧；\n④反硝化：NO₃⁻→N₂，微生物为反硝化细菌，需要无氧（厌氧环境）。',answer:'(2) 各过程：\n①固氮：大气N₂→NH₃/NH₄⁺，微生物：根瘤菌（豆科植物共生）、圆褐固氮菌（自生）；\n②氨化：含氮有机物→NH₃，微生物：氨化细菌（属于分解者）；\n③硝化：NH₄⁺→NO₂⁻→NO₃⁻，微生物：硝化细菌（化能自养型）；\n④反硝化：NO₃⁻→N₂，微生物：反硝化细菌（异养厌氧型）。\n(3) 有氧：硝化作用（③）；无氧：反硝化作用（④）。固氮和氨化过程对氧气需求因微生物种类而异。'},
+  'mq-ec318':{badge:'物质循环特点 · 母题',badgeClass:'cycle',title:'物质循环与能量流动的特点及两者关系',ref:'EC-20260525-318 · 子问题 (3)(4)',stem:`某生态系统中，科学家研究了物质循环和能量流动的规律。\n\n(3) 物质循环和能量流动各有什么特点？请分别描述。\n(4) 物质循环和能量流动之间有什么关系？为什么物质可以循环而能量不能循环？`,focus:'(3) 物质循环：全球性、反复循环（元素不消失，只是形态改变）；能量流动：单向流动、逐级递减（能量以热能形式耗散，不可再利用）。\n(4) 关系：同时进行、相互依存；能量流动驱动物质循环（需要消耗ATP等），物质是能量的载体（有机物化学能）。\n原因：物质（元素）不灭失，只是化学形态改变，故可循环；能量最终以热能形式耗散，热能不能再转化为有机物中的化学能，故不可循环。',answer:'(3) 物质循环特点：全球性（不受生态系统边界限制）、反复性（物质在无机环境和生物群落间反复流动，元素不消失）。\n能量流动特点：单向性（沿食物链从低营养级流向高营养级，不可逆）、逐级递减性（每个营养级都通过呼吸散失大量热能）。\n(4) 关系：两者同时进行、相互依存，不可分割。能量流动为物质循环提供动力；物质是能量的载体，能量依附于物质而流动。\n原因：物质（化学元素）不灭失，只发生化合物形态的转变，因此可以反复利用；能量（最终以热能散失）不能再被生物体利用，因此不能循环。'},
+  'mq-ec322':{badge:'温室效应 · 母题',badgeClass:'greenhouse',title:'温室效应成因分析与缓解措施评价',ref:'EC-20260525-322 · 子问题 (1)(2)(4)',stem:`近几十年来，大气中CO₂浓度持续升高，全球气温呈现上升趋势。\n\n(1) 分析导致大气CO₂浓度升高的主要原因（写出两个）。\n(2) CO₂浓度升高会带来哪些生态后果？请列举三个方面。\n(4) 以下措施中，哪些能有效缓解温室效应？请分析其作用机理：①减少化石燃料使用；②植树造林；③开发核能和可再生能源；④向海洋中倾倒石灰石。`,focus:'(1) 两个原因：①化石燃料（煤、石油、天然气）的大量燃烧，将储存数亿年的碳快速释放；②大规模砍伐森林，减少了植被固碳能力，同时木材腐烂/燃烧也释放CO₂。\n(2) 三个后果：全球气温升高；极地冰川融化→海平面上升→沿海地区被淹；极端气候（干旱/洪涝）增多。\n(4) ①③有效（减少CO₂排放来源）；②有效（增加固碳）；④石灰石溶于海水会生成Ca(HCO₃)₂，短期有效但会导致海洋酸化，不可取。',answer:'(1) 主要原因：\n①化石燃料的大量开采和燃烧，将地下储存的碳迅速释放为大气CO₂；\n②大规模毁林（农业开荒、木材采伐），使陆地植被的CO₂固定量大幅减少。\n(2) 生态后果：\n①全球平均气温升高，热带向两极扩展；\n②极地冰川和高山冰雪加速融化，海平面升高，威胁沿海低地；\n③极端天气事件（强降水、干旱、飓风）频率和强度增加，影响农业生产和生物多样性。\n(4) ①减少化石燃料使用：直接减少CO₂排放，最有效；②植树造林：增加植被固碳量，吸收大气CO₂；③开发核能和可再生能源：替代化石燃料，减少碳排放；④倾倒石灰石：虽能短暂吸收CO₂，但会导致海洋酸化，破坏海洋生态，不建议采用。'},
+  'v-ec310-1':{badge:'L1 基础变式 · 碳循环',badgeClass:'carbon',title:'碳循环图中各箭头的生理过程识别',ref:'EC-20260525-310 · (1)',stem:'（同母题 mq-ec310 (1)）',focus:'同母题分析。',answer:'见母题 EC-310 答案。'},
+  'v-ec315-2':{badge:'L1 基础变式 · 氮循环',badgeClass:'nitrogen',title:'氮循环四环节名称及微生物填写',ref:'EC-20260525-315 · (2)',stem:'（同母题 mq-ec315 (2)）',focus:'同母题分析。',answer:'见母题 EC-315 答案。'},
+  'v-ec318-3':{badge:'L1 基础变式 · 物质循环特点',badgeClass:'cycle',title:'物质循环与能量流动特点区分',ref:'EC-20260525-318 · (3)',stem:'（同母题 mq-ec318 (3)）',focus:'同母题分析。',answer:'见母题 EC-318 答案。'},
+  'v-ec322-12':{badge:'L2 进阶变式 · 温室效应',badgeClass:'greenhouse',title:'温室效应成因及缓解方案评价',ref:'EC-20260525-322 · (1)+(2)',stem:'（同母题 mq-ec322 (1)(2)）',focus:'同母题分析。',answer:'见母题 EC-322 答案。'},
+  'v-ec315-34':{badge:'L2 进阶变式 · 氮循环应用',badgeClass:'nitrogen',title:'施肥过量→水体富营养化机制',ref:'EC-20260525-315 · (3)+(4)',stem:`农田大量施用氮肥（铵态氮和硝态氮），经雨水冲刷流入邻近湖泊。\n\n(3) 分析湖泊中氮浓度升高后，藻类大量繁殖的原因。\n(4) 藻类爆发后，水体中溶解氧浓度如何变化？鱼类会受到怎样的影响？请用氮循环和物质循环的知识解释。`,focus:'(3) 氮是藻类生长的限制因素（N是蛋白质/核酸的组成元素）；氮浓度升高→藻类获得充足氮源→大量繁殖（水华/赤潮）。\n(4) 藻类大量繁殖→水体上层遮光→底层藻类和水草死亡→分解者大量繁殖分解有机物→消耗大量O₂→水中溶解氧↓→鱼类因缺氧死亡（eutrophication）。',answer:'(3) 氮是构成蛋白质和核酸的必需元素，通常是湖泊中藻类生长的限制因素。氮肥流入后，水体中NH₄⁺和NO₃⁻浓度升高，藻类获得充足的氮源，大量快速繁殖，导致水华。\n(4) 藻类大量繁殖后：大量藻类覆盖水面→遮挡阳光→底层水草和藻类因光合作用受阻而死亡→大量有机物积累→微生物（分解者）分解有机物时大量消耗溶解氧→水中溶解氧浓度急剧下降→鱼虾等水生生物因缺氧而死亡。这一过程属于物质循环失衡的典型后果。'},
+  'v-ec320-2':{badge:'L2 进阶变式 · 分解者',badgeClass:'cycle',title:'分解者缺失对物质循环的影响',ref:'EC-20260525-320 · (2)',stem:`假设某生态系统中所有分解者（细菌和真菌）突然全部消失。\n\n(2) 分析分解者消失后，该生态系统的物质循环会发生什么变化？这对生态系统会产生怎样的长远影响？`,focus:'分解者的功能：将动植物遗体、粪便中的有机物分解为无机物（CO₂、水、无机盐），使物质从生物群落回流到无机环境。\n消失后：有机物无法被分解→CO₂不再回归大气→植物光合作用原料（CO₂、无机盐）减少→植物生长受阻→整个生态系统物质循环中断→最终崩溃。',answer:'(2) 分解者消失后的变化：\n①动植物遗体、粪便中的有机物无法被分解为无机物（CO₂、H₂O、无机盐），大量有机物积累在土壤和水体中；\n②大气CO₂浓度逐渐降低（植物呼吸释放减少，无分解者补充），无机盐不能回归土壤；\n③植物因CO₂和无机盐匮乏，光合作用减弱，生长受阻；\n④整个食物链因生产者减少而崩溃，生态系统物质循环中断，最终生态系统瓦解。\n结论：分解者是物质循环的"关键环节"，连接有机物与无机物，不可或缺。'},
+  'v-ec325-135':{badge:'L3 综合变式',badgeClass:'greenhouse',title:'碳氮循环联动 + 人类活动干扰 + 生态修复',ref:'EC-20260525-325 · (1)+(3)+(5)',stem:`某地区由于大量使用化肥、砍伐森林、工业排放，导致土壤和水体氮含量过高，同时大气CO₂浓度升高。\n\n(1) 分析该地区碳循环和氮循环各被如何干扰，并指出干扰方向（加速/阻断/失衡）。\n(3) 设计生态修复方案，从碳固定、氮还原、生物多样性恢复三个角度各提出一条措施。\n(5) 若长期不干预，预测该地区生态系统的演变趋势。`,focus:'(1) 碳循环被加速（化石燃料燃烧+森林砍伐→CO₂输出增加，固碳减少）；氮循环失衡（过量施肥→NH₄⁺/NO₃⁻积累→水体富营养化，自然氮循环比例被打乱）。\n(3) 碳固定：植树造林（增加光合固碳）；氮还原：恢复湿地/沼泽（促进反硝化，将NO₃⁻还原为N₂）；生物多样性：建立自然保护区，减少农药使用。\n(5) 若不干预：水华频发→水体生物死亡→生物多样性下降→生态系统抵抗力稳定性降低→更易受外部干扰→最终退化为低多样性的简单生态系统。',answer:'(1) 碳循环干扰：\n化石燃料燃烧和森林砍伐共同作用，使大气CO₂输入速率远超固碳速率，碳循环被加速（失衡方向：大气CO₂积累）。\n氮循环干扰：大量化肥输入使土壤和水体无机氮远超生物需求，氮循环失衡（方向：NO₃⁻/NH₄⁺积累→水体富营养化；自然固氮/反硝化无法平衡）。\n(3) 修复措施：\n①碳固定：大规模植树造林，恢复森林植被，增加光合固碳量；\n②氮还原：恢复或新建人工湿地，利用湿地土壤的厌氧环境促进反硝化细菌将NO₃⁻还原为N₂，减少水体氮负荷；\n③生物多样性恢复：建立生态缓冲带（减少农业面源污染），逐步减少化学农药，保护土壤微生物多样性。\n(5) 若长期不干预：水体持续富营养化→水华频发→水生生物大量死亡→水体生态系统崩溃；土壤有机质矿化加速；陆地生物多样性因栖息地破坏持续下降；最终该地区生态系统退化为物种单一、功能低下的受损生态系统，恢复难度极大。'}
+};
+
+let answerShown=false;
+function openDrawer(key){const q=QUESTIONS[key];if(!q)return;const badge=document.getElementById('drawer-badge');badge.textContent=q.badge;badge.className='drawer-badge mq-badge '+(q.badgeClass||'');document.getElementById('drawer-title').textContent=q.title;document.getElementById('drawer-ref').innerHTML='<i class="ti ti-source-code" style="font-size:13px;"></i> '+q.ref;document.getElementById('drawer-stem').textContent=q.stem;const sub=document.getElementById('drawer-sub');if(q.focus){document.getElementById('drawer-sub-text').textContent=q.focus;sub.style.display='';}else{sub.style.display='none';}answerShown=false;document.getElementById('drawer-answer').classList.remove('show');document.getElementById('drawer-answer-text').textContent=q.answer||'';const btn=document.getElementById('drawer-ans-btn');btn.textContent='显示答案';btn.style.display=q.answer?'':'none';document.getElementById('overlay').classList.add('open');document.getElementById('drawer').classList.add('open');document.body.style.overflow='hidden';}
+function closeDrawer(){document.getElementById('overlay').classList.remove('open');document.getElementById('drawer').classList.remove('open');document.body.style.overflow='';}
+function toggleAnswer(){answerShown=!answerShown;document.getElementById('drawer-answer').classList.toggle('show',answerShown);document.getElementById('drawer-ans-btn').textContent=answerShown?'隐藏答案':'显示答案';}
+function openLightbox(src,alt){document.getElementById('lb-img').src=src;document.getElementById('lb-img').alt=alt;document.getElementById('lb-overlay').classList.add('open');document.body.style.overflow='hidden';}
+function closeLightbox(){document.getElementById('lb-overlay').classList.remove('open');document.body.style.overflow='';}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(document.getElementById('lb-overlay').classList.contains('open'))closeLightbox();else closeDrawer();}});
+</script>
+</body>
+</html>

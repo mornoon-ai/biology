@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T07_M1 · 食物链与营养级分析</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent:#3B6D11; --accent-l:#EAF3DE; --accent-m:#8BBF5A; --accent-d:#173404;
+  --teal:#0F6E56; --teal-l:#E1F5EE; --teal-d:#085041;
+  --amber:#BA7517; --accent-d2:#27500A; --amber-l:#FAEEDA; --amber-d:#633806;
+  --coral:#993C1D; --coral-l:#FAECE7; --coral-d:#712B13;
+  --blue:#185FA5; --blue-l:#E6F1FB; --blue-d:#0C447C;
+  --bg:#ffffff; --bg2:#f7f7f5; --bg3:#f1efe8;
+  --tx:#1a1a18; --tx2:#5f5e5a; --tx3:#888780;
+  --bd:rgba(0,0,0,0.10); --bd2:rgba(0,0,0,0.18);
+  --r-sm:6px; --r-md:8px; --r-lg:12px; --r-xl:16px;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#1c1c1a;--bg2:#252523;--bg3:#2c2c2a;
+    --tx:#f0efea;--tx2:#b4b2a9;--tx3:#888780;
+    --bd:rgba(255,255,255,0.09);--bd2:rgba(255,255,255,0.16);
+    --accent-l:#173404;--accent-d:#C0DD97;--accent-d2:#C0DD97;
+    --teal-l:#04342C;--teal-d:#9FE1CB;
+    --amber-l:#412402;--amber-d:#FAC775;
+    --coral-l:#4A1B0C;--coral-d:#F5C4B3;
+    --blue-l:#042C53;--blue-d:#B5D4F4;
+  }
+}
+body{font-family:var(--font);font-size:15px;line-height:1.6;color:var(--tx);background:var(--bg3);min-height:100vh;}
+.app{max-width:800px;margin:0 auto;background:var(--bg);min-height:100vh;}
+.site-header{padding:1.25rem 1.5rem 0;background:var(--bg);border-bottom:0.5px solid var(--bd);position:sticky;top:0;z-index:20;}
+.header-top{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.header-icon{background:var(--accent-l);border-radius:var(--r-md);padding:6px 8px;display:flex;align-items:center;justify-content:center;}
+.header-icon i{font-size:20px;color:var(--accent);}
+.header-meta{font-size:12px;color:var(--tx3);}
+.header-title{font-size:17px;font-weight:500;color:var(--tx);}
+.header-id{margin-left:auto;font-size:11px;color:var(--tx3);background:var(--bg2);padding:3px 9px;border-radius:var(--r-sm);}
+.nav-tabs{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.nav-tab{padding:.6rem 1.1rem;font-size:13px;color:var(--tx2);cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;font-family:var(--font);white-space:nowrap;transition:color .15s,border-color .15s;}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500;}
+.nav-tab:hover:not(.active){color:var(--tx);}
+.page{display:none;padding:1.5rem;}
+.page.active{display:block;}
+.memory-section{margin-bottom:1.5rem;}
+.memory-card{border:0.5px solid var(--bd);border-radius:var(--r-xl);overflow:hidden;background:var(--bg);}
+.memory-img{width:100%;display:block;max-height:300px;object-fit:contain;background:var(--bg3);cursor:zoom-in;transition:opacity .15s;}
+.memory-img:hover{opacity:.9;}
+.memory-footer{padding:.85rem 1rem;display:flex;align-items:center;gap:10px;border-top:0.5px solid var(--bd);}
+.memory-label{font-size:13px;font-weight:500;color:var(--tx);flex:1;}
+audio{height:32px;width:220px;}
+audio::-webkit-media-controls-panel{background:var(--bg2);}
+.lb-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:200;display:none;align-items:center;justify-content:center;cursor:zoom-out;}
+.lb-overlay.open{display:flex;}
+.lb-img{max-width:92vw;max-height:92vh;object-fit:contain;border-radius:var(--r-md);}
+.lb-close{position:fixed;top:16px;right:20px;background:none;border:none;color:#fff;font-size:28px;cursor:pointer;opacity:.7;}
+.lb-close:hover{opacity:1;}
+.section-title{font-size:13px;font-weight:500;color:var(--tx2);display:flex;align-items:center;gap:7px;margin-bottom:1rem;text-transform:uppercase;letter-spacing:.04em;}
+.section-divider{height:0.5px;background:var(--bd);margin:1.5rem 0;}
+.signal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:1.5rem;}
+.signal-card{background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;}
+.signal-label{font-size:11px;color:var(--tx3);letter-spacing:.04em;margin-bottom:.4rem;text-transform:uppercase;}
+.signal-tag{font-size:13px;color:var(--tx);margin-bottom:3px;}
+.mode-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:1.5rem;}
+.mode-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.85rem 1rem;border-left-width:3px;}
+.mode-card-label{font-size:11px;font-weight:500;margin-bottom:.3rem;}
+.mode-card-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.trap-list{display:flex;flex-direction:column;gap:7px;}
+.trap-item{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.55;}
+.trap-icon{color:#E24B4A;font-size:15px;flex-shrink:0;margin-top:1px;}
+.filter-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem;}
+.filter-btn{padding:5px 13px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx2);font-family:var(--font);transition:all .15s;}
+.filter-btn.active{background:var(--accent-l);color:var(--accent-d2);border-color:var(--accent-m);font-weight:500;}
+.mq-card{border:0.5px solid var(--bd);border-radius:var(--r-lg);background:var(--bg);margin-bottom:.85rem;overflow:hidden;}
+.mq-header{padding:.9rem 1.1rem;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;transition:background .15s;}
+.mq-header:hover{background:var(--bg2);}
+.mq-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);white-space:nowrap;}
+.mq-badge.chain{background:var(--accent-l);color:var(--accent-d2);}
+.mq-badge.level{background:var(--teal-l);color:var(--teal-d);}
+.mq-badge.web{background:var(--amber-l);color:var(--amber-d);}
+.mq-badge.change{background:var(--coral-l);color:var(--coral-d);}
+.mq-name{font-size:14px;font-weight:500;color:var(--tx);flex:1;}
+.mq-purity{font-size:12px;color:var(--tx3);flex-shrink:0;}
+.mq-chevron{color:var(--tx3);font-size:16px;transition:transform .2s;flex-shrink:0;}
+.mq-chevron.open{transform:rotate(180deg);}
+.mq-body{display:none;padding:.75rem 1.1rem 1.1rem;border-top:0.5px solid var(--bd);}
+.mq-body.open{display:block;}
+.mq-source{font-size:12px;color:var(--tx3);margin-bottom:.65rem;}
+.rule-box{background:var(--accent-l);border-left:3px solid var(--accent);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:.65rem .9rem;font-size:13px;color:var(--accent-d2);margin:.75rem 0;line-height:1.65;}
+.chain-label{font-size:12px;font-weight:500;color:var(--tx2);margin:.75rem 0 .4rem;text-transform:uppercase;letter-spacing:.04em;}
+.signal-chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:6px;}
+.sc-node{background:var(--bg2);border-radius:var(--r-sm);padding:3px 9px;font-size:13px;color:var(--tx);}
+.sc-node.chain{background:var(--accent-l);color:var(--accent-d2);}
+.sc-node.level{background:var(--teal-l);color:var(--teal-d);}
+.sc-node.web{background:var(--amber-l);color:var(--amber-d);}
+.sc-node.change{background:var(--coral-l);color:var(--coral-d);}
+.sc-arrow{color:var(--tx3);font-size:13px;}
+.mq-note{font-size:13px;color:var(--tx2);margin-top:.75rem;line-height:1.6;}
+.q-trigger{display:inline-flex;align-items:center;gap:5px;margin-top:.75rem;padding:6px 12px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;color:var(--tx2);cursor:pointer;font-family:var(--font);transition:all .15s;}
+.q-trigger:hover{background:var(--bg2);color:var(--tx);}
+.q-trigger i{font-size:14px;}
+.ladder-section-label{font-size:13px;font-weight:500;color:var(--tx2);margin-bottom:.85rem;display:flex;align-items:center;gap:7px;}
+.ladder-rows{display:flex;flex-direction:column;gap:8px;margin-bottom:1rem;}
+.ladder-row{display:grid;grid-template-columns:64px 1fr;gap:10px;align-items:start;}
+.ladder-level{font-size:11px;font-weight:500;padding:6px 4px;border-radius:var(--r-sm);text-align:center;line-height:1.4;}
+.l1{background:var(--teal-l);color:var(--teal-d);}
+.l2{background:var(--accent-l);color:var(--accent-d2);}
+.l3{background:var(--amber-l);color:var(--amber-d);}
+.ladder-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.65rem .9rem;background:var(--bg);}
+.ladder-card-name{font-size:13px;font-weight:500;color:var(--tx);}
+.ladder-card-sub{font-size:12px;color:var(--tx3);margin-top:3px;line-height:1.5;}
+.ladder-note{background:var(--bg2);border-radius:var(--r-md);padding:.65rem .9rem;font-size:12px;color:var(--tx2);margin-bottom:1rem;line-height:1.55;}
+.progress-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem;}
+.progress-bar{height:5px;border-radius:3px;background:var(--bg2);margin-bottom:1.25rem;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;background:var(--accent);width:0%;transition:width .3s;}
+.checklist{display:flex;flex-direction:column;gap:7px;}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:.7rem .9rem;border:0.5px solid var(--bd);border-radius:var(--r-md);background:var(--bg);cursor:pointer;transition:background .15s;}
+.check-item.done{background:var(--bg2);}
+.check-box{width:18px;height:18px;border:1.5px solid var(--bd2);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .15s;}
+.check-item.done .check-box{background:var(--accent);border-color:var(--accent);}
+.check-box i{font-size:11px;color:#fff;display:none;}
+.check-item.done .check-box i{display:block;}
+.check-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.check-item.done .check-text{color:var(--tx3);text-decoration:line-through;}
+.action-row{margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:8px;}
+.action-btn{padding:7px 14px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.action-btn:hover{background:var(--bg2);}
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s;}
+.drawer-overlay.open{opacity:1;pointer-events:all;}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100vw);background:var(--bg);z-index:101;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden;}
+.drawer.open{transform:translateX(0);}
+.drawer-header{padding:1rem 1.25rem;border-bottom:0.5px solid var(--bd);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.drawer-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);}
+.drawer-title{font-size:14px;font-weight:500;color:var(--tx);flex:1;line-height:1.4;}
+.drawer-close{background:none;border:none;cursor:pointer;color:var(--tx2);padding:4px;border-radius:var(--r-sm);display:flex;align-items:center;transition:background .15s;}
+.drawer-close:hover{background:var(--bg2);}
+.drawer-body{flex:1;overflow-y:auto;padding:1.25rem;}
+.drawer-ec-ref{font-size:12px;color:var(--tx3);margin-bottom:1rem;display:flex;align-items:center;gap:6px;}
+.drawer-stem{font-size:14px;color:var(--tx);line-height:1.75;white-space:pre-wrap;}
+.drawer-sub{font-size:13px;color:var(--tx2);background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:1rem;line-height:1.65;}
+.drawer-sub-label{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-answer{font-size:13px;color:var(--tx);background:var(--accent-l);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:.75rem;line-height:1.65;display:none;}
+.drawer-answer.show{display:block;}
+.drawer-answer-label{font-size:11px;font-weight:500;color:var(--accent-d2);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-footer{padding:.85rem 1.25rem;border-top:0.5px solid var(--bd);display:flex;gap:8px;flex-shrink:0;}
+.drawer-btn{flex:1;padding:8px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.drawer-btn:hover{background:var(--bg2);}
+.drawer-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+.drawer-btn.primary:hover{background:var(--accent-d);}
+@media(max-width:600px){
+  .site-header{padding:1rem 1rem 0;} .page{padding:1rem;}
+  .header-title{font-size:15px;} .mode-grid{grid-template-columns:1fr 1fr;}
+  .ladder-row{grid-template-columns:52px 1fr;gap:8px;}
+  .action-row{flex-direction:column;} .action-btn{width:100%;text-align:center;}
+  .drawer{width:100vw;} audio{width:160px;}
+}
+@media(max-width:380px){.mode-grid,.signal-grid{grid-template-columns:1fr;}}
+
+.back-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;font-size:12px;color:var(--tx2);background:var(--bg2);border:0.5px solid var(--bd2);border-radius:var(--r-md);text-decoration:none;font-family:var(--font);transition:background .15s,color .15s;white-space:nowrap;flex-shrink:0;}
+.back-btn:hover{background:var(--bg3);color:var(--tx);}
+.back-btn i{font-size:14px;}
+.memory-video{width:100%;max-height:220px;display:block;border-radius:var(--r-md);background:#000;margin-top:8px;}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="site-header">
+  <div class="header-top">
+    <div class="header-icon"><i class="ti ti-plant-2" aria-hidden="true"></i></div>
+    <div>
+      <div class="header-meta">07 生物与环境 · M1 食物网结构</div>
+      <div class="header-title">食物链与营养级分析</div>
+    </div>
+    <a class="back-btn" href="index.html" aria-label="返回首页"><i class="ti ti-arrow-left"></i> 首页</a>
+    <div class="header-id">T07_M1</div>
+  </div>
+  <nav class="nav-tabs" role="tablist">
+    <button class="nav-tab active" role="tab" onclick="switchTab('overview',this)">概览</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('mothers',this)">母题精讲</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('ladder',this)">变式阶梯</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('self',this)">自查清单</button>
+  </nav>
+</header>
+
+<div id="tab-overview" class="page active" role="tabpanel">
+  <div class="memory-section">
+    <div class="memory-card">
+      <img class="memory-img" src="记忆卡/T07_M1_memory.png" alt="食物链与营养级分析记忆卡" onclick="openLightbox(this.src,this.alt)" onerror="this.style.display='none'">
+      <div class="memory-footer">
+        <div>
+          <div class="memory-label">记忆卡 · 食物网读图与营养级计数框架</div>
+          <div style="font-size:12px;color:var(--tx3);">点击图片可放大</div>
+        </div>
+        <video class="memory-video" controls controlsList="nodownload" preload="metadata" style="display:none">
+          <source src="audio/T07_M1.mp4" type="video/mp4">
+        </video>
+          <div class="audio-placeholder" style="display:flex"><i class="ti ti-video-off"></i>视频待放入</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title"><i class="ti ti-scan" aria-hidden="true"></i> 触发信号速查</div>
+  <div class="signal-grid">
+    <div class="signal-card">
+      <div class="signal-label">图像信号</div>
+      <div class="signal-tag">箭头网络图（食物网）</div>
+      <div class="signal-tag">方块层级图（营养级）</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">文字信号</div>
+      <div class="signal-tag">食物链 / 食物网</div>
+      <div class="signal-tag">第几营养级 / 生产者</div>
+      <div class="signal-tag">捕食关系 / 竞争关系</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">任务关键词</div>
+      <div class="signal-tag">写出食物链 / 数食物链条数</div>
+      <div class="signal-tag">判断营养级 / 写基因型概率</div>
+      <div class="signal-tag">某种群数量变化对其他种群的影响</div>
+    </div>
+  </div>
+
+  <div class="section-title"><i class="ti ti-arrow-fork" aria-hidden="true"></i> 核心概念 · 四个分析维度</div>
+  <div class="mode-grid">
+    <div class="mode-card" style="border-left-color:var(--accent);">
+      <div class="mode-card-label" style="color:var(--accent-d2);">食物链书写</div>
+      <div class="mode-card-text">从生产者→消费者，箭头指向捕食者；每条链必须从生产者（植物）开始，不包含分解者</div>
+    </div>
+    <div class="mode-card" style="border-left-color:var(--teal);">
+      <div class="mode-card-label" style="color:var(--teal-d);">营养级判定</div>
+      <div class="mode-card-text">生产者=第一营养级；初级消费者=第二营养级；同一生物可占多个营养级（食物网中）</div>
+    </div>
+    <div class="mode-card" style="border-left-color:var(--amber);">
+      <div class="mode-card-label" style="color:var(--amber-d);">食物网计数</div>
+      <div class="mode-card-text">从生产者到顶端消费者，逐层列举所有通路；"路径数 = 食物链条数"，用逐级穷举法</div>
+    </div>
+    <div class="mode-card" style="border-left-color:var(--coral);">
+      <div class="mode-card-label" style="color:var(--coral-d);">种群数量变化推导</div>
+      <div class="mode-card-text">某种群减少/增加→分析捕食者食物来源变化→逐步推导联动效应；注意"最短路径"优先</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-alert-triangle" aria-hidden="true"></i> 高频陷阱（5 个）</div>
+  <div class="trap-list">
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon"></i><div>食物链<strong>不包含分解者</strong>——腐生细菌、真菌不能出现在食物链中</div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon"></i><div>同一生物在食物网中可位于<strong>多个营养级</strong>——如人同时吃粮食（第二）和猪肉（第三）</div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon"></i><div>数食物链条数时容易漏路径——务必从生产者开始，<strong>逐节点穷举</strong>，不要凭感觉</div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon"></i><div>种群数量变化的推导：某种群减少，若其天敌有多个食物来源，天敌数量<strong>不一定减少</strong></div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon"></i><div>"捕食关系"与"竞争关系"可同时存在——两物种均被同一天敌捕食，且共享食物来源时，既竞争又被同一捕食者利用</div></div>
+  </div>
+</div>
+
+<div id="tab-mothers" class="page" role="tabpanel">
+  <div class="filter-tabs" role="group">
+    <button class="filter-btn active" onclick="filterMode('all',this)">全部（4 类）</button>
+    <button class="filter-btn" onclick="filterMode('chain',this)">食物链书写</button>
+    <button class="filter-btn" onclick="filterMode('level',this)">营养级判定</button>
+    <button class="filter-btn" onclick="filterMode('web',this)">食物网计数</button>
+    <button class="filter-btn" onclick="filterMode('change',this)">种群数量联动</button>
+  </div>
+
+  <div class="mq-card" data-mode="chain">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge chain">食物链书写</span>
+      <span class="mq-name">草原食物网中全部食物链的书写</span>
+      <span class="mq-purity">9/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-280 · 子问题 (1)(2)</div>
+      <div class="rule-box">核心信号：给出草→蚱蜢→蛙→蛇→鹰，草→鼠→蛇→鹰，草→鼠→鹰的食物网图，要求写出全部食物链并统计条数。标准母题：逐节点穷举法。</div>
+      <div class="chain-label">穷举步骤</div>
+      <div class="signal-chain"><span class="sc-node">起点：草（生产者）</span><span class="sc-arrow">→</span><span class="sc-node">分支1：蚱蜢→蛙→蛇→鹰</span></div>
+      <div class="signal-chain"><span class="sc-node">起点：草</span><span class="sc-arrow">→</span><span class="sc-node">分支2：鼠→蛇→鹰</span></div>
+      <div class="signal-chain"><span class="sc-node">起点：草</span><span class="sc-arrow">→</span><span class="sc-node chain">分支3：鼠→鹰 ✓ 共3条</span></div>
+      <p class="mq-note">选题理由：含分叉节点的标准食物网，穷举逻辑清晰，是书写和计数的入门母题。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec280')"><i class="ti ti-file-text"></i> 查看完整题干</button>
+    </div>
+  </div>
+
+  <div class="mq-card" data-mode="level">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge level">营养级判定</span>
+      <span class="mq-name">同一生物占多个营养级的识别</span>
+      <span class="mq-purity">10/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-284 · 子问题 (2)</div>
+      <div class="rule-box">核心信号：食物网中"鹰"既捕食鼠（鹰=第三营养级），又捕食蛇（鹰=第四营养级）——同一生物在不同食物链中处于不同营养级，是高频考点。</div>
+      <div class="chain-label">营养级计数方法</div>
+      <div class="signal-chain"><span class="sc-node">链1：草→鼠→鹰</span><span class="sc-arrow">→</span><span class="sc-node">鹰 = 第三营养级</span></div>
+      <div class="signal-chain"><span class="sc-node">链2：草→蚱蜢→蛙→蛇→鹰</span><span class="sc-arrow">→</span><span class="sc-node level">鹰 = 第五营养级 ✓</span></div>
+      <p class="mq-note">⚠️ 表述规范："鹰处于第三至第五营养级"，不能只写一个数字；若题目问"最高营养级"则取最大值。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec284')"><i class="ti ti-file-text"></i> 查看完整题干</button>
+    </div>
+  </div>
+
+  <div class="mq-card" data-mode="web">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge web">食物网计数</span>
+      <span class="mq-name">复杂食物网中食物链条数的精确统计</span>
+      <span class="mq-purity">10/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-287 · 子问题 (1)</div>
+      <div class="rule-box">核心信号：多生产者/多顶端消费者的复杂食物网，需按"逐分支穷举"计数，防漏防重。标准做法：列出所有生产者，从每个出发穷举到顶端。</div>
+      <div class="chain-label">计数口诀</div>
+      <div class="signal-chain"><span class="sc-node">固定起点（生产者）</span><span class="sc-arrow">→</span><span class="sc-node">逐节点分支展开</span><span class="sc-arrow">→</span><span class="sc-node">统计终点（顶端）个数</span></div>
+      <div class="signal-chain"><span class="sc-node">每条路径 = 一条食物链</span><span class="sc-arrow">→</span><span class="sc-node web">路径总数 = 食物链条数 ✓</span></div>
+      <p class="mq-note">技巧：在草稿纸上画树形图展开，比直接数图上箭头准确得多。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec287')"><i class="ti ti-file-text"></i> 查看完整题干</button>
+    </div>
+  </div>
+
+  <div class="mq-card" data-mode="change">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge change">种群数量联动</span>
+      <span class="mq-name">蛇的数量减少对各种群数量的影响推导</span>
+      <span class="mq-purity">9/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-280 · 子问题 (3)</div>
+      <div class="rule-box">核心信号：蛇大量减少→鹰的食物来源减少（蛇→鹰路径受损）→鹰可能转向更多捕食鼠→鼠受压增大；同时蛙天敌减少→蛙数量增加→蚱蜢被捕食增多→蚱蜢减少。需逐步推导，注意"多路径缓冲效应"。</div>
+      <div class="chain-label">推导信号链（蛇↓）</div>
+      <div class="signal-chain"><span class="sc-node">蛇↓</span><span class="sc-arrow">→</span><span class="sc-node">蛙↑（天敌减少）</span><span class="sc-arrow">→</span><span class="sc-node">蚱蜢↓</span></div>
+      <div class="signal-chain"><span class="sc-node">蛇↓</span><span class="sc-arrow">→</span><span class="sc-node">鹰食物减少→加大捕鼠</span><span class="sc-arrow">→</span><span class="sc-node change">鼠↓（短期） ✓</span></div>
+      <p class="mq-note">⚠️ 注意：鹰有多个食物来源，蛇减少对鹰的影响取决于蛇占鹰食物的比例，题目一般简化处理。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec280b')"><i class="ti ti-file-text"></i> 查看完整题干</button>
+    </div>
+  </div>
+</div>
+
+<div id="tab-ladder" class="page" role="tabpanel">
+  <div class="ladder-note">按 L1 基础 → L2 进阶 → L3 综合三级递进。点击卡片可查看完整题干。</div>
+  <div class="ladder-section-label"><span class="ladder-level l1" style="width:auto;padding:3px 8px;">L1 基础</span> 单一食物网，书写与计数</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1-1<br>书写</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec280-1')" style="cursor:pointer;">
+        <div class="ladder-card-name">草原食物网：写出全部食物链并计数</div>
+        <div class="ladder-card-sub">EC-280 (1) · 3条链的标准食物网，逐分支穷举练习 <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1-2<br>营养级</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec284-2')" style="cursor:pointer;">
+        <div class="ladder-card-name">判断食物网中各生物所处的营养级</div>
+        <div class="ladder-card-sub">EC-284 (2) · 含多营养级生物，表述"第X至第Y营养级" <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1-3<br>关系</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec280-rel')" style="cursor:pointer;">
+        <div class="ladder-card-name">判断两种生物之间的关系（捕食 / 竞争 / 两者兼有）</div>
+        <div class="ladder-card-sub">EC-280 (2) · 鼠与蚱蜢、蛙与蛇——同时具有捕食和竞争的典型 <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+  </div>
+  <div class="section-divider"></div>
+  <div class="ladder-section-label"><span class="ladder-level l2" style="width:auto;padding:3px 8px;">L2 进阶</span> 数量变化推导 + 复杂网络</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2-1<br>联动</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec280-3')" style="cursor:pointer;">
+        <div class="ladder-card-name">蛇减少后各种群数量变化的逐步推导</div>
+        <div class="ladder-card-sub">EC-280 (3) · 多路径缓冲分析，注意方向与程度判断 <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2-2<br>计数</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec287-1')" style="cursor:pointer;">
+        <div class="ladder-card-name">复杂食物网（6种生物）精确计数食物链</div>
+        <div class="ladder-card-sub">EC-287 (1) · 多生产者×多消费者，树形穷举法 <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2-3<br>能量联动</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec290-12')" style="cursor:pointer;">
+        <div class="ladder-card-name">某营养级减少→能量流动重新分配（联动+能量）</div>
+        <div class="ladder-card-sub">EC-290 (1)+(2) · 食物链结构变化导致能量流向改变 <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+  </div>
+  <div class="section-divider"></div>
+  <div class="ladder-section-label"><span class="ladder-level l3" style="width:auto;padding:3px 8px;">L3 综合</span> 食物网 + 能量计算 + 生态意义综合</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l3">L3-1</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec295-135')" style="cursor:pointer;">
+        <div class="ladder-card-name">食物网结构分析 + 能量效率 + 人工控制某物种的生态风险评估</div>
+        <div class="ladder-card-sub">EC-295 (1)+(3)+(5) · 控制某物种后的多级联动及生态稳定性影响 <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="tab-self" class="page" role="tabpanel">
+  <div class="progress-row">
+    <span style="font-size:13px;color:var(--tx2);">学习自查清单</span>
+    <span style="font-size:13px;color:var(--tx2);" id="progress-text">0 / 7 完成</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="pbar"></div></div>
+  <div class="checklist" id="checklist">
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">能用箭头正确书写食物链，起点为生产者，终点为顶级消费者，不含分解者</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">能判断食物网中同一生物占多个营养级的情况，并用"第X至第Y营养级"规范表述</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">能用逐节点穷举法（树形图）统计食物链条数，不漏不重</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">能判断两物种之间是捕食关系、竞争关系，还是两者兼有</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">能推导某种群数量变化对食物网中其他种群的影响，注意"多路径缓冲效应"</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">完成 L1 全部 3 道基础变式（书写、营养级、关系判断各 1 道）</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">完成至少 2 道 L2 进阶变式，能说出与母题的推理差异</div></div>
+  </div>
+  <div class="action-row">
+    <button class="action-btn" onclick="window.scrollTo(0,0);switchTab('mothers',document.querySelectorAll('.nav-tab')[1])">返回母题精讲 →</button>
+    <button class="action-btn" onclick="window.scrollTo(0,0);switchTab('ladder',document.querySelectorAll('.nav-tab')[2])">进入变式阶梯 →</button>
+  </div>
+</div>
+</div>
+
+<div class="lb-overlay" id="lb-overlay" onclick="closeLightbox()">
+  <button class="lb-close" onclick="closeLightbox()">×</button>
+  <img class="lb-img" id="lb-img" src="" alt="">
+</div>
+<div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer" role="dialog" aria-modal="true">
+  <div class="drawer-header">
+    <span class="drawer-badge" id="drawer-badge"></span>
+    <span class="drawer-title" id="drawer-title"></span>
+    <button class="drawer-close" onclick="closeDrawer()"><i class="ti ti-x" style="font-size:18px;"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="drawer-ec-ref" id="drawer-ref"></div>
+    <div class="drawer-stem" id="drawer-stem"></div>
+    <div class="drawer-sub" id="drawer-sub" style="display:none;"><div class="drawer-sub-label">本题考查重点</div><div id="drawer-sub-text"></div></div>
+    <div class="drawer-answer" id="drawer-answer"><div class="drawer-answer-label">参考答案</div><div id="drawer-answer-text"></div></div>
+  </div>
+  <div class="drawer-footer">
+    <button class="drawer-btn" id="drawer-ans-btn" onclick="toggleAnswer()">显示答案</button>
+    <button class="drawer-btn primary" onclick="closeDrawer()">完成阅读</button>
+  </div>
+</div>
+
+<script>
+function switchTab(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');if(btn)btn.classList.add('active');}
+function toggleMQ(h){const b=h.nextElementSibling,c=h.querySelector('.mq-chevron'),o=b.classList.contains('open');b.classList.toggle('open',!o);c.classList.toggle('open',!o);}
+function filterMode(mode,btn){document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.mq-card').forEach(card=>{card.style.display=(mode==='all'||card.dataset.mode===mode)?'':'none';});}
+function toggleCheck(item){item.classList.toggle('done');updateProgress();saveChecklist();}
+function updateProgress(){const total=document.querySelectorAll('.check-item').length,done=document.querySelectorAll('.check-item.done').length;document.getElementById('pbar').style.width=(done/total*100)+'%';document.getElementById('progress-text').textContent=done+' / '+total+' 完成';}
+function saveChecklist(){try{const s=Array.from(document.querySelectorAll('.check-item')).map(el=>el.classList.contains('done'));localStorage.setItem('T07_M1_checklist',JSON.stringify(s));}catch(e){}}
+(function(){try{const s=JSON.parse(localStorage.getItem('T07_M1_checklist')||'[]');document.querySelectorAll('.check-item').forEach((item,i)=>{if(s[i])item.classList.add('done');});updateProgress();}catch(e){}})();
+
+const QUESTIONS = {
+  'mq-ec280':{badge:'食物链书写 · 母题',badgeClass:'chain',title:'草原食物网全部食物链书写',ref:'EC-20260525-280 · 子问题 (1)(2)',stem:`某草原食物网如下：草→蚱蜢→蛙→蛇→鹰；草→鼠→蛇→鹰；草→鼠→鹰。\n\n(1) 写出该食物网中的全部食物链，并统计共有几条。\n\n(2) 该食物网中，鼠与蚱蜢之间是什么关系？蛙与蛇之间是什么关系？`,focus:'(1) 三条食物链，逐分支穷举。\n(2) 鼠与蚱蜢：竞争关系（均被蛇捕食，均以草为食来源）；蛙与蛇：捕食关系（蛇捕食蛙）。注意：有时两物种间同时存在捕食+竞争。',answer:'(1) 共3条食物链：\n① 草→蚱蜢→蛙→蛇→鹰\n② 草→鼠→蛇→鹰\n③ 草→鼠→鹰\n(2) 鼠与蚱蜢：竞争关系（共享草作为食物来源）；蛙与蛇：捕食关系（蛇捕食蛙）。'},
+  'mq-ec284':{badge:'营养级判定 · 母题',badgeClass:'level',title:'同一生物占多个营养级的识别',ref:'EC-20260525-284 · 子问题 (2)',stem:`某食物网：草→蚱蜢→蛙→蛇→鹰；草→鼠→蛇→鹰；草→鼠→鹰。\n\n(2) 鹰在该食物网中处于哪些营养级？请分别列出鹰在各条食物链中的营养级，并说明为何同一生物可占多个营养级。`,focus:'逐链计数：链①草→蚱蜢→蛙→蛇→鹰：鹰=第5营养级；链②草→鼠→蛇→鹰：鹰=第4营养级；链③草→鼠→鹰：鹰=第3营养级。所以鹰处于第3、4、5营养级。原因：在食物网中，同一生物通过不同食物链获得食物，链长不同，营养级不同。',answer:'鹰处于第三、四、五营养级。\n链③草→鼠→鹰：第3营养级；链②草→鼠→蛇→鹰：第4营养级；链①草→蚱蜢→蛙→蛇→鹰：第5营养级。\n原因：食物网中同一生物通过不同长度的食物链取食，在不同链中处于不同位置，因此占多个营养级。'},
+  'mq-ec287':{badge:'食物网计数 · 母题',badgeClass:'web',title:'复杂食物网食物链条数精确统计',ref:'EC-20260525-287 · 子问题 (1)',stem:`某生态系统食物网包含以下捕食关系：植物被蝗虫、鼠、兔取食；蝗虫被蛙、鸟取食；蛙被蛇取食；鼠、兔被鸟、鹰取食；蛇被鹰取食；鸟被鹰取食。\n\n(1) 该食物网中共有多少条食物链？请写出全部并说明计数方法。`,focus:'树形穷举法：从植物出发，逐节点分支展开，数出所有到达顶端（鹰）的路径。\n路径：植物→蝗虫→蛙→蛇→鹰；植物→蝗虫→鸟→鹰；植物→鼠→鸟→鹰；植物→鼠→鹰；植物→兔→鸟→鹰；植物→兔→鹰。共6条。',answer:'共6条食物链：\n①植物→蝗虫→蛙→蛇→鹰\n②植物→蝗虫→鸟→鹰\n③植物→鼠→鸟→鹰\n④植物→鼠→鹰\n⑤植物→兔→鸟→鹰\n⑥植物→兔→鹰\n计数方法：从生产者（植物）出发，逐节点穷举所有到达顶端消费者（鹰）的路径，每条完整路径为一条食物链。'},
+  'mq-ec280b':{badge:'种群数量联动 · 母题',badgeClass:'change',title:'蛇大量减少对各种群数量的影响',ref:'EC-20260525-280 · 子问题 (3)',stem:`某草原食物网：草→蚱蜢→蛙→蛇→鹰；草→鼠→蛇→鹰；草→鼠→鹰。\n\n(3) 若由于人类活动导致蛇的数量大量减少，请分析该食物网中其他种群数量的短期变化趋势，并说明推导过程。`,focus:'逐步推导：\n蛇↓ → 蛙天敌减少 → 蛙↑ → 蚱蜢被蛙大量捕食 → 蚱蜢↓\n蛇↓ → 鹰的食物来源减少（蛇→鹰路径受损）→ 鹰可能增加对鼠的捕食 → 鼠↓\n草：蚱蜢↓使草被消耗减少，鼠↓也使草消耗减少 → 草短期可能↑\n注意：这是短期变化，长期会重新达到平衡。',answer:'短期变化：\n• 蛙↑（天敌蛇减少，被捕食压力下降）\n• 蚱蜢↓（蛙增多，蚱蜢被捕食加剧）\n• 鼠↓（鹰食物来源减少，转向更多捕食鼠）\n• 草↑（蚱蜢和鼠减少，草被消耗减少）\n• 鹰：短期内因蛇（食物之一）减少，数量可能略有下降，但因增加捕鼠，影响较复杂。'},
+  'v-ec280-1':{badge:'L1 基础变式 · 食物链书写',badgeClass:'chain',title:'草原食物网全部食物链书写',ref:'EC-20260525-280 · (1)',stem:'（同母题 mq-ec280）',focus:'同母题分析。',answer:'见母题 EC-280 答案。'},
+  'v-ec284-2':{badge:'L1 基础变式 · 营养级判定',badgeClass:'level',title:'判断各生物营养级',ref:'EC-20260525-284 · (2)',stem:'（同母题 mq-ec284）',focus:'同母题分析。',answer:'见母题 EC-284 答案。'},
+  'v-ec280-rel':{badge:'L1 基础变式 · 关系判断',badgeClass:'chain',title:'判断两物种之间的关系',ref:'EC-20260525-280 · (2)',stem:'（同母题 mq-ec280 (2)）',focus:'同母题分析。',answer:'见母题 EC-280 答案。'},
+  'v-ec280-3':{badge:'L2 进阶变式 · 种群联动',badgeClass:'change',title:'蛇减少后各种群数量变化',ref:'EC-20260525-280 · (3)',stem:'（同母题 mq-ec280b）',focus:'同母题分析。',answer:'见母题 EC-280 答案。'},
+  'v-ec287-1':{badge:'L2 进阶变式 · 食物网计数',badgeClass:'web',title:'复杂食物网食物链条数统计',ref:'EC-20260525-287 · (1)',stem:'（同母题 mq-ec287）',focus:'同母题分析。',answer:'见母题 EC-287 答案。'},
+  'v-ec290-12':{badge:'L2 进阶变式 · 能量联动',badgeClass:'change',title:'营养级减少后能量流动重新分配',ref:'EC-20260525-290 · (1)+(2)',stem:`某食物网：植物→草食动物→肉食动物→顶级消费者。若草食动物种群数量减少50%，分析能量流动的变化。\n\n(1) 植物固定的能量在各营养级的分配比例如何变化？\n(2) 肉食动物获得的能量如何变化？`,focus:'草食动物↓→流向肉食动物的能量↓→肉食动物↓→流向顶级消费者的能量↓；同时植物积累能量增加（被消耗减少）。关键：能量流动的减少是逐级放大的（每级约传10%~20%）。',answer:'(1) 草食动物减少 → 植物被消耗减少 → 植物积累能量增加；流向草食动物的能量比例下降。\n(2) 肉食动物获得的能量减少（因食物来源—草食动物数量减少），进一步导致顶级消费者获得的能量也减少。能量减少效应逐级放大。'},
+  'v-ec295-135':{badge:'L3 综合变式',badgeClass:'web',title:'食物网分析+能量效率+控制物种的生态风险',ref:'EC-20260525-295 · (1)+(3)+(5)',stem:`某复杂食物网包含植物、草食动物A/B、杂食动物C、肉食动物D。\n\n(1) 写出全部食物链并统计条数。\n(3) 若人类大量捕杀D，分析对A、B、C数量的影响。\n(5) 若引入外来物种E与A竞争，评估对整个生态系统的影响。`,focus:'综合三层分析：①食物链书写与计数（基础）；②种群数量联动推导（进阶）；③外来物种入侵的生态风险评估（综合）：E与A竞争→A↓→C食物减少→C↓→D食物进一步减少；同时E可能无天敌→种群爆发→破坏生态平衡。',answer:'(1) 根据题目食物网图，穷举所有食物链（具体条数取决于题目图示）。\n(3) 大量捕杀D：A、B天敌减少→A、B↑；C（被D捕食）天敌减少→C↑；进而A、B被C捕食增加，长期可能回归平衡，但短期各种群数量均有波动。\n(5) 外来物种E入侵：E与A竞争→A↓→以A为食的捕食者食物减少→整个食物网能量流动受影响；E若无天敌，种群可能爆发，进一步压缩本地物种生存空间，降低生物多样性。'}
+};
+
+let answerShown=false;
+function openDrawer(key){const q=QUESTIONS[key];if(!q)return;const badge=document.getElementById('drawer-badge');badge.textContent=q.badge;badge.className='drawer-badge mq-badge '+(q.badgeClass||'');document.getElementById('drawer-title').textContent=q.title;document.getElementById('drawer-ref').innerHTML='<i class="ti ti-source-code" style="font-size:13px;"></i> '+q.ref;document.getElementById('drawer-stem').textContent=q.stem;const sub=document.getElementById('drawer-sub');if(q.focus){document.getElementById('drawer-sub-text').textContent=q.focus;sub.style.display='';}else{sub.style.display='none';}answerShown=false;document.getElementById('drawer-answer').classList.remove('show');document.getElementById('drawer-answer-text').textContent=q.answer||'';const btn=document.getElementById('drawer-ans-btn');btn.textContent='显示答案';btn.style.display=q.answer?'':'none';document.getElementById('overlay').classList.add('open');document.getElementById('drawer').classList.add('open');document.body.style.overflow='hidden';}
+function closeDrawer(){document.getElementById('overlay').classList.remove('open');document.getElementById('drawer').classList.remove('open');document.body.style.overflow='';}
+function toggleAnswer(){answerShown=!answerShown;document.getElementById('drawer-answer').classList.toggle('show',answerShown);document.getElementById('drawer-ans-btn').textContent=answerShown?'隐藏答案':'显示答案';}
+function openLightbox(src,alt){document.getElementById('lb-img').src=src;document.getElementById('lb-img').alt=alt;document.getElementById('lb-overlay').classList.add('open');document.body.style.overflow='hidden';}
+function closeLightbox(){document.getElementById('lb-overlay').classList.remove('open');document.body.style.overflow='';}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(document.getElementById('lb-overlay').classList.contains('open'))closeLightbox();else closeDrawer();}});
+</script>
+</body>
+</html>

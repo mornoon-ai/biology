@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T03_M1 · 系谱图遗传方式判定</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent:#534AB7; --accent-l:#EEEDFE; --accent-m:#AFA9EC; --accent-d:#3C3489;
+  --teal:#0F6E56; --teal-l:#E1F5EE; --teal-d:#085041;
+  --amber:#BA7517; --amber-l:#FAEEDA; --amber-d:#633806;
+  --coral:#993C1D; --coral-l:#FAECE7; --coral-d:#712B13;
+  --bg:#ffffff; --bg2:#f7f7f5; --bg3:#f1efe8;
+  --tx:#1a1a18; --tx2:#5f5e5a; --tx3:#888780;
+  --bd:rgba(0,0,0,0.10); --bd2:rgba(0,0,0,0.18);
+  --r-sm:6px; --r-md:8px; --r-lg:12px; --r-xl:16px;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#1c1c1a;--bg2:#252523;--bg3:#2c2c2a;
+    --tx:#f0efea;--tx2:#b4b2a9;--tx3:#888780;
+    --bd:rgba(255,255,255,0.09);--bd2:rgba(255,255,255,0.16);
+    --accent-l:#26215C;--accent-d:#CECBF6;
+    --teal-l:#04342C;--teal-d:#9FE1CB;
+    --amber-l:#412402;--amber-d:#FAC775;
+    --coral-l:#4A1B0C;--coral-d:#F5C4B3;
+  }
+}
+body{font-family:var(--font);font-size:15px;line-height:1.6;color:var(--tx);background:var(--bg3);min-height:100vh;}
+.app{max-width:800px;margin:0 auto;background:var(--bg);min-height:100vh;}
+
+/* ── Header & Nav ── */
+.site-header{padding:1.25rem 1.5rem 0;background:var(--bg);border-bottom:0.5px solid var(--bd);position:sticky;top:0;z-index:20;}
+.header-top{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.header-icon{background:var(--amber-l);border-radius:var(--r-md);padding:6px 8px;display:flex;align-items:center;justify-content:center;}
+.header-icon i{font-size:20px;color:var(--amber);}
+.header-meta{font-size:12px;color:var(--tx3);}
+.header-title{font-size:17px;font-weight:500;color:var(--tx);}
+.header-id{margin-left:auto;font-size:11px;color:var(--tx3);background:var(--bg2);padding:3px 9px;border-radius:var(--r-sm);}
+.nav-tabs{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.nav-tab{padding:.6rem 1.1rem;font-size:13px;color:var(--tx2);cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;font-family:var(--font);white-space:nowrap;transition:color .15s,border-color .15s;}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500;}
+.nav-tab:hover:not(.active){color:var(--tx);}
+
+/* ── Pages ── */
+.page{display:none;padding:1.5rem;}
+.page.active{display:block;}
+
+/* ── Memory Card (Tab: Overview) ── */
+.memory-section{margin-bottom:1.5rem;}
+.memory-card{border:0.5px solid var(--bd);border-radius:var(--r-xl);overflow:hidden;background:var(--bg);}
+.memory-img{width:100%;display:block;max-height:300px;object-fit:contain;background:var(--bg3);cursor:zoom-in;transition:opacity .15s;}
+.memory-img:hover{opacity:.9;}
+.memory-footer{padding:.85rem 1rem;display:flex;align-items:center;gap:10px;border-top:0.5px solid var(--bd);}
+.memory-label{font-size:13px;font-weight:500;color:var(--tx);flex:1;}
+.audio-player{display:flex;align-items:center;gap:8px;}
+.audio-status{font-size:12px;color:var(--tx3);display:flex;align-items:center;gap:4px;}
+audio{height:32px;width:220px;}
+audio::-webkit-media-controls-panel{background:var(--bg2);}
+.audio-placeholder{font-size:12px;color:var(--tx3);display:flex;align-items:center;gap:5px;background:var(--bg2);padding:6px 10px;border-radius:var(--r-sm);}
+/* ── Lightbox ── */
+.lb-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:200;display:none;align-items:center;justify-content:center;cursor:zoom-out;}
+.lb-overlay.open{display:flex;}
+.lb-img{max-width:92vw;max-height:92vh;object-fit:contain;border-radius:var(--r-md);box-shadow:0 8px 40px rgba(0,0,0,.5);}
+.lb-close{position:fixed;top:16px;right:20px;background:none;border:none;color:#fff;font-size:28px;cursor:pointer;line-height:1;opacity:.7;transition:opacity .15s;}
+.lb-close:hover{opacity:1;}
+
+/* ── Overview cards ── */
+.section-title{font-size:13px;font-weight:500;color:var(--tx2);display:flex;align-items:center;gap:7px;margin-bottom:1rem;text-transform:uppercase;letter-spacing:.04em;}
+.section-divider{height:0.5px;background:var(--bd);margin:1.5rem 0;}
+.signal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:1.5rem;}
+.signal-card{background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;}
+.signal-label{font-size:11px;color:var(--tx3);letter-spacing:.04em;margin-bottom:.4rem;text-transform:uppercase;}
+.signal-tag{font-size:13px;color:var(--tx);margin-bottom:3px;}
+.mode-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:1.5rem;}
+.mode-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.85rem 1rem;border-left-width:3px;}
+.mode-card-label{font-size:11px;font-weight:500;margin-bottom:.3rem;}
+.mode-card-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.trap-list{display:flex;flex-direction:column;gap:7px;}
+.trap-item{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.55;}
+.trap-icon{color:#E24B4A;font-size:15px;flex-shrink:0;margin-top:1px;}
+
+/* ── Mother Questions ── */
+.filter-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem;}
+.filter-btn{padding:5px 13px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx2);font-family:var(--font);transition:all .15s;}
+.filter-btn.active{background:var(--accent-l);color:var(--accent-d);border-color:var(--accent-m);font-weight:500;}
+.mq-card{border:0.5px solid var(--bd);border-radius:var(--r-lg);background:var(--bg);margin-bottom:.85rem;overflow:hidden;}
+.mq-header{padding:.9rem 1.1rem;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;transition:background .15s;}
+.mq-header:hover{background:var(--bg2);}
+.mq-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);white-space:nowrap;}
+.mq-badge.ar{background:var(--teal-l);color:var(--teal-d);}
+.mq-badge.ad{background:var(--accent-l);color:var(--accent-d);}
+.mq-badge.xr{background:var(--amber-l);color:var(--amber-d);}
+.mq-badge.xd{background:var(--coral-l);color:var(--coral-d);}
+.mq-name{font-size:14px;font-weight:500;color:var(--tx);flex:1;}
+.mq-purity{font-size:12px;color:var(--tx3);flex-shrink:0;}
+.mq-chevron{color:var(--tx3);font-size:16px;transition:transform .2s;flex-shrink:0;}
+.mq-chevron.open{transform:rotate(180deg);}
+.mq-body{display:none;padding:.75rem 1.1rem 1.1rem;border-top:0.5px solid var(--bd);}
+.mq-body.open{display:block;}
+.mq-source{font-size:12px;color:var(--tx3);margin-bottom:.65rem;}
+.rule-box{background:var(--accent-l);border-left:3px solid var(--accent);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:.65rem .9rem;font-size:13px;color:var(--accent-d);margin:.75rem 0;line-height:1.65;}
+.chain-label{font-size:12px;font-weight:500;color:var(--tx2);margin:.75rem 0 .4rem;text-transform:uppercase;letter-spacing:.04em;}
+.signal-chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:6px;}
+.sc-node{background:var(--bg2);border-radius:var(--r-sm);padding:3px 9px;font-size:13px;color:var(--tx);}
+.sc-node.ar{background:var(--teal-l);color:var(--teal-d);}
+.sc-node.ad{background:var(--accent-l);color:var(--accent-d);}
+.sc-node.xr{background:var(--amber-l);color:var(--amber-d);}
+.sc-node.xd{background:var(--coral-l);color:var(--coral-d);}
+.sc-arrow{color:var(--tx3);font-size:13px;}
+.mq-note{font-size:13px;color:var(--tx2);margin-top:.75rem;line-height:1.6;}
+
+/* ── Question Trigger Button ── */
+.q-trigger{display:inline-flex;align-items:center;gap:5px;margin-top:.75rem;padding:6px 12px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;color:var(--tx2);cursor:pointer;font-family:var(--font);transition:all .15s;}
+.q-trigger:hover{background:var(--bg2);color:var(--tx);border-color:var(--bd2);}
+.q-trigger i{font-size:14px;}
+
+/* ── Ladder ── */
+.ladder-section-label{font-size:13px;font-weight:500;color:var(--tx2);margin-bottom:.85rem;display:flex;align-items:center;gap:7px;}
+.ladder-rows{display:flex;flex-direction:column;gap:8px;margin-bottom:1rem;}
+.ladder-row{display:grid;grid-template-columns:64px 1fr;gap:10px;align-items:start;}
+.ladder-level{font-size:11px;font-weight:500;padding:6px 4px;border-radius:var(--r-sm);text-align:center;line-height:1.4;}
+.l1{background:var(--teal-l);color:var(--teal-d);}
+.l2{background:var(--accent-l);color:var(--accent-d);}
+.l3{background:var(--amber-l);color:var(--amber-d);}
+.ladder-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.65rem .9rem;background:var(--bg);}
+.ladder-card-name{font-size:13px;font-weight:500;color:var(--tx);}
+.ladder-card-sub{font-size:12px;color:var(--tx3);margin-top:3px;line-height:1.5;}
+.ladder-note{background:var(--bg2);border-radius:var(--r-md);padding:.65rem .9rem;font-size:12px;color:var(--tx2);margin-bottom:1rem;line-height:1.55;}
+
+/* ── Self-check ── */
+.progress-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem;}
+.progress-bar{height:5px;border-radius:3px;background:var(--bg2);margin-bottom:1.25rem;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;background:var(--accent);width:0%;transition:width .3s;}
+.checklist{display:flex;flex-direction:column;gap:7px;}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:.7rem .9rem;border:0.5px solid var(--bd);border-radius:var(--r-md);background:var(--bg);cursor:pointer;transition:background .15s;}
+.check-item.done{background:var(--bg2);}
+.check-box{width:18px;height:18px;border:1.5px solid var(--bd2);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .15s;}
+.check-item.done .check-box{background:var(--accent);border-color:var(--accent);}
+.check-box i{font-size:11px;color:#fff;display:none;}
+.check-item.done .check-box i{display:block;}
+.check-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.check-item.done .check-text{color:var(--tx3);text-decoration:line-through;}
+.action-row{margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:8px;}
+.action-btn{padding:7px 14px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.action-btn:hover{background:var(--bg2);}
+
+/* ══ DRAWER OVERLAY ══ */
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s;}
+.drawer-overlay.open{opacity:1;pointer-events:all;}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100vw);background:var(--bg);z-index:101;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden;}
+.drawer.open{transform:translateX(0);}
+.drawer-header{padding:1rem 1.25rem;border-bottom:0.5px solid var(--bd);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.drawer-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);}
+.drawer-title{font-size:14px;font-weight:500;color:var(--tx);flex:1;line-height:1.4;}
+.drawer-close{background:none;border:none;cursor:pointer;color:var(--tx2);padding:4px;border-radius:var(--r-sm);display:flex;align-items:center;transition:background .15s;}
+.drawer-close:hover{background:var(--bg2);}
+.drawer-body{flex:1;overflow-y:auto;padding:1.25rem;}
+.drawer-ec-ref{font-size:12px;color:var(--tx3);margin-bottom:1rem;display:flex;align-items:center;gap:6px;}
+.drawer-stem{font-size:14px;color:var(--tx);line-height:1.75;white-space:pre-wrap;}
+.drawer-sub{font-size:13px;color:var(--tx2);background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:1rem;line-height:1.65;}
+.drawer-sub-label{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-answer{font-size:13px;color:var(--tx);background:var(--accent-l);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:.75rem;line-height:1.65;display:none;}
+.drawer-answer.show{display:block;}
+.drawer-answer-label{font-size:11px;font-weight:500;color:var(--accent-d);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-footer{padding:.85rem 1.25rem;border-top:0.5px solid var(--bd);display:flex;gap:8px;flex-shrink:0;}
+.drawer-btn{flex:1;padding:8px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.drawer-btn:hover{background:var(--bg2);}
+.drawer-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+.drawer-btn.primary:hover{background:var(--accent-d);}
+
+/* ── Mobile ── */
+@media(max-width:600px){
+  .site-header{padding:1rem 1rem 0;}
+  .page{padding:1rem;}
+  .header-title{font-size:15px;}
+  .mode-grid{grid-template-columns:1fr 1fr;}
+  .ladder-row{grid-template-columns:52px 1fr;gap:8px;}
+  .action-row{flex-direction:column;}
+  .action-btn{width:100%;text-align:center;}
+  .drawer{width:100vw;}
+  audio{width:160px;}
+}
+@media(max-width:380px){
+  .mode-grid,.signal-grid{grid-template-columns:1fr;}
+}
+
+.back-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;font-size:12px;color:var(--tx2);background:var(--bg2);border:0.5px solid var(--bd2);border-radius:var(--r-md);text-decoration:none;font-family:var(--font);transition:background .15s,color .15s;white-space:nowrap;flex-shrink:0;}
+.back-btn:hover{background:var(--bg3);color:var(--tx);}
+.back-btn i{font-size:14px;}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- Header -->
+<header class="site-header">
+  <div class="header-top">
+    <div class="header-icon"><i class="ti ti-dna" aria-hidden="true"></i></div>
+    <div>
+      <div class="header-meta">03 遗传分析 · M1 家系判型</div>
+      <div class="header-title">系谱图遗传方式判定</div>
+    </div>
+    <a class="back-btn" href="index.html" aria-label="返回首页"><i class="ti ti-arrow-left"></i> 首页</a>
+    <div class="header-id">T03_M1</div>
+  </div>
+  <nav class="nav-tabs" role="tablist">
+    <button class="nav-tab active" role="tab" onclick="switchTab('overview',this)">概览</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('mothers',this)">母题精讲</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('ladder',this)">变式阶梯</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('self',this)">自查清单</button>
+  </nav>
+</header>
+
+<!-- ══ TAB: OVERVIEW ══ -->
+<div id="tab-overview" class="page active" role="tabpanel">
+
+  <!-- Memory Card + Audio -->
+  <div class="memory-section">
+    <div class="memory-card">
+      <img class="memory-img" src="记忆卡/T03_M1_memory.png" alt="系谱图遗传方式判定 · 四路决策树记忆卡" onclick="openLightbox(this.src,this.alt)">
+      <div class="memory-footer">
+        <div>
+          <div class="memory-label">记忆卡 · 四路判型决策树</div>
+          <div style="font-size:12px;color:var(--tx3);">点击图片可放大</div>
+        </div>
+        <div class="audio-player">
+          <div id="audio-wrap">
+            <audio controls src="audio/T03_M1.m4a"></audio>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title"><i class="ti ti-scan" aria-hidden="true"></i> 触发信号速查</div>
+  <div class="signal-grid">
+    <div class="signal-card">
+      <div class="signal-label">图像信号</div>
+      <div class="signal-tag">多代家系图（圆 / 方 / 涂黑）</div>
+      <div class="signal-tag">系谱连线结构</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">文字信号</div>
+      <div class="signal-tag">无中生有 · 有中生无</div>
+      <div class="signal-tag">不携带致病基因</div>
+      <div class="signal-tag">男女发病率差异</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">任务关键词</div>
+      <div class="signal-tag">判断遗传方式</div>
+      <div class="signal-tag">基因型推断</div>
+      <div class="signal-tag">患病 / 携带者概率</div>
+    </div>
+  </div>
+
+  <div class="section-title"><i class="ti ti-arrow-fork" aria-hidden="true"></i> 四种遗传方式 · 核心判型逻辑</div>
+  <div class="mode-grid">
+    <div class="mode-card" style="border-left-color:var(--teal);">
+      <div class="mode-card-label" style="color:var(--teal-d);">常染色体隐性</div>
+      <div class="mode-card-text">无中生有 + 患病女性的父亲表现正常</div>
+    </div>
+    <div class="mode-card" style="border-left-color:var(--accent);">
+      <div class="mode-card-label" style="color:var(--accent-d);">常染色体显性</div>
+      <div class="mode-card-text">代代相传 / 有中生无 + 不携带致病基因</div>
+    </div>
+    <div class="mode-card" style="border-left-color:var(--amber);">
+      <div class="mode-card-label" style="color:var(--amber-d);">伴 X 染色体隐性</div>
+      <div class="mode-card-text">无中生有 + 患者均为男性 + 父亲不携带</div>
+    </div>
+    <div class="mode-card" style="border-left-color:var(--coral);">
+      <div class="mode-card-label" style="color:var(--coral-d);">伴 X 染色体显性</div>
+      <div class="mode-card-text">患病父亲的所有女儿均患病；无男传男</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-alert-triangle" aria-hidden="true"></i> 高频陷阱（5 个）</div>
+  <div class="trap-list">
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon" aria-hidden="true"></i><div>常显与伴 X 显混淆——关键证据：患病父亲的女儿是否全部患病</div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon" aria-hidden="true"></i><div>常隐与伴 X 隐混淆——关键证据：有无女性患者 + 父亲携带情况</div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon" aria-hidden="true"></i><div>条件概率漏算——"已知表现正常"须调整分母，排除患病个体</div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon" aria-hidden="true"></i><div>杂合子判断——"一定是"与"可能是"混用，须逐一验证能否为纯合子</div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon" aria-hidden="true"></i><div>X 连锁不完全显性——杂合女性可轻度发病，易被误判为常隐</div></div>
+  </div>
+</div>
+
+<!-- ══ TAB: MOTHER QUESTIONS ══ -->
+<div id="tab-mothers" class="page" role="tabpanel">
+  <div class="filter-tabs" role="group">
+    <button class="filter-btn active" onclick="filterMode('all',this)">全部（4 种）</button>
+    <button class="filter-btn" onclick="filterMode('ar',this)">常染色体隐性</button>
+    <button class="filter-btn" onclick="filterMode('ad',this)">常染色体显性</button>
+    <button class="filter-btn" onclick="filterMode('xr',this)">伴 X 隐性</button>
+    <button class="filter-btn" onclick="filterMode('xd',this)">伴 X 显性</button>
+  </div>
+
+  <!-- MQ1 -->
+  <div class="mq-card" data-mode="ar">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge ar">常染色体隐性</span>
+      <span class="mq-name">镰状细胞贫血系谱判型</span>
+      <span class="mq-purity">9/10</span>
+      <i class="ti ti-chevron-down mq-chevron" aria-hidden="true"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-162 · 子问题 (6)(7)</div>
+      <div class="rule-box">核心信号：单家系同时出现"无中生有"（正常父母生患病孩子）+ "患病女性的父亲表现正常"→ 两个信号共同锁定常染色体隐性，无歧义。</div>
+      <div class="chain-label">推理信号链</div>
+      <div class="signal-chain">
+        <span class="sc-node">Ⅱ-1 正常</span><span class="sc-arrow">×</span><span class="sc-node">Ⅱ-2 正常</span>
+        <span class="sc-arrow">→</span><span class="sc-node">Ⅲ-1 患病</span>
+        <span class="sc-arrow">→</span><span class="sc-node">无中生有</span>
+        <span class="sc-arrow">→</span><span class="sc-node">排除显性</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node">患病女性 Ⅲ-2</span>
+        <span class="sc-arrow">→</span><span class="sc-node">父亲 Ⅱ-1 正常</span>
+        <span class="sc-arrow">→</span><span class="sc-node">排除伴 X 隐</span>
+        <span class="sc-arrow">→</span><span class="sc-node ar">常染色体隐性 ✓</span>
+      </div>
+      <p class="mq-note">选题理由：两个信号同时出现，判型无歧义，是 M1 常隐的标准母题。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec162')">
+        <i class="ti ti-file-text" aria-hidden="true"></i> 查看完整题干
+      </button>
+    </div>
+  </div>
+
+  <!-- MQ2 -->
+  <div class="mq-card" data-mode="ad">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge ad">常染色体显性</span>
+      <span class="mq-name">EOFAD 系谱判型</span>
+      <span class="mq-purity">10/10</span>
+      <i class="ti ti-chevron-down mq-chevron" aria-hidden="true"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-130 · 子问题 (1)</div>
+      <div class="rule-box">核心信号："Ⅱ-1 不携带 EOFAD 致病基因"→ 排除隐性携带者传递 → 只能是显性 → 再排除伴 X 显（Ⅰ-1 患病男性有正常女儿）→ 常染色体显性。</div>
+      <div class="chain-label">推理信号链</div>
+      <div class="signal-chain">
+        <span class="sc-node">Ⅱ-1 不携带致病基因</span>
+        <span class="sc-arrow">→</span><span class="sc-node">排除隐性携带传递</span>
+        <span class="sc-arrow">→</span><span class="sc-node">只能是显性</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node">Ⅰ-1 患病男性</span>
+        <span class="sc-arrow">→</span><span class="sc-node">女儿 Ⅱ-2 正常</span>
+        <span class="sc-arrow">→</span><span class="sc-node">排除伴 X 显</span>
+        <span class="sc-arrow">→</span><span class="sc-node ad">常染色体显性 ✓</span>
+      </div>
+      <p class="mq-note">信号链极干净，无需背景知识，单一条件即可完成判型。纯净度 10/10 的标杆母题。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec130')">
+        <i class="ti ti-file-text" aria-hidden="true"></i> 查看完整题干
+      </button>
+    </div>
+  </div>
+
+  <!-- MQ3 -->
+  <div class="mq-card" data-mode="xr">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge xr">伴 X 染色体隐性</span>
+      <span class="mq-name">卡尔曼综合征系谱推理</span>
+      <span class="mq-purity">10/10</span>
+      <i class="ti ti-chevron-down mq-chevron" aria-hidden="true"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-129 · 子问题 (2)</div>
+      <div class="rule-box">核心信号（三项锁定）：① 无中生有 → 排除显性；② 患者均为男性 → 提示伴 X；③ 父亲不携带致病基因 → 排除常隐 → 确认伴 X 隐性。</div>
+      <div class="chain-label">三项锁定</div>
+      <div class="signal-chain"><span class="sc-node">① 无中生有</span><span class="sc-arrow">→</span><span class="sc-node">排除显性遗传</span></div>
+      <div class="signal-chain"><span class="sc-node">② 患者全为男性</span><span class="sc-arrow">→</span><span class="sc-node">提示伴 X 遗传</span></div>
+      <div class="signal-chain">
+        <span class="sc-node">③ 父亲不携带</span>
+        <span class="sc-arrow">→</span><span class="sc-node">排除常染色体隐性</span>
+        <span class="sc-arrow">→</span><span class="sc-node xr">伴 X 隐性 ✓</span>
+      </div>
+      <p class="mq-note">学生先在 (1) 手绘系谱图，再在 (2) 完成判型——主动建构与推理一体。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec129')">
+        <i class="ti ti-file-text" aria-hidden="true"></i> 查看完整题干
+      </button>
+    </div>
+  </div>
+
+  <!-- MQ4 -->
+  <div class="mq-card" data-mode="xd">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge xd">伴 X 染色体显性</span>
+      <span class="mq-name">雷特综合征 RTT 判型</span>
+      <span class="mq-purity">9/10</span>
+      <i class="ti ti-chevron-down mq-chevron" aria-hidden="true"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-220 · 子问题 (1)(2)</div>
+      <div class="rule-box">核心信号：(1) 系谱四选一 → (2) "若 Ⅱ-4 只具致病基因，则所有女儿必患病"——父亲只含致病 X → 女儿全从父获致病 X → 全部患病。这是区分常显与伴 X 显的教科书级证据。</div>
+      <div class="chain-label">区分常显 vs 伴 X 显的关键推理</div>
+      <div class="signal-chain">
+        <span class="sc-node">父亲基因型 X^A Y</span>
+        <span class="sc-arrow">→</span><span class="sc-node">所有女儿必获 X^A</span>
+        <span class="sc-arrow">→</span><span class="sc-node">全部患病</span>
+        <span class="sc-arrow">→</span><span class="sc-node xd">伴 X 显性 ✓</span>
+      </div>
+      <p class="mq-note">伴 X 显性是高考低频但常混淆考点，EC-220 提供了区分常显与伴 X 显的标准信号。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec220')">
+        <i class="ti ti-file-text" aria-hidden="true"></i> 查看完整题干
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TAB: LADDER ══ -->
+<div id="tab-ladder" class="page" role="tabpanel">
+  <div class="ladder-note">按 L1 基础 → L2 进阶 → L3 综合三级递进。每级掌握后再进入下一级。点击卡片可查看完整题干。</div>
+
+  <div class="ladder-section-label"><span class="ladder-level l1" style="width:auto;padding:3px 8px;">L1 基础</span> 同一遗传方式，不同家系规模</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1-1<br>常隐</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec143-1')" style="cursor:pointer;">
+        <div class="ladder-card-name">PKD 甲家系判型</div>
+        <div class="ladder-card-sub">EC-143 (1) · 更多家系成员，练习同一推理在大系谱中的应用 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1-2<br>常显</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec135-1')" style="cursor:pointer;">
+        <div class="ladder-card-name">PKD 常显系谱</div>
+        <div class="ladder-card-sub">EC-135 (1) · 不同家系背景，含子代基因型推断与基础概率 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1-3<br>X 隐</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec188-2')" style="cursor:pointer;">
+        <div class="ladder-card-name">SEDT 伴 X 隐判型</div>
+        <div class="ladder-card-sub">EC-188 (2) · 四选一，需先排除常显与伴 X 显再锁定 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1-4<br>X 显</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec192-1')" style="cursor:pointer;">
+        <div class="ladder-card-name">蚕豆病 G6PD 不完全显性</div>
+        <div class="ladder-card-sub">EC-192 (1) · X 连锁不完全显性，杂合女性可能轻度患病 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="ladder-section-label"><span class="ladder-level l2" style="width:auto;padding:3px 8px;">L2 进阶</span> 叠加分子证据或概率推理</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2-1<br>常隐+</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec162-8')" style="cursor:pointer;">
+        <div class="ladder-card-name">镰状细胞贫血 · 电泳 + 概率</div>
+        <div class="ladder-card-sub">EC-162 (8) · 系谱判型 → 电泳条带读取基因型 → 三层概率推理 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2-2<br>常显+</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec130-13')" style="cursor:pointer;">
+        <div class="ladder-card-name">EOFAD · 判型 + 突变来源</div>
+        <div class="ladder-card-sub">EC-130 (1)+(3) · 追问致病突变来自体细胞还是生殖细胞 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2-3<br>X 隐+</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec188-23')" style="cursor:pointer;">
+        <div class="ladder-card-name">SEDT · 系谱 + 分子证据</div>
+        <div class="ladder-card-sub">EC-188 (2)+(3) · 分子检测结果排除常隐，交叉验证 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2-4<br>X 显+</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec220-123')" style="cursor:pointer;">
+        <div class="ladder-card-name">RTT · 判型 + 精子减数分裂追踪</div>
+        <div class="ladder-card-sub">EC-220 (1)+(2)+(3) · 追踪含致病基因的精原/初级/次级精母细胞 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="ladder-section-label"><span class="ladder-level l3" style="width:auto;padding:3px 8px;">L3 综合</span> 同卷多遗传方式并发，切换判型逻辑</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l3">L3-1</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec143-12')" style="cursor:pointer;">
+        <div class="ladder-card-name">PKD 双家系对比（甲=常隐，乙=常显）</div>
+        <div class="ladder-card-sub">EC-143 (1)+(2) · 检验能否在同一题内区分两种遗传方式 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l3">L3-2</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec137-127')" style="cursor:pointer;">
+        <div class="ladder-card-name">三遗传并发（糖原贮积症 + 红绿色盲 + 血友病）</div>
+        <div class="ladder-card-sub">EC-137 (1)+(2)+(7) · 常隐/伴 X 隐在同一题内切换 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l3">L3-3</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec157-1')" style="cursor:pointer;">
+        <div class="ladder-card-name">EPPK + 红绿色盲（常显 + 伴 X 隐并发）</div>
+        <div class="ladder-card-sub">EC-157 (1) · 平行判型两种遗传方式，加入染色体缺失 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TAB: SELF-CHECK ══ -->
+<div id="tab-self" class="page" role="tabpanel">
+  <div class="progress-row">
+    <span style="font-size:13px;color:var(--tx2);">学习自查清单</span>
+    <span style="font-size:13px;color:var(--tx2);" id="progress-text">0 / 7 完成</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="pbar"></div></div>
+  <div class="checklist" id="checklist">
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能从系谱图直接读出"无中生有"和"有中生无"两种关键信号</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能用"患病女性的父亲是否正常"区分常隐与伴 X 隐</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能用"患病父亲的女儿是否全部患病"区分常显与伴 X 显</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能写出 4 种遗传方式下典型家系成员的基因型（区分"确定"与"可能"）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能正确处理"已知表现正常"的条件概率（调整分母，排除患病个体）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">完成 L1 全部 4 道基础变式（每种遗传方式各 1 道）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">完成至少 2 道 L2 进阶变式，并能说出与母题的推理差异</div>
+    </div>
+  </div>
+  <div class="action-row">
+    <button class="action-btn" onclick="window.scrollTo(0,0);switchTab('mothers',document.querySelectorAll('.nav-tab')[1])">返回母题精讲 →</button>
+    <button class="action-btn" onclick="window.scrollTo(0,0);switchTab('ladder',document.querySelectorAll('.nav-tab')[2])">进入变式阶梯 →</button>
+  </div>
+</div>
+
+</div><!-- .app -->
+
+<!-- ══ DRAWER ══ -->
+<div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
+  <div class="drawer-header">
+    <span class="drawer-badge" id="drawer-badge"></span>
+    <span class="drawer-title" id="drawer-title"></span>
+    <button class="drawer-close" onclick="closeDrawer()" aria-label="关闭题干面板">
+      <i class="ti ti-x" style="font-size:18px;" aria-hidden="true"></i>
+    </button>
+  </div>
+  <div class="drawer-body">
+    <div class="drawer-ec-ref" id="drawer-ref"></div>
+    <div class="drawer-stem" id="drawer-stem"></div>
+    <div class="drawer-sub" id="drawer-sub" style="display:none;">
+      <div class="drawer-sub-label">本题考查重点</div>
+      <div id="drawer-sub-text"></div>
+    </div>
+    <div class="drawer-answer" id="drawer-answer">
+      <div class="drawer-answer-label">参考答案</div>
+      <div id="drawer-answer-text"></div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="drawer-btn" id="drawer-ans-btn" onclick="toggleAnswer()">显示答案</button>
+    <button class="drawer-btn primary" onclick="closeDrawer()">完成阅读</button>
+  </div>
+</div>
+
+<script>
+/* ── Tab navigation ── */
+function switchTab(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+function toggleMQ(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.mq-chevron');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chevron.classList.toggle('open', !isOpen);
+}
+function filterMode(mode, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.mq-card').forEach(card => {
+    card.style.display = (mode === 'all' || card.dataset.mode === mode) ? '' : 'none';
+  });
+}
+
+/* ── Checklist ── */
+function toggleCheck(item) {
+  item.classList.toggle('done');
+  updateProgress();
+  saveChecklist();
+}
+function updateProgress() {
+  const total = document.querySelectorAll('.check-item').length;
+  const done = document.querySelectorAll('.check-item.done').length;
+  document.getElementById('pbar').style.width = (done / total * 100) + '%';
+  document.getElementById('progress-text').textContent = done + ' / ' + total + ' 完成';
+}
+function saveChecklist() {
+  try {
+    const states = Array.from(document.querySelectorAll('.check-item')).map(el => el.classList.contains('done'));
+    localStorage.setItem('T03_M1_checklist', JSON.stringify(states));
+  } catch(e) {}
+}
+(function() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('T03_M1_checklist') || '[]');
+    document.querySelectorAll('.check-item').forEach((item, i) => { if (saved[i]) item.classList.add('done'); });
+    updateProgress();
+  } catch(e) {}
+})();
+
+/* ══ QUESTION DATA ══ */
+const QUESTIONS = {
+  /* ── 母题 ── */
+  'mq-ec162': {
+    badge: '常染色体隐性 · 母题', badgeClass: 'ar',
+    title: '镰状细胞贫血系谱判型',
+    ref: 'EC-20260520-162 · 子问题 (6)(7)',
+    stem: `血红蛋白由 2 条α链和 2 条β链组成，编码β链的基因位于 11 号染色体，镰状细胞贫血（SCA）患者的β链第 6 位氨基酸由谷氨酸变为缬氨酸。图为某镰状细胞贫血家系的系谱图。
+
+(6) 根据系谱图判断，镰状细胞贫血的遗传方式是（  ）
+    A. 常染色体显性遗传
+    B. 常染色体隐性遗传
+    C. 伴 X 染色体显性遗传
+    D. 伴 X 染色体隐性遗传
+
+(7) 若系谱图中Ⅱ-3 和Ⅱ-4 再生育一个孩子，该孩子患镰状细胞贫血的概率为___。`,
+    focus: '判型要点：① 正常父母（Ⅱ-1×Ⅱ-2）生患病孩子（Ⅲ-1）→ 无中生有 → 排除显性；② 患病女性（Ⅲ-2）的父亲（Ⅱ-1）表现正常 → 排除伴 X 隐性 → 确认常染色体隐性。',
+    answer: '(6) B\n(7) 1/4（Ⅱ-3 和 Ⅱ-4 均为 Aa，后代 aa 概率 = 1/4）'
+  },
+  'mq-ec130': {
+    badge: '常染色体显性 · 母题', badgeClass: 'ad',
+    title: 'EOFAD 早发性阿尔茨海默症系谱判型',
+    ref: 'EC-20260519-130 · 子问题 (1)',
+    stem: `阿尔茨海默症（AD）中早发性阿尔茨海默症（EOFAD）多发于 20~60 岁，主要症状为进行性记忆力减退，最终可能导致重度认知障碍。图是某 EOFAD 患者的系谱图。
+
+(1) 经检测，Ⅱ-1 不携带 EOFAD 的致病基因，据图可推断该致病基因为___（显性/隐性）基因，位于___（常/X）染色体。`,
+    focus: '判型要点：① Ⅱ-1 不携带致病基因 → 排除了隐性携带者传递（若是常隐，Ⅱ-1 必为 Aa 才能生患病后代）→ 只能是显性遗传；② Ⅰ-1 患病男性有正常女儿 Ⅱ-2 → 若是伴 X 显性，Ⅰ-1 为 X^A Y，女儿必获 X^A 全部患病，矛盾 → 排除伴 X 显 → 确认常染色体显性。',
+    answer: '(1) 显性；常\n推理路径：不携带→排除隐性→只能显性；患病父亲正常女儿→排除伴X显→常染色体显性'
+  },
+  'mq-ec129': {
+    badge: '伴 X 染色体隐性 · 母题', badgeClass: 'xr',
+    title: '卡尔曼综合征系谱推理',
+    ref: 'EC-20260519-129 · 子问题 (2)',
+    stem: `卡尔曼综合征（KS）是一种单基因遗传病。小红和丈夫表现正常，生育了一个正常的女儿和一个患病的儿子。小红的弟弟也是该病患者。小红的父母表现正常，但小红的父亲不携带致病基因。
+
+（根据题目 (1) 所绘系谱图）
+(2) 根据你所画的系谱图推测，该病的遗传方式是___，你的判断依据是___。`,
+    focus: '三项锁定：① 正常父母生患病孩子（儿子）→ 无中生有 → 排除显性遗传；② 已知患者均为男性（儿子、弟弟）→ 提示可能伴 X；③ 父亲不携带致病基因 → 若是常染色体隐性，父亲必携带（至少 Aa），矛盾 → 排除常隐 → 确认伴 X 染色体隐性遗传。',
+    answer: '(2) 伴 X 染色体隐性遗传\n判断依据：正常父母生患病儿子（无中生有，排除显性）；父亲不携带致病基因（排除常染色体隐性）；患者均为男性（符合伴 X 隐性特征）。'
+  },
+  'mq-ec220': {
+    badge: '伴 X 染色体显性 · 母题', badgeClass: 'xd',
+    title: '雷特综合征 RTT 判型',
+    ref: 'EC-20260521-220 · 子问题 (1)(2)',
+    stem: `雷特综合征（RTT）是一种罕见遗传病，由 MECP2 基因突变引起，临床特征为进行性智力衰退和运动功能障碍。下图是该病的家族系谱图（Ⅱ-4 为患病男性，其子女中有正常男孩）。
+
+(1) 据图分析该病的遗传方式可能是___。
+    A. 常染色体显性  B. 常染色体隐性  C. 伴 X 隐性  D. 伴 X 显性
+
+(2) 若 Ⅱ-4 只具有致病基因，则 RTT 为伴 X 染色体显性遗传病。判断依据___。（编号选填）
+    ① Ⅱ-4 只具致病基因 → 其女儿必从父亲继承致病 X → RTT 为伴 X 显性
+    ② 该病是隐性遗传病
+    ③ 该病是常染色体遗传病
+    ④ 若 Ⅲ-3 同时具正常+致病基因则可能是常显或伴 X 显`,
+    focus: '区分常显与伴 X 显的关键：若患病父亲（Ⅱ-4）"只具致病基因"，即基因型为 X^A Y（伴 X 显性），则其所有女儿必须从父亲那里获得 X^A（致病），因此女儿全部患病。若是常染色体显性（Aa），则女儿得到 A 的概率为 1/2，不是"必须全患病"。→ 用"女儿是否全患病"来区分。',
+    answer: '(1) A 或 D（系谱图信息不足以完全排除，需附加条件）\n(2) ①（Ⅱ-4 只具致病基因 → X^A Y → 所有女儿必获 X^A → 全部患病 → 确认伴 X 显性）'
+  },
+
+  /* ── L1 变式 ── */
+  'v-ec143-1': {
+    badge: 'L1 基础变式 · 常染色体隐性', badgeClass: 'ar',
+    title: 'PKD 甲家系判型',
+    ref: 'EC-20260519-143 · 子问题 (1)',
+    stem: `多囊肾病（PKD）有两种类型，甲家系患的是常染色体遗传的 PKD，乙家系患的是另一种类型。下图甲为甲家系的系谱图（Ⅱ-5 为患病女性，其父母表现正常，Ⅰ-1 为正常男性）。
+
+(1) 据图判断甲家系 PKD 的遗传方式是___，并写出你的判断依据。`,
+    focus: '判型要点同母题：① 正常父母（Ⅰ-1×Ⅰ-2）生患病孩子 → 无中生有 → 排除显性；② 患病女性 Ⅱ-5 的父亲 Ⅰ-1 表现正常 → 排除伴 X 隐性 → 常染色体隐性。与母题的区别：家系成员更多，需要在更复杂的结构中找到这两个信号。',
+    answer: '常染色体隐性遗传\n依据：Ⅱ-5 患病，其父 Ⅰ-1 正常（若伴X隐则父亲必患病，矛盾）；正常亲代生患病后代（无中生有，排除显性）。'
+  },
+  'v-ec135-1': {
+    badge: 'L1 基础变式 · 常染色体显性', badgeClass: 'ad',
+    title: 'PKD 常显系谱',
+    ref: 'EC-20260519-135 · 子问题 (1)',
+    stem: `多囊肾病（PKD1）是一种单基因遗传病，PKD1 基因位于常染色体上。下图为某 PKD 家系的系谱图（图中阴影个体为患者，Ⅱ-2 表现正常）。
+
+(1) 根据系谱图及题目信息，判断 PKD1 致病基因的显隐性及其位置，并写出 Ⅱ-2 的基因型。`,
+    focus: '判型要点：① 代代出现患者（Ⅰ代、Ⅱ代均有患者）→ 代代相传 → 提示显性；② 患病父亲（Ⅰ-1）有正常女儿（Ⅱ-2）→ 排除伴 X 显性（伴X显则女儿全患）→ 常染色体显性。已知 PKD1 基因在常染色体上作为辅助信息验证。',
+    answer: '(1) 显性基因，位于常染色体。\nⅡ-2 基因型：aa（表现正常，未患病）\n（注：若 Ⅱ-2 的父母均为 Aa，Ⅱ-2 表现正常则基因型为 aa）'
+  },
+  'v-ec188-2': {
+    badge: 'L1 基础变式 · 伴 X 染色体隐性', badgeClass: 'xr',
+    title: 'SEDT 迟发性脊椎骨骺发育不良',
+    ref: 'EC-20260521-188 · 子问题 (2)',
+    stem: `迟发性脊椎骨骺发育不良（SEDT）是由 TRAPPC2 基因缺失突变引起的遗传病，患者主要表现为身材矮小和脊椎异常。下图为某 SEDT 家系的系谱图（系谱中患者均为男性）。
+
+(2) 根据系谱图，该病的遗传方式最可能是___。（单选）
+    A. 常染色体显性遗传
+    B. 常染色体隐性遗传
+    C. 伴 X 染色体显性遗传
+    D. 伴 X 染色体隐性遗传`,
+    focus: '四选一排除法：① 正常亲代生患病后代 → 无中生有 → 排除 A（常显）和 C（伴X显）；② 患者均为男性 → 提示伴 X → 倾向 D；③ 若能从题目中确认女性携带者或父亲不携带，则锁定 D。与母题的区别：需要从四个选项中逐步排除，而母题是三项锁定直接推导。',
+    answer: '(2) D（伴 X 染色体隐性遗传）\n排除路径：无中生有→排除显性（A/C）；患者均为男性+符合伴X遗传特征→排除B→选D'
+  },
+  'v-ec192-1': {
+    badge: 'L1 基础变式 · 伴 X 染色体显性（变体）', badgeClass: 'xd',
+    title: '蚕豆病 G6PD 缺乏症',
+    ref: 'EC-20260521-192 · 子问题 (1)',
+    stem: `蚕豆病是一种单基因遗传病，患者因红细胞膜缺乏正常的 G6PD（葡萄糖-6-磷酸脱氢酶）导致红细胞易受氧化损伤而破裂溶血。下图为一蚕豆病家族系谱图。已知该病在男性中发病率较高。
+
+(1) 据图及信息判断，蚕豆病的遗传方式可能为___。
+    A. 常染色体显性
+    B. 常染色体隐性
+    C. X 连锁显性
+    D. X 连锁隐性`,
+    focus: '特殊变体：X 连锁不完全显性。① 男性发病率远高于女性 → 提示伴 X；② 杂合女性（X^D X^d）可能轻度发病（不完全显性）→ 不能仅凭"有女患者"就排除伴 X 遗传；③ 本题答案为 D（X 连锁隐性），因为绝大多数患者为男性，女性患者极少且轻微，符合 X 连锁隐性特征。⚠️ 易错点：不完全显性时杂合女性可轻度发病，可能被误判为常染色体隐性。',
+    answer: '(1) D（X 连锁隐性）\n关键：男性发病率远高于女性；杂合女性（携带者）因不完全显性可能轻度发病但不等于常隐'
+  },
+
+  /* ── L2 变式 ── */
+  'v-ec162-8': {
+    badge: 'L2 进阶变式 · 常隐 + 电泳', badgeClass: 'ar',
+    title: '镰状细胞贫血 · 电泳条带读取 + 概率计算',
+    ref: 'EC-20260520-162 · 子问题 (8)',
+    stem: `（接上题，镰状细胞贫血家系，已知为常染色体隐性遗传，致病基因 b，正常基因 B）
+Ⅱ-3 和 Ⅱ-4 的电泳检测结果如图所示：Ⅱ-3 电泳出现两条带（上下各一），Ⅱ-4 电泳出现一条带（仅上带）。
+
+(8) 根据电泳结果，Ⅱ-3 的基因型为___，Ⅱ-4 的基因型为___。
+    若 Ⅱ-3 和 Ⅱ-4 再生一个孩子，该孩子：
+    ① 患镰状细胞贫血的概率为___
+    ② 表现正常且携带致病基因的概率为___`,
+    focus: '三层推理：① 电泳读取：两条带 = 两种蛋白 = 杂合 Bb；一条带（正常带）= 纯合 BB 或 bb，结合表现型（正常）= BB；② 基因型确定：Ⅱ-3 = Bb，Ⅱ-4 = BB；③ 后代概率：Bb × BB → 后代均不患病（bb 概率 = 0），携带者 Bb 概率 = 1/2。⚠️ 与母题区别：判型已知，重点是"从分子证据读基因型再算概率"，是 M4（分子证据）+ M2（概率）的交叉题。',
+    answer: '(8) Ⅱ-3：Bb（两条带=杂合）；Ⅱ-4：BB（一条正常带=纯合正常）\n① 患病（bb）概率 = 0\n② 携带者（Bb）概率 = 1/2'
+  },
+  'v-ec130-13': {
+    badge: 'L2 进阶变式 · 常显 + 突变来源', badgeClass: 'ad',
+    title: 'EOFAD · 判型 + 致病基因突变来源追问',
+    ref: 'EC-20260519-130 · 子问题 (1)+(3)',
+    stem: `（接上题，EOFAD 家系）
+(1) 经检测，Ⅱ-1 不携带 EOFAD 的致病基因，据图推断该致病基因为___（显性/隐性）基因，位于___（常/X）染色体。
+
+(3) Ⅰ-2 的致病基因是其正常基因的第 488 位碱基 A 被 G 所替换，该致病基因可能最早来源于 Ⅰ-2 的___（早期胚胎细胞/精细胞），该细胞发生变异的时期最有可能是___（有丝分裂/减数分裂Ⅰ/减数分裂Ⅱ）间期。`,
+    focus: '(1) 同母题判型；(3) 关键辨析：致病基因来源于 Ⅰ-2 → Ⅰ-2 有子代患病 → 致病基因已通过生殖传给后代 → 不能来自体细胞（体细胞突变不遗传）→ 来自精细胞/卵细胞形成过程中的突变 → 最有可能在"减数分裂间期"（DNA 复制时）发生。⚠️ 易错：误选"有丝分裂间期"（体细胞突变不能传给后代）。',
+    answer: '(1) 显性；常\n(3) 精细胞（通过生殖传给后代，必来自生殖细胞系列）；减数分裂Ⅰ间期（DNA复制时碱基替换）'
+  },
+  'v-ec188-23': {
+    badge: 'L2 进阶变式 · 伴 X 隐 + 分子证据', badgeClass: 'xr',
+    title: 'SEDT · 系谱 + 分子检测交叉验证',
+    ref: 'EC-20260521-188 · 子问题 (2)+(3)',
+    stem: `（接上题，SEDT 家系，TRAPPC2 基因位于 X 染色体）
+(2) 根据系谱图，该病遗传方式最可能是___（单选，见上题选项）。
+
+(3) 研究人员对该家系成员进行了 TRAPPC2 基因检测，发现 Ⅱ-6（系谱中一位正常女性）的基因组 DNA 中不含有 2500bp 的片段缺失。据此分析，Ⅱ-6 的基因型为___，该家系 SEDT 的遗传方式___（是否）能确定为伴 X 染色体隐性遗传。`,
+    focus: '系谱 + 分子证据交叉验证：(2) 系谱初判：患者均为男性 + 无中生有 → 可能伴X隐或常隐；(3) 分子排除：Ⅱ-6 正常且"不含 2500bp 缺失片段"→ 她的 X 染色体均完整 → 若是常隐，携带者 Ⅱ-6 应含一条有缺失的等位基因 → 矛盾 → 排除常隐 → 确认伴 X 染色体隐性遗传。这是"两步判型"模式：系谱缩小范围 → 分子证据最终确认。',
+    answer: '(2) D（伴X染色体隐性）\n(3) Ⅱ-6 基因型：X^E X^E（两条X均正常，无缺失）；能确认为伴X染色体隐性遗传（排除了常染色体隐性）'
+  },
+  'v-ec220-123': {
+    badge: 'L2 进阶变式 · 伴 X 显 + 减数分裂追踪', badgeClass: 'xd',
+    title: 'RTT · 判型 + 精子形成减数分裂追踪',
+    ref: 'EC-20260521-220 · 子问题 (1)+(2)+(3)',
+    stem: `（接上题，RTT 雷特综合征，已确认为伴 X 染色体显性遗传，致病基因 A，正常基因 a，Ⅱ-4 基因型为 X^A Y）
+
+(1) 据图分析该病遗传方式可能是___（见母题选项）。
+
+(2) 若 Ⅱ-4 只具有致病基因，则 RTT 为伴 X 染色体显性遗传病。判断依据___（编号选填）。
+
+(3) 若该病为常染色体显性或伴 X 显性，Ⅱ-4 的基因型可能是 Aa 或 X^A Y。精子形成过程中一定含有致病基因的细胞有___，可能含有两个致病基因的细胞有___。（编号选填）
+    ① 精原细胞  ② 初级精母细胞  ③ 次级精母细胞`,
+    focus: '(3) 减数分裂追踪：若 Ⅱ-4 为 X^A Y，则精原细胞（①，含 X^A，一定含致病基因）→ 减Ⅰ前期/中期/后期：初级精母细胞（②，一定含 X^A，一定含致病基因）→ 减Ⅰ末期：X^A 进入一个次级精母细胞（③，该细胞含致病基因；另一个 Y 精母细胞不含）→ "一定含致病基因的"：①② 。"可能含两个致病基因"：若 Ⅱ-4 为 Aa（常显），减Ⅱ姐妹染色单体分离前，次级精母细胞（③）含 aa 或 AA → AA 那个含两个致病基因。',
+    answer: '(1) A 或 D\n(2) ①\n(3) 一定含致病基因：①②（精原细胞和初级精母细胞均含 X^A）\n可能含两个致病基因：②③（若为常显 Aa，初级精母细胞 DNA 复制后含 AAaa；次级精母细胞可能为 AA）'
+  },
+
+  /* ── L3 变式 ── */
+  'v-ec143-12': {
+    badge: 'L3 综合变式 · 双家系对比', badgeClass: 'xr',
+    title: 'PKD 甲乙双家系对比（常隐 vs 常显）',
+    ref: 'EC-20260519-143 · 子问题 (1)+(2)',
+    stem: `多囊肾病（PKD）有两种类型：甲家系的 PKD 为一种遗传方式，乙家系的 PKD 为另一种遗传方式。
+
+(1) 判断甲家系 PKD 的遗传方式（见甲家系系谱图，Ⅱ-5 患病，父母正常）。
+
+(2) 判断乙家系 PKD 的遗传方式（见乙家系系谱图，Ⅰ-1 患病，其后代中有患者也有正常人，Ⅱ-6 正常但生了患病孩子）。`,
+    focus: '综合挑战：同一题目中两个家系遗传方式不同，考查学生能否灵活切换判型逻辑而不产生"惯性"。甲家系（常隐）：无中生有 + 患病女性父亲正常；乙家系（常显）：代代相传 + 有患病个体生正常后代（有中生无）。关键：不能因为甲家系是常隐就惯性认为乙家系也是常隐。',
+    answer: '(1) 甲家系：常染色体隐性遗传\n(2) 乙家系：常染色体显性遗传（代代有患者，有中生无，且患者中有生正常后代者→杂合Aa）'
+  },
+  'v-ec137-127': {
+    badge: 'L3 综合变式 · 三遗传并发', badgeClass: 'xr',
+    title: '三遗传并发（糖原贮积症 + 红绿色盲 + 血友病）',
+    ref: 'EC-20260519-137 · 子问题 (1)+(2)+(7)',
+    stem: `图为某家族有关"Ⅰ型糖原贮积症"患病情况的遗传系谱图（Ⅱ-8 携带致病基因，Ⅱ-5 患病）。
+
+(1) 其中 Ⅱ-8 携带致病基因，说明该病的遗传方式为___（显性/隐性）遗传病，且由图可知该致病基因位于___（X/常）染色体上，判断依据是___。
+
+(2) 在一次体检中，13 号发现自己还患有红绿色盲。图是人类 XY 染色体上的有关区段示意图，红绿色盲基因在染色体上的位置是___。
+    A. Ⅰ1（X 和 Y 染色体同源区段）
+    B. Ⅱ1（X 染色体非同源区段）
+    C. Ⅱ2（Y 染色体非同源区段）
+
+（另附血友病题干，为伴 X 隐性遗传病）
+(7) 红绿色盲与血友病两对基因在遗传时是否遵循基因的自由组合定律？___，理由是___。`,
+    focus: '三种遗传方式在同一题中切换：① 糖原贮积症（常隐）：携带者存在 + Ⅱ-5 患病（正常亲代→患病后代）→ 隐性；Ⅱ-5 患病但若是伴X隐男性必患而女性要双隐性，结合系谱排除伴X → 常染色体隐性；② 红绿色盲（伴X隐）：位于 X 染色体非同源区段（Ⅱ1/B）→ 伴 X 遗传；③ 血友病（伴X隐）：同在 X 染色体上 → 不遵循自由组合定律（连锁遗传）。',
+    answer: '(1) 隐性；常染色体。依据：Ⅱ-5 患病，Ⅲ-11（或 Ⅰ-1）正常（若伴X隐性，正常男性不能生患病后代或正常男性必不携带，矛盾）\n(2) B（X染色体非同源区段 Ⅱ1）\n(7) 不遵循自由组合定律；红绿色盲和血友病基因均位于 X 染色体上（连锁遗传，不符合自由组合定律要求的"两对基因位于非同源染色体上"）'
+  },
+  'v-ec157-1': {
+    badge: 'L3 综合变式 · 常显 + 伴 X 隐并发', badgeClass: 'ad',
+    title: 'EPPK + 红绿色盲（两种遗传方式平行判型）',
+    ref: 'EC-20260519-157 · 子问题 (1)',
+    stem: `表皮松解性掌跖角化症（EPPK）是一种单基因（KRT9 基因）遗传病。图 1 为 EPPK 的一个家系图，已知 Ⅰ-2 个体没有该病的致病基因。
+
+(1) 据本题相关信息判断，表皮松解性掌跖角化症的遗传方式是___。
+    A. 常染色体显性遗传
+    B. 常染色体隐性遗传
+    C. 伴 X 染色体显性遗传
+    D. 伴 X 染色体隐性遗传
+
+（本题后续还涉及红绿色盲，为伴 X 染色体隐性遗传病）`,
+    focus: '双重判型挑战：同一套题中需要对 EPPK 和红绿色盲分别判型。① EPPK 判型：Ⅰ-2 不携带致病基因 → 排除隐性 → 只能是显性；Ⅰ-1（患病男性）有正常女儿（Ⅱ-1）→ 排除伴 X 显性 → 常染色体显性（选 A）；② 红绿色盲（后续题目）：男患者 + 母亲携带 → 伴 X 染色体隐性遗传。⚠️ 综合难点：在同一题的不同小问中切换判型逻辑，不能混淆。',
+    answer: '(1) A（常染色体显性遗传）\n判型路径：Ⅰ-2 不携带致病基因→排除隐性；患病父亲（Ⅰ-1）有正常女儿（Ⅱ-1）→排除伴X显→常染色体显性'
+  }
+};
+
+/* ══ DRAWER LOGIC ══ */
+let answerShown = false;
+
+function openDrawer(key) {
+  const q = QUESTIONS[key];
+  if (!q) return;
+
+  // set badge
+  const badge = document.getElementById('drawer-badge');
+  badge.textContent = q.badge;
+  badge.className = 'drawer-badge mq-badge ' + (q.badgeClass || '');
+
+  document.getElementById('drawer-title').textContent = q.title;
+
+  const ref = document.getElementById('drawer-ref');
+  ref.innerHTML = '<i class="ti ti-source-code" style="font-size:13px;" aria-hidden="true"></i> ' + q.ref;
+
+  document.getElementById('drawer-stem').textContent = q.stem;
+
+  const subEl = document.getElementById('drawer-sub');
+  const subText = document.getElementById('drawer-sub-text');
+  if (q.focus) {
+    subText.textContent = q.focus;
+    subEl.style.display = '';
+  } else {
+    subEl.style.display = 'none';
+  }
+
+  // reset answer
+  answerShown = false;
+  const ans = document.getElementById('drawer-answer');
+  ans.classList.remove('show');
+  document.getElementById('drawer-answer-text').textContent = q.answer || '';
+  const btn = document.getElementById('drawer-ans-btn');
+  btn.textContent = '显示答案';
+  btn.style.display = q.answer ? '' : 'none';
+
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('drawer').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDrawer() {
+  document.getElementById('overlay').classList.remove('open');
+  document.getElementById('drawer').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function toggleAnswer() {
+  answerShown = !answerShown;
+  document.getElementById('drawer-answer').classList.toggle('show', answerShown);
+  document.getElementById('drawer-ans-btn').textContent = answerShown ? '隐藏答案' : '显示答案';
+}
+
+// ESC to close drawer or lightbox
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (document.getElementById('lb-overlay').classList.contains('open')) closeLightbox();
+    else closeDrawer();
+  }
+});
+</script>
+
+<!-- Lightbox -->
+<div class="lb-overlay" id="lb-overlay" onclick="closeLightbox()">
+  <button class="lb-close" onclick="closeLightbox()" aria-label="关闭">&#x2715;</button>
+  <img class="lb-img" id="lb-img" src="" alt="">
+</div>
+<script>
+function openLightbox(src, alt) {
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lb-img').alt = alt || '';
+  document.getElementById('lb-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lb-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+// Prevent click on image itself from bubbling to overlay close
+document.getElementById('lb-img').addEventListener('click', e => e.stopPropagation());
+</script>
+</body>
+</html>

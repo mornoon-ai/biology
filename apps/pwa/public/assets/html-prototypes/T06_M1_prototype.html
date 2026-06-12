@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T06_M1 · 实验变量与对照设计</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent:#185FA5; --accent-l:#E6F1FB; --accent-m:#88BAE8; --accent-d:#0C447C;
+  --teal:#0F6E56; --teal-l:#E1F5EE; --teal-d:#085041;
+  --amber:#BA7517; --amber-l:#FAEEDA; --amber-d:#633806;
+  --coral:#993C1D; --coral-l:#FAECE7; --coral-d:#712B13;
+  --bg:#ffffff; --bg2:#f7f7f5; --bg3:#f1efe8;
+  --tx:#1a1a18; --tx2:#5f5e5a; --tx3:#888780;
+  --bd:rgba(0,0,0,0.10); --bd2:rgba(0,0,0,0.18);
+  --r-sm:6px; --r-md:8px; --r-lg:12px; --r-xl:16px;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#1c1c1a;--bg2:#252523;--bg3:#2c2c2a;
+    --tx:#f0efea;--tx2:#b4b2a9;--tx3:#888780;
+    --bd:rgba(255,255,255,0.09);--bd2:rgba(255,255,255,0.16);
+    --accent-l:#042C53;--accent-d:#B5D4F4;
+    --teal-l:#04342C;--teal-d:#9FE1CB;
+    --amber-l:#412402;--amber-d:#FAC775;
+    --coral-l:#4A1B0C;--coral-d:#F5C4B3;
+  }
+}
+body{font-family:var(--font);font-size:15px;line-height:1.6;color:var(--tx);background:var(--bg3);min-height:100vh;}
+.app{max-width:800px;margin:0 auto;background:var(--bg);min-height:100vh;}
+
+/* ── Header & Nav ── */
+.site-header{padding:1.25rem 1.5rem 0;background:var(--bg);border-bottom:0.5px solid var(--bd);position:sticky;top:0;z-index:20;}
+.header-top{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.header-icon{background:var(--accent-l);border-radius:var(--r-md);padding:6px 8px;display:flex;align-items:center;justify-content:center;}
+.header-icon i{font-size:20px;color:var(--accent);}
+.header-meta{font-size:12px;color:var(--tx3);}
+.header-title{font-size:17px;font-weight:500;color:var(--tx);}
+.header-id{margin-left:auto;font-size:11px;color:var(--tx3);background:var(--bg2);padding:3px 9px;border-radius:var(--r-sm);}
+.nav-tabs{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.nav-tab{padding:.6rem 1.1rem;font-size:13px;color:var(--tx2);cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;font-family:var(--font);white-space:nowrap;transition:color .15s,border-color .15s;}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500;}
+.nav-tab:hover:not(.active){color:var(--tx);}
+
+/* ── Pages ── */
+.page{display:none;padding:1.5rem;}
+.page.active{display:block;}
+
+/* ── Memory Card ── */
+.memory-section{margin-bottom:1.5rem;}
+.memory-card{border:0.5px solid var(--bd);border-radius:var(--r-xl);overflow:hidden;background:var(--bg);}
+.memory-img{width:100%;display:block;max-height:300px;object-fit:contain;background:var(--bg3);cursor:zoom-in;transition:opacity .15s;}
+.memory-img:hover{opacity:.9;}
+.memory-footer{padding:.85rem 1rem;display:flex;align-items:center;gap:10px;border-top:0.5px solid var(--bd);}
+.memory-label{font-size:13px;font-weight:500;color:var(--tx);flex:1;}
+.audio-player{display:flex;align-items:center;gap:8px;}
+audio{height:32px;width:220px;}
+audio::-webkit-media-controls-panel{background:var(--bg2);}
+
+/* ── Lightbox ── */
+.lb-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:200;display:none;align-items:center;justify-content:center;cursor:zoom-out;}
+.lb-overlay.open{display:flex;}
+.lb-img{max-width:92vw;max-height:92vh;object-fit:contain;border-radius:var(--r-md);box-shadow:0 8px 40px rgba(0,0,0,.5);}
+.lb-close{position:fixed;top:16px;right:20px;background:none;border:none;color:#fff;font-size:28px;cursor:pointer;line-height:1;opacity:.7;transition:opacity .15s;}
+.lb-close:hover{opacity:1;}
+
+/* ── Overview ── */
+.section-title{font-size:13px;font-weight:500;color:var(--tx2);display:flex;align-items:center;gap:7px;margin-bottom:1rem;text-transform:uppercase;letter-spacing:.04em;}
+.section-divider{height:0.5px;background:var(--bd);margin:1.5rem 0;}
+.signal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:1.5rem;}
+.signal-card{background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;}
+.signal-label{font-size:11px;color:var(--tx3);letter-spacing:.04em;margin-bottom:.4rem;text-transform:uppercase;}
+.signal-tag{font-size:13px;color:var(--tx);margin-bottom:3px;}
+.mode-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:1.5rem;}
+.mode-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.85rem 1rem;border-left-width:3px;}
+.mode-card-label{font-size:11px;font-weight:500;margin-bottom:.3rem;}
+.mode-card-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.trap-list{display:flex;flex-direction:column;gap:7px;}
+.trap-item{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.55;}
+.trap-icon{color:#E24B4A;font-size:15px;flex-shrink:0;margin-top:1px;}
+
+/* ── Mother Questions ── */
+.filter-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem;}
+.filter-btn{padding:5px 13px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx2);font-family:var(--font);transition:all .15s;}
+.filter-btn.active{background:var(--accent-l);color:var(--accent-d);border-color:var(--accent-m);font-weight:500;}
+.mq-card{border:0.5px solid var(--bd);border-radius:var(--r-lg);background:var(--bg);margin-bottom:.85rem;overflow:hidden;}
+.mq-header{padding:.9rem 1.1rem;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;transition:background .15s;}
+.mq-header:hover{background:var(--bg2);}
+.mq-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);white-space:nowrap;}
+.mq-badge.indep{background:var(--accent-l);color:var(--accent-d);}
+.mq-badge.ctrl{background:var(--teal-l);color:var(--teal-d);}
+.mq-badge.confound{background:var(--amber-l);color:var(--amber-d);}
+.mq-badge.design{background:var(--coral-l);color:var(--coral-d);}
+.mq-name{font-size:14px;font-weight:500;color:var(--tx);flex:1;}
+.mq-purity{font-size:12px;color:var(--tx3);flex-shrink:0;}
+.mq-chevron{color:var(--tx3);font-size:16px;transition:transform .2s;flex-shrink:0;}
+.mq-chevron.open{transform:rotate(180deg);}
+.mq-body{display:none;padding:.75rem 1.1rem 1.1rem;border-top:0.5px solid var(--bd);}
+.mq-body.open{display:block;}
+.mq-source{font-size:12px;color:var(--tx3);margin-bottom:.65rem;}
+.rule-box{background:var(--accent-l);border-left:3px solid var(--accent);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:.65rem .9rem;font-size:13px;color:var(--accent-d);margin:.75rem 0;line-height:1.65;}
+.chain-label{font-size:12px;font-weight:500;color:var(--tx2);margin:.75rem 0 .4rem;text-transform:uppercase;letter-spacing:.04em;}
+.signal-chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:6px;}
+.sc-node{background:var(--bg2);border-radius:var(--r-sm);padding:3px 9px;font-size:13px;color:var(--tx);}
+.sc-node.indep{background:var(--accent-l);color:var(--accent-d);}
+.sc-node.ctrl{background:var(--teal-l);color:var(--teal-d);}
+.sc-node.confound{background:var(--amber-l);color:var(--amber-d);}
+.sc-node.design{background:var(--coral-l);color:var(--coral-d);}
+.sc-arrow{color:var(--tx3);font-size:13px;}
+.mq-note{font-size:13px;color:var(--tx2);margin-top:.75rem;line-height:1.6;}
+
+/* ── Question Trigger ── */
+.q-trigger{display:inline-flex;align-items:center;gap:5px;margin-top:.75rem;padding:6px 12px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;color:var(--tx2);cursor:pointer;font-family:var(--font);transition:all .15s;}
+.q-trigger:hover{background:var(--bg2);color:var(--tx);}
+.q-trigger i{font-size:14px;}
+
+/* ── Ladder ── */
+.ladder-section-label{font-size:13px;font-weight:500;color:var(--tx2);margin-bottom:.85rem;display:flex;align-items:center;gap:7px;}
+.ladder-rows{display:flex;flex-direction:column;gap:8px;margin-bottom:1rem;}
+.ladder-row{display:grid;grid-template-columns:64px 1fr;gap:10px;align-items:start;}
+.ladder-level{font-size:11px;font-weight:500;padding:6px 4px;border-radius:var(--r-sm);text-align:center;line-height:1.4;}
+.l1{background:var(--teal-l);color:var(--teal-d);}
+.l2{background:var(--accent-l);color:var(--accent-d);}
+.l3{background:var(--amber-l);color:var(--amber-d);}
+.ladder-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.65rem .9rem;background:var(--bg);}
+.ladder-card-name{font-size:13px;font-weight:500;color:var(--tx);}
+.ladder-card-sub{font-size:12px;color:var(--tx3);margin-top:3px;line-height:1.5;}
+.ladder-note{background:var(--bg2);border-radius:var(--r-md);padding:.65rem .9rem;font-size:12px;color:var(--tx2);margin-bottom:1rem;line-height:1.55;}
+
+/* ── Self-check ── */
+.progress-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem;}
+.progress-bar{height:5px;border-radius:3px;background:var(--bg2);margin-bottom:1.25rem;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;background:var(--accent);width:0%;transition:width .3s;}
+.checklist{display:flex;flex-direction:column;gap:7px;}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:.7rem .9rem;border:0.5px solid var(--bd);border-radius:var(--r-md);background:var(--bg);cursor:pointer;transition:background .15s;}
+.check-item.done{background:var(--bg2);}
+.check-box{width:18px;height:18px;border:1.5px solid var(--bd2);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .15s;}
+.check-item.done .check-box{background:var(--accent);border-color:var(--accent);}
+.check-box i{font-size:11px;color:#fff;display:none;}
+.check-item.done .check-box i{display:block;}
+.check-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.check-item.done .check-text{color:var(--tx3);text-decoration:line-through;}
+.action-row{margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:8px;}
+.action-btn{padding:7px 14px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.action-btn:hover{background:var(--bg2);}
+
+/* ── Drawer ── */
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s;}
+.drawer-overlay.open{opacity:1;pointer-events:all;}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100vw);background:var(--bg);z-index:101;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden;}
+.drawer.open{transform:translateX(0);}
+.drawer-header{padding:1rem 1.25rem;border-bottom:0.5px solid var(--bd);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.drawer-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);}
+.drawer-title{font-size:14px;font-weight:500;color:var(--tx);flex:1;line-height:1.4;}
+.drawer-close{background:none;border:none;cursor:pointer;color:var(--tx2);padding:4px;border-radius:var(--r-sm);display:flex;align-items:center;transition:background .15s;}
+.drawer-close:hover{background:var(--bg2);}
+.drawer-body{flex:1;overflow-y:auto;padding:1.25rem;}
+.drawer-ec-ref{font-size:12px;color:var(--tx3);margin-bottom:1rem;display:flex;align-items:center;gap:6px;}
+.drawer-stem{font-size:14px;color:var(--tx);line-height:1.75;white-space:pre-wrap;}
+.drawer-sub{font-size:13px;color:var(--tx2);background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:1rem;line-height:1.65;}
+.drawer-sub-label{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-answer{font-size:13px;color:var(--tx);background:var(--accent-l);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:.75rem;line-height:1.65;display:none;}
+.drawer-answer.show{display:block;}
+.drawer-answer-label{font-size:11px;font-weight:500;color:var(--accent-d);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-footer{padding:.85rem 1.25rem;border-top:0.5px solid var(--bd);display:flex;gap:8px;flex-shrink:0;}
+.drawer-btn{flex:1;padding:8px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.drawer-btn:hover{background:var(--bg2);}
+.drawer-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+.drawer-btn.primary:hover{background:var(--accent-d);}
+
+/* ── Mobile ── */
+@media(max-width:600px){
+  .site-header{padding:1rem 1rem 0;}
+  .page{padding:1rem;}
+  .header-title{font-size:15px;}
+  .mode-grid{grid-template-columns:1fr 1fr;}
+  .ladder-row{grid-template-columns:52px 1fr;gap:8px;}
+  .action-row{flex-direction:column;}
+  .action-btn{width:100%;text-align:center;}
+  .drawer{width:100vw;}
+  audio{width:160px;}
+}
+@media(max-width:380px){
+  .mode-grid,.signal-grid{grid-template-columns:1fr;}
+}
+
+.back-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;font-size:12px;color:var(--tx2);background:var(--bg2);border:0.5px solid var(--bd2);border-radius:var(--r-md);text-decoration:none;font-family:var(--font);transition:background .15s,color .15s;white-space:nowrap;flex-shrink:0;}
+.back-btn:hover{background:var(--bg3);color:var(--tx);}
+.back-btn i{font-size:14px;}
+.memory-video{width:100%;max-height:220px;display:block;border-radius:var(--r-md);background:#000;margin-top:8px;}
+</style>
+</head>
+<body>
+<div class="app">
+
+<header class="site-header">
+  <div class="header-top">
+    <div class="header-icon"><i class="ti ti-flask" aria-hidden="true"></i></div>
+    <div>
+      <div class="header-meta">06 实验设计 · M1 变量与对照</div>
+      <div class="header-title">实验变量与对照设计</div>
+    </div>
+    <a class="back-btn" href="index.html" aria-label="返回首页"><i class="ti ti-arrow-left"></i> 首页</a>
+    <div class="header-id">T06_M1</div>
+  </div>
+  <nav class="nav-tabs" role="tablist">
+    <button class="nav-tab active" role="tab" onclick="switchTab('overview',this)">概览</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('mothers',this)">母题精讲</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('ladder',this)">变式阶梯</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('self',this)">自查清单</button>
+  </nav>
+</header>
+
+<!-- ══ TAB: OVERVIEW ══ -->
+<div id="tab-overview" class="page active" role="tabpanel">
+
+  <div class="memory-section">
+    <div class="memory-card">
+      <img class="memory-img" src="记忆卡/T06_M1_memory.png" alt="实验变量与对照设计记忆卡" onclick="openLightbox(this.src,this.alt)" onerror="this.style.display='none'">
+      <div class="memory-footer">
+        <div>
+          <div class="memory-label">记忆卡 · 自变量/因变量/无关变量 · 四种对照类型框架</div>
+          <div style="font-size:12px;color:var(--tx3);">点击图片可放大</div>
+        </div>
+        <div class="audio-player">
+          <div id="audio-wrap">
+            <video class="memory-video" controls controlsList="nodownload" preload="metadata" style="display:none">
+              <source src="audio/T06_M1.mp4" type="video/mp4">
+            </video>
+            <div class="audio-placeholder" style="display:flex"><i class="ti ti-video-off"></i>视频待放入</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title"><i class="ti ti-scan" aria-hidden="true"></i> 触发信号速查</div>
+  <div class="signal-grid">
+    <div class="signal-card">
+      <div class="signal-label">图像信号</div>
+      <div class="signal-tag">实验流程图 / 操作步骤框</div>
+      <div class="signal-tag">实验组 vs 对照组分组表</div>
+      <div class="signal-tag">实验结果记录表格</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">文字信号</div>
+      <div class="signal-tag">自变量 / 因变量 / 无关变量</div>
+      <div class="signal-tag">空白对照 / 阳性对照 / 相互对照</div>
+      <div class="signal-tag">单一变量原则 / 重复性原则</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">任务关键词</div>
+      <div class="signal-tag">指出实验中的自变量和因变量</div>
+      <div class="signal-tag">补全对照组的操作步骤</div>
+      <div class="signal-tag">评价实验方案是否符合原则</div>
+    </div>
+  </div>
+
+  <div class="section-title"><i class="ti ti-arrow-fork" aria-hidden="true"></i> 四类变量与对照 · 核心逻辑</div>
+  <div class="mode-grid">
+    <div class="mode-card" style="border-left-color:var(--accent);">
+      <div class="mode-card-label" style="color:var(--accent-d);">自变量（独立变量）</div>
+      <div class="mode-card-text">实验者主动改变的变量；决定实验分组的依据；必须只有一个（单一变量原则），否则无法判断因果关系</div>
+    </div>
+    <div class="mode-card" style="border-left-color:var(--teal);">
+      <div class="mode-card-label" style="color:var(--teal-d);">因变量（结果变量）</div>
+      <div class="mode-card-text">随自变量变化而变化的观测指标；须可测量且客观；如颜色深浅、气泡数量、萌发率等；要写明观测方式</div>
+    </div>
+    <div class="mode-card" style="border-left-color:var(--amber);">
+      <div class="mode-card-label" style="color:var(--amber-d);">无关变量（控制变量）</div>
+      <div class="mode-card-text">除自变量外所有可能影响因变量的变量，必须在各组间保持一致；如温度、pH、加液量、处理时间等</div>
+    </div>
+    <div class="mode-card" style="border-left-color:var(--coral);">
+      <div class="mode-card-label" style="color:var(--coral-d);">四种对照类型</div>
+      <div class="mode-card-text">空白对照（不施处理）；阳性对照（已知有效处理）；阴性对照（已知无效处理）；相互对照（各组互为对照）</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-alert-triangle" aria-hidden="true"></i> 高频陷阱（5 个）</div>
+  <div class="trap-list">
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon" aria-hidden="true"></i><div>无关变量未严格控制——"等量"两字最常漏写，如"向各组加入等量同浓度的底物""于相同温度下保温相同时间"，缺一不可</div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon" aria-hidden="true"></i><div>空白对照只加溶剂不加试剂——空白对照应与实验组除自变量外完全相同，不能仅加蒸馏水替代；需用等量溶剂（如缓冲液）配平</div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon" aria-hidden="true"></i><div>因变量描述不可观测——"观察是否有变化"太模糊；应写明"记录各组溶液颜色变化"或"统计各组萌发种子数量"等可量化指标</div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon" aria-hidden="true"></i><div>样本量过小无法排除偶然误差——单组单个样本不能得出可靠结论；实验设计应说明"每组设3个重复"或"每组选取10株"等</div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon" aria-hidden="true"></i><div>阳性对照与实验组混淆——阳性对照是"已知效果"组，用于验证实验体系灵敏度；实验组是"待测处理"组；两者目的不同，不能互换</div></div>
+  </div>
+</div>
+
+<!-- ══ TAB: MOTHER QUESTIONS ══ -->
+<div id="tab-mothers" class="page" role="tabpanel">
+  <div class="filter-tabs" role="group">
+    <button class="filter-btn active" onclick="filterMode('all',this)">全部（4 类）</button>
+    <button class="filter-btn" onclick="filterMode('indep',this)">自变量识别</button>
+    <button class="filter-btn" onclick="filterMode('ctrl',this)">对照设置</button>
+    <button class="filter-btn" onclick="filterMode('confound',this)">无关变量控制</button>
+    <button class="filter-btn" onclick="filterMode('design',this)">实验方案设计</button>
+  </div>
+
+  <div class="mq-card" data-mode="indep">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge indep">自变量识别</span>
+      <span class="mq-name">酶促反应速率实验中自变量、因变量与无关变量的识别与区分</span>
+      <span class="mq-purity">10/10</span>
+      <i class="ti ti-chevron-down mq-chevron" aria-hidden="true"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-510 · 子问题 (1)(2)</div>
+      <div class="rule-box">核心信号：题目给出探究"温度（或pH）对酶活性影响"的实验方案，要求指出自变量、因变量和无关变量各是什么。标准三步识别法：先找"实验者改变了什么"→自变量；再找"实验者测量了什么变化"→因变量；最后列出其余需保持一致的条件→无关变量。</div>
+      <div class="chain-label">三变量识别速记框架</div>
+      <div class="signal-chain"><span class="sc-node">实验者主动改变的条件</span><span class="sc-arrow">→</span><span class="sc-node indep">自变量（如温度梯度：20°C/37°C/60°C）✓</span></div>
+      <div class="signal-chain"><span class="sc-node">被动变化、可测量的结果</span><span class="sc-arrow">→</span><span class="sc-node indep">因变量（如底物消耗速率、气泡产生数量）✓</span></div>
+      <div class="signal-chain"><span class="sc-node">其余影响因素需统一</span><span class="sc-arrow">→</span><span class="sc-node">无关变量（pH、酶量、底物浓度、处理时间等）</span></div>
+      <p class="mq-note">⚠️ 常见混淆：把"时间"误写为自变量（时间是无关变量，各组处理时间须相同）；把"pH变化"当因变量（pH是自变量时，因变量是反应速率）。识别自变量的关键句：题目中"探究X对Y的影响"→X是自变量，Y是因变量。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec510')">
+        <i class="ti ti-file-text" aria-hidden="true"></i> 查看完整题干
+      </button>
+    </div>
+  </div>
+
+  <div class="mq-card" data-mode="ctrl">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge ctrl">对照设置</span>
+      <span class="mq-name">探究生长素浓度对茎生长影响实验的空白对照与阳性对照设置</span>
+      <span class="mq-purity">10/10</span>
+      <i class="ti ti-chevron-down mq-chevron" aria-hidden="true"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-515 · 子问题 (1)(2)</div>
+      <div class="rule-box">核心信号：题目要求补全实验设计中"对照组的处理"，或要求解释某对照组存在的理由。关键判断：该对照是为了排除"无处理本底效应"（空白对照）还是"验证实验体系有效"（阳性对照）？</div>
+      <div class="chain-label">两种核心对照的设置逻辑</div>
+      <div class="signal-chain"><span class="sc-node">空白对照</span><span class="sc-arrow">：</span><span class="sc-node ctrl">不施自变量处理（如不加生长素，加等量蒸馏水）</span></div>
+      <div class="signal-chain"><span class="sc-node">空白对照目的</span><span class="sc-arrow">：</span><span class="sc-node ctrl">排除培养基/溶剂本身对结果的影响→证明效果是自变量引起的 ✓</span></div>
+      <div class="signal-chain"><span class="sc-node">阳性对照</span><span class="sc-arrow">：</span><span class="sc-node">施加已知有效处理（如赤霉素组）</span></div>
+      <div class="signal-chain"><span class="sc-node">阳性对照目的</span><span class="sc-arrow">：</span><span class="sc-node ctrl">验证实验系统灵敏度正常，结果可信 ✓</span></div>
+      <p class="mq-note">补全对照组操作时，空白对照必须保证"除自变量外其他条件完全相同"——如实验组用10mL不同浓度生长素处理，则空白对照应用10mL等量蒸馏水/溶剂处理，而非"不做任何处理"。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec515')">
+        <i class="ti ti-file-text" aria-hidden="true"></i> 查看完整题干
+      </button>
+    </div>
+  </div>
+
+  <div class="mq-card" data-mode="confound">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge confound">无关变量控制</span>
+      <span class="mq-name">探究pH对淀粉酶活性影响实验中的无关变量控制分析</span>
+      <span class="mq-purity">9/10</span>
+      <i class="ti ti-chevron-down mq-chevron" aria-hidden="true"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-518 · 子问题 (2)(3)</div>
+      <div class="rule-box">核心信号：题目给出一个实验方案并要求"找出不妥之处"或"说明哪些无关变量处理不当"。标准排查路线：将已标明的自变量排除，对剩余的每一个可能影响结果的条件逐一检查是否在各组间保持一致。</div>
+      <div class="chain-label">无关变量排查清单（酶促反应实验通用）</div>
+      <div class="signal-chain"><span class="sc-node">酶的用量</span><span class="sc-arrow">+</span><span class="sc-node confound">底物浓度</span><span class="sc-arrow">+</span><span class="sc-node confound">反应时间</span><span class="sc-arrow">→ 各组必须相同</span></div>
+      <div class="signal-chain"><span class="sc-node">温度</span><span class="sc-arrow">（若不是自变量）</span><span class="sc-arrow">+</span><span class="sc-node confound">加液顺序</span><span class="sc-arrow">→ 须在恒温水浴中操作并统一</span></div>
+      <div class="signal-chain"><span class="sc-node">pH调节</span><span class="sc-arrow">（若不是自变量）</span><span class="sc-arrow">→</span><span class="sc-node confound">各组缓冲液种类和浓度需相同</span></div>
+      <p class="mq-note">⚠️ 经典错误：先将酶与底物混合，再调pH——此时酶已与底物反应一段时间，pH不是真正的自变量。正确操作：先在不同pH缓冲液中预热酶液，再加底物启动反应，保证pH是唯一变量。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec518')">
+        <i class="ti ti-file-text" aria-hidden="true"></i> 查看完整题干
+      </button>
+    </div>
+  </div>
+
+  <div class="mq-card" data-mode="design">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge design">实验方案设计</span>
+      <span class="mq-name">从零设计"探究X对Y的影响"实验——五要素完整写作模板</span>
+      <span class="mq-purity">10/10</span>
+      <i class="ti ti-chevron-down mq-chevron" aria-hidden="true"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-522 · 子问题 (3)(4)</div>
+      <div class="rule-box">核心信号：题目要求"设计实验方案"或"补全实验步骤"，需要完整写出分组、处理、观测、结果预期四个部分，并确保每一步均遵循单一变量原则和重复性原则。</div>
+      <div class="chain-label">完整实验方案五步模板</div>
+      <div class="signal-chain"><span class="sc-node">① 材料分组</span><span class="sc-arrow">：</span><span class="sc-node design">随机均等分组，各组个体数量相同（重复性原则）</span></div>
+      <div class="signal-chain"><span class="sc-node">② 自变量施加</span><span class="sc-arrow">：</span><span class="sc-node design">各组施加不同梯度的自变量（如不同温度/浓度），其余条件完全相同</span></div>
+      <div class="signal-chain"><span class="sc-node">③ 无关变量控制</span><span class="sc-arrow">：</span><span class="sc-node">列举主要无关变量并说明"各组保持一致"</span></div>
+      <div class="signal-chain"><span class="sc-node">④ 因变量观测</span><span class="sc-arrow">：</span><span class="sc-node design">在规定时间后统一测量/记录可量化指标 ✓</span></div>
+      <div class="signal-chain"><span class="sc-node">⑤ 结果与预期</span><span class="sc-arrow">：</span><span class="sc-node design">分情况预期（若…则说明…），全面覆盖可能结论 ✓</span></div>
+      <p class="mq-note">满分要点：① 必须设对照组；② 分组用"随机"；③ 无关变量写"相同且适宜"；④ 因变量用"记录/统计/测量"不用"观察"；⑤ 预期结论写双向或三向（促进/无影响/抑制）。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec522')">
+        <i class="ti ti-file-text" aria-hidden="true"></i> 查看完整题干
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TAB: LADDER ══ -->
+<div id="tab-ladder" class="page" role="tabpanel">
+  <div class="ladder-note">按 L1 基础 → L2 进阶 → L3 综合三级递进。每级掌握后再进入下一级。点击卡片可查看完整题干。</div>
+
+  <div class="ladder-section-label"><span class="ladder-level l1" style="width:auto;padding:3px 8px;">L1 基础</span> 三变量识别与单一变量判断</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1-1<br>识别</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec510-1')" style="cursor:pointer;">
+        <div class="ladder-card-name">给定酶促反应实验，指出三变量各是什么</div>
+        <div class="ladder-card-sub">EC-510 (1) · 温度/pH/酶浓度三组实验，逐一判断哪个是自变量 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1-2<br>对照</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec515-1')" style="cursor:pointer;">
+        <div class="ladder-card-name">补全空白对照组操作（生长素实验）</div>
+        <div class="ladder-card-sub">EC-515 (1) · 已知实验组处理，写出对照组的完整操作 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1-3<br>找错</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec518-2')" style="cursor:pointer;">
+        <div class="ladder-card-name">找出淀粉酶实验方案中的单一变量原则漏洞</div>
+        <div class="ladder-card-sub">EC-518 (2) · 给出有设计缺陷的方案，逐条找出不妥 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="ladder-section-label"><span class="ladder-level l2" style="width:auto;padding:3px 8px;">L2 进阶</span> 方案补全与对照逻辑推断</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2-1<br>补全</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec522-34')" style="cursor:pointer;">
+        <div class="ladder-card-name">从零补写探究实验完整步骤（五要素模板）</div>
+        <div class="ladder-card-sub">EC-522 (3)+(4) · 给出目的和材料，要求写出分组→处理→观测→预期的完整方案 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2-2<br>评价</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec518-3')" style="cursor:pointer;">
+        <div class="ladder-card-name">评价已有实验方案的优缺点并提出改进意见</div>
+        <div class="ladder-card-sub">EC-518 (3) · 分析方案中对照是否合理、因变量是否可测、无关变量是否控制到位 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2-3<br>预期</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec522-5')" style="cursor:pointer;">
+        <div class="ladder-card-name">根据实验结果预期反推实验假设（逆向推理）</div>
+        <div class="ladder-card-sub">EC-522 (5) · 给出结果图，要求写出"若出现X结果，说明Y结论" <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="ladder-section-label"><span class="ladder-level l3" style="width:auto;padding:3px 8px;">L3 综合</span> 多变量交叉实验设计与结论推断</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l3">L3-1</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec528-135')" style="cursor:pointer;">
+        <div class="ladder-card-name">双因素实验设计——温度×pH交叉实验中变量控制与结论析因</div>
+        <div class="ladder-card-sub">EC-528 (1)+(3)+(5) · 2×3 因子设计：识别自变量组合、补全无关变量控制、从结果表反推哪个因素影响更大 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TAB: SELF-CHECK ══ -->
+<div id="tab-self" class="page" role="tabpanel">
+  <div class="progress-row">
+    <span style="font-size:13px;color:var(--tx2);">学习自查清单</span>
+    <span style="font-size:13px;color:var(--tx2);" id="progress-text">0 / 7 完成</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="pbar"></div></div>
+  <div class="checklist" id="checklist">
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能从"探究X对Y的影响"题干中，准确识别自变量（X）和因变量（Y），并列举至少3个需要控制的无关变量</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能区分空白对照、阳性对照、阴性对照和相互对照，并说明各自设置的目的</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能补写对照组的完整操作步骤，保证"除自变量外其他条件与实验组完全相同"</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能按五步模板（分组→施加自变量→控制无关变量→观测因变量→预期结论）写出完整实验方案</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能看出实验方案中的典型错误（无关变量未统一、因变量描述不可测、缺少对照组、样本量过小）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">完成 L1 全部 3 道基础变式（三变量识别、对照补全、找错各 1 道）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">完成至少 2 道 L2 进阶变式，能独立写出完整实验方案并进行结论预期</div>
+    </div>
+  </div>
+  <div class="action-row">
+    <button class="action-btn" onclick="window.scrollTo(0,0);switchTab('mothers',document.querySelectorAll('.nav-tab')[1])">返回母题精讲 →</button>
+    <button class="action-btn" onclick="window.scrollTo(0,0);switchTab('ladder',document.querySelectorAll('.nav-tab')[2])">进入变式阶梯 →</button>
+  </div>
+</div>
+
+</div><!-- .app -->
+
+<!-- ══ DRAWER ══ -->
+<div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
+  <div class="drawer-header">
+    <span class="drawer-badge" id="drawer-badge"></span>
+    <span class="drawer-title" id="drawer-title"></span>
+    <button class="drawer-close" onclick="closeDrawer()" aria-label="关闭题干面板">
+      <i class="ti ti-x" style="font-size:18px;" aria-hidden="true"></i>
+    </button>
+  </div>
+  <div class="drawer-body">
+    <div class="drawer-ec-ref" id="drawer-ref"></div>
+    <div class="drawer-stem" id="drawer-stem"></div>
+    <div class="drawer-sub" id="drawer-sub" style="display:none;">
+      <div class="drawer-sub-label">本题考查重点</div>
+      <div id="drawer-sub-text"></div>
+    </div>
+    <div class="drawer-answer" id="drawer-answer">
+      <div class="drawer-answer-label">参考答案</div>
+      <div id="drawer-answer-text"></div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="drawer-btn" id="drawer-ans-btn" onclick="toggleAnswer()">显示答案</button>
+    <button class="drawer-btn primary" onclick="closeDrawer()">完成阅读</button>
+  </div>
+</div>
+
+<script>
+function switchTab(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+function toggleMQ(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.mq-chevron');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chevron.classList.toggle('open', !isOpen);
+}
+function filterMode(mode, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.mq-card').forEach(card => {
+    card.style.display = (mode === 'all' || card.dataset.mode === mode) ? '' : 'none';
+  });
+}
+function toggleCheck(item) {
+  item.classList.toggle('done');
+  updateProgress();
+  saveChecklist();
+}
+function updateProgress() {
+  const total = document.querySelectorAll('.check-item').length;
+  const done = document.querySelectorAll('.check-item.done').length;
+  document.getElementById('pbar').style.width = (done / total * 100) + '%';
+  document.getElementById('progress-text').textContent = done + ' / ' + total + ' 完成';
+}
+function saveChecklist() {
+  try {
+    const states = Array.from(document.querySelectorAll('.check-item')).map(el => el.classList.contains('done'));
+    localStorage.setItem('T06_M1_checklist', JSON.stringify(states));
+  } catch(e) {}
+}
+(function() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('T06_M1_checklist') || '[]');
+    document.querySelectorAll('.check-item').forEach((item, i) => { if (saved[i]) item.classList.add('done'); });
+    updateProgress();
+  } catch(e) {}
+})();
+
+const QUESTIONS = {
+  'mq-ec510': {
+    badge: '自变量识别 · 母题', badgeClass: 'indep',
+    title: '酶促反应实验三变量识别',
+    ref: 'EC-20260525-510 · 子问题 (1)(2)',
+    stem: `研究人员用淀粉酶探究温度对酶活性的影响。实验方案如下：\n取4支试管，各加入2mL质量分数为1%的淀粉溶液，再各加入1mL淀粉酶液，分别置于0°C、20°C、37°C、60°C水浴中保温10分钟，取出后各加入1滴碘液，记录颜色变化。\n\n(1) 该实验的自变量是___，因变量是___，试举出2个无关变量：___、___。\n(2) 若要使实验结果更可靠，在材料分组和重复方面应如何改进？`,
+    focus: '(1) 自变量=温度（0/20/37/60°C），因变量=加碘液后颜色变化深浅（反映淀粉水解程度/酶活性高低），无关变量=淀粉浓度、酶液用量、保温时间、pH等（各组须相同）。\n(2) 改进：每个温度设置3~5个重复；用相同批次淀粉酶；每管加液量精确相等；水浴先预热再混合底物和酶。',
+    answer: '(1) 自变量：温度（0°C、20°C、37°C、60°C）\n因变量：加碘液后各组溶液颜色深浅（蓝色深→淀粉水解少→酶活性低；蓝色浅/不变蓝→淀粉水解多→酶活性高）\n无关变量（任写2个）：淀粉溶液的浓度和用量、淀粉酶液的用量和浓度、保温时间、碘液用量、pH（各组均需相同）\n(2) 改进建议：①每个温度设置3~5支平行试管（增加重复，减小偶然误差）；②底物和酶液分别在各温度水浴中预热后再混合（保证温度为真正的自变量，避免混合时温度变化对结果干扰）；③用吸管精确量取等量液体（保证加液量完全一致）。'
+  },
+  'mq-ec515': {
+    badge: '对照设置 · 母题', badgeClass: 'ctrl',
+    title: '生长素实验空白对照与阳性对照设置',
+    ref: 'EC-20260525-515 · 子问题 (1)(2)',
+    stem: `研究人员探究生长素（IAA）浓度对豌豆茎切段伸长的影响，设计了以下实验：\n实验组：将等长豌豆茎切段置于5个浓度梯度的IAA溶液中（10⁻¹⁰、10⁻⁸、10⁻⁶、10⁻⁴、10⁻²mol/L）浸泡24小时后，测量各组茎切段长度变化。\n\n(1) 该实验缺少一个重要的对照组，请写出该对照组的完整操作（包括处理方式、处理时间）。\n(2) 若要进一步验证"IAA确实能促进茎的伸长而非溶剂效果"，还需要设置哪种对照？请描述该对照的设置方法。`,
+    focus: '(1) 空白对照：将等长豌豆茎切段置于蒸馏水（或配制IAA溶液的溶剂，如磷酸缓冲液）中浸泡相同时间（24小时），测量长度变化；目的：排除溶剂本身对茎伸长的影响。\n(2) 实验中已有不同浓度IAA（相互对照），空白对照与实验组之间的对比可以验证IAA效果；若单独验证溶剂效果，仅需空白对照即可。',
+    answer: '(1) 对照组操作：将与实验组相同大小（等长、等粗）的豌豆茎切段置于等量蒸馏水（或配制IAA所用的溶剂）中，在与实验组完全相同的条件下（温度、光照、处理时间24小时）浸泡，24小时后测量茎切段长度，记录伸长量。\n设置目的：作为空白对照，排除浸泡过程（溶剂本身、水分吸收）对茎伸长的影响，确保茎切段长度变化是由IAA引起的，而非溶剂效果。\n(2) 若要进一步验证IAA效果而非溶剂效果，需设置阴性对照：用已知不能促进茎伸长的物质（如灭活的IAA，即高温处理后的IAA溶液）处理等长茎切段，预期该组茎切段伸长量应与空白对照相近，证明IAA的活性结构是起作用的关键。'
+  },
+  'mq-ec518': {
+    badge: '无关变量控制 · 母题', badgeClass: 'confound',
+    title: 'pH对淀粉酶活性影响实验方案中无关变量控制分析',
+    ref: 'EC-20260525-518 · 子问题 (2)(3)',
+    stem: `某同学设计了探究pH对唾液淀粉酶活性影响的实验方案：\n步骤一：取3支试管，各加入2mL质量分数1%淀粉溶液和1mL唾液淀粉酶液，混合摇匀。\n步骤二：用盐酸或NaOH将3支试管分别调至pH 5、7、9，置于37°C水浴中保温5分钟。\n步骤三：各取1滴碘液检测各管，记录颜色变化。\n\n(2) 该实验方案中有一个明显的操作错误，影响了单一变量原则，请指出并说明原因。\n(3) 请写出改正后的步骤一和步骤二。`,
+    focus: '(2) 错误：步骤一先将酶和底物混合再调pH——混合后酶已开始催化水解，调pH时各组的反应已经在37°C前的室温下进行了一段时间，这段时间内pH不是唯一变量（还包括了酶与底物接触的时间差异），违反单一变量原则。\n(3) 正确：先分别调好各pH（用缓冲液预先配制好pH5/7/9的缓冲体系），将酶和底物分别在37°C预热，再同时加入各自的pH缓冲液，计时5分钟后检测。',
+    answer: '(2) 错误操作：步骤一先将淀粉溶液和淀粉酶液混合后再调pH，导致混合后酶已开始在室温/混合时的条件下催化反应；后续调pH时各管反应进行程度不同（先混合的管子已反应了一段时间），pH并非唯一改变的变量，还叠加了"不同pH下酶与底物提前接触的时间差异"，违反单一变量原则。\n(3) 改正后的操作步骤：\n步骤一（改）：取3份缓冲液分别调至pH 5、7、9；另取3支试管各加入2mL 1%淀粉溶液，再各加入相应pH缓冲液使溶液pH分别为5、7、9（预先调pH）；同时准备酶液（在中性条件下保存）；将淀粉液和酶液分别在37°C水浴中预热5分钟。\n步骤二（改）：向各pH的淀粉液中同时加入等量（1mL）已预热的淀粉酶液，立即混合，置于37°C水浴中保温5分钟，计时开始，保证各组反应时间完全一致。之后再加碘液检测。'
+  },
+  'mq-ec522': {
+    badge: '实验方案设计 · 母题', badgeClass: 'design',
+    title: '从零设计探究实验——五要素完整模板（光照强度对光合速率的影响）',
+    ref: 'EC-20260525-522 · 子问题 (3)(4)',
+    stem: `请根据以下研究目的，设计完整的实验方案：\n研究目的：探究光照强度对菠菜叶片净光合速率的影响。\n材料：新鲜菠菜叶片、CO₂浓度检测仪、光源（可调节亮度）、密封容器若干。\n\n(3) 请写出完整的实验方案（包括分组、处理、观测指标、预期结论）。\n(4) 若实验结果显示"光照强度从0增加到3000 lux时，净光合速率持续增大；3000 lux以上净光合速率不再增加"，据此能否得出"光照强度是影响光合速率的唯一限制因素"？说明理由。`,
+    focus: '(3) 五步模板：①随机取等面积等数量菠菜叶片分5组；②分别在0/500/1000/2000/3000lux光照下密封培养；③温度、CO₂初始浓度、培养时间等无关变量保持相同；④1小时后检测各容器CO₂浓度变化（因变量）；⑤预期：随光照增强净光合速率先增大后趋于平稳（光饱和点）。\n(4) 不能，理由：实验只改变了光照强度，未排除CO₂浓度、温度等也是限制因素的可能；光饱和点处可能是CO₂浓度或温度成为限制因素，而非光照强度本身的上限。',
+    answer: '(3) 实验方案：\n①材料分组：随机取6组大小相同（等面积、等质量）的新鲜菠菜叶片，各组叶片数量相同（如每组20片），分别置于6个相同密封容器中。\n②施加自变量：各组分别置于0、500、1000、2000、3000、4000 lux的光照强度下（其余条件完全相同）；光照时间统一为1小时。\n③无关变量控制：温度（25°C恒温）、CO₂初始浓度（各容器内初始CO₂浓度相同）、容器大小和密封程度、培养时间（统一1小时）均保持一致。\n④因变量观测：1小时后用CO₂浓度检测仪测定各容器内CO₂浓度变化量（CO₂减少量反映净光合速率；若CO₂增加则为净呼吸），记录数据。\n⑤预期结论：①若随光照强度增大CO₂消耗量增加，说明光照强度在此范围内正相关促进净光合速率；②若高光照下CO₂消耗量趋于平稳，说明光照强度不再是限制因素，光饱和点已达到；③若0 lux（黑暗）组CO₂增加，说明细胞呼吸消耗有机物。\n(4) 不能得出"光照强度是唯一限制因素"的结论。理由：①该实验只改变了光照强度一个变量，3000 lux以上光合速率不再增加，说明此时光照强度不再是限制因素，但不能确定何者成为限制因素（可能是CO₂浓度、温度或叶绿体数量等）；②要确认唯一限制因素，需要固定其他变量后分别改变各因素进行单独探究；③单一实验无法得出"唯一"的结论，这是多因素实验设计的基本原则。'
+  },
+  'v-ec510-1': {
+    badge: 'L1 基础变式 · 识别', badgeClass: 'indep',
+    title: '三变量识别——给定实验方案逐一判断',
+    ref: 'EC-20260525-510 · (1)',
+    stem: '（同母题 mq-ec510 (1)）',
+    focus: '同母题分析。关键：先找"实验者改变了什么"→自变量（温度）；再找"测量了什么"→因变量（碘液颜色变化）；最后列无关变量（淀粉浓度、酶量、时间等）。',
+    answer: '见母题 EC-510 答案。'
+  },
+  'v-ec515-1': {
+    badge: 'L1 基础变式 · 对照补全', badgeClass: 'ctrl',
+    title: '补全空白对照组操作——生长素实验',
+    ref: 'EC-20260525-515 · (1)',
+    stem: '（同母题 mq-ec515 (1)）',
+    focus: '同母题分析。空白对照核心要求：除自变量（IAA浓度）外，其他处理完全与实验组相同（等量溶剂、相同时间、相同温度）。',
+    answer: '见母题 EC-515 答案。'
+  },
+  'v-ec518-2': {
+    badge: 'L1 基础变式 · 找错', badgeClass: 'confound',
+    title: '找出淀粉酶实验方案中的无关变量控制漏洞',
+    ref: 'EC-20260525-518 · (2)',
+    stem: '（同母题 mq-ec518 (2)）',
+    focus: '同母题分析。经典错误：先混合酶和底物再调pH，导致酶已开始反应，pH不是唯一变量。',
+    answer: '见母题 EC-518 答案。'
+  },
+  'v-ec522-34': {
+    badge: 'L2 进阶变式 · 方案补全', badgeClass: 'design',
+    title: '从零补写探究实验完整步骤——五要素模板',
+    ref: 'EC-20260525-522 · (3)+(4)',
+    stem: '（同母题 mq-ec522 (3)(4)）',
+    focus: '同母题分析。五步模板：分组→自变量→无关变量→因变量→预期结论。',
+    answer: '见母题 EC-522 答案。'
+  },
+  'v-ec518-3': {
+    badge: 'L2 进阶变式 · 方案评价', badgeClass: 'confound',
+    title: '评价淀粉酶实验方案并提出改进意见',
+    ref: 'EC-20260525-518 · (3)',
+    stem: '（同母题 mq-ec518 (3)——评价整体方案，指出不妥处并提出改进方案）',
+    focus: '同母题分析。评价要点：操作顺序错误（先混合再调pH）；改进：先配pH缓冲液→分别预热酶液和底物→同时混合开始计时。',
+    answer: '见母题 EC-518 答案。'
+  },
+  'v-ec522-5': {
+    badge: 'L2 进阶变式 · 结论预期', badgeClass: 'design',
+    title: '由结果反推结论——逆向推理实验假设',
+    ref: 'EC-20260525-522 · (5)',
+    stem: `（接上题，光照强度对菠菜净光合速率影响实验）\n实验结果如下：\n光照强度（lux）：0 / 500 / 1000 / 2000 / 3000\nCO₂变化量（μmol/h）：+2 / 0 / -3 / -7 / -7\n（+表示CO₂增加，-表示CO₂减少）\n\n(5) 根据上述结果：\n① 该植物的光补偿点大约在___lux附近，说明依据是什么？\n② 该植物的光饱和点大约在___lux，依据是？\n③ 在黑暗中（0 lux），该植物的细胞呼吸速率为___μmol CO₂/h，光合速率为___。`,
+    focus: '结果反推分析：①光补偿点（净光合=0）在500 lux附近（CO₂变化量=0）；②光饱和点在2000~3000 lux之间（2000到3000净光合不再增加，均为-7）；③黑暗中呼吸速率=+2 μmol CO₂/h（CO₂增加量）；光合速率=0（无光无光合），真正光合速率在有光时=净光合+呼吸=(-7)+2=-5→真正光合=-(-7+2)=7+2=不对，修正：总光合=净光合+呼吸=7+2=9 μmol/h（在3000lux时）。',
+    answer: '① 光补偿点约在500 lux（此时CO₂变化量=0，说明光合速率=呼吸速率，净光合为零）\n② 光饱和点约在2000~3000 lux之间（2000 lux时净光合已达最大值-7μmol/h，再增加到3000 lux净光合不再增加，说明2000 lux即为光饱和点附近）\n③ 黑暗中（0 lux）CO₂增加+2μmol/h，全部来自细胞呼吸（无光合），故呼吸速率=2 μmol CO₂/h；黑暗中光合速率=0（无光无光合反应）\n（补充：在3000 lux时，总（真正）光合速率=净光合速率+呼吸速率=7+2=9 μmol CO₂固定/h）'
+  },
+  'v-ec528-135': {
+    badge: 'L3 综合变式', badgeClass: 'design',
+    title: '双因素实验设计——温度×pH交叉实验变量控制与析因',
+    ref: 'EC-20260525-528 · (1)+(3)+(5)',
+    stem: `研究人员设计了探究温度和pH对蛋白酶（胰蛋白酶）活性影响的双因素实验，实验结果（以底物蛋白质降解率%表示）如下表：\n\n         pH 6    pH 7    pH 8\n25°C：    12      35      28\n37°C：    30      82      65\n50°C：    18      45      31\n\n(1) 该实验有两个自变量，请写出来，并说明因变量和主要无关变量各是什么。\n(3) 根据实验结果，温度和pH分别对胰蛋白酶活性有何影响？哪个因素的影响更显著？\n(5) 若该实验只用了1支试管进行每个条件组合的测试，在统计学意义上有何缺陷？应如何改进？`,
+    focus: '(1) 两个自变量=温度（25/37/50°C）和pH（6/7/8），因变量=蛋白质降解率%，无关变量=酶液用量、底物浓度、保温时间、缓冲液种类等。\n(3) pH影响：pH 7时各温度下降解率均最高（最适pH=7）；温度影响：37°C时降解率最高（最适温度=37°C）；pH的影响更显著（pH 7 vs 6的差值≈23-47%，温度影响差值=12-52%；在最优pH下37°C 82%>>25°C 35%，温度影响也很大，需逐行逐列分析）。\n(5) 单管无重复→无法排除偶然误差→需每组设3~5个重复取平均值。',
+    answer: '(1) 两个自变量：温度（25°C、37°C、50°C）和pH（6、7、8）；共9个实验条件组合（3×3设计）。\n因变量：底物蛋白质降解率（%）——反映胰蛋白酶的活性高低。\n主要无关变量：胰蛋白酶液的浓度和用量（各组相同）；底物蛋白质溶液的浓度和用量（各组相同）；保温时间（各组相同）；pH缓冲液的种类和浓度（各pH组内保持相同类型）。\n(3) 温度影响：在相同pH下，37°C时降解率最高（如pH 7时：25°C=35%，37°C=82%，50°C=45%），说明胰蛋白酶的最适温度约为37°C；超过37°C酶活性下降（50°C时酶部分变性）。\npH影响：在相同温度下，pH 7时降解率均最高（如37°C时：pH6=30%，pH7=82%，pH8=65%），说明胰蛋白酶最适pH约为7；偏酸（pH6）或偏碱（pH8）均使活性降低。\n综合比较：pH对活性影响更为显著——pH 7与pH 6的活性差异（以37°C为例：82%-30%=52%）大于37°C与25°C的差异（82%-35%=47%）；此外pH 7时三个温度下活性均远高于pH 6，说明pH是更核心的影响因素（在最适pH下活性才能最大化）。\n(5) 缺陷：每个条件仅1管，无重复→无法区分实验误差（偶然因素）与真实的因变量变化→结果可靠性低，无法进行统计分析（如t检验或方差分析）。\n改进方案：每个条件组合（每个温度-pH组合）设置3~5支重复试管，取平均值并计算标准差，用统计检验判断各条件间差异是否显著。'
+  }
+};
+
+let answerShown = false;
+function openDrawer(key) {
+  const q = QUESTIONS[key];
+  if (!q) return;
+  const badge = document.getElementById('drawer-badge');
+  badge.textContent = q.badge;
+  badge.className = 'drawer-badge mq-badge ' + (q.badgeClass || '');
+  document.getElementById('drawer-title').textContent = q.title;
+  const ref = document.getElementById('drawer-ref');
+  ref.innerHTML = '<i class="ti ti-source-code" style="font-size:13px;" aria-hidden="true"></i> ' + q.ref;
+  document.getElementById('drawer-stem').textContent = q.stem;
+  const subEl = document.getElementById('drawer-sub');
+  const subText = document.getElementById('drawer-sub-text');
+  if (q.focus) {
+    subText.textContent = q.focus;
+    subEl.style.display = '';
+  } else {
+    subEl.style.display = 'none';
+  }
+  answerShown = false;
+  const ans = document.getElementById('drawer-answer');
+  ans.classList.remove('show');
+  document.getElementById('drawer-answer-text').textContent = q.answer || '';
+  const btn = document.getElementById('drawer-ans-btn');
+  btn.textContent = '显示答案';
+  btn.style.display = q.answer ? '' : 'none';
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('drawer').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeDrawer() {
+  document.getElementById('overlay').classList.remove('open');
+  document.getElementById('drawer').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function toggleAnswer() {
+  answerShown = !answerShown;
+  document.getElementById('drawer-answer').classList.toggle('show', answerShown);
+  document.getElementById('drawer-ans-btn').textContent = answerShown ? '隐藏答案' : '显示答案';
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (document.getElementById('lb-overlay').classList.contains('open')) closeLightbox();
+    else closeDrawer();
+  }
+});
+</script>
+
+<!-- Lightbox -->
+<div class="lb-overlay" id="lb-overlay" onclick="closeLightbox()">
+  <button class="lb-close" onclick="closeLightbox()" aria-label="关闭">&#x2715;</button>
+  <img class="lb-img" id="lb-img" src="" alt="">
+</div>
+<script>
+function openLightbox(src, alt) {
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lb-img').alt = alt || '';
+  document.getElementById('lb-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lb-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('lb-img').addEventListener('click', e => e.stopPropagation());
+</script>
+</body>
+</html>

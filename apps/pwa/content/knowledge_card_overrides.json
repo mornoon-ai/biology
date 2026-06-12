@@ -1,0 +1,122 @@
+{
+  "T01_M2_判断_01": {
+    "short_back": "酶缺陷题先定位阻断酶，再同时判断上游堆积和下游缺乏。",
+    "maintenance_status": "refined"
+  },
+  "T01_M2_拆题_01": {
+    "short_back": "苯丙酮尿症代表题：看代谢通路阻断后，分析苯丙氨酸堆积和酪氨酸不足。",
+    "maintenance_status": "refined"
+  },
+  "T02_M4_判断_02": {
+    "short_back": "先说结构正常功能，再推结构受损后的影响：微管负责运输，骨架被切割会破坏细胞形态和功能。",
+    "maintenance_status": "refined"
+  },
+  "T03_M1_判断_02": {
+    "short_back": "三句一票否决：无中生有判隐性，有中生无判显性，再用关键个体排除常染色体或伴X。",
+    "maintenance_status": "refined"
+  },
+  "T03_M2_拆题_01": {
+    "short_back": "花粉不育代表题：先区分雌雄配子贡献，再按有效配子比例计算后代概率。",
+    "maintenance_status": "refined"
+  },
+  "T04_M1_拆题_01": {
+    "short_back": "血糖调节代表题：先判血糖变化，再连接胰岛素、胰高血糖素和靶器官反应。",
+    "maintenance_status": "refined"
+  },
+  "T04_M2_判断_02": {
+    "short_back": "判箭头方向：上级到靶腺是分级调节，靶腺激素反抑上级是负反馈。",
+    "maintenance_status": "refined"
+  },
+  "T04_M3_框架_01": {
+    "short_back": "体液免疫链条：抗原呈递→辅助T激活→B细胞分化→浆细胞产抗体→清除病原体。",
+    "maintenance_status": "refined"
+  },
+  "T04_M3_拆题_01": {
+    "short_back": "胞外菌感染代表题：优先调用体液免疫，说明抗体和吞噬细胞如何协同清除。",
+    "maintenance_status": "refined"
+  },
+  "T04_M3_拆题_02": {
+    "short_back": "血液中病原体走体液免疫：呈递抗原、激活B细胞、产生抗体，并形成记忆细胞。",
+    "maintenance_status": "refined"
+  },
+  "T05_M4_判断_02": {
+    "short_back": "看激素运输方向：生长素多为极性向下，细胞分裂素多从根向上，方向决定作用部位。",
+    "maintenance_status": "refined"
+  },
+  "T06_M1_拆题_01": {
+    "short_back": "实验表格先找组间不同确定自变量，再看结果列确定因变量，最后找空白或溶剂对照。",
+    "maintenance_status": "refined"
+  },
+  "T06_M2_判断_01": {
+    "short_back": "鉴定题先判待测物质，再匹配试剂、条件和颜色变化，不能混用实验步骤。",
+    "maintenance_status": "refined"
+  },
+  "T06_M3_判断_01": {
+    "short_back": "图表题三步看：先看坐标和变量，再看趋势差异，最后用数据支持结论。",
+    "maintenance_status": "refined"
+  },
+  "T06_M3_框架_01": {
+    "short_back": "不同图表抓不同信息：表格看精确值，柱形图比大小，折线图看变化趋势。",
+    "maintenance_status": "refined"
+  },
+  "T07_M2_判断_01": {
+    "short_back": "能量题先区分摄入量、粪便量和同化量，再按能量去向或传递效率计算。",
+    "maintenance_status": "refined"
+  },
+  "T07_M4_判断_01": {
+    "short_back": "演替先看是否有土壤：无土壤是初生演替，有土壤是次生演替。",
+    "maintenance_status": "refined"
+  },
+  "T07_M4_框架_01": {
+    "short_back": "初生演替从无土壤开始、速度慢；次生演替保留土壤基础、恢复更快。",
+    "maintenance_status": "refined"
+  },
+  "T01_M1_信号_02": {
+    "short_back": "蛋白质错误折叠题看三类信号：氨基酸改变、空间结构变化、功能异常或细胞损伤。",
+    "maintenance_status": "refined"
+  },
+  "T01_M1_陷阱_01": {
+    "short_back": "不要把所有错误折叠都写成功能丧失；出现聚集、凋亡、细胞死亡时多是毒性获得。",
+    "maintenance_status": "refined"
+  },
+  "T01_M1_陷阱_02": {
+    "short_back": "一个氨基酸改变也可能改变亲疏水性或电荷，进而破坏蛋白质三维结构。",
+    "maintenance_status": "refined"
+  },
+  "T01_M4_陷阱_01": {
+    "short_back": "Cas9只负责识别特定DNA序列并切割双链，敲除或敲入取决于后续修复方式。",
+    "maintenance_status": "refined"
+  },
+  "T02_M2_陷阱_02": {
+    "short_back": "囊泡运输有方向：COPII从内质网到高尔基体，COPI从高尔基体回到内质网。",
+    "maintenance_status": "refined"
+  },
+  "T02_M3_陷阱_02": {
+    "short_back": "通道蛋白像孔道，物质直接通过；载体蛋白要结合物质并改变构象后转运。",
+    "maintenance_status": "refined"
+  },
+  "T03_M3_信号_02": {
+    "short_back": "异常配子基因型提示减数分裂分离出错：配子多了等位基因或组合异常就要追踪染色体来源。",
+    "maintenance_status": "refined"
+  },
+  "T03_M3_陷阱_01": {
+    "short_back": "AA未分多指姐妹染色单体未分离，即减二异常；Aa未分多指同源染色体未分离，即减一异常。",
+    "maintenance_status": "refined"
+  },
+  "T03_M4_框架_01": {
+    "short_back": "RFLP看限制酶识别位点是否被突变破坏：能切出短片段，不能切留下长片段。",
+    "maintenance_status": "refined"
+  },
+  "T03_M4_框架_02": {
+    "short_back": "STR靠重复次数差异形成条带差异，可用于亲子鉴定和与致病基因的连锁分析。",
+    "maintenance_status": "refined"
+  },
+  "T05_M1_拆题_01": {
+    "short_back": "光合曲线先分区间：低光照看光限制，上升变缓看CO2参与限制，平台看光饱和后的其他限制因子。",
+    "maintenance_status": "refined"
+  },
+  "T06_M5_拆题_02": {
+    "short_back": "miRNA靶向验证要三证合一：野生UTR加miRNA荧光下降，突变靶位点后荧光恢复，说明序列特异。",
+    "maintenance_status": "refined"
+  }
+}

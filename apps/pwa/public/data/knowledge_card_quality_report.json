@@ -1,0 +1,916 @@
+[
+  {
+    "topic_id": "T01_M1",
+    "title": "蛋白质错误折叠与疾病",
+    "cards_count": 12,
+    "long_front_count": 0,
+    "long_back_count": 3,
+    "long_card_ids": [
+      "T01_M1_信号_02",
+      "T01_M1_陷阱_01",
+      "T01_M1_陷阱_02"
+    ],
+    "maintenance_needs_review_count": 0,
+    "maintenance_card_ids": [],
+    "refined_count": 3,
+    "refined_card_ids": [
+      "T01_M1_信号_02",
+      "T01_M1_陷阱_01",
+      "T01_M1_陷阱_02"
+    ],
+    "type_counts": {
+      "recall": 1,
+      "signal": 2,
+      "rule": 2,
+      "trap": 5,
+      "representative": 2
+    },
+    "chapter_counts": {
+      "钩子": 1,
+      "信号": 2,
+      "判断": 2,
+      "框架": 2,
+      "拆题": 2,
+      "陷阱": 2,
+      "收束": 1
+    },
+    "status": "ready"
+  },
+  {
+    "topic_id": "T01_M2",
+    "title": "酶缺陷与代谢阻塞",
+    "cards_count": 10,
+    "long_front_count": 0,
+    "long_back_count": 0,
+    "long_card_ids": [],
+    "maintenance_needs_review_count": 0,
+    "maintenance_card_ids": [],
+    "refined_count": 2,
+    "refined_card_ids": [
+      "T01_M2_判断_01",
+      "T01_M2_拆题_01"
+    ],
+    "type_counts": {
+      "recall": 1,
+      "signal": 2,
+      "rule": 3,
+      "representative": 2,
+      "trap": 2
+    },
+    "chapter_counts": {
+      "钩子": 1,
+      "信号": 2,
+      "判断": 2,
+      "框架": 1,
+      "拆题": 2,
+      "陷阱": 1,
+      "收束": 1
+    },
+    "status": "ready"
+  },
+  {
+    "topic_id": "T01_M3",
+    "title": "表观遗传与表达调控",
+    "cards_count": 11,
+    "long_front_count": 0,
+    "long_back_count": 0,
+    "long_card_ids": [],
+    "maintenance_needs_review_count": 0,
+    "maintenance_card_ids": [],
+    "refined_count": 0,
+    "refined_card_ids": [],
+    "type_counts": {
+      "recall": 2,
+      "signal": 2,
+      "rule": 2,
+      "trap": 3,
+      "representative": 2
+    },
+    "chapter_counts": {
+      "钩子": 1,
+      "信号": 2,
+      "判断": 2,
+      "框架": 1,
+      "拆题": 2,
+      "陷阱": 2,
+      "收束": 1
+    },
+    "status": "ready"
+  },
+  {
+    "topic_id": "T01_M4",
+    "title": "基因编辑与RNA干扰",
+    "cards_count": 10,
+    "long_front_count": 0,
+    "long_back_count": 1,
+    "long_card_ids": [
+      "T01_M4_陷阱_01"
+    ],
+    "maintenance_needs_review_count": 0,
+    "maintenance_card_ids": [],
+    "refined_count": 1,
+    "refined_card_ids": [
+      "T01_M4_陷阱_01"
+    ],
+    "type_counts": {
+      "recall": 2,
+      "signal": 2,
+      "rule": 3,
+      "representative": 2,
+      "trap": 1
+    },
+    "chapter_counts": {
+      "钩子": 1,
+      "信号": 2,
+      "判断": 2,
+      "框架": 1,
+      "拆题": 2,
+      "陷阱": 1,
+      "收束": 1
+    },
+    "status": "ready"
+  },
+  {
+    "topic_id": "T02_M1",
+    "title": "细胞结构识别与功能匹配",
+    "cards_count": 11,
+    "long_front_count": 0,
+    "long_back_count": 0,
+    "long_card_ids": [],
+    "maintenance_needs_review_count": 0,
+    "maintenance_card_ids": [],
+    "refined_count": 0,
+    "refined_card_ids": [],
+    "type_counts": {
+      "recall": 2,
+      "signal": 2,
+      "trap": 3,
+      "rule": 2,
+      "representative": 2
+    },
+    "chapter_counts": {
+      "钩子": 1,
+      "信号": 2,
+      "判断": 2,
+      "框架": 1,
+      "拆题": 2,
+      "陷阱": 2,
+      "收束": 1
+    },
+    "status": "ready"
+  },
+  {
+    "topic_id": "T02_M2",
+    "title": "内膜系统与分泌蛋白运输",
+    "cards_count": 10,
+    "long_front_count": 0,
+    "long_back_count": 1,
+    "long_card_ids": [
+      "T02_M2_陷阱_02"
+    ],
+    "maintenance_needs_review_count": 0,
+    "maintenance_card_ids": [],
+    "refined_count": 1,
+    "refined_card_ids": [
+      "T02_M2_陷阱_02"
+    ],
+    "type_counts": {
+      "recall": 2,
+      "signal": 2,
+      "rule": 2,
+      "representative": 2,
+      "trap": 2
+    },
+    "chapter_counts": {
+      "钩子": 1,
+      "信号": 2,
+      "判断": 1,
+      "框架": 1,
+      "拆题": 2,
+      "陷阱": 2,
+      "收束": 1
+    },
+    "status": "ready"
+  },
+  {
+    "topic_id": "T02_M3",
+    "title": "跨膜运输方式判定",
+    "cards_count": 12,
+    "long_front_count": 0,
+    "long_back_count": 1,
+    "long_card_ids": [
+      "T02_M3_陷阱_02"
+    ],
+    "maintenance_needs_review_count": 0,
+    "maintenance_card_ids": [],
+    "refined_count": 1,
+    "refined_card_ids": [
+      "T02_M3_陷阱_02"
+    ],
+    "type_counts": {
+      "recall": 3,
+      "signal": 2,
+      "rule": 3,
+      "representative": 2,
+      "trap": 2
+    },
+    "chapter_counts": {
+      "钩子": 2,
+      "信号": 2,
+      "判断": 2,
+      "框架": 1,
+      "拆题": 2,
+      "陷阱": 2,
+      "收束": 1
+    },
+    "status": "ready"
+  },
+  {
+    "topic_id": "T02_M4",
+    "title": "细胞结构变化与功能适应",
+    "cards_count": 11,
+    "long_front_count": 0,
+    "long_back_count": 0,
+    "long_card_ids": [],
+    "maintenance_needs_review_count": 0,
+    "maintenance_card_ids": [],
+    "refined_count": 1,
+    "refined_card_ids": [
+      "T02_M4_判断_02"
+    ],
+    "type_counts": {
+      "recall": 1,
+      "signal": 2,
+      "trap": 4,
+      "rule": 2,
+      "representative": 2
+    },
+    "chapter_counts": {
+      "钩子": 1,
+      "信号": 2,
+      "判断": 2,
+      "框架": 2,
+      "拆题": 2,
+      "陷阱": 1,
+      "收束": 1
+    },
+    "status": "ready"
+  },
+  {
+    "topic_id": "T03_M1",
+    "title": "系谱图遗传方式判定",
+    "cards_count": 12,
+    "long_front_count": 0,
+    "long_back_count": 0,
+    "long_card_ids": [],
+    "maintenance_needs_review_count": 0,
+    "maintenance_card_ids": [],
+    "refined_count": 1,
+    "refined_card_ids": [
+      "T03_M1_判断_02"
+    ],
+    "type_counts": {
+      "trap": 4,
+      "signal": 2,
+      "rule": 3,
+      "representative": 2,
+      "recall": 1
+    },
+    "chapter_counts": {
+      "钩子": 1,
+      "信号": 2,
+      "判断": 2,
+      "框架": 1,
+      "拆题": 2,
+      "陷阱": 2,
+      "收束": 2
+    },
+    "status": "ready"
+  },
+  {
+    "topic_id": "T03_M2",
+    "title": "后代概率精算",
+    "cards_count": 12,
+    "long_front_count": 0,
+    "long_back_count": 0,
+    "long_card_ids": [],
+    "maintenance_needs_review_count": 0,
+    "maintenance_card_ids": [],
+    "refined_count": 1,
+    "refined_card_ids": [
+      "T03_M2_拆题_01"
+    ],
+    "type_counts": {
+      "recall": 1,
+      "signal": 2,
+      "rule": 3,
+      "trap": 4,
+      "representative": 2
+    },
+    "chapter_counts": {
+      "钩子": 1,
+      "信号": 2,
+      "判断": 2,
+      "框架": 2,
+      "拆题": 2,
+      "陷阱": 2,
+      "收束": 1
+    },
+    "status": "ready"
+  },
+  {
+    "topic_id": "T03_M3",
+    "title": "减数分裂染色体追踪",
+    "cards_count": 11,
+    "long_front_count": 0,
+    "long_back_count": 2,
+    "long_card_ids": [
+      "T03_M3_信号_02",
+      "T03_M3_陷阱_01"
+    ],
+    "maintenance_needs_review_count": 0,
+    "maintenance_card_ids": [],
+    "refined_count": 2,
+    "refined_card_ids": [
+      "T03_M3_信号_02",
+      "T03_M3_陷阱_01"
+    ],
+    "type_counts": {
+      "recall": 2,
+      "signal": 2,
+      "rule": 3,
+      "representative": 2,
+      "trap": 2
+    },
+    "chapter_counts": {
+      "钩子": 1,
+      "信号": 2,
+      "判断": 2,
+      "框架": 1,
+      "拆题": 2,
+      "陷阱": 2,
+      "收束": 1
+    },
+    "status": "ready"
+  },
+  {
+    "topic_id": "T03_M4",
+    "title": "电泳分子证据判读",
+    "cards_count": 12,
+    "long_front_count": 0,
+    "long_back_count": 2,
+    "long_card_ids": [
+      "T03_M4_框架_01",
+      "T03_M4_框架_02"
+    ],
+    "maintenance_needs_review_count": 0,
+    "maintenance_card_ids": [],
+    "refined_count": 2,
+    "refined_card_ids": [
+      "T03_M4_框架_01",
+      "T03_M4_框架_02"
+    ],
+    "type_counts": {
+      "recall": 1,
+      "signal": 2,
+      "trap": 5,
+      "rule": 2,
+      "representative": 2
+    },
+    "chapter_counts": {
+      "钩子": 1,
+      "信号": 2,
+      "判断": 2,
+      "框架": 2,
+      "拆题": 2,
+      "陷阱": 2,
+      "收束": 1
+    },
+    "status": "ready"
+  },
+  {
+    "topic_id": "T04_M1",
+    "title": "神经体液稳态调节",
+    "cards_count": 11,
+    "long_front_count": 0,
+    "long_back_count": 0,
+    "long_card_ids": [],
+    "maintenance_needs_review_count": 0,
+    "maintenance_card_ids": [],
+    "refined_count": 1,
+    "refined_card_ids": [
+      "T04_M1_拆题_01"
+    ],
+    "type_counts": {
+      "trap": 3,
+      "signal": 2,
+      "rule": 3,
+      "representative": 2,
+      "recall": 1
+    },
+    "chapter_counts": {
+      "钩子": 1,
+      "信号": 2,
+      "判断": 2,
+      "框架": 1,
+      "拆题": 2,
+      "陷阱": 2,
+      "收束": 1
+    },
+    "status": "ready"
+  },
+  {
+    "topic_id": "T04_M2",
+    "title": "内分泌分级调节",
+    "cards_count": 12,
+    "long_front_count": 0,
+    "long_back_count": 0,
+    "long_card_ids": [],
+    "maintenance_needs_review_count": 0,
+    "maintenance_card_ids": [],
+    "refined_count": 1,
+    "refined_card_ids": [
+      "T04_M2_判断_02"
+    ],
+    "type_counts": {
+      "recall": 2,
+      "signal": 2,
+      "rule": 4,
+      "representative": 2,
+      "trap": 2
+    },
+    "chapter_counts": {
+      "钩子": 1,
+      "信号": 2,
+      "判断": 2,
+      "框架": 2,
+      "拆题": 2,
+      "陷阱": 2,
+      "收束": 1
+    },
+    "status": "ready"
+  },
+  {
+    "topic_id": "T04_M3",
+    "title": "免疫识别与应答",
+    "cards_count": 12,
+    "long_front_count": 0,
+    "long_back_count": 1,
+    "long_card_ids": [
+      "T04_M3_拆题_02"
+    ],
+    "maintenance_needs_review_count": 0,
+    "maintenance_card_ids": [],
+    "refined_count": 3,
+    "refined_card_ids": [
+      "T04_M3_框架_01",
+      "T04_M3_拆题_01",
+      "T04_M3_拆题_02"
+    ],
+    "type_counts": {
+      "recall": 2,
+      "signal": 2,
+      "rule": 4,
+      "representative": 2,
+      "trap": 2
+    },
+    "chapter_counts": {
+      "钩子": 1,
+      "信号": 2,
+      "判断": 2,
+      "框架": 2,
+      "拆题": 2,
+      "陷阱": 2,
+      "收束": 1
+    },
+    "status": "ready"
+  },
+  {
+    "topic_id": "T04_M4",
+    "title": "昼夜节律与褪黑素",
+    "cards_count": 12,
+    "long_front_count": 0,
+    "long_back_count": 0,
+    "long_card_ids": [],
+    "maintenance_needs_review_count": 0,
+    "maintenance_card_ids": [],
+    "refined_count": 0,
+    "refined_card_ids": [],
+    "type_counts": {
+      "recall": 2,
+      "signal": 2,
+      "rule": 4,
+      "representative": 2,
+      "trap": 2
+    },
+    "chapter_counts": {
+      "钩子": 1,
+      "信号": 2,
+      "判断": 2,
+      "框架": 2,
+      "拆题": 2,
+      "陷阱": 2,
+      "收束": 1
+    },
+    "status": "ready"
+  },
+  {
+    "topic_id": "T05_M1",
+    "title": "光合速率与限制因子",
+    "cards_count": 12,
+    "long_front_count": 0,
+    "long_back_count": 1,
+    "long_card_ids": [
+      "T05_M1_拆题_01"
+    ],
+    "maintenance_needs_review_count": 0,
+    "maintenance_card_ids": [],
+    "refined_count": 1,
+    "refined_card_ids": [
+      "T05_M1_拆题_01"
+    ],
+    "type_counts": {
+      "recall": 2,
+      "signal": 2,
+      "rule": 4,
+      "representative": 2,
+      "trap": 2
+    },
+    "chapter_counts": {
+      "钩子": 1,
+      "信号": 2,
+      "判断": 2,
+      "框架": 2,
+      "拆题": 2,
+      "陷阱": 2,
+      "收束": 1
+    },
+    "status": "ready"
+  },
+  {
+    "topic_id": "T05_M2",
+    "title": "气孔开闭与蒸腾调节",
+    "cards_count": 12,
+    "long_front_count": 0,
+    "long_back_count": 0,
+    "long_card_ids": [],
+    "maintenance_needs_review_count": 0,
+    "maintenance_card_ids": [],
+    "refined_count": 0,
+    "refined_card_ids": [],
+    "type_counts": {
+      "recall": 2,
+      "signal": 2,
+      "rule": 4,
+      "representative": 1,
+      "trap": 3
+    },
+    "chapter_counts": {
+      "钩子": 1,
+      "信号": 2,
+      "判断": 2,
+      "框架": 2,
+      "拆题": 2,
+      "陷阱": 2,
+      "收束": 1
+    },
+    "status": "ready"
+  },
+  {
+    "topic_id": "T05_M3",
+    "title": "呼吸方式与产物比例",
+    "cards_count": 13,
+    "long_front_count": 0,
+    "long_back_count": 0,
+    "long_card_ids": [],
+    "maintenance_needs_review_count": 0,
+    "maintenance_card_ids": [],
+    "refined_count": 0,
+    "refined_card_ids": [],
+    "type_counts": {
+      "recall": 3,
+      "signal": 2,
+      "rule": 4,
+      "representative": 2,
+      "trap": 2
+    },
+    "chapter_counts": {
+      "钩子": 2,
+      "信号": 2,
+      "判断": 2,
+      "框架": 2,
+      "拆题": 2,
+      "陷阱": 2,
+      "收束": 1
+    },
+    "status": "ready"
+  },
+  {
+    "topic_id": "T05_M4",
+    "title": "植物激素与生长调控",
+    "cards_count": 12,
+    "long_front_count": 0,
+    "long_back_count": 0,
+    "long_card_ids": [],
+    "maintenance_needs_review_count": 0,
+    "maintenance_card_ids": [],
+    "refined_count": 1,
+    "refined_card_ids": [
+      "T05_M4_判断_02"
+    ],
+    "type_counts": {
+      "recall": 2,
+      "signal": 2,
+      "rule": 4,
+      "representative": 2,
+      "trap": 2
+    },
+    "chapter_counts": {
+      "钩子": 1,
+      "信号": 2,
+      "判断": 2,
+      "框架": 2,
+      "拆题": 2,
+      "陷阱": 2,
+      "收束": 1
+    },
+    "status": "ready"
+  },
+  {
+    "topic_id": "T06_M1",
+    "title": "实验变量与对照设计",
+    "cards_count": 12,
+    "long_front_count": 0,
+    "long_back_count": 0,
+    "long_card_ids": [],
+    "maintenance_needs_review_count": 0,
+    "maintenance_card_ids": [],
+    "refined_count": 1,
+    "refined_card_ids": [
+      "T06_M1_拆题_01"
+    ],
+    "type_counts": {
+      "recall": 2,
+      "signal": 2,
+      "rule": 4,
+      "representative": 2,
+      "trap": 2
+    },
+    "chapter_counts": {
+      "钩子": 1,
+      "信号": 2,
+      "判断": 2,
+      "框架": 2,
+      "拆题": 2,
+      "陷阱": 2,
+      "收束": 1
+    },
+    "status": "ready"
+  },
+  {
+    "topic_id": "T06_M2",
+    "title": "生物物质鉴定实验",
+    "cards_count": 12,
+    "long_front_count": 0,
+    "long_back_count": 0,
+    "long_card_ids": [],
+    "maintenance_needs_review_count": 0,
+    "maintenance_card_ids": [],
+    "refined_count": 1,
+    "refined_card_ids": [
+      "T06_M2_判断_01"
+    ],
+    "type_counts": {
+      "recall": 2,
+      "signal": 2,
+      "rule": 4,
+      "representative": 2,
+      "trap": 2
+    },
+    "chapter_counts": {
+      "钩子": 1,
+      "信号": 2,
+      "判断": 2,
+      "框架": 2,
+      "拆题": 2,
+      "陷阱": 2,
+      "收束": 1
+    },
+    "status": "ready"
+  },
+  {
+    "topic_id": "T06_M3",
+    "title": "数据图表分析与判读",
+    "cards_count": 11,
+    "long_front_count": 0,
+    "long_back_count": 0,
+    "long_card_ids": [],
+    "maintenance_needs_review_count": 0,
+    "maintenance_card_ids": [],
+    "refined_count": 2,
+    "refined_card_ids": [
+      "T06_M3_判断_01",
+      "T06_M3_框架_01"
+    ],
+    "type_counts": {
+      "recall": 2,
+      "signal": 2,
+      "rule": 3,
+      "representative": 2,
+      "trap": 2
+    },
+    "chapter_counts": {
+      "钩子": 1,
+      "信号": 2,
+      "判断": 2,
+      "框架": 1,
+      "拆题": 2,
+      "陷阱": 2,
+      "收束": 1
+    },
+    "status": "ready"
+  },
+  {
+    "topic_id": "T06_M4",
+    "title": "PCR技术与电泳分析",
+    "cards_count": 11,
+    "long_front_count": 0,
+    "long_back_count": 0,
+    "long_card_ids": [],
+    "maintenance_needs_review_count": 0,
+    "maintenance_card_ids": [],
+    "refined_count": 0,
+    "refined_card_ids": [],
+    "type_counts": {
+      "recall": 2,
+      "signal": 2,
+      "rule": 3,
+      "representative": 2,
+      "trap": 2
+    },
+    "chapter_counts": {
+      "钩子": 1,
+      "信号": 2,
+      "判断": 2,
+      "框架": 1,
+      "拆题": 2,
+      "陷阱": 2,
+      "收束": 1
+    },
+    "status": "ready"
+  },
+  {
+    "topic_id": "T06_M5",
+    "title": "实验结论评价",
+    "cards_count": 11,
+    "long_front_count": 0,
+    "long_back_count": 1,
+    "long_card_ids": [
+      "T06_M5_拆题_02"
+    ],
+    "maintenance_needs_review_count": 0,
+    "maintenance_card_ids": [],
+    "refined_count": 1,
+    "refined_card_ids": [
+      "T06_M5_拆题_02"
+    ],
+    "type_counts": {
+      "recall": 1,
+      "signal": 2,
+      "rule": 3,
+      "trap": 4,
+      "representative": 1
+    },
+    "chapter_counts": {
+      "钩子": 1,
+      "信号": 2,
+      "判断": 2,
+      "框架": 1,
+      "拆题": 2,
+      "陷阱": 2,
+      "收束": 1
+    },
+    "status": "ready"
+  },
+  {
+    "topic_id": "T07_M1",
+    "title": "食物链与营养级分析",
+    "cards_count": 12,
+    "long_front_count": 0,
+    "long_back_count": 0,
+    "long_card_ids": [],
+    "maintenance_needs_review_count": 0,
+    "maintenance_card_ids": [],
+    "refined_count": 0,
+    "refined_card_ids": [],
+    "type_counts": {
+      "trap": 3,
+      "signal": 2,
+      "rule": 4,
+      "representative": 2,
+      "recall": 1
+    },
+    "chapter_counts": {
+      "钩子": 1,
+      "信号": 2,
+      "判断": 2,
+      "框架": 2,
+      "拆题": 2,
+      "陷阱": 2,
+      "收束": 1
+    },
+    "status": "ready"
+  },
+  {
+    "topic_id": "T07_M2",
+    "title": "能量流动计算",
+    "cards_count": 11,
+    "long_front_count": 0,
+    "long_back_count": 0,
+    "long_card_ids": [],
+    "maintenance_needs_review_count": 0,
+    "maintenance_card_ids": [],
+    "refined_count": 1,
+    "refined_card_ids": [
+      "T07_M2_判断_01"
+    ],
+    "type_counts": {
+      "recall": 2,
+      "signal": 2,
+      "rule": 3,
+      "representative": 2,
+      "trap": 2
+    },
+    "chapter_counts": {
+      "钩子": 1,
+      "信号": 2,
+      "判断": 2,
+      "框架": 1,
+      "拆题": 2,
+      "陷阱": 2,
+      "收束": 1
+    },
+    "status": "ready"
+  },
+  {
+    "topic_id": "T07_M3",
+    "title": "物质循环与碳氮循环",
+    "cards_count": 12,
+    "long_front_count": 0,
+    "long_back_count": 0,
+    "long_card_ids": [],
+    "maintenance_needs_review_count": 0,
+    "maintenance_card_ids": [],
+    "refined_count": 0,
+    "refined_card_ids": [],
+    "type_counts": {
+      "recall": 2,
+      "signal": 2,
+      "rule": 4,
+      "representative": 2,
+      "trap": 2
+    },
+    "chapter_counts": {
+      "钩子": 1,
+      "信号": 2,
+      "判断": 2,
+      "框架": 2,
+      "拆题": 2,
+      "陷阱": 2,
+      "收束": 1
+    },
+    "status": "ready"
+  },
+  {
+    "topic_id": "T07_M4",
+    "title": "群落演替与生态稳定性",
+    "cards_count": 11,
+    "long_front_count": 0,
+    "long_back_count": 0,
+    "long_card_ids": [],
+    "maintenance_needs_review_count": 0,
+    "maintenance_card_ids": [],
+    "refined_count": 2,
+    "refined_card_ids": [
+      "T07_M4_判断_01",
+      "T07_M4_框架_01"
+    ],
+    "type_counts": {
+      "recall": 2,
+      "signal": 2,
+      "rule": 3,
+      "representative": 2,
+      "trap": 2
+    },
+    "chapter_counts": {
+      "钩子": 1,
+      "信号": 2,
+      "判断": 1,
+      "框架": 2,
+      "拆题": 2,
+      "陷阱": 2,
+      "收束": 1
+    },
+    "status": "ready"
+  }
+]

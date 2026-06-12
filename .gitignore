@@ -1,0 +1,14 @@
+*
+
+!.gitignore
+!.github/
+!.github/**
+!apps/
+!apps/pwa/
+!apps/pwa/**
+
+apps/pwa/node_modules/
+apps/pwa/dist/
+
+.DS_Store
+**/.DS_Store

@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T04_M3 · 免疫识别与应答</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent:#0F6E56; --accent-l:#E1F5EE; --accent-m:#7DCFBB; --accent-d:#085041;
+  --purple:#534AB7; --purple-l:#EEEDFE; --purple-d:#3C3489;
+  --amber:#BA7517; --amber-l:#FAEEDA; --amber-d:#633806;
+  --coral:#993C1D; --coral-l:#FAECE7; --coral-d:#712B13;
+  --bg:#ffffff; --bg2:#f7f7f5; --bg3:#f1efe8;
+  --tx:#1a1a18; --tx2:#5f5e5a; --tx3:#888780;
+  --bd:rgba(0,0,0,0.10); --bd2:rgba(0,0,0,0.18);
+  --r-sm:6px; --r-md:8px; --r-lg:12px; --r-xl:16px;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+}
+@media(prefers-color-scheme:dark){
+  :root{ --bg:#1c1c1a;--bg2:#252523;--bg3:#2c2c2a;--tx:#f0efea;--tx2:#b4b2a9;--tx3:#888780;
+    --bd:rgba(255,255,255,0.09);--bd2:rgba(255,255,255,0.16);
+    --accent-l:#04342C;--accent-d:#9FE1CB;--purple-l:#26215C;--purple-d:#CECBF6;
+    --amber-l:#412402;--amber-d:#FAC775;--coral-l:#4A1B0C;--coral-d:#F5C4B3; }
+}
+body{font-family:var(--font);font-size:15px;line-height:1.6;color:var(--tx);background:var(--bg3);min-height:100vh;}
+.app{max-width:800px;margin:0 auto;background:var(--bg);min-height:100vh;}
+.site-header{padding:1.25rem 1.5rem 0;background:var(--bg);border-bottom:0.5px solid var(--bd);position:sticky;top:0;z-index:20;}
+.header-top{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.header-icon{background:var(--accent-l);border-radius:var(--r-md);padding:6px 8px;display:flex;align-items:center;justify-content:center;}
+.header-icon i{font-size:20px;color:var(--accent);}
+.header-meta{font-size:12px;color:var(--tx3);}
+.header-title{font-size:17px;font-weight:500;color:var(--tx);}
+.header-id{margin-left:auto;font-size:11px;color:var(--tx3);background:var(--bg2);padding:3px 9px;border-radius:var(--r-sm);}
+.nav-tabs{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.nav-tab{padding:.6rem 1.1rem;font-size:13px;color:var(--tx2);cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;font-family:var(--font);white-space:nowrap;transition:color .15s,border-color .15s;}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500;}
+.nav-tab:hover:not(.active){color:var(--tx);}
+.page{display:none;padding:1.5rem;} .page.active{display:block;}
+.memory-section{margin-bottom:1.5rem;}
+.memory-card{border:0.5px solid var(--bd);border-radius:var(--r-xl);overflow:hidden;background:var(--bg);}
+.memory-placeholder{min-height:200px;background:var(--bg2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--tx3);padding:2rem;}
+.memory-placeholder i{font-size:32px;color:var(--bd2);}
+.memory-placeholder-text{font-size:13px;text-align:center;line-height:1.6;}
+.memory-placeholder-filename{font-size:11px;background:var(--bg3);border:0.5px solid var(--bd);border-radius:var(--r-sm);padding:4px 10px;font-family:monospace;color:var(--tx2);}
+.memory-img{width:100%;display:block;max-height:320px;object-fit:contain;background:var(--bg3);cursor:zoom-in;transition:opacity .15s;}
+.memory-img:hover{opacity:.9;}
+.memory-footer{padding:.85rem 1rem;display:flex;align-items:center;gap:10px;border-top:0.5px solid var(--bd);}
+.memory-label{font-size:13px;font-weight:500;color:var(--tx);flex:1;}
+audio{height:32px;width:220px;}
+.audio-placeholder{font-size:12px;color:var(--tx3);display:flex;align-items:center;gap:5px;background:var(--bg2);padding:6px 10px;border-radius:var(--r-sm);}
+.section-title{font-size:13px;font-weight:500;color:var(--tx2);display:flex;align-items:center;gap:7px;margin-bottom:1rem;text-transform:uppercase;letter-spacing:.04em;}
+.section-divider{height:0.5px;background:var(--bd);margin:1.5rem 0;}
+.signal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:1.5rem;}
+.signal-card{background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;}
+.signal-label{font-size:11px;color:var(--tx3);letter-spacing:.04em;margin-bottom:.4rem;text-transform:uppercase;}
+.signal-tag{font-size:13px;color:var(--tx);margin-bottom:2px;}
+.subtopic-list{display:flex;flex-direction:column;gap:10px;margin-bottom:1.5rem;}
+.subtopic-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.9rem 1.1rem;border-left:3px solid var(--accent);}
+.subtopic-card.s2{border-left-color:var(--purple);} .subtopic-card.s3{border-left-color:var(--amber);}
+.subtopic-num{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.3rem;}
+.subtopic-name{font-size:14px;font-weight:500;color:var(--tx);margin-bottom:.3rem;}
+.subtopic-signal{font-size:13px;color:var(--tx2);line-height:1.6;}
+.trap-list{display:flex;flex-direction:column;gap:7px;}
+.trap-item{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.55;}
+.trap-icon{color:#E24B4A;font-size:15px;flex-shrink:0;margin-top:1px;}
+.filter-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem;}
+.filter-btn{padding:5px 13px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx2);font-family:var(--font);transition:all .15s;}
+.filter-btn.active{background:var(--accent-l);color:var(--accent-d);border-color:var(--accent);font-weight:500;}
+.mq-card{border:0.5px solid var(--bd);border-radius:var(--r-lg);background:var(--bg);margin-bottom:.85rem;overflow:hidden;}
+.mq-header{padding:.9rem 1.1rem;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;transition:background .15s;}
+.mq-header:hover{background:var(--bg2);}
+.mq-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);white-space:nowrap;}
+.mq-badge.s1{background:var(--accent-l);color:var(--accent-d);} .mq-badge.s2{background:var(--purple-l);color:var(--purple-d);} .mq-badge.s3{background:var(--amber-l);color:var(--amber-d);}
+.mq-name{font-size:14px;font-weight:500;color:var(--tx);flex:1;}
+.mq-purity{font-size:12px;color:var(--tx3);flex-shrink:0;}
+.mq-chevron{color:var(--tx3);font-size:16px;transition:transform .2s;flex-shrink:0;}
+.mq-chevron.open{transform:rotate(180deg);}
+.mq-body{display:none;padding:.75rem 1.1rem 1.1rem;border-top:0.5px solid var(--bd);}
+.mq-body.open{display:block;}
+.mq-source{font-size:12px;color:var(--tx3);margin-bottom:.65rem;}
+.rule-box{background:var(--accent-l);border-left:3px solid var(--accent);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:.65rem .9rem;font-size:13px;color:var(--accent-d);margin:.75rem 0;line-height:1.65;}
+.rule-box.s2{background:var(--purple-l);border-left-color:var(--purple);color:var(--purple-d);}
+.rule-box.s3{background:var(--amber-l);border-left-color:var(--amber);color:var(--amber-d);}
+.chain-label{font-size:12px;font-weight:500;color:var(--tx2);margin:.75rem 0 .4rem;text-transform:uppercase;letter-spacing:.04em;}
+.signal-chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:6px;}
+.sc-node{background:var(--bg2);border-radius:var(--r-sm);padding:3px 9px;font-size:13px;color:var(--tx);}
+.sc-node.s1{background:var(--accent-l);color:var(--accent-d);} .sc-node.s2{background:var(--purple-l);color:var(--purple-d);} .sc-node.s3{background:var(--amber-l);color:var(--amber-d);}
+.sc-arrow{color:var(--tx3);font-size:13px;}
+.mq-note{font-size:13px;color:var(--tx2);margin-top:.75rem;line-height:1.6;}
+.q-trigger{display:inline-flex;align-items:center;gap:5px;margin-top:.75rem;padding:6px 12px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;color:var(--tx2);cursor:pointer;font-family:var(--font);transition:all .15s;}
+.q-trigger:hover{background:var(--bg2);color:var(--tx);} .q-trigger i{font-size:14px;}
+.ladder-section-label{font-size:13px;font-weight:500;color:var(--tx2);margin-bottom:.85rem;display:flex;align-items:center;gap:7px;}
+.ladder-rows{display:flex;flex-direction:column;gap:8px;margin-bottom:1rem;}
+.ladder-row{display:grid;grid-template-columns:64px 1fr;gap:10px;align-items:start;}
+.ladder-level{font-size:11px;font-weight:500;padding:6px 4px;border-radius:var(--r-sm);text-align:center;line-height:1.4;}
+.l0{background:var(--accent-l);color:var(--accent-d);} .l1{background:var(--purple-l);color:var(--purple-d);} .l2{background:var(--amber-l);color:var(--amber-d);} .l3{background:var(--coral-l);color:var(--coral-d);}
+.ladder-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.65rem .9rem;background:var(--bg);cursor:pointer;transition:background .15s;}
+.ladder-card:hover{background:var(--bg2);}
+.ladder-card-name{font-size:13px;font-weight:500;color:var(--tx);}
+.ladder-card-sub{font-size:12px;color:var(--tx3);margin-top:3px;line-height:1.5;}
+.ladder-note{background:var(--bg2);border-radius:var(--r-md);padding:.65rem .9rem;font-size:12px;color:var(--tx2);margin-bottom:1rem;line-height:1.55;}
+.progress-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem;}
+.progress-bar{height:5px;border-radius:3px;background:var(--bg2);margin-bottom:1.25rem;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;background:var(--accent);width:0%;transition:width .3s;}
+.checklist{display:flex;flex-direction:column;gap:7px;}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:.7rem .9rem;border:0.5px solid var(--bd);border-radius:var(--r-md);background:var(--bg);cursor:pointer;transition:background .15s;}
+.check-item.done{background:var(--bg2);}
+.check-box{width:18px;height:18px;border:1.5px solid var(--bd2);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .15s;}
+.check-item.done .check-box{background:var(--accent);border-color:var(--accent);}
+.check-box i{font-size:11px;color:#fff;display:none;} .check-item.done .check-box i{display:block;}
+.check-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.check-item.done .check-text{color:var(--tx3);text-decoration:line-through;}
+.action-row{margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:8px;}
+.action-btn{padding:7px 14px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.action-btn:hover{background:var(--bg2);}
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s;}
+.drawer-overlay.open{opacity:1;pointer-events:all;}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100vw);background:var(--bg);z-index:101;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden;}
+.drawer.open{transform:translateX(0);}
+.drawer-header{padding:1rem 1.25rem;border-bottom:0.5px solid var(--bd);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.drawer-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);}
+.drawer-title{font-size:14px;font-weight:500;color:var(--tx);flex:1;line-height:1.4;}
+.drawer-close{background:none;border:none;cursor:pointer;color:var(--tx2);padding:4px;border-radius:var(--r-sm);display:flex;align-items:center;transition:background .15s;}
+.drawer-close:hover{background:var(--bg2);}
+.drawer-body{flex:1;overflow-y:auto;padding:1.25rem;}
+.drawer-ec-ref{font-size:12px;color:var(--tx3);margin-bottom:1rem;display:flex;align-items:center;gap:6px;}
+.drawer-stem{font-size:14px;color:var(--tx);line-height:1.75;white-space:pre-wrap;}
+.drawer-sub{font-size:13px;color:var(--tx2);background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:1rem;line-height:1.65;}
+.drawer-sub-label{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-answer{font-size:13px;color:var(--tx);background:var(--accent-l);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:.75rem;line-height:1.65;display:none;}
+.drawer-answer.show{display:block;}
+.drawer-answer-label{font-size:11px;font-weight:500;color:var(--accent-d);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-footer{padding:.85rem 1.25rem;border-top:0.5px solid var(--bd);display:flex;gap:8px;flex-shrink:0;}
+.drawer-btn{flex:1;padding:8px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.drawer-btn:hover{background:var(--bg2);}
+.drawer-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+.drawer-btn.primary:hover{background:var(--accent-d);}
+.lb-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:200;display:none;align-items:center;justify-content:center;cursor:zoom-out;}
+.lb-overlay.open{display:flex;}
+.lb-img{max-width:92vw;max-height:92vh;object-fit:contain;border-radius:var(--r-md);box-shadow:0 8px 40px rgba(0,0,0,.5);}
+.lb-close{position:fixed;top:16px;right:20px;background:none;border:none;color:#fff;font-size:28px;cursor:pointer;line-height:1;opacity:.7;transition:opacity .15s;}
+.lb-close:hover{opacity:1;}
+@media(max-width:600px){
+  .site-header{padding:1rem 1rem 0;}.page{padding:1rem;}.header-title{font-size:15px;}
+  .signal-grid{grid-template-columns:1fr 1fr;}.ladder-row{grid-template-columns:52px 1fr;gap:8px;}
+  .action-row{flex-direction:column;}.action-btn{width:100%;text-align:center;}.drawer{width:100vw;}audio{width:160px;}
+}
+@media(max-width:380px){.signal-grid{grid-template-columns:1fr;}}
+
+.back-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;font-size:12px;color:var(--tx2);background:var(--bg2);border:0.5px solid var(--bd2);border-radius:var(--r-md);text-decoration:none;font-family:var(--font);transition:background .15s,color .15s;white-space:nowrap;flex-shrink:0;}
+.back-btn:hover{background:var(--bg3);color:var(--tx);}
+.back-btn i{font-size:14px;}
+.memory-video{width:100%;max-height:220px;display:block;border-radius:var(--r-md);background:#000;margin-top:8px;}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="site-header">
+  <div class="header-top">
+    <div class="header-icon"><i class="ti ti-shield-check" aria-hidden="true"></i></div>
+    <div>
+      <div class="header-meta">04 生理调节 · M3 免疫识别应答</div>
+      <div class="header-title">免疫识别与应答</div>
+    </div>
+    <a class="back-btn" href="index.html" aria-label="返回首页"><i class="ti ti-arrow-left"></i> 首页</a>
+    <div class="header-id">T04_M3</div>
+  </div>
+  <nav class="nav-tabs" role="tablist">
+    <button class="nav-tab active" role="tab" onclick="switchTab('overview',this)">概览</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('mothers',this)">母题精讲</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('ladder',this)">变式阶梯</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('check',this)">自查清单</button>
+  </nav>
+</header>
+
+<!-- 概览 -->
+<div id="page-overview" class="page active">
+  <div class="memory-section">
+    <div class="memory-card">
+      <img class="memory-img" src="记忆卡/T04_M3_memory.png" alt="T04_M3 记忆卡"
+           onclick="openLightbox(this.src,this.alt)"
+           onerror="this.style.display='none';document.getElementById('mem-placeholder').style.display='flex'">
+      <div id="mem-placeholder" class="memory-placeholder" style="display:none;">
+        <i class="ti ti-photo-up"></i>
+        <div class="memory-placeholder-text">记忆卡图片放置于此</div>
+        <div class="memory-placeholder-filename">记忆卡/T04_M3_memory.png</div>
+      </div>
+      <div class="memory-footer">
+        <span class="memory-label"><i class="ti ti-brain" style="margin-right:5px;color:var(--accent);"></i>记忆卡 · 免疫应答流程与失调</span>
+        <video class="memory-video" controls controlsList="nodownload" preload="metadata" style="display:none">
+        <source src="audio/T04_M3.mp4" type="video/mp4">
+      </video>
+      <div class="audio-placeholder" style="display:flex"><i class="ti ti-video-off"></i>视频待放入</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title"><i class="ti ti-radar"></i>核心触发信号</div>
+  <div class="signal-grid">
+    <div class="signal-card">
+      <div class="signal-label">视觉信号</div>
+      <div class="signal-tag">免疫应答流程图</div>
+      <div class="signal-tag">PD-1/PD-L1 检查点图</div>
+      <div class="signal-tag">自身免疫病示意图</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">关键词</div>
+      <div class="signal-tag">APC / 抗原呈递 / MHC</div>
+      <div class="signal-tag">T细胞 / B细胞 / 浆细胞 / 记忆细胞</div>
+      <div class="signal-tag">PD-1 / PD-L1 / 免疫逃逸</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">任务关键词</div>
+      <div class="signal-tag">描述免疫应答过程</div>
+      <div class="signal-tag">分析免疫异常机制</div>
+      <div class="signal-tag">判断免疫类型（体液/细胞）</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">核心区分</div>
+      <div class="signal-tag">体液=B→浆细胞→抗体（胞外）</div>
+      <div class="signal-tag">细胞=T→效应T→杀伤（胞内）</div>
+      <div class="signal-tag">PD-L1=肿瘤"伪装"信号</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-sitemap"></i>两条免疫路线</div>
+  <div class="subtopic-list">
+    <div class="subtopic-card">
+      <div class="subtopic-num">路径 1 · 体液免疫</div>
+      <div class="subtopic-name">APC→T/B激活→浆细胞→抗体→记忆B细胞</div>
+      <div class="subtopic-signal">APC(树突细胞/巨噬细胞)吞噬抗原→MHC-II呈递→辅助T细胞识别→分泌白介素激活B细胞→B细胞增殖分化→浆细胞（产生大量抗体，胞外病原清除）+ 记忆B细胞（二次免疫快速响应）。抗体作用：中和病毒、调理吞噬、激活补体</div>
+    </div>
+    <div class="subtopic-card s2">
+      <div class="subtopic-num">路径 2 · 免疫失调</div>
+      <div class="subtopic-name">自身免疫攻击 / 肿瘤PD-1逃逸</div>
+      <div class="subtopic-signal">自身免疫：自身蛋白（如AQP4）被免疫系统错误识别为"外来抗原"→免疫攻击自身组织→NMOSD/类风湿等。肿瘤逃逸：肿瘤细胞高表达PD-L1→与T细胞PD-1结合→T细胞活性抑制→无法识别/杀伤肿瘤→肿瘤存活。PD-1抗体（免疫检查点抑制剂）→阻断PD-1/PD-L1结合→T细胞重新激活</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-alert-triangle"></i>高频易错</div>
+  <div class="trap-list">
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span><strong>混淆体液免疫与细胞免疫的效应细胞</strong>——体液免疫效应细胞=浆细胞（分泌抗体），细胞免疫效应细胞=效应T细胞（分泌穿孔素直接杀伤）。浆细胞≠T细胞，不能互换。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span><strong>记忆细胞直接清除病原体</strong>——记忆细胞（记忆B和记忆T）不直接清除，而是在再次遇到相同抗原时迅速增殖分化为效应细胞，产生更快更强的二次免疫应答。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span><strong>PD-1抑制剂=免疫抑制药</strong>——恰恰相反，PD-1抑制剂是<strong>激活</strong>T细胞（解除肿瘤的免疫抑制），是免疫增强疗法。与器官移植用的免疫抑制剂方向完全相反。</span></div>
+  </div>
+</div>
+
+<!-- 母题精讲 -->
+<div id="page-mothers" class="page">
+  <div class="filter-tabs">
+    <button class="filter-btn active" onclick="filterMQ('all',this)">全部 (2母题)</button>
+    <button class="filter-btn" onclick="filterMQ('s1',this)">路径1·体液免疫</button>
+    <button class="filter-btn" onclick="filterMQ('s2',this)">路径2·免疫失调</button>
+  </div>
+
+  <div class="mq-card" data-topic="s1">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge s1">路径1 母题</span>
+      <span class="mq-name">体液免疫完整流程·APC→浆细胞→记忆B细胞</span>
+      <span class="mq-purity">★ 9/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-271 · B淋巴细胞成熟体液免疫骨髓胸腺抗体分泌浆细胞记忆B细胞免疫应答 · (1)(2)</div>
+      <div class="rule-box">核心考查：APC吞噬抗原→MHC-II呈递→辅助T细胞激活→白介素促B细胞增殖分化→浆细胞(产抗体)+记忆B细胞(二次免疫)。B细胞成熟场所=骨髓，T细胞成熟场所=胸腺</div>
+      <div class="chain-label">体液免疫完整流程</div>
+      <div class="signal-chain">
+        <span class="sc-node s1">APC吞噬抗原</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">MHC-II呈递给辅助T</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">辅助T激活</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">白介素分泌</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node s1">B细胞识别抗原+白介素信号</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">增殖分化</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">浆细胞（大量抗体）</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node s1">部分B细胞→记忆B细胞</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">二次接触同抗原→快速强烈应答</span>
+      </div>
+      <div class="mq-note">
+        <strong>关键：</strong>浆细胞（效应B细胞）是高度分化的终末细胞，不再增殖，专门产生大量抗体（每秒可分泌数千个抗体分子）。<br>
+        <strong>B细胞 vs 浆细胞：</strong>B细胞有抗原受体（可识别抗原），浆细胞没有抗原受体（只产生抗体，不直接识别抗原）。
+      </div>
+      <button class="q-trigger" onclick="openDrawer('mq-271')"><i class="ti ti-eye"></i>查看完整题干与答案</button>
+    </div>
+  </div>
+
+  <div class="mq-card" data-topic="s2">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge s2">路径2 母题</span>
+      <span class="mq-name">NMOSD·AQP4自身免疫·免疫识别异常</span>
+      <span class="mq-purity">★ 8/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-421 · CHIP28水通道蛋白AQP1_AQP4与NMOSD自身免疫机制 · (5)</div>
+      <div class="rule-box s2">核心考查：AQP4（水通道蛋白4）作为自身蛋白，被免疫系统错误识别为"外来抗原"→产生自身抗体→攻击星形胶质细胞/视神经→NMOSD（视神经脊髓炎谱系疾病）。自身免疫=识别的"我/非我"判断失误</div>
+      <div class="chain-label">NMOSD自身免疫发生机制</div>
+      <div class="signal-chain">
+        <span class="sc-node s2">AQP4（自身蛋白）</span><span class="sc-arrow">→</span>
+        <span class="sc-node s2">免疫系统错误识别为抗原</span><span class="sc-arrow">→</span>
+        <span class="sc-node s2">体液免疫激活</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node s2">产生抗AQP4抗体（自身抗体）</span><span class="sc-arrow">→</span>
+        <span class="sc-node s2">攻击含AQP4的细胞</span><span class="sc-arrow">→</span>
+        <span class="sc-node s2">星形胶质细胞损伤/脱髓鞘</span>
+      </div>
+      <div class="mq-note">
+        <strong>自身免疫病本质：</strong>免疫系统的"识别程序"出错——把本来应该耐受的自身分子标记成攻击目标。<br>
+        <strong>治疗方向：</strong>免疫抑制（抑制过度的免疫应答）或针对性清除致病B细胞/抗体，而不是增强免疫。
+      </div>
+      <button class="q-trigger" onclick="openDrawer('mq-421')"><i class="ti ti-eye"></i>查看完整题干与答案</button>
+    </div>
+  </div>
+</div>
+
+<!-- 变式阶梯 -->
+<div id="page-ladder" class="page">
+  <div class="ladder-note">从"体液免疫标准流程"到"自身免疫机制分析"到"PD-1肿瘤免疫逃逸与检查点治疗"，从正常免疫到免疫失调的完整图谱。</div>
+
+  <div class="ladder-section-label"><i class="ti ti-stairs"></i>路径1 · 体液免疫 变式阶梯</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l0">母题<br>9/10</div>
+      <div class="ladder-card" onclick="openDrawer('mq-271')">
+        <div class="ladder-card-name">EC-271 体液免疫·APC→浆细胞→记忆B细胞完整流程</div>
+        <div class="ladder-card-sub">子问题(1)(2)·B/T细胞发育场所+体液免疫全流程+浆细胞特征</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">基础变式<br>8/10</div>
+      <div class="ladder-card" onclick="openDrawer('v-096')">
+        <div class="ladder-card-name">EC-096 PD-1/PD-L1·肿瘤免疫逃逸与检查点抑制剂</div>
+        <div class="ladder-card-sub">PD-L1高表达肿瘤→抑制T细胞→免疫逃逸；PD-1抗体→解除抑制→T细胞重激活；分析逃逸机制+治疗靶点</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ladder-section-label"><i class="ti ti-stairs"></i>路径2 · 免疫失调 变式阶梯</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l0">母题<br>8/10</div>
+      <div class="ladder-card" onclick="openDrawer('mq-421')">
+        <div class="ladder-card-name">EC-421 NMOSD·AQP4自身免疫·识别异常机制</div>
+        <div class="ladder-card-sub">子问题(5)·自身蛋白被错误识别→抗AQP4抗体→星形胶质细胞损伤→脱髓鞘</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 自查清单 -->
+<div id="page-check" class="page">
+  <div class="progress-row">
+    <span style="font-size:13px;color:var(--tx2);">掌握进度</span>
+    <span id="check-count" style="font-size:13px;color:var(--tx2);">0 / 2</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="check-bar"></div></div>
+  <div class="checklist" id="checklist">
+    <div class="check-item" onclick="toggleCheck(this,0)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能写出 APC→辅助T→B细胞→浆细胞（抗体）+记忆B细胞 的完整链，并区分体液免疫与细胞免疫的效应细胞（→ 母题精讲·路径1）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,1)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我理解 PD-L1→PD-1 肿瘤免疫逃逸逻辑，并能分析 PD-1 抗体为何是"激活"而非"抑制"免疫（→ 变式阶梯·路径1·L1变式）</div>
+    </div>
+  </div>
+  <div class="action-row">
+    <button class="action-btn" onclick="checkAll()">全部勾选</button>
+    <button class="action-btn" onclick="clearAll()">清空重来</button>
+  </div>
+</div>
+</div>
+
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <span class="drawer-badge" id="drawer-badge"></span>
+    <span class="drawer-title" id="drawer-title"></span>
+    <button class="drawer-close" onclick="closeDrawer()"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="drawer-ec-ref" id="drawer-ref"><i class="ti ti-file-description"></i><span></span></div>
+    <div class="drawer-stem" id="drawer-stem"></div>
+    <div class="drawer-sub" id="drawer-focus">
+      <div class="drawer-sub-label">考查重点</div>
+      <div id="drawer-focus-text"></div>
+    </div>
+    <div class="drawer-answer" id="drawer-answer">
+      <div class="drawer-answer-label">核心答案</div>
+      <div id="drawer-answer-text"></div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="drawer-btn" onclick="toggleAnswer()">显示 / 隐藏答案</button>
+    <button class="drawer-btn primary" onclick="closeDrawer()">关闭</button>
+  </div>
+</div>
+
+<div class="lb-overlay" id="lb-overlay" onclick="closeLightbox()">
+  <button class="lb-close" onclick="closeLightbox()">×</button>
+  <img class="lb-img" id="lb-img" src="" alt="">
+</div>
+
+<script>
+const QUESTIONS = {
+  'mq-271':{badge:'路径1 母题',badgeStyle:'background:var(--accent-l);color:var(--accent-d);',name:'EC-271 体液免疫·APC→浆细胞→记忆B细胞完整流程',ref:'EC-20260522-271 · B淋巴细胞成熟体液免疫骨髓胸腺抗体分泌浆细胞记忆B细胞免疫应答 · (1)(2)',stem:`研究人员对小鼠B淋巴细胞的发育和体液免疫应答进行了分析。\n\n(1) B淋巴细胞在哪里发育成熟？T淋巴细胞在哪里发育成熟？两者都起源于哪种干细胞？\n\n(2) 描述体液免疫应答的完整过程：当抗原（如病毒外壳蛋白）进入机体后，抗原呈递细胞(APC)如何处理抗原？T细胞和B细胞分别如何被激活？最终产生哪些细胞？各有何功能？`,focus:`① B细胞成熟场所=骨髓（哺乳动物）；T细胞成熟场所=胸腺；两者均起源于骨髓造血干细胞\n② APC处理抗原：吞噬→溶酶体降解成多肽片段→与MHC-II结合→呈递到细胞表面\n③ T细胞激活：识别APC表面MHC-II+抗原肽复合物→激活→分泌白介素\n④ B细胞激活：直接识别抗原+辅助T的白介素信号双重激活→增殖分化\n⑤ 终末细胞：浆细胞（产抗体）+ 记忆B细胞（长期免疫记忆）`,answer:`(1) 发育成熟场所：\nB淋巴细胞：在骨髓中发育成熟（骨髓提供B细胞发育的微环境）\nT淋巴细胞：在胸腺中发育成熟（胸腺负责T细胞的阳性/阴性选择）\n起源：两者均起源于骨髓中的造血干细胞（多能干细胞→淋巴干细胞→B/T细胞前体）\n\n(2) 体液免疫完整过程：\n①抗原摄取与呈递：APC（如树突细胞、巨噬细胞）通过吞噬或胞饮摄取抗原→溶酶体中蛋白酶降解成多肽片段→与细胞内MHC-II分子结合→转运到细胞表面形成MHC-II/抗原肽复合物。\n\n②辅助T细胞激活：T细胞受体(TCR)识别APC表面的MHC-II/抗原肽复合物→辅助T细胞激活→分泌白介素-2等细胞因子（自分泌促自身增殖+旁分泌激活B细胞）。\n\n③B细胞激活：B细胞受体(BCR)直接识别游离抗原+接受辅助T细胞的白介素信号（双信号激活）→B细胞激活→克隆增殖→分化。\n\n④效应细胞产生：\n- 浆细胞（效应B细胞）：高度分化的终末细胞，不再增殖，专门分泌大量抗体（免疫球蛋白），清除胞外病原（中和+调理吞噬+激活补体）\n- 记忆B细胞：长寿命细胞，携带对该抗原的"记忆"，再次遇到相同抗原时迅速克隆扩增→更快更强的二次免疫应答。`},
+  'mq-421':{badge:'路径2 母题',badgeStyle:'background:var(--purple-l);color:var(--purple-d);',name:'EC-421 NMOSD·AQP4自身免疫·识别异常',ref:'EC-20260522-421 · CHIP28水通道蛋白AQP1_AQP4与NMOSD自身免疫机制 · (5)',stem:`视神经脊髓炎谱系疾病(NMOSD)是一种自身免疫性疾病。患者体内存在针对水通道蛋白4（AQP4）的自身抗体（IgG抗体），这些抗体主要攻击中枢神经系统星形胶质细胞上的AQP4，导致视神经和脊髓病变。\n\nAQP4在正常生理状态下是星形胶质细胞调节水分子进出的重要通道蛋白。\n\n(5) 请解释NMOSD的发病机制：为什么机体会产生针对自身AQP4的抗体？这种抗体的产生属于哪种免疫类型？为什么治疗NMOSD需要使用免疫抑制剂而非免疫增强剂？`,focus:`① 自身免疫病=免疫系统将自身正常蛋白（AQP4）错误识别为"外来抗原"\n② 发病机制：自身耐受破坏→体液免疫产生抗AQP4抗体→攻击星形胶质细胞→脱髓鞘/细胞死亡\n③ 免疫类型：体液免疫（B细胞→浆细胞→抗体）\n④ 治疗方向：需要抑制过度激活的免疫应答（减少自身抗体产生）而非增强，增强会加重攻击`,answer:`(5) NMOSD发病机制分析：\n\n【为什么产生抗AQP4自身抗体】\n正常情况下，免疫系统对自身蛋白（如AQP4）存在"中枢耐受"和"外周耐受"机制——识别自身抗原的T细胞在胸腺被清除（阴性选择），B细胞也存在自身耐受机制。\n\nNMOSD患者中，上述耐受机制发生缺陷（可能由遗传易感性+环境触发共同导致）→针对AQP4的自身反应性T细胞和B细胞得以存活并被激活→体液免疫应答产生抗AQP4抗体（自身抗体，IgG型）。\n\n【免疫类型】\n属于体液免疫异常（自身抗体由浆细胞分泌，是B细胞介导的免疫应答），也存在辅助T细胞参与激活B细胞的过程。\n\n【为什么用免疫抑制剂】\nNMOSD的病理根源是免疫系统"过度激活且攻击方向错误"——浆细胞产生的自身抗体正在破坏AQP4+星形胶质细胞。\n使用免疫增强剂（如干扰素、白介素）→进一步激活免疫→产生更多自身抗体→加重组织损伤。\n使用免疫抑制剂（如利妥昔单抗清除B细胞、激素抑制炎症）→减少自身抗体产生→减轻免疫攻击→症状缓解。`},
+  'v-096':{badge:'L1 基础变式',badgeStyle:'background:var(--purple-l);color:var(--purple-d);',name:'EC-096 PD-1/PD-L1·肿瘤免疫逃逸与检查点治疗',ref:'EC-20260519-096 · 肿瘤免疫逃逸中PD-L1与PD-1介导T细胞凋亡及衰老细胞蛋白酶降解机制与PD-1抗体治疗评估',stem:`肿瘤细胞可以通过上调表面PD-L1（程序性死亡配体1）蛋白的表达来逃避免疫系统的攻击。T细胞表面的PD-1（程序性死亡受体1）与肿瘤细胞PD-L1结合后，T细胞的活化信号被抑制，导致T细胞功能性"耗竭"或凋亡。\n\n目前临床上使用抗PD-1单克隆抗体（如帕博利珠单抗）治疗多种肿瘤。\n\n请回答：\n(1) 肿瘤细胞表达PD-L1后，为什么T细胞无法正常杀伤肿瘤？从免疫应答的角度解释。\n(2) 抗PD-1抗体药物是如何发挥抗肿瘤作用的？这是增强还是抑制了免疫功能？\n(3) 衰老细胞也会表达PD-L1，分析衰老细胞通过PD-L1逃避免疫清除的机制，以及这对机体健康的潜在影响。`,focus:`① PD-L1/PD-1结合是肿瘤"伪装"成"自身细胞"的免疫检查点机制\n② T细胞需要双信号激活（TCR识别抗原+共刺激信号），PD-1被激活→产生抑制信号→T细胞无法充分激活\n③ 抗PD-1药物=阻断PD-1/PD-L1结合→解除对T细胞的抑制→T细胞重新激活攻击肿瘤\n④ 衰老细胞PD-L1：衰老细胞积累→免疫逃逸→慢性炎症/肿瘤风险升高`,answer:`(1) PD-L1导致T细胞无法杀伤肿瘤的机制：\nT细胞正常杀伤肿瘤细胞需要：① TCR识别肿瘤抗原（第一信号）+ ② 共刺激信号（CD28/B7，第二信号）→T细胞充分激活→分裂增殖→效应T细胞→释放穿孔素/颗粒酶→裂解肿瘤细胞。\n\n肿瘤细胞高表达PD-L1→与激活的T细胞表面PD-1结合→PD-1向细胞内传导"关闭信号"（抑制TCR下游的PI3K/Akt信号通路）→T细胞激活被抑制→T细胞进入"耗竭"状态或发生凋亡→无法增殖、无法产生足够效应T细胞→肿瘤细胞逃避免疫清除。\n\n(2) 抗PD-1抗体的作用机制：\n抗PD-1单克隆抗体与T细胞表面PD-1结合→物理阻断PD-L1与PD-1的结合→PD-1不再传导抑制信号→T细胞重新获得完整激活能力→克隆扩增→效应T细胞识别并杀伤肿瘤细胞。\n\n属于增强免疫功能——解除肿瘤对T细胞的主动抑制，使免疫系统恢复对肿瘤的正常杀伤能力。与免疫抑制剂（器官移植、自身免疫病用）方向完全相反。\n\n(3) 衰老细胞PD-L1的影响：\n衰老细胞理应被免疫系统（尤其NK细胞/细胞毒T细胞）识别并清除。若衰老细胞也上调PD-L1→T细胞/NK细胞的PD-1被激活→抑制免疫清除→衰老细胞在体内积累。\n\n潜在影响：\n① 衰老细胞分泌炎症因子（SASP）→慢性低度炎症→加速周围组织老化\n② 衰老细胞积累→局部微环境改变→可能促进肿瘤发生（为肿瘤前体细胞提供有利微环境）\n③ 这是机体衰老与肿瘤风险升高的潜在免疫机制之一。`}
+};
+function switchTab(tab,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));document.getElementById('page-'+tab).classList.add('active');btn.classList.add('active');}
+function toggleMQ(header){const body=header.nextElementSibling;const chevron=header.querySelector('.mq-chevron');body.classList.toggle('open');chevron.classList.toggle('open');}
+function filterMQ(topic,btn){document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.mq-card').forEach(card=>{card.style.display=(topic==='all'||card.dataset.topic===topic)?'':'none';});}
+function openDrawer(key){const q=QUESTIONS[key];if(!q)return;document.getElementById('drawer-badge').textContent=q.badge;document.getElementById('drawer-badge').style.cssText=q.badgeStyle;document.getElementById('drawer-title').textContent=q.name;document.getElementById('drawer-ref').querySelector('span').textContent=q.ref;document.getElementById('drawer-stem').textContent=q.stem;document.getElementById('drawer-focus-text').textContent=q.focus;document.getElementById('drawer-answer-text').textContent=q.answer;document.getElementById('drawer-answer').classList.remove('show');document.getElementById('drawer').classList.add('open');document.getElementById('drawer-overlay').classList.add('open');document.body.style.overflow='hidden';}
+function closeDrawer(){document.getElementById('drawer').classList.remove('open');document.getElementById('drawer-overlay').classList.remove('open');document.body.style.overflow='';}
+function toggleAnswer(){document.getElementById('drawer-answer').classList.toggle('show');}
+function openLightbox(src,alt){document.getElementById('lb-img').src=src;document.getElementById('lb-img').alt=alt;document.getElementById('lb-overlay').classList.add('open');document.body.style.overflow='hidden';}
+function closeLightbox(){document.getElementById('lb-overlay').classList.remove('open');document.body.style.overflow='';}
+const STORAGE_KEY='T04_M3_checks';const TOTAL=2;
+function loadChecks(){try{const d=JSON.parse(localStorage.getItem(STORAGE_KEY));return Array.isArray(d)?d:Array(TOTAL).fill(false);}catch{return Array(TOTAL).fill(false);}}
+function saveChecks(arr){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(arr));}catch{}}
+function updateProgress(){const items=document.querySelectorAll('.check-item');const done=Array.from(items).filter(i=>i.classList.contains('done')).length;document.getElementById('check-count').textContent=done+' / '+TOTAL;document.getElementById('check-bar').style.width=(done/TOTAL*100)+'%';}
+function toggleCheck(item,idx){item.classList.toggle('done');const arr=loadChecks();arr[idx]=item.classList.contains('done');saveChecks(arr);updateProgress();}
+function checkAll(){document.querySelectorAll('.check-item').forEach(item=>item.classList.add('done'));saveChecks(Array(TOTAL).fill(true));updateProgress();}
+function clearAll(){document.querySelectorAll('.check-item').forEach(item=>item.classList.remove('done'));saveChecks(Array(TOTAL).fill(false));updateProgress();}
+(function(){const arr=loadChecks();document.querySelectorAll('.check-item').forEach((item,i)=>{if(arr[i])item.classList.add('done');});updateProgress();})();
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(document.getElementById('lb-overlay').classList.contains('open'))closeLightbox();else if(document.getElementById('drawer').classList.contains('open'))closeDrawer();}});
+</script>
+</body>
+</html>

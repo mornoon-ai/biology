@@ -1,0 +1,321 @@
+[
+  {
+    "segment_id": "T01_M1_full",
+    "topic_id": "T01_M1",
+    "asset_id": "T01_M1_lecture_audio",
+    "title": "完整专题讲座",
+    "start_seconds": 0,
+    "end_seconds": null,
+    "tags": [
+      "完整讲座"
+    ]
+  },
+  {
+    "segment_id": "T01_M2_full",
+    "topic_id": "T01_M2",
+    "asset_id": "T01_M2_lecture_audio",
+    "title": "完整专题讲座",
+    "start_seconds": 0,
+    "end_seconds": null,
+    "tags": [
+      "完整讲座"
+    ]
+  },
+  {
+    "segment_id": "T01_M3_full",
+    "topic_id": "T01_M3",
+    "asset_id": "T01_M3_lecture_audio",
+    "title": "完整专题讲座",
+    "start_seconds": 0,
+    "end_seconds": null,
+    "tags": [
+      "完整讲座"
+    ]
+  },
+  {
+    "segment_id": "T01_M4_full",
+    "topic_id": "T01_M4",
+    "asset_id": "T01_M4_lecture_audio",
+    "title": "完整专题讲座",
+    "start_seconds": 0,
+    "end_seconds": null,
+    "tags": [
+      "完整讲座"
+    ]
+  },
+  {
+    "segment_id": "T02_M1_full",
+    "topic_id": "T02_M1",
+    "asset_id": "T02_M1_lecture_audio",
+    "title": "完整专题讲座",
+    "start_seconds": 0,
+    "end_seconds": null,
+    "tags": [
+      "完整讲座"
+    ]
+  },
+  {
+    "segment_id": "T02_M2_full",
+    "topic_id": "T02_M2",
+    "asset_id": "T02_M2_lecture_audio",
+    "title": "完整专题讲座",
+    "start_seconds": 0,
+    "end_seconds": null,
+    "tags": [
+      "完整讲座"
+    ]
+  },
+  {
+    "segment_id": "T02_M3_full",
+    "topic_id": "T02_M3",
+    "asset_id": "T02_M3_lecture_audio",
+    "title": "完整专题讲座",
+    "start_seconds": 0,
+    "end_seconds": null,
+    "tags": [
+      "完整讲座"
+    ]
+  },
+  {
+    "segment_id": "T02_M4_full",
+    "topic_id": "T02_M4",
+    "asset_id": "T02_M4_lecture_audio",
+    "title": "完整专题讲座",
+    "start_seconds": 0,
+    "end_seconds": null,
+    "tags": [
+      "完整讲座"
+    ]
+  },
+  {
+    "segment_id": "T03_M1_full",
+    "topic_id": "T03_M1",
+    "asset_id": "T03_M1_lecture_audio",
+    "title": "完整专题讲座",
+    "start_seconds": 0,
+    "end_seconds": null,
+    "tags": [
+      "完整讲座"
+    ]
+  },
+  {
+    "segment_id": "T03_M2_full",
+    "topic_id": "T03_M2",
+    "asset_id": "T03_M2_lecture_audio",
+    "title": "完整专题讲座",
+    "start_seconds": 0,
+    "end_seconds": null,
+    "tags": [
+      "完整讲座"
+    ]
+  },
+  {
+    "segment_id": "T03_M3_full",
+    "topic_id": "T03_M3",
+    "asset_id": "T03_M3_lecture_audio",
+    "title": "完整专题讲座",
+    "start_seconds": 0,
+    "end_seconds": null,
+    "tags": [
+      "完整讲座"
+    ]
+  },
+  {
+    "segment_id": "T03_M4_full",
+    "topic_id": "T03_M4",
+    "asset_id": "T03_M4_lecture_audio",
+    "title": "完整专题讲座",
+    "start_seconds": 0,
+    "end_seconds": null,
+    "tags": [
+      "完整讲座"
+    ]
+  },
+  {
+    "segment_id": "T04_M1_full",
+    "topic_id": "T04_M1",
+    "asset_id": "T04_M1_lecture_audio",
+    "title": "完整专题讲座",
+    "start_seconds": 0,
+    "end_seconds": null,
+    "tags": [
+      "完整讲座"
+    ]
+  },
+  {
+    "segment_id": "T04_M2_full",
+    "topic_id": "T04_M2",
+    "asset_id": "T04_M2_lecture_audio",
+    "title": "完整专题讲座",
+    "start_seconds": 0,
+    "end_seconds": null,
+    "tags": [
+      "完整讲座"
+    ]
+  },
+  {
+    "segment_id": "T04_M3_full",
+    "topic_id": "T04_M3",
+    "asset_id": "T04_M3_lecture_audio",
+    "title": "完整专题讲座",
+    "start_seconds": 0,
+    "end_seconds": null,
+    "tags": [
+      "完整讲座"
+    ]
+  },
+  {
+    "segment_id": "T04_M4_full",
+    "topic_id": "T04_M4",
+    "asset_id": "T04_M4_lecture_audio",
+    "title": "完整专题讲座",
+    "start_seconds": 0,
+    "end_seconds": null,
+    "tags": [
+      "完整讲座"
+    ]
+  },
+  {
+    "segment_id": "T05_M1_full",
+    "topic_id": "T05_M1",
+    "asset_id": "T05_M1_lecture_audio",
+    "title": "完整专题讲座",
+    "start_seconds": 0,
+    "end_seconds": null,
+    "tags": [
+      "完整讲座"
+    ]
+  },
+  {
+    "segment_id": "T05_M2_full",
+    "topic_id": "T05_M2",
+    "asset_id": "T05_M2_lecture_audio",
+    "title": "完整专题讲座",
+    "start_seconds": 0,
+    "end_seconds": null,
+    "tags": [
+      "完整讲座"
+    ]
+  },
+  {
+    "segment_id": "T05_M3_full",
+    "topic_id": "T05_M3",
+    "asset_id": "T05_M3_lecture_audio",
+    "title": "完整专题讲座",
+    "start_seconds": 0,
+    "end_seconds": null,
+    "tags": [
+      "完整讲座"
+    ]
+  },
+  {
+    "segment_id": "T05_M4_full",
+    "topic_id": "T05_M4",
+    "asset_id": "T05_M4_lecture_audio",
+    "title": "完整专题讲座",
+    "start_seconds": 0,
+    "end_seconds": null,
+    "tags": [
+      "完整讲座"
+    ]
+  },
+  {
+    "segment_id": "T06_M1_full",
+    "topic_id": "T06_M1",
+    "asset_id": "T06_M1_lecture_audio",
+    "title": "完整专题讲座",
+    "start_seconds": 0,
+    "end_seconds": null,
+    "tags": [
+      "完整讲座"
+    ]
+  },
+  {
+    "segment_id": "T06_M2_full",
+    "topic_id": "T06_M2",
+    "asset_id": "T06_M2_lecture_audio",
+    "title": "完整专题讲座",
+    "start_seconds": 0,
+    "end_seconds": null,
+    "tags": [
+      "完整讲座"
+    ]
+  },
+  {
+    "segment_id": "T06_M3_full",
+    "topic_id": "T06_M3",
+    "asset_id": "T06_M3_lecture_audio",
+    "title": "完整专题讲座",
+    "start_seconds": 0,
+    "end_seconds": null,
+    "tags": [
+      "完整讲座"
+    ]
+  },
+  {
+    "segment_id": "T06_M4_full",
+    "topic_id": "T06_M4",
+    "asset_id": "T06_M4_lecture_audio",
+    "title": "完整专题讲座",
+    "start_seconds": 0,
+    "end_seconds": null,
+    "tags": [
+      "完整讲座"
+    ]
+  },
+  {
+    "segment_id": "T06_M5_full",
+    "topic_id": "T06_M5",
+    "asset_id": "T06_M5_lecture_audio",
+    "title": "完整专题讲座",
+    "start_seconds": 0,
+    "end_seconds": null,
+    "tags": [
+      "完整讲座"
+    ]
+  },
+  {
+    "segment_id": "T07_M1_full",
+    "topic_id": "T07_M1",
+    "asset_id": "T07_M1_lecture_audio",
+    "title": "完整专题讲座",
+    "start_seconds": 0,
+    "end_seconds": null,
+    "tags": [
+      "完整讲座"
+    ]
+  },
+  {
+    "segment_id": "T07_M2_full",
+    "topic_id": "T07_M2",
+    "asset_id": "T07_M2_lecture_audio",
+    "title": "完整专题讲座",
+    "start_seconds": 0,
+    "end_seconds": null,
+    "tags": [
+      "完整讲座"
+    ]
+  },
+  {
+    "segment_id": "T07_M3_full",
+    "topic_id": "T07_M3",
+    "asset_id": "T07_M3_lecture_audio",
+    "title": "完整专题讲座",
+    "start_seconds": 0,
+    "end_seconds": null,
+    "tags": [
+      "完整讲座"
+    ]
+  },
+  {
+    "segment_id": "T07_M4_full",
+    "topic_id": "T07_M4",
+    "asset_id": "T07_M4_lecture_audio",
+    "title": "完整专题讲座",
+    "start_seconds": 0,
+    "end_seconds": null,
+    "tags": [
+      "完整讲座"
+    ]
+  }
+]

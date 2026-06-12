@@ -1,0 +1,321 @@
+[
+  {
+    "topic_id": "T01_M1",
+    "title": "蛋白质错误折叠与疾病",
+    "status": "ready",
+    "counts": {
+      "training_units": 4,
+      "variants": 3,
+      "coach_rules": 1
+    },
+    "issues": []
+  },
+  {
+    "topic_id": "T01_M2",
+    "title": "酶缺陷与代谢阻塞",
+    "status": "ready",
+    "counts": {
+      "training_units": 4,
+      "variants": 2,
+      "coach_rules": 1
+    },
+    "issues": []
+  },
+  {
+    "topic_id": "T01_M3",
+    "title": "表观遗传与表达调控",
+    "status": "ready",
+    "counts": {
+      "training_units": 4,
+      "variants": 1,
+      "coach_rules": 1
+    },
+    "issues": []
+  },
+  {
+    "topic_id": "T01_M4",
+    "title": "基因编辑与RNA干扰",
+    "status": "ready",
+    "counts": {
+      "training_units": 4,
+      "variants": 1,
+      "coach_rules": 1
+    },
+    "issues": []
+  },
+  {
+    "topic_id": "T02_M1",
+    "title": "细胞结构识别与功能匹配",
+    "status": "ready",
+    "counts": {
+      "training_units": 4,
+      "variants": 3,
+      "coach_rules": 1
+    },
+    "issues": []
+  },
+  {
+    "topic_id": "T02_M2",
+    "title": "内膜系统与分泌蛋白运输",
+    "status": "ready",
+    "counts": {
+      "training_units": 4,
+      "variants": 3,
+      "coach_rules": 1
+    },
+    "issues": []
+  },
+  {
+    "topic_id": "T02_M3",
+    "title": "跨膜运输方式判定",
+    "status": "ready",
+    "counts": {
+      "training_units": 4,
+      "variants": 2,
+      "coach_rules": 1
+    },
+    "issues": []
+  },
+  {
+    "topic_id": "T02_M4",
+    "title": "细胞结构变化与功能适应",
+    "status": "ready",
+    "counts": {
+      "training_units": 4,
+      "variants": 2,
+      "coach_rules": 1
+    },
+    "issues": []
+  },
+  {
+    "topic_id": "T03_M1",
+    "title": "系谱图遗传方式判定",
+    "status": "ready",
+    "counts": {
+      "training_units": 4,
+      "variants": 12,
+      "coach_rules": 1
+    },
+    "issues": []
+  },
+  {
+    "topic_id": "T03_M2",
+    "title": "后代概率精算",
+    "status": "ready",
+    "counts": {
+      "training_units": 4,
+      "variants": 6,
+      "coach_rules": 1
+    },
+    "issues": []
+  },
+  {
+    "topic_id": "T03_M3",
+    "title": "减数分裂染色体追踪",
+    "status": "ready",
+    "counts": {
+      "training_units": 4,
+      "variants": 6,
+      "coach_rules": 1
+    },
+    "issues": []
+  },
+  {
+    "topic_id": "T03_M4",
+    "title": "电泳分子证据判读",
+    "status": "ready",
+    "counts": {
+      "training_units": 4,
+      "variants": 7,
+      "coach_rules": 1
+    },
+    "issues": []
+  },
+  {
+    "topic_id": "T04_M1",
+    "title": "神经体液稳态调节",
+    "status": "ready",
+    "counts": {
+      "training_units": 4,
+      "variants": 2,
+      "coach_rules": 1
+    },
+    "issues": []
+  },
+  {
+    "topic_id": "T04_M2",
+    "title": "内分泌分级调节",
+    "status": "ready",
+    "counts": {
+      "training_units": 4,
+      "variants": 2,
+      "coach_rules": 1
+    },
+    "issues": []
+  },
+  {
+    "topic_id": "T04_M3",
+    "title": "免疫识别与应答",
+    "status": "ready",
+    "counts": {
+      "training_units": 4,
+      "variants": 1,
+      "coach_rules": 1
+    },
+    "issues": []
+  },
+  {
+    "topic_id": "T04_M4",
+    "title": "昼夜节律与褪黑素",
+    "status": "ready",
+    "counts": {
+      "training_units": 4,
+      "variants": 1,
+      "coach_rules": 1
+    },
+    "issues": []
+  },
+  {
+    "topic_id": "T05_M1",
+    "title": "光合速率与限制因子",
+    "status": "ready",
+    "counts": {
+      "training_units": 4,
+      "variants": 4,
+      "coach_rules": 1
+    },
+    "issues": []
+  },
+  {
+    "topic_id": "T05_M2",
+    "title": "气孔开闭与蒸腾调节",
+    "status": "ready",
+    "counts": {
+      "training_units": 4,
+      "variants": 3,
+      "coach_rules": 1
+    },
+    "issues": []
+  },
+  {
+    "topic_id": "T05_M3",
+    "title": "呼吸方式与产物比例",
+    "status": "ready",
+    "counts": {
+      "training_units": 4,
+      "variants": 2,
+      "coach_rules": 1
+    },
+    "issues": []
+  },
+  {
+    "topic_id": "T05_M4",
+    "title": "植物激素与生长调控",
+    "status": "ready",
+    "counts": {
+      "training_units": 4,
+      "variants": 2,
+      "coach_rules": 1
+    },
+    "issues": []
+  },
+  {
+    "topic_id": "T06_M1",
+    "title": "实验变量与对照设计",
+    "status": "ready",
+    "counts": {
+      "training_units": 4,
+      "variants": 1,
+      "coach_rules": 1
+    },
+    "issues": []
+  },
+  {
+    "topic_id": "T06_M2",
+    "title": "生物物质鉴定实验",
+    "status": "ready",
+    "counts": {
+      "training_units": 4,
+      "variants": 2,
+      "coach_rules": 1
+    },
+    "issues": []
+  },
+  {
+    "topic_id": "T06_M3",
+    "title": "数据图表分析与判读",
+    "status": "ready",
+    "counts": {
+      "training_units": 4,
+      "variants": 1,
+      "coach_rules": 1
+    },
+    "issues": []
+  },
+  {
+    "topic_id": "T06_M4",
+    "title": "PCR技术与电泳分析",
+    "status": "ready",
+    "counts": {
+      "training_units": 4,
+      "variants": 1,
+      "coach_rules": 1
+    },
+    "issues": []
+  },
+  {
+    "topic_id": "T06_M5",
+    "title": "实验结论评价",
+    "status": "ready",
+    "counts": {
+      "training_units": 4,
+      "variants": 1,
+      "coach_rules": 1
+    },
+    "issues": []
+  },
+  {
+    "topic_id": "T07_M1",
+    "title": "食物链与营养级分析",
+    "status": "ready",
+    "counts": {
+      "training_units": 4,
+      "variants": 2,
+      "coach_rules": 1
+    },
+    "issues": []
+  },
+  {
+    "topic_id": "T07_M2",
+    "title": "能量流动计算",
+    "status": "ready",
+    "counts": {
+      "training_units": 4,
+      "variants": 1,
+      "coach_rules": 1
+    },
+    "issues": []
+  },
+  {
+    "topic_id": "T07_M3",
+    "title": "物质循环与碳氮循环",
+    "status": "ready",
+    "counts": {
+      "training_units": 4,
+      "variants": 1,
+      "coach_rules": 1
+    },
+    "issues": []
+  },
+  {
+    "topic_id": "T07_M4",
+    "title": "群落演替与生态稳定性",
+    "status": "ready",
+    "counts": {
+      "training_units": 4,
+      "variants": 1,
+      "coach_rules": 1
+    },
+    "issues": []
+  }
+]

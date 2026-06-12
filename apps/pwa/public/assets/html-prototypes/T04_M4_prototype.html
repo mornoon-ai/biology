@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T04_M4 · 昼夜节律与褪黑素</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent:#993C1D; --accent-l:#FAECE7; --accent-m:#E09080; --accent-d:#712B13;
+  --teal:#0F6E56; --teal-l:#E1F5EE; --teal-d:#085041;
+  --amber:#BA7517; --amber-l:#FAEEDA; --amber-d:#633806;
+  --blue:#185FA5; --blue-l:#E6F1FB; --blue-d:#0C447C;
+  --purple:#534AB7; --purple-l:#EEEDFE; --purple-d:#3C3489;
+  --bg:#ffffff; --bg2:#f7f7f5; --bg3:#f1efe8;
+  --tx:#1a1a18; --tx2:#5f5e5a; --tx3:#888780;
+  --bd:rgba(0,0,0,0.10); --bd2:rgba(0,0,0,0.18);
+  --r-sm:6px; --r-md:8px; --r-lg:12px; --r-xl:16px;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#1c1c1a;--bg2:#252523;--bg3:#2c2c2a;
+    --tx:#f0efea;--tx2:#b4b2a9;--tx3:#888780;
+    --bd:rgba(255,255,255,0.09);--bd2:rgba(255,255,255,0.16);
+    --accent-l:#4A1B0C;--accent-d:#F5C4B3;
+    --teal-l:#04342C;--teal-d:#9FE1CB;
+    --amber-l:#412402;--amber-d:#FAC775;
+    --blue-l:#042C53;--blue-d:#B5D4F4;
+    --purple-l:#26215C;--purple-d:#CECBF6;
+  }
+}
+body{font-family:var(--font);font-size:15px;line-height:1.6;color:var(--tx);background:var(--bg3);min-height:100vh;}
+.app{max-width:800px;margin:0 auto;background:var(--bg);min-height:100vh;}
+
+/* ── Header & Nav ── */
+.site-header{padding:1.25rem 1.5rem 0;background:var(--bg);border-bottom:0.5px solid var(--bd);position:sticky;top:0;z-index:20;}
+.header-top{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.header-icon{background:var(--accent-l);border-radius:var(--r-md);padding:6px 8px;display:flex;align-items:center;justify-content:center;}
+.header-icon i{font-size:20px;color:var(--accent);}
+.header-meta{font-size:12px;color:var(--tx3);}
+.header-title{font-size:17px;font-weight:500;color:var(--tx);}
+.header-id{margin-left:auto;font-size:11px;color:var(--tx3);background:var(--bg2);padding:3px 9px;border-radius:var(--r-sm);}
+.nav-tabs{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.nav-tab{padding:.6rem 1.1rem;font-size:13px;color:var(--tx2);cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;font-family:var(--font);white-space:nowrap;transition:color .15s,border-color .15s;}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500;}
+.nav-tab:hover:not(.active){color:var(--tx);}
+
+/* ── Pages ── */
+.page{display:none;padding:1.5rem;}
+.page.active{display:block;}
+
+/* ── Memory Card ── */
+.memory-section{margin-bottom:1.5rem;}
+.memory-card{border:0.5px solid var(--bd);border-radius:var(--r-xl);overflow:hidden;background:var(--bg);}
+.memory-img{width:100%;display:block;max-height:300px;object-fit:contain;background:var(--bg3);cursor:zoom-in;transition:opacity .15s;}
+.memory-img:hover{opacity:.9;}
+.memory-footer{padding:.85rem 1rem;display:flex;align-items:center;gap:10px;border-top:0.5px solid var(--bd);}
+.memory-label{font-size:13px;font-weight:500;color:var(--tx);flex:1;}
+audio{height:32px;width:220px;}
+audio::-webkit-media-controls-panel{background:var(--bg2);}
+/* ── Lightbox ── */
+.lb-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:200;display:none;align-items:center;justify-content:center;cursor:zoom-out;}
+.lb-overlay.open{display:flex;}
+.lb-img{max-width:92vw;max-height:92vh;object-fit:contain;border-radius:var(--r-md);box-shadow:0 8px 40px rgba(0,0,0,.5);}
+.lb-close{position:fixed;top:16px;right:20px;background:none;border:none;color:#fff;font-size:28px;cursor:pointer;line-height:1;opacity:.7;transition:opacity .15s;}
+.lb-close:hover{opacity:1;}
+
+/* ── Overview cards ── */
+.section-title{font-size:13px;font-weight:500;color:var(--tx2);display:flex;align-items:center;gap:7px;margin-bottom:1rem;text-transform:uppercase;letter-spacing:.04em;}
+.section-divider{height:0.5px;background:var(--bd);margin:1.5rem 0;}
+.signal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:1.5rem;}
+.signal-card{background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;}
+.signal-label{font-size:11px;color:var(--tx3);letter-spacing:.04em;margin-bottom:.4rem;text-transform:uppercase;}
+.signal-tag{font-size:13px;color:var(--tx);margin-bottom:3px;}
+.mode-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:1.5rem;}
+.mode-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.85rem 1rem;border-left-width:3px;}
+.mode-card-label{font-size:11px;font-weight:500;margin-bottom:.3rem;}
+.mode-card-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.trap-list{display:flex;flex-direction:column;gap:7px;}
+.trap-item{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.55;}
+.trap-icon{color:#E24B4A;font-size:15px;flex-shrink:0;margin-top:1px;}
+
+/* ── Mother Questions ── */
+.filter-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem;}
+.filter-btn{padding:5px 13px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx2);font-family:var(--font);transition:all .15s;}
+.filter-btn.active{background:var(--accent-l);color:var(--accent-d);border-color:var(--accent-m);font-weight:500;}
+.mq-card{border:0.5px solid var(--bd);border-radius:var(--r-lg);background:var(--bg);margin-bottom:.85rem;overflow:hidden;}
+.mq-header{padding:.9rem 1.1rem;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;transition:background .15s;}
+.mq-header:hover{background:var(--bg2);}
+.mq-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);white-space:nowrap;}
+.mq-badge.scn{background:var(--accent-l);color:var(--accent-d);}
+.mq-badge.melatonin{background:var(--purple-l);color:var(--purple-d);}
+.mq-badge.photoperiod{background:var(--amber-l);color:var(--amber-d);}
+.mq-badge.circadian{background:var(--blue-l);color:var(--blue-d);}
+.mq-name{font-size:14px;font-weight:500;color:var(--tx);flex:1;}
+.mq-purity{font-size:12px;color:var(--tx3);flex-shrink:0;}
+.mq-chevron{color:var(--tx3);font-size:16px;transition:transform .2s;flex-shrink:0;}
+.mq-chevron.open{transform:rotate(180deg);}
+.mq-body{display:none;padding:.75rem 1.1rem 1.1rem;border-top:0.5px solid var(--bd);}
+.mq-body.open{display:block;}
+.mq-source{font-size:12px;color:var(--tx3);margin-bottom:.65rem;}
+.rule-box{background:var(--accent-l);border-left:3px solid var(--accent);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:.65rem .9rem;font-size:13px;color:var(--accent-d);margin:.75rem 0;line-height:1.65;}
+.chain-label{font-size:12px;font-weight:500;color:var(--tx2);margin:.75rem 0 .4rem;text-transform:uppercase;letter-spacing:.04em;}
+.signal-chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:6px;}
+.sc-node{background:var(--bg2);border-radius:var(--r-sm);padding:3px 9px;font-size:13px;color:var(--tx);}
+.sc-node.scn{background:var(--accent-l);color:var(--accent-d);}
+.sc-node.melatonin{background:var(--purple-l);color:var(--purple-d);}
+.sc-node.photoperiod{background:var(--amber-l);color:var(--amber-d);}
+.sc-node.circadian{background:var(--blue-l);color:var(--blue-d);}
+.sc-arrow{color:var(--tx3);font-size:13px;}
+.mq-note{font-size:13px;color:var(--tx2);margin-top:.75rem;line-height:1.6;}
+
+/* ── Question Trigger Button ── */
+.q-trigger{display:inline-flex;align-items:center;gap:5px;margin-top:.75rem;padding:6px 12px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;color:var(--tx2);cursor:pointer;font-family:var(--font);transition:all .15s;}
+.q-trigger:hover{background:var(--bg2);color:var(--tx);}
+.q-trigger i{font-size:14px;}
+
+/* ── Ladder ── */
+.ladder-section-label{font-size:13px;font-weight:500;color:var(--tx2);margin-bottom:.85rem;display:flex;align-items:center;gap:7px;}
+.ladder-rows{display:flex;flex-direction:column;gap:8px;margin-bottom:1rem;}
+.ladder-row{display:grid;grid-template-columns:64px 1fr;gap:10px;align-items:start;}
+.ladder-level{font-size:11px;font-weight:500;padding:6px 4px;border-radius:var(--r-sm);text-align:center;line-height:1.4;}
+.l1{background:var(--teal-l);color:var(--teal-d);}
+.l2{background:var(--accent-l);color:var(--accent-d);}
+.l3{background:var(--amber-l);color:var(--amber-d);}
+.ladder-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.65rem .9rem;background:var(--bg);}
+.ladder-card-name{font-size:13px;font-weight:500;color:var(--tx);}
+.ladder-card-sub{font-size:12px;color:var(--tx3);margin-top:3px;line-height:1.5;}
+.ladder-note{background:var(--bg2);border-radius:var(--r-md);padding:.65rem .9rem;font-size:12px;color:var(--tx2);margin-bottom:1rem;line-height:1.55;}
+
+/* ── Self-check ── */
+.progress-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem;}
+.progress-bar{height:5px;border-radius:3px;background:var(--bg2);margin-bottom:1.25rem;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;background:var(--accent);width:0%;transition:width .3s;}
+.checklist{display:flex;flex-direction:column;gap:7px;}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:.7rem .9rem;border:0.5px solid var(--bd);border-radius:var(--r-md);background:var(--bg);cursor:pointer;transition:background .15s;}
+.check-item.done{background:var(--bg2);}
+.check-box{width:18px;height:18px;border:1.5px solid var(--bd2);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .15s;}
+.check-item.done .check-box{background:var(--accent);border-color:var(--accent);}
+.check-box i{font-size:11px;color:#fff;display:none;}
+.check-item.done .check-box i{display:block;}
+.check-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.check-item.done .check-text{color:var(--tx3);text-decoration:line-through;}
+.action-row{margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:8px;}
+.action-btn{padding:7px 14px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.action-btn:hover{background:var(--bg2);}
+
+/* ══ DRAWER OVERLAY ══ */
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s;}
+.drawer-overlay.open{opacity:1;pointer-events:all;}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100vw);background:var(--bg);z-index:101;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden;}
+.drawer.open{transform:translateX(0);}
+.drawer-header{padding:1rem 1.25rem;border-bottom:0.5px solid var(--bd);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.drawer-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);}
+.drawer-title{font-size:14px;font-weight:500;color:var(--tx);flex:1;line-height:1.4;}
+.drawer-close{background:none;border:none;cursor:pointer;color:var(--tx2);padding:4px;border-radius:var(--r-sm);display:flex;align-items:center;transition:background .15s;}
+.drawer-close:hover{background:var(--bg2);}
+.drawer-body{flex:1;overflow-y:auto;padding:1.25rem;}
+.drawer-ec-ref{font-size:12px;color:var(--tx3);margin-bottom:1rem;display:flex;align-items:center;gap:6px;}
+.drawer-stem{font-size:14px;color:var(--tx);line-height:1.75;white-space:pre-wrap;}
+.drawer-sub{font-size:13px;color:var(--tx2);background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:1rem;line-height:1.65;}
+.drawer-sub-label{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-answer{font-size:13px;color:var(--tx);background:var(--accent-l);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:.75rem;line-height:1.65;display:none;}
+.drawer-answer.show{display:block;}
+.drawer-answer-label{font-size:11px;font-weight:500;color:var(--accent-d);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-footer{padding:.85rem 1.25rem;border-top:0.5px solid var(--bd);display:flex;gap:8px;flex-shrink:0;}
+.drawer-btn{flex:1;padding:8px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.drawer-btn:hover{background:var(--bg2);}
+.drawer-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+.drawer-btn.primary:hover{background:var(--accent-d);}
+
+/* ── Mobile ── */
+@media(max-width:600px){
+  .site-header{padding:1rem 1rem 0;}
+  .page{padding:1rem;}
+  .header-title{font-size:15px;}
+  .mode-grid{grid-template-columns:1fr 1fr;}
+  .ladder-row{grid-template-columns:52px 1fr;gap:8px;}
+  .action-row{flex-direction:column;}
+  .action-btn{width:100%;text-align:center;}
+  .drawer{width:100vw;}
+  audio{width:160px;}
+}
+@media(max-width:380px){
+  .mode-grid,.signal-grid{grid-template-columns:1fr;}
+}
+
+.back-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;font-size:12px;color:var(--tx2);background:var(--bg2);border:0.5px solid var(--bd2);border-radius:var(--r-md);text-decoration:none;font-family:var(--font);transition:background .15s,color .15s;white-space:nowrap;flex-shrink:0;}
+.back-btn:hover{background:var(--bg3);color:var(--tx);}
+.back-btn i{font-size:14px;}
+.memory-video{width:100%;max-height:220px;display:block;border-radius:var(--r-md);background:#000;margin-top:8px;}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- Header -->
+<header class="site-header">
+  <div class="header-top">
+    <div class="header-icon"><i class="ti ti-moon" aria-hidden="true"></i></div>
+    <div>
+      <div class="header-meta">04 生理调节 · M4 昼夜节律</div>
+      <div class="header-title">昼夜节律与褪黑素</div>
+    </div>
+    <a class="back-btn" href="index.html" aria-label="返回首页"><i class="ti ti-arrow-left"></i> 首页</a>
+    <div class="header-id">T04_M4</div>
+  </div>
+  <nav class="nav-tabs" role="tablist">
+    <button class="nav-tab active" role="tab" onclick="switchTab('overview',this)">概览</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('mothers',this)">母题精讲</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('ladder',this)">变式阶梯</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('self',this)">自查清单</button>
+  </nav>
+</header>
+
+<!-- ══ TAB: OVERVIEW ══ -->
+<div id="tab-overview" class="page active" role="tabpanel">
+
+  <!-- Memory Card -->
+  <div class="memory-section">
+    <div class="memory-card">
+      <img class="memory-img" src="记忆卡/T04_M4_memory.png" alt="昼夜节律与褪黑素 · 光信号通路记忆卡" onclick="openLightbox(this.src,this.alt)" onerror="this.style.display='none'">
+      <div class="memory-footer">
+        <div>
+          <div class="memory-label">记忆卡 · 光—SCN—松果体—褪黑素通路</div>
+          <div style="font-size:12px;color:var(--tx3);">点击图片可放大</div>
+        </div>
+        <div>
+          <video class="memory-video" controls controlsList="nodownload" preload="metadata" style="display:none">
+          <source src="audio/T04_M4.mp4" type="video/mp4">
+        </video>
+          <div class="audio-placeholder" style="display:flex"><i class="ti ti-video-off"></i>视频待放入</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title"><i class="ti ti-scan" aria-hidden="true"></i> 触发信号速查</div>
+  <div class="signal-grid">
+    <div class="signal-card">
+      <div class="signal-label">图像信号</div>
+      <div class="signal-tag">24 h 褪黑素分泌曲线</div>
+      <div class="signal-tag">光照强度与分泌量关系图</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">文字信号</div>
+      <div class="signal-tag">松果体 / 褪黑素</div>
+      <div class="signal-tag">视交叉上核（SCN）</div>
+      <div class="signal-tag">昼夜节律 / 时差 / 倒班</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">任务关键词</div>
+      <div class="signal-tag">分析褪黑素分泌规律</div>
+      <div class="signal-tag">设计遮光实验</div>
+      <div class="signal-tag">神经—体液协调判断</div>
+    </div>
+  </div>
+
+  <div class="section-title"><i class="ti ti-arrow-fork" aria-hidden="true"></i> 核心调节通路 · 四个节点</div>
+  <div class="mode-grid">
+    <div class="mode-card" style="border-left-color:var(--amber);">
+      <div class="mode-card-label" style="color:var(--amber-d);">光信号输入</div>
+      <div class="mode-card-text">视网膜感光细胞接收光照，经视神经传入下丘脑视交叉上核（SCN）</div>
+    </div>
+    <div class="mode-card" style="border-left-color:var(--accent);">
+      <div class="mode-card-label" style="color:var(--accent-d);">SCN 节律起搏</div>
+      <div class="mode-card-text">SCN 是生物钟核心，整合光信号，通过交感神经调控松果体；光照→SCN 抑制松果体</div>
+    </div>
+    <div class="mode-card" style="border-left-color:var(--purple);">
+      <div class="mode-card-label" style="color:var(--purple-d);">松果体分泌褪黑素</div>
+      <div class="mode-card-text">黑暗中褪黑素分泌↑（夜间峰值），光照时抑制分泌；褪黑素是化学信使（激素）</div>
+    </div>
+    <div class="mode-card" style="border-left-color:var(--blue);">
+      <div class="mode-card-label" style="color:var(--blue-d);">靶器官效应</div>
+      <div class="mode-card-text">褪黑素通过血液作用于全身，促进睡眠、调节生殖周期、参与免疫调节</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-alert-triangle" aria-hidden="true"></i> 高频陷阱（5 个）</div>
+  <div class="trap-list">
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon" aria-hidden="true"></i><div>褪黑素分泌受<strong>神经调节</strong>（交感神经抑制松果体），本身作为激素发挥<strong>体液调节</strong>——双重属性，不能只选其一</div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon" aria-hidden="true"></i><div>光照→褪黑素<strong>减少</strong>（光抑制分泌），黑暗→褪黑素<strong>增加</strong>——方向不能颠倒</div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon" aria-hidden="true"></i><div>SCN 是神经结构（下丘脑核团），松果体是内分泌腺——两者功能不能互换</div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon" aria-hidden="true"></i><div>遮光实验设计：需同时设<strong>不遮光对照组</strong>，否则无法排除非光因素；遮光材料要确保完全不透光</div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon" aria-hidden="true"></i><div>时差 / 倒班引起节律紊乱——原因是光照时间改变，<strong>SCN 重新同步需时间</strong>，非褪黑素直接减少</div></div>
+  </div>
+</div>
+
+<!-- ══ TAB: MOTHER QUESTIONS ══ -->
+<div id="tab-mothers" class="page" role="tabpanel">
+  <div class="filter-tabs" role="group">
+    <button class="filter-btn active" onclick="filterMode('all',this)">全部（4 类）</button>
+    <button class="filter-btn" onclick="filterMode('scn',this)">SCN 与通路</button>
+    <button class="filter-btn" onclick="filterMode('melatonin',this)">褪黑素分泌规律</button>
+    <button class="filter-btn" onclick="filterMode('photoperiod',this)">光周期 / 季节</button>
+    <button class="filter-btn" onclick="filterMode('circadian',this)">节律紊乱 / 实验设计</button>
+  </div>
+
+  <!-- MQ1 -->
+  <div class="mq-card" data-mode="melatonin">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge melatonin">褪黑素分泌规律</span>
+      <span class="mq-name">24 h 褪黑素分泌曲线解读</span>
+      <span class="mq-purity">9/10</span>
+      <i class="ti ti-chevron-down mq-chevron" aria-hidden="true"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-230 · 子问题 (1)(2)</div>
+      <div class="rule-box">核心信号：曲线显示褪黑素在夜间（约 23:00—凌晨 3:00）出现峰值，白天维持低水平。题目要求解读"峰值时间点""光照对分泌的抑制""遮光后曲线变化"三个层次。是本模型的标准入门母题。</div>
+      <div class="chain-label">推理信号链</div>
+      <div class="signal-chain">
+        <span class="sc-node">夜间无光照</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node">SCN 对松果体抑制解除</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node melatonin">褪黑素↑（夜间峰值）✓</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node">白天光照</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node">SCN 激活，交感神经抑制松果体</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node">褪黑素↓（白天低水平）</span>
+      </div>
+      <p class="mq-note">选题理由：曲线读图 + 光照因果推理双考点，纯净度高，无需额外背景知识。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec230')">
+        <i class="ti ti-file-text" aria-hidden="true"></i> 查看完整题干
+      </button>
+    </div>
+  </div>
+
+  <!-- MQ2 -->
+  <div class="mq-card" data-mode="scn">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge scn">SCN 与通路</span>
+      <span class="mq-name">视交叉上核损毁实验——节律消失机制</span>
+      <span class="mq-purity">10/10</span>
+      <i class="ti ti-chevron-down mq-chevron" aria-hidden="true"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-235 · 子问题 (2)(3)</div>
+      <div class="rule-box">核心信号：损毁 SCN 后，动物昼夜节律消失（活动时间变得随机），褪黑素分泌失去昼夜节律性——证明 SCN 是昼夜节律的"起搏器"。是因果推理型母题，信号链极清晰。</div>
+      <div class="chain-label">推理信号链</div>
+      <div class="signal-chain">
+        <span class="sc-node">损毁 SCN</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node">节律起搏器消失</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node">无法整合光信号</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node">SCN 信号消失</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node">松果体调控紊乱</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node scn">褪黑素节律消失 ✓</span>
+      </div>
+      <p class="mq-note">⚠️ 关键区分：损毁 SCN ≠ 损毁松果体。SCN 损毁后，松果体本身完好，但失去指令；松果体损毁后，褪黑素直接消失，两者表现不同。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec235')">
+        <i class="ti ti-file-text" aria-hidden="true"></i> 查看完整题干
+      </button>
+    </div>
+  </div>
+
+  <!-- MQ3 -->
+  <div class="mq-card" data-mode="photoperiod">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge photoperiod">光周期 / 季节</span>
+      <span class="mq-name">冬季日照短、夜长 → 褪黑素分泌增多 → 生殖抑制</span>
+      <span class="mq-purity">9/10</span>
+      <i class="ti ti-chevron-down mq-chevron" aria-hidden="true"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-241 · 子问题 (1)(3)</div>
+      <div class="rule-box">核心信号：冬季夜长（暗期长）→ 褪黑素分泌时间增长 → 褪黑素总量↑ → 抑制促性腺激素释放 → 生殖器官发育受抑。是光周期—褪黑素—繁殖季节调控的经典模型。</div>
+      <div class="chain-label">季节性繁殖调控链</div>
+      <div class="signal-chain">
+        <span class="sc-node">冬季夜长</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node">暗期延长</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node photoperiod">褪黑素分泌↑（持续时间长）✓</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node">褪黑素↑</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node">抑制促性腺激素释放激素</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node">性腺发育受抑（非繁殖季）</span>
+      </div>
+      <p class="mq-note">生态意义：季节性繁殖动物（如绵羊）通过褪黑素感知季节，在食物丰富的春夏季生育后代，提升存活率。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec241')">
+        <i class="ti ti-file-text" aria-hidden="true"></i> 查看完整题干
+      </button>
+    </div>
+  </div>
+
+  <!-- MQ4 -->
+  <div class="mq-card" data-mode="circadian">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge circadian">节律紊乱 / 实验设计</span>
+      <span class="mq-name">模拟时差实验设计与对照组设置</span>
+      <span class="mq-purity">10/10</span>
+      <i class="ti ti-chevron-down mq-chevron" aria-hidden="true"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-238 · 子问题 (3)(4)</div>
+      <div class="rule-box">核心信号：实验设计题——将小鼠的光暗周期突然前移 6 h（模拟跨时区飞行），观察节律重同步（re-entrainment）所需时间及褪黑素分泌峰值时间的偏移。需设置"正常光暗周期组"和"持续黑暗组"两个对照。</div>
+      <div class="chain-label">实验设计要点</div>
+      <div class="signal-chain">
+        <span class="sc-node">实验组：光暗前移 6 h</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node">SCN 逐渐重新同步</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node circadian">褪黑素峰值逐日前移 ✓</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node">对照 1：正常光暗</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node">峰值时间不变（基线）</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node">对照 2：持续黑暗</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node">自主节律（约 24.x h）</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node">排除内源节律干扰</span>
+      </div>
+      <p class="mq-note">实验设计三要素：单一变量（光暗时相）、对照组（正常 + 黑暗两种）、可测量指标（褪黑素峰值时间 / 活动量）。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec238')">
+        <i class="ti ti-file-text" aria-hidden="true"></i> 查看完整题干
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TAB: LADDER ══ -->
+<div id="tab-ladder" class="page" role="tabpanel">
+  <div class="ladder-note">按 L1 基础 → L2 进阶 → L3 综合三级递进。每级掌握后再进入下一级。点击卡片可查看完整题干。</div>
+
+  <div class="ladder-section-label"><span class="ladder-level l1" style="width:auto;padding:3px 8px;">L1 基础</span> 光照与褪黑素分泌方向的直接判断</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1-1<br>曲线读图</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec230-1')" style="cursor:pointer;">
+        <div class="ladder-card-name">从 24 h 分泌曲线读出峰值时间与光照关系</div>
+        <div class="ladder-card-sub">EC-230 (1) · 定位夜间峰值，判断白天低水平的原因 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1-2<br>遮光变化</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec230-3')" style="cursor:pointer;">
+        <div class="ladder-card-name">持续遮光后褪黑素曲线如何变化</div>
+        <div class="ladder-card-sub">EC-230 (3) · 持续遮光 → 昼夜差异减小，趋于持续高水平 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1-3<br>神经体液</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec230-4')" style="cursor:pointer;">
+        <div class="ladder-card-name">判断褪黑素调节类型（神经 / 体液 / 神经—体液）</div>
+        <div class="ladder-card-sub">EC-230 (4) · 分泌受神经调控，作用以体液传递——双重判断 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="ladder-section-label"><span class="ladder-level l2" style="width:auto;padding:3px 8px;">L2 进阶</span> 实验操作（SCN 损毁 / 光周期改变）+ 季节效应</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2-1<br>损毁实验</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec235-23')" style="cursor:pointer;">
+        <div class="ladder-card-name">损毁 SCN vs 损毁松果体：节律表现对比</div>
+        <div class="ladder-card-sub">EC-235 (2)+(3) · 两种损毁的不同后果，深化 SCN "上级调控"的理解 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2-2<br>光周期</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec241-13')" style="cursor:pointer;">
+        <div class="ladder-card-name">缩短光照 → 褪黑素↑ → 季节性生殖抑制机制</div>
+        <div class="ladder-card-sub">EC-241 (1)+(3) · 光周期—褪黑素—促性腺轴完整推理链 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2-3<br>时差模型</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec238-34')" style="cursor:pointer;">
+        <div class="ladder-card-name">时差模拟实验的对照设计与预期结果</div>
+        <div class="ladder-card-sub">EC-238 (3)+(4) · 对照组类型选择 + 褪黑素峰值偏移的预期描述 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="ladder-section-label"><span class="ladder-level l3" style="width:auto;padding:3px 8px;">L3 综合</span> 多系统联动 + 褪黑素与内分泌轴交叉</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l3">L3-1</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec245-135')" style="cursor:pointer;">
+        <div class="ladder-card-name">夜间光污染 → 褪黑素↓ → 睡眠障碍 + 免疫功能下降</div>
+        <div class="ladder-card-sub">EC-245 (1)+(3)+(5) · 光污染的多靶点效应，褪黑素—免疫—睡眠三系统联动 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l3">L3-2</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec250-24')" style="cursor:pointer;">
+        <div class="ladder-card-name">褪黑素与促性腺轴 + 甲状腺轴的交叉调控（冬眠动物模型）</div>
+        <div class="ladder-card-sub">EC-250 (2)+(4) · 冬季褪黑素↑同时抑制促性腺轴和甲状腺轴，多轴联动综合分析 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TAB: SELF-CHECK ══ -->
+<div id="tab-self" class="page" role="tabpanel">
+  <div class="progress-row">
+    <span style="font-size:13px;color:var(--tx2);">学习自查清单</span>
+    <span style="font-size:13px;color:var(--tx2);" id="progress-text">0 / 7 完成</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="pbar"></div></div>
+  <div class="checklist" id="checklist">
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能描述光—SCN—松果体—褪黑素的完整通路（4 个节点，方向正确）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能判断褪黑素分泌的调节类型：分泌受神经调节，作用通过体液（激素）传递</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能从 24 h 曲线读出峰值时间，并解释光照期低水平的原因</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能区分损毁 SCN 和损毁松果体的不同后果</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能推导"冬季夜长→褪黑素↑→抑制促性腺激素→生殖受抑"的季节调控链</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">完成 L1 全部 3 道基础变式（曲线读图、遮光变化、调节类型判断）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能设计一个检验"光照对褪黑素分泌影响"的实验，包括对照组和可测量指标</div>
+    </div>
+  </div>
+  <div class="action-row">
+    <button class="action-btn" onclick="window.scrollTo(0,0);switchTab('mothers',document.querySelectorAll('.nav-tab')[1])">返回母题精讲 →</button>
+    <button class="action-btn" onclick="window.scrollTo(0,0);switchTab('ladder',document.querySelectorAll('.nav-tab')[2])">进入变式阶梯 →</button>
+  </div>
+</div>
+
+</div><!-- .app -->
+
+<!-- ══ LIGHTBOX ══ -->
+<div class="lb-overlay" id="lb-overlay" onclick="closeLightbox()">
+  <button class="lb-close" onclick="closeLightbox()" aria-label="关闭">×</button>
+  <img class="lb-img" id="lb-img" src="" alt="">
+</div>
+
+<!-- ══ DRAWER ══ -->
+<div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
+  <div class="drawer-header">
+    <span class="drawer-badge" id="drawer-badge"></span>
+    <span class="drawer-title" id="drawer-title"></span>
+    <button class="drawer-close" onclick="closeDrawer()" aria-label="关闭题干面板">
+      <i class="ti ti-x" style="font-size:18px;" aria-hidden="true"></i>
+    </button>
+  </div>
+  <div class="drawer-body">
+    <div class="drawer-ec-ref" id="drawer-ref"></div>
+    <div class="drawer-stem" id="drawer-stem"></div>
+    <div class="drawer-sub" id="drawer-sub" style="display:none;">
+      <div class="drawer-sub-label">本题考查重点</div>
+      <div id="drawer-sub-text"></div>
+    </div>
+    <div class="drawer-answer" id="drawer-answer">
+      <div class="drawer-answer-label">参考答案</div>
+      <div id="drawer-answer-text"></div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="drawer-btn" id="drawer-ans-btn" onclick="toggleAnswer()">显示答案</button>
+    <button class="drawer-btn primary" onclick="closeDrawer()">完成阅读</button>
+  </div>
+</div>
+
+<script>
+/* ── Tab navigation ── */
+function switchTab(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+function toggleMQ(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.mq-chevron');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chevron.classList.toggle('open', !isOpen);
+}
+function filterMode(mode, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.mq-card').forEach(card => {
+    card.style.display = (mode === 'all' || card.dataset.mode === mode) ? '' : 'none';
+  });
+}
+
+/* ── Checklist ── */
+function toggleCheck(item) {
+  item.classList.toggle('done');
+  updateProgress();
+  saveChecklist();
+}
+function updateProgress() {
+  const total = document.querySelectorAll('.check-item').length;
+  const done = document.querySelectorAll('.check-item.done').length;
+  document.getElementById('pbar').style.width = (done / total * 100) + '%';
+  document.getElementById('progress-text').textContent = done + ' / ' + total + ' 完成';
+}
+function saveChecklist() {
+  try {
+    const states = Array.from(document.querySelectorAll('.check-item')).map(el => el.classList.contains('done'));
+    localStorage.setItem('T04_M4_checklist', JSON.stringify(states));
+  } catch(e) {}
+}
+(function() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('T04_M4_checklist') || '[]');
+    document.querySelectorAll('.check-item').forEach((item, i) => { if (saved[i]) item.classList.add('done'); });
+    updateProgress();
+  } catch(e) {}
+})();
+
+/* ══ QUESTION DATA ══ */
+const QUESTIONS = {
+  'mq-ec230': {
+    badge: '褪黑素分泌规律 · 母题', badgeClass: 'melatonin',
+    title: '24 h 褪黑素分泌曲线解读',
+    ref: 'EC-20260523-230 · 子问题 (1)(2)',
+    stem: `图示为健康成年人 24 小时内血液中褪黑素浓度的变化曲线。褪黑素由松果体分泌，其分泌受光照影响。
+
+(1) 根据曲线，褪黑素分泌的峰值出现在___时左右，此时处于___（白天/夜晚）。
+
+(2) 白天褪黑素浓度较低的原因是：光照信号通过___传入___（脑区），该脑区通过交感神经___（促进/抑制）松果体分泌褪黑素。`,
+    focus: '读图要点：峰值约 23:00—凌晨 2:00（夜间），白天低水平。\n机制推导：光照→视网膜感光→经视神经传入下丘脑 SCN→SCN 通过交感神经抑制松果体→褪黑素分泌减少（白天低）。\n夜间无光→SCN 对松果体抑制解除→褪黑素升高（夜间峰值）。',
+    answer: '(1) 峰值约 23:00—凌晨 2:00，此时处于夜晚。\n(2) 光照信号通过视神经传入下丘脑视交叉上核（SCN），SCN 通过交感神经抑制松果体分泌褪黑素，导致白天褪黑素浓度较低。'
+  },
+  'mq-ec235': {
+    badge: 'SCN 与通路 · 母题', badgeClass: 'scn',
+    title: '视交叉上核损毁实验——节律消失机制',
+    ref: 'EC-20260523-235 · 子问题 (2)(3)',
+    stem: `研究人员对小鼠进行视交叉上核（SCN）损毁实验，观察昼夜节律变化。
+
+(2) 损毁 SCN 后，小鼠的活动节律（自发活动量随时间的分布）发生了什么变化？请预测实验结果。
+
+(3) 同时测定损毁 SCN 前后血液中褪黑素浓度的昼夜变化，预测损毁后褪黑素浓度曲线的变化，并说明原因。`,
+    focus: '损毁 SCN 的后果：①活动节律：失去昼夜节律，活动时间变随机（不再集中于某一时段）。②褪黑素：失去昼夜节律性分泌，不再呈现明显的夜间峰值，趋于全天随机波动或接近某固定水平。原因：SCN 是节律起搏器，损毁后松果体失去节律性调控信号，分泌失去节律。',
+    answer: '(2) 预测结果：损毁 SCN 后，小鼠自发活动不再集中于特定时间段，昼夜节律消失，活动时间在 24 h 内随机分布（无明显昼夜差异）。\n(3) 褪黑素曲线：损毁后不再出现明显的夜间峰值，褪黑素浓度在 24 h 内趋于平稳（无明显昼夜节律性变化）。\n原因：SCN 是昼夜节律的"起搏器"，负责整合光信号并通过交感神经调控松果体；损毁 SCN 后，松果体失去节律性调控指令，褪黑素分泌失去昼夜节律性。'
+  },
+  'mq-ec241': {
+    badge: '光周期/季节 · 母题', badgeClass: 'photoperiod',
+    title: '冬季日照短 → 褪黑素增多 → 生殖受抑',
+    ref: 'EC-20260523-241 · 子问题 (1)(3)',
+    stem: `绵羊是一种季节性繁殖动物，通常在秋冬季（光照减少、夜晚变长）进入繁殖期。研究发现，褪黑素在其中扮演关键角色。
+
+(1) 与夏季相比，冬季绵羊血液中褪黑素的日分泌总量___（增多/减少），原因是___。
+
+(3) 若给绵羊持续注射外源褪黑素（不随光照变化），其繁殖周期会发生什么变化？请预测并解释。`,
+    focus: '(1) 冬季夜长（暗期长）→ 松果体无光照抑制时间长 → 褪黑素分泌时间更长 → 日总量增多。\n(3) 持续注射外源褪黑素 → 模拟"持续夜间"状态 → 繁殖轴持续受抑（或持续激活，取决于物种）→ 失去季节性周期变化，繁殖周期紊乱。对于绵羊：褪黑素↑本来是促繁殖信号，持续高水平可能先激活后产生耐受/脱敏，最终失去季节性节律。',
+    answer: '(1) 增多。原因：冬季夜晚（暗期）更长，无光照时间更长，松果体受交感神经抑制的时间更短，褪黑素分泌时间延长，日分泌总量增多。\n(3) 预测：繁殖周期节律消失（季节性丧失）。解释：外源褪黑素持续恒定，机体无法通过褪黑素浓度的昼夜/季节变化感知光周期信号，促性腺轴失去季节性调控，繁殖行为不再随季节变化而出现周期性高峰。'
+  },
+  'mq-ec238': {
+    badge: '节律紊乱/实验设计 · 母题', badgeClass: 'circadian',
+    title: '模拟时差实验设计与对照组设置',
+    ref: 'EC-20260523-238 · 子问题 (3)(4)',
+    stem: `为研究时差对昼夜节律的影响，研究人员设计了小鼠光暗周期前移实验（模拟向东跨时区飞行）。
+
+(3) 实验设计：将小鼠的光暗周期突然前移 6 h（即原来 8:00 开灯改为 2:00 开灯），观察小鼠褪黑素分泌峰值时间的变化过程。
+    ① 该实验需要设置哪些对照组？说明设置理由。
+    ② 预期实验结果（用文字描述褪黑素峰值时间的变化趋势）。
+
+(4) 若实验结果显示，小鼠节律完全重新同步需要 5~7 天，请解释为何不能立即重新同步。`,
+    focus: '实验设计要点：\n对照组1（正常光暗组）：排除非实验因素导致的峰值时间偏移，作为基线。\n对照组2（持续黑暗组）：显示无光照时小鼠的自主节律（约 24 h），排除自主节律漂移的干扰。\n预期结果：实验组褪黑素峰值逐日前移，约 5~7 天后与新光暗周期同步（比原时间提前 6 h）。\n(4) 不能立即同步：因为 SCN 节律的重新同步需要多个光暗周期的累积信号，细胞内时钟基因（period、cryptochrome 等）的表达相位改变需要时间，不能在一个周期内完成。',
+    answer: '(3)① 对照组：\n  • 正常光暗周期组（不改变光暗时间）——作为基线对照，排除其他因素影响\n  • 持续黑暗组——排除自主节律自然漂移的干扰\n② 预期结果：实验组（光暗前移 6 h）的小鼠褪黑素分泌峰值时间逐日提前，经过约 5~7 天后，峰值时间比实验前提前约 6 h，与新光暗周期完全同步。\n(4) 原因：昼夜节律的重新同步需要 SCN 中时钟基因（period、cryptochrome 等）表达相位的逐渐调整，该过程需要多个光暗周期的累积光信号刺激，无法在单次光照改变后立即完成。'
+  },
+
+  /* ── L1 变式 ── */
+  'v-ec230-1': {
+    badge: 'L1 基础变式 · 曲线读图', badgeClass: 'melatonin',
+    title: '从 24 h 分泌曲线读出峰值时间',
+    ref: 'EC-20260523-230 · 子问题 (1)',
+    stem: `（同母题，见 24 h 曲线）\n(1) 褪黑素分泌峰值出现在何时？此时是白天还是夜晚？`,
+    focus: '基础读图，定位峰值时间并对应昼夜时段。',
+    answer: '峰值约出现在 23:00—凌晨 2:00，此时为夜晚（无光照时段）。'
+  },
+  'v-ec230-3': {
+    badge: 'L1 基础变式 · 遮光变化', badgeClass: 'melatonin',
+    title: '持续遮光后褪黑素曲线变化',
+    ref: 'EC-20260523-230 · 子问题 (3)',
+    stem: `若将实验动物置于持续黑暗环境中（24 h 无光照），其褪黑素分泌曲线会如何变化？`,
+    focus: '持续黑暗 → 全天无光照抑制 → 褪黑素全天分泌增加，昼夜差异缩小（趋于持续高水平），但因自主节律存在，仍有微弱波动。',
+    answer: '持续遮光后，褪黑素全天分泌量增加，白天与夜晚的浓度差异缩小（白天浓度明显升高），曲线趋于较高水平且昼夜波动幅度减小（但因 SCN 自主节律仍存在，不会完全平坦）。'
+  },
+  'v-ec230-4': {
+    badge: 'L1 基础变式 · 神经体液判断', badgeClass: 'scn',
+    title: '褪黑素调节类型：神经调节还是体液调节',
+    ref: 'EC-20260523-230 · 子问题 (4)',
+    stem: `褪黑素由松果体分泌，其分泌受光照通过神经系统的调节；分泌后随血液流动作用于靶细胞。\n\n判断褪黑素在体内的调节类型，并说明理由。`,
+    focus: '双重属性分析：①"分泌受神经调节"（光→SCN→交感神经→松果体）→ 体现神经调节；②"分泌后随血液传递"（激素的体液传递特征）→ 体现体液调节。→ 综合：神经—体液调节协调完成。不能只选神经或只选体液。',
+    answer: '褪黑素的调节类型为神经—体液调节。\n理由：①褪黑素的分泌受神经调节（光照信号→视神经→SCN→交感神经→松果体），体现了神经调节；②褪黑素分泌后进入血液，随血液循环到达靶细胞发挥作用，体现了体液调节（激素调节）。两者协调配合，属于神经—体液调节。'
+  },
+  'v-ec235-23': {
+    badge: 'L2 进阶变式 · 损毁实验', badgeClass: 'scn',
+    title: '损毁 SCN vs 损毁松果体的不同结果',
+    ref: 'EC-20260523-235 · 子问题 (2)+(3)',
+    stem: `实验 A：损毁小鼠 SCN；实验 B：损毁小鼠松果体。\n\n分别预测两种损毁后：\n(1) 小鼠活动节律的变化；\n(2) 血液中褪黑素浓度及其昼夜节律性的变化。\n\n两者有何本质区别？`,
+    focus: '对比：损毁 SCN：活动节律消失（随机），褪黑素昼夜节律消失但松果体本身完好，可能仍分泌但无节律性。\n损毁松果体：活动节律可能仍存在（SCN 完好），但褪黑素直接消失（分泌器官不存在），血中褪黑素接近零。本质区别：SCN 是"指令中枢"，松果体是"执行器官"。',
+    answer: '实验 A（损毁 SCN）：①活动节律消失，活动随机分布；②褪黑素的昼夜节律性消失（但松果体本身仍存在，可能维持低水平随机分泌）。\n实验 B（损毁松果体）：①活动节律可能保留（SCN 和神经调节完整）；②血中褪黑素浓度极低甚至为零（分泌器官被损毁）。\n本质区别：SCN 是昼夜节律的"中枢起搏器"，松果体是"执行效应器"；损毁起搏器导致节律紊乱，损毁效应器导致激素消失。'
+  },
+  'v-ec241-13': {
+    badge: 'L2 进阶变式 · 光周期', badgeClass: 'photoperiod',
+    title: '缩短光照 → 褪黑素↑ → 季节性生殖调控',
+    ref: 'EC-20260523-241 · 子问题 (1)+(3)',
+    stem: `（同母题 mq-ec241）`,
+    focus: '同母题分析。',
+    answer: '见母题 EC-241 答案。'
+  },
+  'v-ec238-34': {
+    badge: 'L2 进阶变式 · 时差模型', badgeClass: 'circadian',
+    title: '时差模拟实验的对照设计与预期结果',
+    ref: 'EC-20260523-238 · 子问题 (3)+(4)',
+    stem: `（同母题 mq-ec238）`,
+    focus: '同母题分析。',
+    answer: '见母题 EC-238 答案。'
+  },
+  'v-ec245-135': {
+    badge: 'L3 综合变式 · 光污染多靶点', badgeClass: 'circadian',
+    title: '夜间光污染 → 褪黑素↓ → 睡眠 + 免疫功能下降',
+    ref: 'EC-20260524-245 · 子问题 (1)+(3)+(5)',
+    stem: `城市夜间光污染（长期暴露于人工照明）与多种健康问题相关。
+
+(1) 夜间光污染如何影响褪黑素的分泌？请用光—SCN—松果体通路解释。
+
+(3) 褪黑素分泌减少如何影响睡眠质量？（提示：褪黑素具有促进入睡的作用）
+
+(5) 有研究表明长期夜间光污染还会降低免疫功能，请推测可能的机制。（提示：褪黑素有免疫调节作用）`,
+    focus: '多系统联动分析：\n(1) 夜间光污染→持续光照刺激→SCN 持续抑制松果体→褪黑素分泌减少（夜间本应分泌的褪黑素受抑）。\n(3) 褪黑素↓→促睡眠信号减弱→入睡困难/睡眠质量下降→昼夜节律紊乱（昼夜睡眠倒置）。\n(5) 褪黑素↓→免疫调节作用减弱→NK 细胞、T 淋巴细胞活性下降→免疫监控能力降低。',
+    answer: '(1) 夜间光污染产生持续光照 → 视网膜感光 → SCN 持续激活 → 交感神经持续抑制松果体 → 夜间褪黑素分泌减少，昼夜浓度差缩小。\n(3) 褪黑素减少 → 其促进睡眠的信号减弱 → 入睡时间延长、睡眠质量下降、深度睡眠减少 → 长期导致昼夜节律紊乱。\n(5) 可能机制：褪黑素具有免疫增强作用（促进 NK 细胞、T 细胞活化等）；褪黑素长期减少 → 免疫细胞活性下降 → 免疫监控（如对肿瘤细胞、病原体的识别清除）能力降低。'
+  },
+  'v-ec250-24': {
+    badge: 'L3 综合变式 · 多轴联动', badgeClass: 'photoperiod',
+    title: '褪黑素与促性腺轴 + 甲状腺轴的交叉调控',
+    ref: 'EC-20260524-250 · 子问题 (2)+(4)',
+    stem: `冬眠动物（如仓鼠）在冬季同时出现生殖受抑和代谢率下降，研究发现褪黑素在其中同时作用于促性腺轴和甲状腺轴。
+
+(2) 冬季褪黑素↑后，促性腺激素释放激素（GnRH）分泌量___（增多/减少），导致性腺___（发育/萎缩），请说明机制。
+
+(4) 同时，冬季褪黑素↑如何影响甲状腺轴？代谢率为何下降？（提示：甲状腺激素能促进细胞代谢）`,
+    focus: '多轴联动综合分析：\n(2) 褪黑素↑ → 抑制下丘脑 GnRH 分泌 → GnRH↓ → 垂体 FSH/LH↓ → 性腺缺乏促激素刺激 → 性腺萎缩（非繁殖季节）。\n(4) 褪黑素↑ → 同时抑制下丘脑 TRH → TRH↓ → 垂体 TSH↓ → 甲状腺激素↓ → 全身细胞代谢率下降 → 为冬眠的低代谢状态提供条件。',
+    answer: '(2) GnRH 分泌减少 → 垂体 FSH/LH↓ → 性腺萎缩。\n机制：冬季夜长→褪黑素↑→通过特异性受体抑制下丘脑分泌 GnRH→垂体促性腺激素减少→性腺缺乏促激素刺激→萎缩（非繁殖季节适应）。\n(4) 褪黑素↑同时抑制 TRH→TSH↓→甲状腺激素↓→全身细胞氧化分解减弱→代谢率下降。这为冬眠动物在食物匮乏的冬季节约能量提供了内分泌基础。'
+  }
+};
+
+/* ══ DRAWER LOGIC ══ */
+let answerShown = false;
+
+function openDrawer(key) {
+  const q = QUESTIONS[key];
+  if (!q) return;
+  const badge = document.getElementById('drawer-badge');
+  badge.textContent = q.badge;
+  badge.className = 'drawer-badge mq-badge ' + (q.badgeClass || '');
+  document.getElementById('drawer-title').textContent = q.title;
+  const ref = document.getElementById('drawer-ref');
+  ref.innerHTML = '<i class="ti ti-source-code" style="font-size:13px;" aria-hidden="true"></i> ' + q.ref;
+  document.getElementById('drawer-stem').textContent = q.stem;
+  const subEl = document.getElementById('drawer-sub');
+  const subText = document.getElementById('drawer-sub-text');
+  if (q.focus) { subText.textContent = q.focus; subEl.style.display = ''; }
+  else { subEl.style.display = 'none'; }
+  answerShown = false;
+  const ans = document.getElementById('drawer-answer');
+  ans.classList.remove('show');
+  document.getElementById('drawer-answer-text').textContent = q.answer || '';
+  const btn = document.getElementById('drawer-ans-btn');
+  btn.textContent = '显示答案';
+  btn.style.display = q.answer ? '' : 'none';
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('drawer').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDrawer() {
+  document.getElementById('overlay').classList.remove('open');
+  document.getElementById('drawer').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function toggleAnswer() {
+  answerShown = !answerShown;
+  document.getElementById('drawer-answer').classList.toggle('show', answerShown);
+  document.getElementById('drawer-ans-btn').textContent = answerShown ? '隐藏答案' : '显示答案';
+}
+
+/* ── Lightbox ── */
+function openLightbox(src, alt) {
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lb-img').alt = alt;
+  document.getElementById('lb-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lb-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (document.getElementById('lb-overlay').classList.contains('open')) closeLightbox();
+    else closeDrawer();
+  }
+});
+</script>
+</body>
+</html>

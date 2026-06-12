@@ -1,0 +1,1008 @@
+[
+  {
+    "topic_id": "T01_M1",
+    "title": "蛋白质错误折叠与疾病",
+    "module_id": "T01",
+    "module_title": "分子机制与表达调控",
+    "summary": "",
+    "trigger_signals": [],
+    "core_mechanism": [],
+    "exam_focus": [],
+    "common_errors": [],
+    "asset_ids": [
+      "T01_M1_memory",
+      "diagram_011",
+      "diagram_026",
+      "T01_M1_lecture_audio",
+      "T01_M1_lecture_script",
+      "T01_M1_html_prototype"
+    ],
+    "gate_ids": [
+      "G03",
+      "G04",
+      "G09",
+      "G32",
+      "G33"
+    ],
+    "training_unit_ids": [
+      "T01_M1_trigger_01",
+      "T01_M1_structure_01",
+      "T01_M1_scoring_01",
+      "T01_M1_error_01"
+    ],
+    "coach_rule_ids": [
+      "T01_M1_coach_core"
+    ],
+    "status": "ready"
+  },
+  {
+    "topic_id": "T01_M2",
+    "title": "酶缺陷与代谢阻塞",
+    "module_id": "T01",
+    "module_title": "分子机制与表达调控",
+    "summary": "",
+    "trigger_signals": [],
+    "core_mechanism": [],
+    "exam_focus": [],
+    "common_errors": [],
+    "asset_ids": [
+      "T01_M2_memory",
+      "diagram_052",
+      "T01_M2_lecture_audio",
+      "T01_M2_lecture_script",
+      "T01_M2_html_prototype"
+    ],
+    "gate_ids": [
+      "G03",
+      "G08",
+      "G32",
+      "G33"
+    ],
+    "training_unit_ids": [
+      "T01_M2_trigger_01",
+      "T01_M2_structure_01",
+      "T01_M2_scoring_01",
+      "T01_M2_error_01"
+    ],
+    "coach_rule_ids": [
+      "T01_M2_coach_core"
+    ],
+    "status": "ready"
+  },
+  {
+    "topic_id": "T01_M3",
+    "title": "表观遗传与表达调控",
+    "module_id": "T01",
+    "module_title": "分子机制与表达调控",
+    "summary": "",
+    "trigger_signals": [],
+    "core_mechanism": [],
+    "exam_focus": [],
+    "common_errors": [],
+    "asset_ids": [
+      "T01_M3_memory",
+      "diagram_022",
+      "diagram_046",
+      "T01_M3_lecture_audio",
+      "T01_M3_lecture_script",
+      "T01_M3_html_prototype"
+    ],
+    "gate_ids": [
+      "G04",
+      "G09"
+    ],
+    "training_unit_ids": [
+      "T01_M3_trigger_01",
+      "T01_M3_structure_01",
+      "T01_M3_scoring_01",
+      "T01_M3_error_01"
+    ],
+    "coach_rule_ids": [
+      "T01_M3_coach_core"
+    ],
+    "status": "ready"
+  },
+  {
+    "topic_id": "T01_M4",
+    "title": "基因编辑与RNA干扰",
+    "module_id": "T01",
+    "module_title": "分子机制与表达调控",
+    "summary": "",
+    "trigger_signals": [],
+    "core_mechanism": [],
+    "exam_focus": [],
+    "common_errors": [],
+    "asset_ids": [
+      "T01_M4_memory",
+      "diagram_009",
+      "diagram_022",
+      "T01_M4_lecture_audio",
+      "T01_M4_lecture_script",
+      "T01_M4_html_prototype"
+    ],
+    "gate_ids": [
+      "G04",
+      "G06",
+      "G09"
+    ],
+    "training_unit_ids": [
+      "T01_M4_trigger_01",
+      "T01_M4_structure_01",
+      "T01_M4_scoring_01",
+      "T01_M4_error_01"
+    ],
+    "coach_rule_ids": [
+      "T01_M4_coach_core"
+    ],
+    "status": "ready"
+  },
+  {
+    "topic_id": "T02_M1",
+    "title": "细胞结构识别与功能匹配",
+    "module_id": "T02",
+    "module_title": "细胞结构与物质运输",
+    "summary": "",
+    "trigger_signals": [],
+    "core_mechanism": [],
+    "exam_focus": [],
+    "common_errors": [],
+    "asset_ids": [
+      "T02_M1_memory",
+      "diagram_012",
+      "diagram_013",
+      "diagram_039",
+      "diagram_040",
+      "diagram_047",
+      "T02_M1_lecture_audio",
+      "T02_M1_lecture_script",
+      "T02_M1_html_prototype"
+    ],
+    "gate_ids": [
+      "G01",
+      "G12",
+      "G45"
+    ],
+    "training_unit_ids": [
+      "T02_M1_trigger_01",
+      "T02_M1_structure_01",
+      "T02_M1_scoring_01",
+      "T02_M1_error_01"
+    ],
+    "coach_rule_ids": [
+      "T02_M1_coach_core"
+    ],
+    "status": "ready"
+  },
+  {
+    "topic_id": "T02_M2",
+    "title": "内膜系统与分泌蛋白运输",
+    "module_id": "T02",
+    "module_title": "细胞结构与物质运输",
+    "summary": "",
+    "trigger_signals": [],
+    "core_mechanism": [],
+    "exam_focus": [],
+    "common_errors": [],
+    "asset_ids": [
+      "T02_M2_memory",
+      "diagram_005",
+      "diagram_006",
+      "T02_M2_lecture_audio",
+      "T02_M2_lecture_script",
+      "T02_M2_html_prototype"
+    ],
+    "gate_ids": [
+      "G03",
+      "G12",
+      "G18"
+    ],
+    "training_unit_ids": [
+      "T02_M2_trigger_01",
+      "T02_M2_structure_01",
+      "T02_M2_scoring_01",
+      "T02_M2_error_01"
+    ],
+    "coach_rule_ids": [
+      "T02_M2_coach_core"
+    ],
+    "status": "ready"
+  },
+  {
+    "topic_id": "T02_M3",
+    "title": "跨膜运输方式判定",
+    "module_id": "T02",
+    "module_title": "细胞结构与物质运输",
+    "summary": "",
+    "trigger_signals": [],
+    "core_mechanism": [],
+    "exam_focus": [],
+    "common_errors": [],
+    "asset_ids": [
+      "T02_M3_memory",
+      "diagram_041",
+      "diagram_049",
+      "diagram_050",
+      "diagram_051",
+      "T02_M3_lecture_audio",
+      "T02_M3_lecture_script",
+      "T02_M3_html_prototype"
+    ],
+    "gate_ids": [
+      "G22",
+      "G31",
+      "G40",
+      "G47"
+    ],
+    "training_unit_ids": [
+      "T02_M3_trigger_01",
+      "T02_M3_structure_01",
+      "T02_M3_scoring_01",
+      "T02_M3_error_01"
+    ],
+    "coach_rule_ids": [
+      "T02_M3_coach_core"
+    ],
+    "status": "ready"
+  },
+  {
+    "topic_id": "T02_M4",
+    "title": "细胞结构变化与功能适应",
+    "module_id": "T02",
+    "module_title": "细胞结构与物质运输",
+    "summary": "",
+    "trigger_signals": [],
+    "core_mechanism": [],
+    "exam_focus": [],
+    "common_errors": [],
+    "asset_ids": [
+      "T02_M4_memory",
+      "diagram_020",
+      "diagram_038",
+      "diagram_042",
+      "T02_M4_lecture_audio",
+      "T02_M4_lecture_script",
+      "T02_M4_html_prototype"
+    ],
+    "gate_ids": [
+      "G12",
+      "G19",
+      "G26"
+    ],
+    "training_unit_ids": [
+      "T02_M4_trigger_01",
+      "T02_M4_structure_01",
+      "T02_M4_scoring_01",
+      "T02_M4_error_01"
+    ],
+    "coach_rule_ids": [
+      "T02_M4_coach_core"
+    ],
+    "status": "ready"
+  },
+  {
+    "topic_id": "T03_M1",
+    "title": "系谱图遗传方式判定",
+    "module_id": "T03",
+    "module_title": "遗传分析",
+    "summary": "系谱判型题的固定程序：先判显隐，再判常/X，写关键基因型，最后处理条件概率与叠加证据。",
+    "trigger_signals": [
+      "系谱图",
+      "无中生有",
+      "有中生无",
+      "判断遗传方式",
+      "携带者概率"
+    ],
+    "core_mechanism": [
+      "显隐判断",
+      "常染色体/X 染色体定位",
+      "关键个体一票否决",
+      "条件概率分母调整"
+    ],
+    "exam_focus": [
+      "常隐",
+      "常显",
+      "X 隐",
+      "X 显",
+      "电泳或突变叠加"
+    ],
+    "common_errors": [
+      "无中生有直接判常隐",
+      "条件概率忘记剔除患病型",
+      "用男女比例判断伴 X",
+      "条带上下位置搞反"
+    ],
+    "asset_ids": [
+      "T03_M1_memory",
+      "diagram_017",
+      "diagram_019",
+      "diagram_036",
+      "T03_M1_lecture_audio",
+      "T03_M1_lecture_script",
+      "T03_M1_html_prototype"
+    ],
+    "gate_ids": [
+      "G14",
+      "G15",
+      "G17",
+      "G20",
+      "G30"
+    ],
+    "training_unit_ids": [
+      "T03_M1_trigger_01",
+      "T03_M1_structure_01",
+      "T03_M1_scoring_01",
+      "T03_M1_error_01"
+    ],
+    "coach_rule_ids": [
+      "T03_M1_coach_core"
+    ],
+    "status": "ready"
+  },
+  {
+    "topic_id": "T03_M2",
+    "title": "后代概率精算",
+    "module_id": "T03",
+    "module_title": "遗传分析",
+    "summary": "",
+    "trigger_signals": [],
+    "core_mechanism": [],
+    "exam_focus": [],
+    "common_errors": [],
+    "asset_ids": [
+      "T03_M2_memory",
+      "diagram_024",
+      "T03_M2_lecture_audio",
+      "T03_M2_lecture_script",
+      "T03_M2_html_prototype"
+    ],
+    "gate_ids": [
+      "G15",
+      "G30"
+    ],
+    "training_unit_ids": [
+      "T03_M2_trigger_01",
+      "T03_M2_structure_01",
+      "T03_M2_scoring_01",
+      "T03_M2_error_01"
+    ],
+    "coach_rule_ids": [
+      "T03_M2_coach_core"
+    ],
+    "status": "ready"
+  },
+  {
+    "topic_id": "T03_M3",
+    "title": "减数分裂染色体追踪",
+    "module_id": "T03",
+    "module_title": "遗传分析",
+    "summary": "",
+    "trigger_signals": [],
+    "core_mechanism": [],
+    "exam_focus": [],
+    "common_errors": [],
+    "asset_ids": [
+      "T03_M3_memory",
+      "diagram_007",
+      "diagram_008",
+      "T03_M3_lecture_audio",
+      "T03_M3_lecture_script",
+      "T03_M3_html_prototype"
+    ],
+    "gate_ids": [
+      "G16"
+    ],
+    "training_unit_ids": [
+      "T03_M3_trigger_01",
+      "T03_M3_structure_01",
+      "T03_M3_scoring_01",
+      "T03_M3_error_01"
+    ],
+    "coach_rule_ids": [
+      "T03_M3_coach_core"
+    ],
+    "status": "ready"
+  },
+  {
+    "topic_id": "T03_M4",
+    "title": "电泳分子证据判读",
+    "module_id": "T03",
+    "module_title": "遗传分析",
+    "summary": "",
+    "trigger_signals": [],
+    "core_mechanism": [],
+    "exam_focus": [],
+    "common_errors": [],
+    "asset_ids": [
+      "T03_M4_memory",
+      "diagram_022",
+      "diagram_031",
+      "T03_M4_lecture_audio",
+      "T03_M4_lecture_script",
+      "T03_M4_html_prototype"
+    ],
+    "gate_ids": [
+      "G04",
+      "G06",
+      "G15"
+    ],
+    "training_unit_ids": [
+      "T03_M4_trigger_01",
+      "T03_M4_structure_01",
+      "T03_M4_scoring_01",
+      "T03_M4_error_01"
+    ],
+    "coach_rule_ids": [
+      "T03_M4_coach_core"
+    ],
+    "status": "ready"
+  },
+  {
+    "topic_id": "T04_M1",
+    "title": "神经体液稳态调节",
+    "module_id": "T04",
+    "module_title": "调节与稳态",
+    "summary": "",
+    "trigger_signals": [],
+    "core_mechanism": [],
+    "exam_focus": [],
+    "common_errors": [],
+    "asset_ids": [
+      "T04_M1_memory",
+      "diagram_032",
+      "diagram_034",
+      "diagram_048",
+      "T04_M1_lecture_audio",
+      "T04_M1_lecture_script",
+      "T04_M1_html_prototype"
+    ],
+    "gate_ids": [
+      "G10",
+      "G21",
+      "G23",
+      "G34",
+      "G40"
+    ],
+    "training_unit_ids": [
+      "T04_M1_trigger_01",
+      "T04_M1_structure_01",
+      "T04_M1_scoring_01",
+      "T04_M1_error_01"
+    ],
+    "coach_rule_ids": [
+      "T04_M1_coach_core"
+    ],
+    "status": "ready"
+  },
+  {
+    "topic_id": "T04_M2",
+    "title": "内分泌分级调节",
+    "module_id": "T04",
+    "module_title": "调节与稳态",
+    "summary": "",
+    "trigger_signals": [],
+    "core_mechanism": [],
+    "exam_focus": [],
+    "common_errors": [],
+    "asset_ids": [
+      "T04_M2_memory",
+      "diagram_027",
+      "T04_M2_lecture_audio",
+      "T04_M2_lecture_script",
+      "T04_M2_html_prototype"
+    ],
+    "gate_ids": [
+      "G23",
+      "G34"
+    ],
+    "training_unit_ids": [
+      "T04_M2_trigger_01",
+      "T04_M2_structure_01",
+      "T04_M2_scoring_01",
+      "T04_M2_error_01"
+    ],
+    "coach_rule_ids": [
+      "T04_M2_coach_core"
+    ],
+    "status": "ready"
+  },
+  {
+    "topic_id": "T04_M3",
+    "title": "免疫识别与应答",
+    "module_id": "T04",
+    "module_title": "调节与稳态",
+    "summary": "",
+    "trigger_signals": [],
+    "core_mechanism": [],
+    "exam_focus": [],
+    "common_errors": [],
+    "asset_ids": [
+      "T04_M3_memory",
+      "diagram_004",
+      "T04_M3_lecture_audio",
+      "T04_M3_lecture_script",
+      "T04_M3_html_prototype"
+    ],
+    "gate_ids": [
+      "G02"
+    ],
+    "training_unit_ids": [
+      "T04_M3_trigger_01",
+      "T04_M3_structure_01",
+      "T04_M3_scoring_01",
+      "T04_M3_error_01"
+    ],
+    "coach_rule_ids": [
+      "T04_M3_coach_core"
+    ],
+    "status": "ready"
+  },
+  {
+    "topic_id": "T04_M4",
+    "title": "昼夜节律与褪黑素",
+    "module_id": "T04",
+    "module_title": "调节与稳态",
+    "summary": "",
+    "trigger_signals": [],
+    "core_mechanism": [],
+    "exam_focus": [],
+    "common_errors": [],
+    "asset_ids": [
+      "T04_M4_memory",
+      "diagram_030",
+      "T04_M4_lecture_audio",
+      "T04_M4_lecture_script",
+      "T04_M4_html_prototype"
+    ],
+    "gate_ids": [
+      "G10",
+      "G34"
+    ],
+    "training_unit_ids": [
+      "T04_M4_trigger_01",
+      "T04_M4_structure_01",
+      "T04_M4_scoring_01",
+      "T04_M4_error_01"
+    ],
+    "coach_rule_ids": [
+      "T04_M4_coach_core"
+    ],
+    "status": "ready"
+  },
+  {
+    "topic_id": "T05_M1",
+    "title": "光合速率与限制因子",
+    "module_id": "T05",
+    "module_title": "代谢与植物生理",
+    "summary": "",
+    "trigger_signals": [],
+    "core_mechanism": [],
+    "exam_focus": [],
+    "common_errors": [],
+    "asset_ids": [
+      "T05_M1_memory",
+      "diagram_001",
+      "diagram_002",
+      "diagram_003",
+      "diagram_015",
+      "diagram_037",
+      "T05_M1_lecture_audio",
+      "T05_M1_lecture_script",
+      "T05_M1_html_prototype"
+    ],
+    "gate_ids": [
+      "G07",
+      "G11",
+      "G13",
+      "G29",
+      "G35",
+      "G41"
+    ],
+    "training_unit_ids": [
+      "T05_M1_trigger_01",
+      "T05_M1_structure_01",
+      "T05_M1_scoring_01",
+      "T05_M1_error_01"
+    ],
+    "coach_rule_ids": [
+      "T05_M1_coach_core"
+    ],
+    "status": "ready"
+  },
+  {
+    "topic_id": "T05_M2",
+    "title": "气孔开闭与蒸腾调节",
+    "module_id": "T05",
+    "module_title": "代谢与植物生理",
+    "summary": "",
+    "trigger_signals": [],
+    "core_mechanism": [],
+    "exam_focus": [],
+    "common_errors": [],
+    "asset_ids": [
+      "T05_M2_memory",
+      "diagram_025",
+      "T05_M2_lecture_audio",
+      "T05_M2_lecture_script",
+      "T05_M2_html_prototype"
+    ],
+    "gate_ids": [
+      "G22",
+      "G28",
+      "G31",
+      "G47"
+    ],
+    "training_unit_ids": [
+      "T05_M2_trigger_01",
+      "T05_M2_structure_01",
+      "T05_M2_scoring_01",
+      "T05_M2_error_01"
+    ],
+    "coach_rule_ids": [
+      "T05_M2_coach_core"
+    ],
+    "status": "ready"
+  },
+  {
+    "topic_id": "T05_M3",
+    "title": "呼吸方式与产物比例",
+    "module_id": "T05",
+    "module_title": "代谢与植物生理",
+    "summary": "",
+    "trigger_signals": [],
+    "core_mechanism": [],
+    "exam_focus": [],
+    "common_errors": [],
+    "asset_ids": [
+      "T05_M3_memory",
+      "diagram_016",
+      "diagram_021",
+      "diagram_039",
+      "diagram_040",
+      "T05_M3_lecture_audio",
+      "T05_M3_lecture_script",
+      "T05_M3_html_prototype"
+    ],
+    "gate_ids": [
+      "G08",
+      "G43",
+      "G46"
+    ],
+    "training_unit_ids": [
+      "T05_M3_trigger_01",
+      "T05_M3_structure_01",
+      "T05_M3_scoring_01",
+      "T05_M3_error_01"
+    ],
+    "coach_rule_ids": [
+      "T05_M3_coach_core"
+    ],
+    "status": "ready"
+  },
+  {
+    "topic_id": "T05_M4",
+    "title": "植物激素与生长调控",
+    "module_id": "T05",
+    "module_title": "代谢与植物生理",
+    "summary": "",
+    "trigger_signals": [],
+    "core_mechanism": [],
+    "exam_focus": [],
+    "common_errors": [],
+    "asset_ids": [
+      "T05_M4_memory",
+      "diagram_023",
+      "T05_M4_lecture_audio",
+      "T05_M4_lecture_script",
+      "T05_M4_html_prototype"
+    ],
+    "gate_ids": [
+      "G28"
+    ],
+    "training_unit_ids": [
+      "T05_M4_trigger_01",
+      "T05_M4_structure_01",
+      "T05_M4_scoring_01",
+      "T05_M4_error_01"
+    ],
+    "coach_rule_ids": [
+      "T05_M4_coach_core"
+    ],
+    "status": "ready"
+  },
+  {
+    "topic_id": "T06_M1",
+    "title": "实验变量与对照设计",
+    "module_id": "T06",
+    "module_title": "实验设计与数据分析",
+    "summary": "",
+    "trigger_signals": [],
+    "core_mechanism": [],
+    "exam_focus": [],
+    "common_errors": [],
+    "asset_ids": [
+      "T06_M1_memory",
+      "diagram_014",
+      "T06_M1_lecture_audio",
+      "T06_M1_lecture_script",
+      "T06_M1_html_prototype"
+    ],
+    "gate_ids": [
+      "G05",
+      "G24"
+    ],
+    "training_unit_ids": [
+      "T06_M1_trigger_01",
+      "T06_M1_structure_01",
+      "T06_M1_scoring_01",
+      "T06_M1_error_01"
+    ],
+    "coach_rule_ids": [
+      "T06_M1_coach_core"
+    ],
+    "status": "ready"
+  },
+  {
+    "topic_id": "T06_M2",
+    "title": "生物物质鉴定实验",
+    "module_id": "T06",
+    "module_title": "实验设计与数据分析",
+    "summary": "",
+    "trigger_signals": [],
+    "core_mechanism": [],
+    "exam_focus": [],
+    "common_errors": [],
+    "asset_ids": [
+      "T06_M2_memory",
+      "diagram_029",
+      "T06_M2_lecture_audio",
+      "T06_M2_lecture_script",
+      "T06_M2_html_prototype"
+    ],
+    "gate_ids": [
+      "G37"
+    ],
+    "training_unit_ids": [
+      "T06_M2_trigger_01",
+      "T06_M2_structure_01",
+      "T06_M2_scoring_01",
+      "T06_M2_error_01"
+    ],
+    "coach_rule_ids": [
+      "T06_M2_coach_core"
+    ],
+    "status": "ready"
+  },
+  {
+    "topic_id": "T06_M3",
+    "title": "数据图表分析与判读",
+    "module_id": "T06",
+    "module_title": "实验设计与数据分析",
+    "summary": "",
+    "trigger_signals": [],
+    "core_mechanism": [],
+    "exam_focus": [],
+    "common_errors": [],
+    "asset_ids": [
+      "T06_M3_memory",
+      "diagram_018",
+      "T06_M3_lecture_audio",
+      "T06_M3_lecture_script",
+      "T06_M3_html_prototype"
+    ],
+    "gate_ids": [
+      "G24",
+      "G41",
+      "G45"
+    ],
+    "training_unit_ids": [
+      "T06_M3_trigger_01",
+      "T06_M3_structure_01",
+      "T06_M3_scoring_01",
+      "T06_M3_error_01"
+    ],
+    "coach_rule_ids": [
+      "T06_M3_coach_core"
+    ],
+    "status": "ready"
+  },
+  {
+    "topic_id": "T06_M4",
+    "title": "PCR技术与电泳分析",
+    "module_id": "T06",
+    "module_title": "实验设计与数据分析",
+    "summary": "",
+    "trigger_signals": [],
+    "core_mechanism": [],
+    "exam_focus": [],
+    "common_errors": [],
+    "asset_ids": [
+      "T06_M4_memory",
+      "diagram_010",
+      "T06_M4_lecture_audio",
+      "T06_M4_lecture_script",
+      "T06_M4_html_prototype"
+    ],
+    "gate_ids": [
+      "G04",
+      "G06"
+    ],
+    "training_unit_ids": [
+      "T06_M4_trigger_01",
+      "T06_M4_structure_01",
+      "T06_M4_scoring_01",
+      "T06_M4_error_01"
+    ],
+    "coach_rule_ids": [
+      "T06_M4_coach_core"
+    ],
+    "status": "ready"
+  },
+  {
+    "topic_id": "T06_M5",
+    "title": "实验结论评价",
+    "module_id": "T06",
+    "module_title": "实验设计与数据分析",
+    "summary": "",
+    "trigger_signals": [],
+    "core_mechanism": [],
+    "exam_focus": [],
+    "common_errors": [],
+    "asset_ids": [
+      "T06_M5_memory",
+      "diagram_043",
+      "T06_M5_lecture_audio",
+      "T06_M5_lecture_script",
+      "T06_M5_html_prototype"
+    ],
+    "gate_ids": [
+      "G05",
+      "G24",
+      "G45"
+    ],
+    "training_unit_ids": [
+      "T06_M5_trigger_01",
+      "T06_M5_structure_01",
+      "T06_M5_scoring_01",
+      "T06_M5_error_01"
+    ],
+    "coach_rule_ids": [
+      "T06_M5_coach_core"
+    ],
+    "status": "ready"
+  },
+  {
+    "topic_id": "T07_M1",
+    "title": "食物链与营养级分析",
+    "module_id": "T07",
+    "module_title": "生态系统",
+    "summary": "",
+    "trigger_signals": [],
+    "core_mechanism": [],
+    "exam_focus": [],
+    "common_errors": [],
+    "asset_ids": [
+      "T07_M1_memory",
+      "diagram_053",
+      "diagram_054",
+      "T07_M1_lecture_audio",
+      "T07_M1_lecture_script",
+      "T07_M1_html_prototype"
+    ],
+    "gate_ids": [
+      "G25",
+      "G36",
+      "G44"
+    ],
+    "training_unit_ids": [
+      "T07_M1_trigger_01",
+      "T07_M1_structure_01",
+      "T07_M1_scoring_01",
+      "T07_M1_error_01"
+    ],
+    "coach_rule_ids": [
+      "T07_M1_coach_core"
+    ],
+    "status": "ready"
+  },
+  {
+    "topic_id": "T07_M2",
+    "title": "能量流动计算",
+    "module_id": "T07",
+    "module_title": "生态系统",
+    "summary": "",
+    "trigger_signals": [],
+    "core_mechanism": [],
+    "exam_focus": [],
+    "common_errors": [],
+    "asset_ids": [
+      "T07_M2_memory",
+      "diagram_044",
+      "diagram_045",
+      "T07_M2_lecture_audio",
+      "T07_M2_lecture_script",
+      "T07_M2_html_prototype"
+    ],
+    "gate_ids": [
+      "G25",
+      "G27"
+    ],
+    "training_unit_ids": [
+      "T07_M2_trigger_01",
+      "T07_M2_structure_01",
+      "T07_M2_scoring_01",
+      "T07_M2_error_01"
+    ],
+    "coach_rule_ids": [
+      "T07_M2_coach_core"
+    ],
+    "status": "ready"
+  },
+  {
+    "topic_id": "T07_M3",
+    "title": "物质循环与碳氮循环",
+    "module_id": "T07",
+    "module_title": "生态系统",
+    "summary": "",
+    "trigger_signals": [],
+    "core_mechanism": [],
+    "exam_focus": [],
+    "common_errors": [],
+    "asset_ids": [
+      "T07_M3_memory",
+      "diagram_028",
+      "T07_M3_lecture_audio",
+      "T07_M3_lecture_script",
+      "T07_M3_html_prototype"
+    ],
+    "gate_ids": [
+      "G25",
+      "G27",
+      "G39"
+    ],
+    "training_unit_ids": [
+      "T07_M3_trigger_01",
+      "T07_M3_structure_01",
+      "T07_M3_scoring_01",
+      "T07_M3_error_01"
+    ],
+    "coach_rule_ids": [
+      "T07_M3_coach_core"
+    ],
+    "status": "ready"
+  },
+  {
+    "topic_id": "T07_M4",
+    "title": "群落演替与生态稳定性",
+    "module_id": "T07",
+    "module_title": "生态系统",
+    "summary": "",
+    "trigger_signals": [],
+    "core_mechanism": [],
+    "exam_focus": [],
+    "common_errors": [],
+    "asset_ids": [
+      "T07_M4_memory",
+      "diagram_033",
+      "diagram_035",
+      "T07_M4_lecture_audio",
+      "T07_M4_lecture_script",
+      "T07_M4_html_prototype"
+    ],
+    "gate_ids": [
+      "G38",
+      "G39",
+      "G42",
+      "G44"
+    ],
+    "training_unit_ids": [
+      "T07_M4_trigger_01",
+      "T07_M4_structure_01",
+      "T07_M4_scoring_01",
+      "T07_M4_error_01"
+    ],
+    "coach_rule_ids": [
+      "T07_M4_coach_core"
+    ],
+    "status": "ready"
+  }
+]

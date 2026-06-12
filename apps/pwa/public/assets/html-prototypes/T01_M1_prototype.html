@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T01_M1 · 分子空间畸变型</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent:#534AB7; --accent-l:#EEEDFE; --accent-m:#AFA9EC; --accent-d:#3C3489;
+  --teal:#0F6E56; --teal-l:#E1F5EE; --teal-d:#085041;
+  --amber:#BA7517; --amber-l:#FAEEDA; --amber-d:#633806;
+  --coral:#993C1D; --coral-l:#FAECE7; --coral-d:#712B13;
+  --rose:#9E1D5A; --rose-l:#FAEDF4; --rose-d:#6B1040;
+  --bg:#ffffff; --bg2:#f7f7f5; --bg3:#f1efe8;
+  --tx:#1a1a18; --tx2:#5f5e5a; --tx3:#888780;
+  --bd:rgba(0,0,0,0.10); --bd2:rgba(0,0,0,0.18);
+  --r-sm:6px; --r-md:8px; --r-lg:12px; --r-xl:16px;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#1c1c1a;--bg2:#252523;--bg3:#2c2c2a;
+    --tx:#f0efea;--tx2:#b4b2a9;--tx3:#888780;
+    --bd:rgba(255,255,255,0.09);--bd2:rgba(255,255,255,0.16);
+    --accent-l:#26215C;--accent-d:#CECBF6;
+    --teal-l:#04342C;--teal-d:#9FE1CB;
+    --amber-l:#412402;--amber-d:#FAC775;
+    --coral-l:#4A1B0C;--coral-d:#F5C4B3;
+    --rose-l:#3A0A25;--rose-d:#F0A8CF;
+  }
+}
+body{font-family:var(--font);font-size:15px;line-height:1.6;color:var(--tx);background:var(--bg3);min-height:100vh;}
+.app{max-width:800px;margin:0 auto;background:var(--bg);min-height:100vh;}
+
+.site-header{padding:1.25rem 1.5rem 0;background:var(--bg);border-bottom:0.5px solid var(--bd);position:sticky;top:0;z-index:20;}
+.header-top{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.header-icon{background:var(--rose-l);border-radius:var(--r-md);padding:6px 8px;display:flex;align-items:center;justify-content:center;}
+.header-icon i{font-size:20px;color:var(--rose);}
+.header-meta{font-size:12px;color:var(--tx3);}
+.header-title{font-size:17px;font-weight:500;color:var(--tx);}
+.header-id{margin-left:auto;font-size:11px;color:var(--tx3);background:var(--bg2);padding:3px 9px;border-radius:var(--r-sm);}
+.nav-tabs{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.nav-tab{padding:.6rem 1.1rem;font-size:13px;color:var(--tx2);cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;font-family:var(--font);white-space:nowrap;transition:color .15s,border-color .15s;}
+.nav-tab.active{color:var(--rose);border-bottom-color:var(--rose);font-weight:500;}
+.nav-tab:hover:not(.active){color:var(--tx);}
+
+.page{display:none;padding:1.5rem;}
+.page.active{display:block;}
+
+.memory-section{margin-bottom:1.5rem;}
+.memory-card{border:0.5px solid var(--bd);border-radius:var(--r-xl);overflow:hidden;background:var(--bg);}
+.memory-placeholder{min-height:200px;background:var(--bg2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--tx3);padding:2rem;}
+.memory-placeholder i{font-size:32px;color:var(--bd2);}
+.memory-placeholder-text{font-size:13px;text-align:center;line-height:1.6;}
+.memory-placeholder-filename{font-size:11px;background:var(--bg3);border:0.5px solid var(--bd);border-radius:var(--r-sm);padding:4px 10px;font-family:monospace;color:var(--tx2);}
+.memory-img{width:100%;display:block;max-height:320px;object-fit:contain;background:var(--bg3);cursor:zoom-in;transition:opacity .15s;}
+.memory-img:hover{opacity:.9;}
+.memory-footer{padding:.85rem 1rem;display:flex;align-items:center;gap:10px;border-top:0.5px solid var(--bd);}
+.memory-label{font-size:13px;font-weight:500;color:var(--tx);flex:1;}
+audio{height:32px;width:220px;}
+.memory-video{width:100%;max-height:200px;display:block;border-radius:var(--r-md);background:#000;margin-top:0;}
+.audio-placeholder{font-size:12px;color:var(--tx3);display:flex;align-items:center;gap:5px;background:var(--bg2);padding:6px 10px;border-radius:var(--r-sm);}
+
+.section-title{font-size:13px;font-weight:500;color:var(--tx2);display:flex;align-items:center;gap:7px;margin-bottom:1rem;text-transform:uppercase;letter-spacing:.04em;}
+.section-divider{height:0.5px;background:var(--bd);margin:1.5rem 0;}
+.signal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:1.5rem;}
+.signal-card{background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;}
+.signal-label{font-size:11px;color:var(--tx3);letter-spacing:.04em;margin-bottom:.4rem;text-transform:uppercase;}
+.signal-tag{font-size:13px;color:var(--tx);margin-bottom:2px;}
+
+.subtopic-list{display:flex;flex-direction:column;gap:10px;margin-bottom:1.5rem;}
+.subtopic-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.9rem 1.1rem;border-left:3px solid var(--rose);}
+.subtopic-card.s2{border-left-color:var(--accent);}
+.subtopic-num{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.3rem;}
+.subtopic-name{font-size:14px;font-weight:500;color:var(--tx);margin-bottom:.3rem;}
+.subtopic-signal{font-size:13px;color:var(--tx2);line-height:1.6;}
+
+.trap-list{display:flex;flex-direction:column;gap:7px;}
+.trap-item{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.55;}
+.trap-icon{color:#E24B4A;font-size:15px;flex-shrink:0;margin-top:1px;}
+
+.filter-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem;}
+.filter-btn{padding:5px 13px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx2);font-family:var(--font);transition:all .15s;}
+.filter-btn.active{background:var(--rose-l);color:var(--rose-d);border-color:var(--rose);font-weight:500;}
+
+.mq-card{border:0.5px solid var(--bd);border-radius:var(--r-lg);background:var(--bg);margin-bottom:.85rem;overflow:hidden;}
+.mq-header{padding:.9rem 1.1rem;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;transition:background .15s;}
+.mq-header:hover{background:var(--bg2);}
+.mq-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);white-space:nowrap;}
+.mq-badge.s1{background:var(--rose-l);color:var(--rose-d);}
+.mq-badge.s2{background:var(--accent-l);color:var(--accent-d);}
+.mq-badge.v{background:var(--bg3);color:var(--tx2);}
+.mq-name{font-size:14px;font-weight:500;color:var(--tx);flex:1;}
+.mq-purity{font-size:12px;color:var(--tx3);flex-shrink:0;}
+.mq-chevron{color:var(--tx3);font-size:16px;transition:transform .2s;flex-shrink:0;}
+.mq-chevron.open{transform:rotate(180deg);}
+.mq-body{display:none;padding:.75rem 1.1rem 1.1rem;border-top:0.5px solid var(--bd);}
+.mq-body.open{display:block;}
+.mq-source{font-size:12px;color:var(--tx3);margin-bottom:.65rem;}
+.rule-box{background:var(--rose-l);border-left:3px solid var(--rose);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:.65rem .9rem;font-size:13px;color:var(--rose-d);margin:.75rem 0;line-height:1.65;}
+.rule-box.s2{background:var(--accent-l);border-left-color:var(--accent);color:var(--accent-d);}
+.chain-label{font-size:12px;font-weight:500;color:var(--tx2);margin:.75rem 0 .4rem;text-transform:uppercase;letter-spacing:.04em;}
+.signal-chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:6px;}
+.sc-node{background:var(--bg2);border-radius:var(--r-sm);padding:3px 9px;font-size:13px;color:var(--tx);}
+.sc-node.s1{background:var(--rose-l);color:var(--rose-d);}
+.sc-node.s2{background:var(--accent-l);color:var(--accent-d);}
+.sc-arrow{color:var(--tx3);font-size:13px;}
+.mq-note{font-size:13px;color:var(--tx2);margin-top:.75rem;line-height:1.6;}
+.q-trigger{display:inline-flex;align-items:center;gap:5px;margin-top:.75rem;padding:6px 12px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;color:var(--tx2);cursor:pointer;font-family:var(--font);transition:all .15s;}
+.q-trigger:hover{background:var(--bg2);color:var(--tx);}
+.q-trigger i{font-size:14px;}
+
+.ladder-section-label{font-size:13px;font-weight:500;color:var(--tx2);margin-bottom:.85rem;display:flex;align-items:center;gap:7px;}
+.ladder-rows{display:flex;flex-direction:column;gap:8px;margin-bottom:1rem;}
+.ladder-row{display:grid;grid-template-columns:64px 1fr;gap:10px;align-items:start;}
+.ladder-level{font-size:11px;font-weight:500;padding:6px 4px;border-radius:var(--r-sm);text-align:center;line-height:1.4;}
+.l0{background:var(--rose-l);color:var(--rose-d);}
+.l1{background:var(--teal-l);color:var(--teal-d);}
+.l2{background:var(--accent-l);color:var(--accent-d);}
+.ladder-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.65rem .9rem;background:var(--bg);cursor:pointer;transition:background .15s;}
+.ladder-card:hover{background:var(--bg2);}
+.ladder-card-name{font-size:13px;font-weight:500;color:var(--tx);}
+.ladder-card-sub{font-size:12px;color:var(--tx3);margin-top:3px;line-height:1.5;}
+.ladder-note{background:var(--bg2);border-radius:var(--r-md);padding:.65rem .9rem;font-size:12px;color:var(--tx2);margin-bottom:1rem;line-height:1.55;}
+
+.progress-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem;}
+.progress-bar{height:5px;border-radius:3px;background:var(--bg2);margin-bottom:1.25rem;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;background:var(--rose);width:0%;transition:width .3s;}
+.checklist{display:flex;flex-direction:column;gap:7px;}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:.7rem .9rem;border:0.5px solid var(--bd);border-radius:var(--r-md);background:var(--bg);cursor:pointer;transition:background .15s;}
+.check-item.done{background:var(--bg2);}
+.check-box{width:18px;height:18px;border:1.5px solid var(--bd2);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .15s;}
+.check-item.done .check-box{background:var(--rose);border-color:var(--rose);}
+.check-box i{font-size:11px;color:#fff;display:none;}
+.check-item.done .check-box i{display:block;}
+.check-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.check-item.done .check-text{color:var(--tx3);text-decoration:line-through;}
+.action-row{margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:8px;}
+.action-btn{padding:7px 14px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.action-btn:hover{background:var(--bg2);}
+
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s;}
+.drawer-overlay.open{opacity:1;pointer-events:all;}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100vw);background:var(--bg);z-index:101;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden;}
+.drawer.open{transform:translateX(0);}
+.drawer-header{padding:1rem 1.25rem;border-bottom:0.5px solid var(--bd);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.drawer-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);}
+.drawer-title{font-size:14px;font-weight:500;color:var(--tx);flex:1;line-height:1.4;}
+.drawer-close{background:none;border:none;cursor:pointer;color:var(--tx2);padding:4px;border-radius:var(--r-sm);display:flex;align-items:center;transition:background .15s;}
+.drawer-close:hover{background:var(--bg2);}
+.drawer-body{flex:1;overflow-y:auto;padding:1.25rem;}
+.drawer-ec-ref{font-size:12px;color:var(--tx3);margin-bottom:1rem;display:flex;align-items:center;gap:6px;}
+.drawer-stem{font-size:14px;color:var(--tx);line-height:1.75;white-space:pre-wrap;}
+.drawer-sub{font-size:13px;color:var(--tx2);background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:1rem;line-height:1.65;}
+.drawer-sub-label{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-answer{font-size:13px;color:var(--tx);background:var(--rose-l);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:.75rem;line-height:1.65;display:none;}
+.drawer-answer.show{display:block;}
+.drawer-answer-label{font-size:11px;font-weight:500;color:var(--rose-d);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-footer{padding:.85rem 1.25rem;border-top:0.5px solid var(--bd);display:flex;gap:8px;flex-shrink:0;}
+.drawer-btn{flex:1;padding:8px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.drawer-btn:hover{background:var(--bg2);}
+.drawer-btn.primary{background:var(--rose);color:#fff;border-color:var(--rose);}
+.drawer-btn.primary:hover{background:var(--rose-d);}
+
+.lb-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:200;display:none;align-items:center;justify-content:center;cursor:zoom-out;}
+.lb-overlay.open{display:flex;}
+.lb-img{max-width:92vw;max-height:92vh;object-fit:contain;border-radius:var(--r-md);box-shadow:0 8px 40px rgba(0,0,0,.5);}
+.lb-close{position:fixed;top:16px;right:20px;background:none;border:none;color:#fff;font-size:28px;cursor:pointer;line-height:1;opacity:.7;transition:opacity .15s;}
+.lb-close:hover{opacity:1;}
+
+@media(max-width:600px){
+  .site-header{padding:1rem 1rem 0;}
+  .page{padding:1rem;}
+  .header-title{font-size:15px;}
+  .signal-grid{grid-template-columns:1fr 1fr;}
+  .ladder-row{grid-template-columns:52px 1fr;gap:8px;}
+  .action-row{flex-direction:column;}
+  .action-btn{width:100%;text-align:center;}
+  .drawer{width:100vw;}
+  audio{width:160px;}
+}
+@media(max-width:380px){.signal-grid{grid-template-columns:1fr;}}
+
+.back-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;font-size:12px;color:var(--tx2);background:var(--bg2);border:0.5px solid var(--bd2);border-radius:var(--r-md);text-decoration:none;font-family:var(--font);transition:background .15s,color .15s;white-space:nowrap;flex-shrink:0;}
+.back-btn:hover{background:var(--bg3);color:var(--tx);}
+.back-btn i{font-size:14px;}
+</style>
+</head>
+<body>
+<div class="app">
+
+<header class="site-header">
+  <div class="header-top">
+    <div class="header-icon"><i class="ti ti-molecule" aria-hidden="true"></i></div>
+    <div>
+      <div class="header-meta">01 分子病理 · M1 分子空间畸变型</div>
+      <div class="header-title">分子空间畸变型疾病</div>
+    </div>
+    <a class="back-btn" href="index.html" aria-label="返回首页"><i class="ti ti-arrow-left"></i> 首页</a>
+    <div class="header-id">T01_M1</div>
+  </div>
+  <nav class="nav-tabs" role="tablist">
+    <button class="nav-tab active" role="tab" onclick="switchTab('overview',this)">概览</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('mothers',this)">母题精讲</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('ladder',this)">变式阶梯</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('check',this)">自查清单</button>
+  </nav>
+</header>
+
+<!-- ══ 概览 ══ -->
+<div id="page-overview" class="page active">
+  <div class="memory-section">
+    <div class="memory-card">
+      <img class="memory-img" src="记忆卡/T01_M1_memory.png" alt="T01_M1 分子空间畸变型 记忆卡"
+           onclick="openLightbox(this.src,this.alt)"
+           onerror="this.style.display='none';document.getElementById('mem-placeholder').style.display='flex'">
+      <div id="mem-placeholder" class="memory-placeholder" style="display:none;">
+        <i class="ti ti-photo-up"></i>
+        <div class="memory-placeholder-text">记忆卡图片放置于此</div>
+        <div class="memory-placeholder-filename">记忆卡/T01_M1_memory.png</div>
+      </div>
+      <div class="memory-footer">
+        <span class="memory-label"><i class="ti ti-brain" style="margin-right:5px;color:var(--rose);"></i>记忆卡 · 两条畸变因果链</span>
+      </div>
+      <video class="memory-video" controls controlsList="nodownload" preload="metadata">
+        <source src="audio/T01_M1.mp4" type="video/mp4">
+        <div class="audio-placeholder"><i class="ti ti-volume-off"></i>视频待放入</div>
+      </video>
+    </div>
+  </div>
+
+  <div class="section-title"><i class="ti ti-radar"></i>核心识别信号</div>
+  <div class="signal-grid">
+    <div class="signal-card">
+      <div class="signal-label">题型触发词</div>
+      <div class="signal-tag">氨基酸改变 / 蛋白质错误折叠</div>
+      <div class="signal-tag">空间结构改变 / 聚集 / 沉积</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">典型疾病</div>
+      <div class="signal-tag">镰状细胞贫血（HbS）</div>
+      <div class="signal-tag">囊性纤维病（CFTR）</div>
+      <div class="signal-tag">阿尔茨海默症（Aβ）</div>
+      <div class="signal-tag">帕金森病（αSyn）</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">两条下游路径</div>
+      <div class="signal-tag">① 功能丧失/异常亢进</div>
+      <div class="signal-tag">② 聚集→自噬受阻→细胞死亡</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">考查逻辑</div>
+      <div class="signal-tag">一级结构改变 → 空间结构改变 → 功能异常 → 疾病</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-sitemap"></i>两条子专题</div>
+  <div class="subtopic-list">
+    <div class="subtopic-card">
+      <div class="subtopic-num">子专题 1</div>
+      <div class="subtopic-name">构象异常 → 功能丧失 / 信号失调</div>
+      <div class="subtopic-signal">单个氨基酸改变（HbS: Glu→Val；CFTR: 氨基酸缺失）→ 空间结构改变 → 正常功能（运输/信号）丧失或异常亢进 → 疾病表现</div>
+    </div>
+    <div class="subtopic-card s2">
+      <div class="subtopic-num">子专题 2</div>
+      <div class="subtopic-name">错误折叠聚集 → 自噬受阻 → 细胞死亡</div>
+      <div class="subtopic-signal">错误折叠蛋白形成寡聚体/沉积（Aβ/αSyn）→ 干扰自噬清除机制（BAX/Mcl-1通路）→ 损伤细胞器堆积 → 神经元死亡</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-alert-triangle"></i>高频易错</div>
+  <div class="trap-list">
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>氨基酸种类改变 ≠ 氨基酸数目改变。HbS是第6位Glu→Val（替换），数目不变；CFTR是氨基酸缺失，数目减少。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>子专题1中Pyrin蛋白（FMF）不是"功能丧失"，而是"功能异常亢进"——对刺激过度敏感，触发正反馈放大IL-1。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>Mcl-1位于线粒体外膜，不在细胞质基质。正常状态下Mcl-1与LC3A结合促进自噬；患者体内BAX竞争性与Mcl-1结合，阻断自噬。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>αSyn聚集过程存在正反馈：寡聚体→促进更多αSyn磷酸化→更多寡聚体→恶性循环。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>HbS疏水突起与疏水口袋结合（不是与另一个疏水突起结合），形成多聚体纤维。</span></div>
+  </div>
+</div>
+
+<!-- ══ 母题精讲 ══ -->
+<div id="page-mothers" class="page">
+  <div class="filter-tabs">
+    <button class="filter-btn active" onclick="filterMQ('all',this)">全部 (2母题)</button>
+    <button class="filter-btn" onclick="filterMQ('s1',this)">子专题1·功能丧失</button>
+    <button class="filter-btn" onclick="filterMQ('s2',this)">子专题2·自噬受阻</button>
+  </div>
+
+  <!-- MQ1: EC-009 -->
+  <div class="mq-card" data-topic="s1">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge s1">子专题1 母题</span>
+      <span class="mq-name">镰状细胞贫血·HbA→HbS·疏水突起聚合·红细胞变形</span>
+      <span class="mq-purity">★ 10/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-009 · (1)(2)(3) · 2026-05-18</div>
+      <div class="rule-box">核心因果链：β链第6位 Glu（亲水）→ Val（疏水）→ β亚基产生疏水突起 → 疏水突起与另一HbS的疏水口袋结合 → 多聚体 → 不溶性纤维 → 红细胞镰刀变形 → 运氧能力下降</div>
+      <div class="chain-label">一级结构→功能的完整链</div>
+      <div class="signal-chain">
+        <span class="sc-node s1">一个氨基酸替换</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">疏水性改变</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">空间结构改变</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">异常聚合</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">细胞形态变化</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">功能丧失</span>
+      </div>
+      <div class="mq-note">计算考点：脱水缩合水分子数 = 氨基酸总数 − 肽链条数 = (141×2+146×2)−4 = 570；游离羧基至少4个（每条链末端各1个）。</div>
+      <button class="q-trigger" onclick="openDrawer('mq-ec009')"><i class="ti ti-file-text"></i>查看完整题干</button>
+    </div>
+  </div>
+
+  <!-- MQ2: EC-486 -->
+  <div class="mq-card" data-topic="s2">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge s2">子专题2 母题</span>
+      <span class="mq-name">阿尔茨海默症·Aβ沉积·BAX阻遏Mcl-1·线粒体自噬受阻·UMI-77治疗</span>
+      <span class="mq-purity">★ 9/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-486 · (4)~(8) · 2026-05-24</div>
+      <div class="rule-box s2">核心因果链：Aβ错误折叠沉积 → BAX与Mcl-1竞争性结合 → LC3A无法与Mcl-1结合 → 线粒体自噬受阻 → 损伤线粒体堆积 → 神经元退行</div>
+      <div class="chain-label">分子互作关键</div>
+      <div class="signal-chain">
+        <span class="sc-node">正常：Mcl-1 + LC3A → 自噬囊泡形成 → 清除损伤线粒体</span>
+      </div>
+      <div class="signal-chain" style="margin-top:6px;">
+        <span class="sc-node s2">患者：BAX竞争与Mcl-1结合 → LC3A被排斥 → 自噬受阻</span>
+      </div>
+      <div class="signal-chain" style="margin-top:6px;">
+        <span class="sc-node">UMI-77：与Mcl-1结合 → 替换BAX → 恢复LC3A结合 → 自噬恢复</span>
+      </div>
+      <div class="mq-note">Mcl-1位于线粒体外膜（②），基本骨架是磷脂双分子层。BAX蛋白在核糖体（③）上合成。Aβ前体APP加工异常涉及内质网③、运输囊泡④、高尔基体⑤。</div>
+      <button class="q-trigger" onclick="openDrawer('mq-ec486')"><i class="ti ti-file-text"></i>查看完整题干</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 变式阶梯 ══ -->
+<div id="page-ladder" class="page">
+
+  <div class="ladder-section-label"><span class="mq-badge s1" style="font-size:12px;">子专题1 · 功能丧失/亢进</span>母题 + 2 变式</div>
+  <div class="ladder-note">核心框架：氨基酸改变→空间结构→功能异常。基础变式换场景（血液→上皮运输），进阶变式叠加正反馈和体温调节机制。</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l0">母题<br>L0</div>
+      <div class="ladder-card" onclick="openDrawer('mq-ec009')">
+        <div class="ladder-card-name">EC-009 · 镰状细胞贫血·HbS疏水突起聚合</div>
+        <div class="ladder-card-sub">(1)(2)(3) · 纯净度10/10 · 教科书级"一个氨基酸→构象→功能丧失"完整链+肽键计算</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">基础<br>L1</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec485')">
+        <div class="ladder-card-name">EC-485 · 囊性纤维病·CFTR氨基酸缺失→主动转运障碍</div>
+        <div class="ladder-card-sub">(1)(2) · 纯净度8/10 · 换疾病场景，叠加细胞膜流动镶嵌模型+主动转运判断</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">进阶<br>L2</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec488')">
+        <div class="ladder-card-name">EC-488 · FMF·Pyrin异常亢进→IL-1正反馈→体温调定点上调</div>
+        <div class="ladder-card-sub">(3)~(7) · 纯净度9/10 · 功能亢进+正反馈+免疫活性物质+体温调节机制综合</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <div class="ladder-section-label"><span class="mq-badge s2" style="font-size:12px;">子专题2 · 自噬受阻</span>母题 + 1 变式 + 1 参考</div>
+  <div class="ladder-note">母题考查完整分子互作链（BAX/Mcl-1/LC3A）；变式换蛋白（Aβ→αSyn）+引入正反馈聚集机制+药物保护实验数据解读。</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l0">母题<br>L0</div>
+      <div class="ladder-card" onclick="openDrawer('mq-ec486')">
+        <div class="ladder-card-name">EC-486 · 阿尔茨海默症·Aβ/BAX/Mcl-1/LC3A·UMI-77治疗</div>
+        <div class="ladder-card-sub">(4)~(8) · 纯净度9/10 · 完整分子互作链+治疗机制推演</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">基础<br>L1</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec487')">
+        <div class="ladder-card-name">EC-487 · 帕金森病·αSyn正反馈聚集·药物X保护实验</div>
+        <div class="ladder-card-sub">(3)~(5) · 纯净度8/10 · 换蛋白+正反馈+对照实验设计+数据反向推断药物作用</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 自查清单 ══ -->
+<div id="page-check" class="page">
+  <div class="progress-row">
+    <span class="section-title" style="margin:0"><i class="ti ti-checkbox"></i>自查进度</span>
+    <span id="check-counter" style="font-size:13px;color:var(--tx3);">0 / 10</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="check-bar"></div></div>
+  <div class="checklist">
+    <div class="check-item" onclick="toggleCheck(this)" data-key="c01m1-1">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">HbS：β链第6位 Glu（亲水）→ Val（疏水）→ 疏水突起 → 与疏水口袋结合 → 多聚体纤维 → 红细胞镰刀变形</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)" data-key="c01m1-2">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">EC-009计算：脱水缩合水分子数 = (141×2+146×2)−4 = 570；游离羧基至少4个</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)" data-key="c01m1-3">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">CFTR：氨基酸缺失（数目减少）→ 空间结构改变 → 氯离子主动转运障碍 → 黏液堆积；主动转运 = 需载体+能量+逆浓度梯度</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)" data-key="c01m1-4">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">CFTR异常→氯离子浓度升高（膜外侧）→水分子向外运输变慢（自由扩散）→黏液无法被稀释→覆盖于膜外侧（甲侧）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)" data-key="c01m1-5">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">FMF：Pyrin异常亢进（不是丧失）→ 半胱天冬酶过激活 → 过量IL-1/IL-18 → PGE₂ → 下丘脑体温调定点↑ → 发热</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)" data-key="c01m1-6">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">IL-1正反馈：IL-1促进自身更多合成释放 → 炎症信号放大（区别于负反馈的抑制调节）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)" data-key="c01m1-7">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">Aβ致病链：Aβ沉积 → BAX与Mcl-1结合 → LC3A无法结合Mcl-1 → 线粒体自噬受阻 → 损伤线粒体堆积 → 神经退行</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)" data-key="c01m1-8">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">Mcl-1位于线粒体外膜（②），BAX在核糖体（③）合成；UMI-77竞争性与Mcl-1结合→替换BAX→恢复自噬</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)" data-key="c01m1-9">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">αSyn聚集正反馈：p-αSyn寡聚体→促进更多αSyn磷酸化→寡聚体增多→恶性循环（EC-487选ABCD）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)" data-key="c01m1-10">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">EC-487药物X实验：乙组为PD模型鼠+注射生理盐水（②⑤）；药物X作用：促进多巴胺合成②、改善运动功能③、保护神经元④（不促进降解）</div>
+    </div>
+  </div>
+  <div class="action-row">
+    <button class="action-btn" onclick="resetChecks()"><i class="ti ti-refresh"></i> 重置</button>
+    <button class="action-btn" onclick="checkAll()"><i class="ti ti-check-all"></i> 全部勾选</button>
+  </div>
+</div>
+
+</div><!-- /app -->
+
+<div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer" role="dialog" aria-modal="true">
+  <div class="drawer-header">
+    <span class="drawer-badge" id="d-badge"></span>
+    <span class="drawer-title" id="d-title"></span>
+    <button class="drawer-close" onclick="closeDrawer()" aria-label="关闭"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="drawer-ec-ref"><i class="ti ti-link"></i><span id="d-ref"></span></div>
+    <div class="drawer-stem" id="d-stem"></div>
+    <div class="drawer-sub">
+      <div class="drawer-sub-label">考查焦点</div>
+      <div id="d-focus"></div>
+    </div>
+    <div class="drawer-answer" id="d-answer">
+      <div class="drawer-answer-label">参考答案</div>
+      <div id="d-answer-text"></div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="drawer-btn" onclick="closeDrawer()">关闭</button>
+    <button class="drawer-btn primary" id="d-answer-btn" onclick="toggleAnswer()">显示答案</button>
+  </div>
+</div>
+
+<div class="lb-overlay" id="lb-overlay" onclick="closeLightbox()">
+  <button class="lb-close" onclick="closeLightbox()" aria-label="关闭">&#x2715;</button>
+  <img class="lb-img" id="lb-img" src="" alt="">
+</div>
+
+<script>
+const QUESTIONS = {
+  'mq-ec009': {
+    badge:'子专题1 母题', badgeClass:'s1',
+    title:'镰状细胞贫血·肌红蛋白血红蛋白·HbS疏水突起聚合',
+    ref:'EC-20260518-009 · (1)(2)(3)',
+    stem:`9. 1962年，马克斯·佩鲁茨、约翰·肯德鲁通过X射线晶体学首次解析血红蛋白和肌红蛋白的三维结构，共同获得了当年的诺贝尔化学奖。肌红蛋白是肌肉中储氧的蛋白质，由一条肽链和一个血红素辅基组成（图甲）。血红蛋白是红细胞中携氧蛋白质，含两条α链（各141个氨基酸）和两条β链（各146个氨基酸），每个亚基都含一个血红素辅基（图乙）。
+
+(1) 肌红蛋白和血红蛋白是由________元素构成的。氨基酸的结构通式为________。
+
+(2) 相邻氨基酸之间通过________反应形成________（化学键名称）。HbA合成过程中脱去的水分子数是________个，HbA至少含有________个游离的羧基。
+
+HbA可溶且不聚集。HbA的β链第6位氨基酸发生特定改变后，产生异常的HbS，使蛋白质在脱氧状态下容易聚集形成纤维，导致红细胞变形、易破裂、堵塞毛细血管，造成镰状细胞贫血。
+
+(3) 由图可知，HbA β链第6位氨基酸由亲水氨基酸变为________后，导致β亚基结构改变产生疏水突起，一个HbS β亚基的疏水突起与另一HbS β亚基的________结合，形成多聚体，大量多聚体聚集形成不溶性纤维，使红细胞扭曲成镰刀状，运输氧气能力________。
+①疏水氨基酸 ②亲水氨基酸 ③疏水口袋 ④疏水突起 ⑤升高 ⑥降低`,
+    focus:'(2)计算：水分子数=(141+141+146+146)−4=570；游离羧基≥4（每条肽链C末端各1个）。(3)关键：疏水突起 ≠ 与另一疏水突起结合，而是与另一HbS的疏水口袋（③）结合。',
+    answer:'(1) C、H、O、N、Fe（含血红素辅基含Fe）\n(2) 脱水缩合；肽键；570个；4个\n(3) ①（疏水氨基酸）；③（疏水口袋）；⑥（降低）\n注：肌红蛋白与血红蛋白功能不同，原因是两者结构（氨基酸种类/数目/排列/空间结构）不同'
+  },
+  'mq-ec486': {
+    badge:'子专题2 母题', badgeClass:'s2',
+    title:'阿尔茨海默症·Aβ错误折叠·BAX阻遏线粒体自噬·UMI-77治疗',
+    ref:'EC-20260524-486 · (4)~(8)',
+    stem:`阿尔茨海默症是一种神经退行性疾病，患者脑细胞中沉积大量错误折叠的Aβ蛋白，并存在大量损伤线粒体。正常脑细胞能通过线粒体自噬清除损伤线粒体，而患者脑细胞中线粒体自噬受阻（与BAX蛋白有关），导致该病发生。小分子物质UMI-77能解除自噬受阻。其中Mcl-1和LC3A位于相关膜结构上，与自噬囊泡形成有关。
+
+（图示：核糖体③合成BAX蛋白；Mcl-1位于线粒体外膜②；正常状态Mcl-1与LC3A结合→自噬囊泡形成→清除损伤线粒体；患者体内BAX与Mcl-1结合→LC3A被阻断→自噬受阻；UMI-77与Mcl-1结合→竞争替换BAX→LC3A得以结合→自噬恢复）
+
+(4) 图中Mcl-1所在的场所是____（编号选填），其骨架是____。
+① 细胞质膜　② 线粒体外膜　③ 线粒体内膜　④ 细胞质基质
+
+(5) 据图推测在正常脑细胞中Mcl-1的功能包括____（多选）。
+A. 识别LC3A分子　B. 与LC3A分子结合　C. 与BAX蛋白结合　D. 引起线粒体自噬
+
+(6) 结合已有知识推测，下列生物膜相关过程中与Mcl-1功能的分子机制最相似的是____（单选）。
+A. 胰腺细胞分泌消化酶至细胞外
+B. 质膜的疏水屏障将细胞内外隔开
+C. 葡萄糖通过葡萄糖转运蛋白进入细胞
+D. 细胞表面的受体接收信号分子
+
+(7) 由图推测，Aβ蛋白引发阿尔茨海默症的可能原因是____（多选）。
+A. Aβ促进BAX蛋白的合成　B. Aβ促进线粒体的损伤
+C. Aβ引起损伤线粒体大量沉积　D. Aβ促进线粒体的自噬
+
+(8) UMI-77可能成为治疗药物，其作用机理是____（多选）。
+A. UMI-77能与Mcl-1蛋白特异性结合
+B. UMI-77阻止Mcl-1和BAX的结合
+C. UMI-77通过激活BAX诱导线粒体自噬
+D. UMI-77通过促进LC3A的合成诱导线粒体自噬`,
+    focus:'(4)Mcl-1位于线粒体外膜②，骨架磷脂双分子层。(5)正常状态Mcl-1与LC3A结合（识别+结合）→选AB。(6)膜蛋白识别信号分子→选D（受体接收信号与Mcl-1识别LC3A机制最相似）。(7)Aβ→BAX与Mcl-1结合（A）→线粒体自噬受阻→损伤线粒体沉积（C）→选AC。(8)UMI-77与Mcl-1结合（A）→阻止BAX与Mcl-1结合（B）→选AB。',
+    answer:'(4) ②（线粒体外膜）；磷脂双分子层\n(5) AB（识别LC3A并与之结合，从而促进自噬囊泡形成；正常状态不与BAX结合，不引起自噬障碍）\n(6) D（受体蛋白识别并结合信号分子，与Mcl-1识别结合LC3A的分子机制最相似）\n(7) AC（Aβ促进BAX合成（A），BAX与Mcl-1结合阻断自噬，使损伤线粒体沉积（C））\n(8) AB（UMI-77与Mcl-1特异结合（A），从而阻止BAX与Mcl-1结合（B），LC3A得以结合Mcl-1，恢复线粒体自噬）'
+  },
+  'v-ec485': {
+    badge:'子专题1 基础变式', badgeClass:'v',
+    title:'囊性纤维病·CFTR蛋白错误折叠·氨基酸缺失·主动转运障碍',
+    ref:'EC-20260524-485 · (1)(2)',
+    stem:`囊性纤维病是北美国家最常见的遗传病，患者汗液中氯离子的浓度升高，支气管被异常黏液堵塞。图是囊性纤维病的病因图解，其中CFTR蛋白协助氯离子跨膜运输，需消耗ATP。
+
+（图示：细胞膜流动镶嵌模型，甲侧含糖蛋白为外侧，乙侧为内侧；CFTR蛋白正常时协助氯离子向甲侧（细胞外）主动转运；CFTR异常时氯离子无法转运，膜外侧氯离子浓度升高，水分子外流减慢，黏液堆积）
+
+(1) 图中所示为细胞膜的____模型，基本骨架是____，____（甲/乙）侧为细胞膜的外侧，囊性纤维病的发病原因是肽链的某个氨基酸缺失，进而导致错误折叠，使蛋白质的____发生改变，从而影响CFTR蛋白的正常功能。该事例体现了细胞膜具有____的功能。
+
+(2) 由图可知，氯离子无法在CFTR协助下通过____方式完成跨膜运输，转运过程中，CFTR蛋白____（填"发生"或"不发生"）自身构象的改变。随着氯离子在细胞膜一侧的浓度逐渐升高，该侧的水分子以____的方式向膜外运输的速度会____，致使细胞分泌的黏液不能及时被稀释而覆盖于____（填"甲"、"乙"）侧。`,
+    focus:'(1)区分氨基酸缺失（数目减少）vs替换（数目不变）。糖蛋白只在外侧→甲为外侧。(2)需要ATP+载体逆浓度梯度→主动转运。载体蛋白每次转运均发生构象改变。氯离子升高→水渗透外流变慢（浓度梯度降低）→黏液堆积于外侧甲。',
+    answer:'(1) 流动镶嵌；磷脂双分子层；甲（含糖蛋白为外侧）；空间结构；控制物质进出\n(2) 主动转运（需载体+ATP+逆浓度梯度）；发生（每次转运载体构象改变）；自由扩散；慢（细胞膜外侧氯离子浓度升高，水的浓度相对降低，渗透外流速度降低）；甲（细胞膜外侧）'
+  },
+  'v-ec488': {
+    badge:'子专题1 进阶变式', badgeClass:'v',
+    title:'家族性地中海热·Pyrin错误折叠亢进·IL-1正反馈·体温调定点上调',
+    ref:'EC-20260524-488 · (3)~(7)',
+    stem:`家族性地中海热（FMF）是一种因Pyrin蛋白错误折叠引起的自身炎症性疾病。一对表型正常的夫妇生了一个正常女儿和一个患FMF的女儿。图是该家庭成员的相关基因以及表达过程（a链为模板链）。
+
+（图示：巨噬细胞/中性粒细胞受刺激→FMF患者Pyrin蛋白对刺激过度敏感→半胱天冬酶过激活→过量IL-1/IL-18释放→促进细胞合成PGE₂→PGE₂作用下丘脑→体温调定点上调；IL-1还正反馈促进自身更多产生）
+
+(3) 对该家庭成员进行基因检测，不考虑其他因素，正常女儿的检测结果可能是____，父亲的检测结果应该是____。
+①仅有正常基因序列　②仅有致病基因序列　③既有正常基因序列又有致病基因序列
+
+(4) 家庭成员的细胞中会有两个致病基因的是____（多选）。
+A. 患病女儿的体细胞　B. 母亲的次级卵母细胞
+C. 母亲的第二极体　D. 父亲的次级精母细胞
+
+(5) 图中能引发局部炎症反应的IL-1、IL-18等属于____（单选）。
+A. 抗原　B. 抗体　C. 穿孔素　D. 免疫活性物质
+
+(6) 由图可知，在中性粒细胞产生IL-1的过程中存在____（正/负）反馈调节。
+
+(7) 阐释与正常人相比FMF患者容易突发发热的机制____。`,
+    focus:'(3)正常父母生患病女儿→常染色体隐性，父母均Aa。正常女儿=AA或Aa→结果①或③；父亲=Aa→③。(4)患病女儿aa体细胞含2个a（A）；母亲Aa，次级卵母细胞含姐妹染色单体可能含2个a（B）；第二极体只含1个（C错）；父亲Aa，次级精母细胞可能含2个a（D）。(7)Pyrin异常→半胱天冬酶过激活→IL-1/IL-18过量→PGE₂→下丘脑调定点上调→产热增加散热减少→发热。',
+    answer:'(3) ①或③（正常女儿基因型AA或Aa）；③（父亲表型正常但为Aa杂合子）\n(4) ABD（C错：第二极体只含1个染色体组，致病基因数为0或1）\n(5) D（IL-1/IL-18是免疫活性物质）\n(6) 正反馈（IL-1促进自身更多合成释放，正向放大）\n(7) FMF患者Pyrin蛋白对刺激过度敏感→半胱天冬酶过激活→过量IL-1/IL-18释放→促进多种细胞合成更多PGE₂→PGE₂作用于下丘脑→体温调定点上调→实际体温低于调定点→身体增加产热减少散热→突发发热'
+  },
+  'v-ec487': {
+    badge:'子专题2 基础变式', badgeClass:'v',
+    title:'帕金森病·αSyn错误折叠正反馈聚集·CgA帮凶·药物X保护实验',
+    ref:'EC-20260524-487 · (3)~(5)',
+    stem:`帕金森病（PD）以运动功能障碍为特征。α-突触核蛋白（αSyn）错误折叠并异常聚集，引发多巴胺能神经元死亡，导致多巴胺分泌不足是PD的病理关键。CgA蛋白的过表达是主要"帮凶"，（+）表示促进，（-）表示抑制。
+
+（图示：高CgA → 促进αSyn磷酸化 → 生成p-αSyn → 蛋白酶降解受抑制 → p-αSyn形成寡聚体 → 寡聚体反过来促进更多αSyn磷酸化（正反馈）→ 多巴胺能神经元死亡 → 多巴胺分泌↓）
+
+(3) 据图，下列有关CgA帮凶机制的分析中，合理的有____（多选）。
+A. CgA促进αSyn磷酸化生成p-αSyn
+B. CgA促进p-αSyn错误折叠并形成寡聚体
+C. 蛋白酶对p-αSyn蛋白的降解能力下降
+D. αSyn的异常聚集过程存在正反馈调节
+
+为探究药物X的作用，研究人员利用PD模型鼠开展实验：
+| 组别 | 动物 | 处理 | 多巴胺（μg/L） | 悬挂时间（s） | TH阳性细胞数（个/mm²） |
+|------|------|------|--------------|-------------|---------------------|
+| 甲 | 健康小鼠 | 注射生理盐水 | 72.5 | 18.6 | 152 |
+| 乙 | （1） | （2） | 25.4 | 6.2 | 50 |
+| 丙 | PD模型鼠 | 注射低剂量X | 38.6 | 9.8 | 82 |
+| 丁 | PD模型鼠 | 注射中剂量X | 54.2 | 14.3 | 115 |
+| 戊 | PD模型鼠 | 注射高剂量X | 69.1 | 17.5 | 140 |
+
+(4) 乙组（1）和（2）为____（编号选填）。
+①健康小鼠　②PD模型鼠　③注射低剂量X　④注射高剂量X　⑤注射生理盐水
+
+(5) 据实验结果分析，药物X的作用可能是____（编号选填）。
+①促进多巴胺降解　②促进多巴胺合成　③改善运动功能障碍　④保护多巴胺能神经元结构`,
+    focus:'(3)四个选项全对（ABCD）：CgA促磷酸化（A）→寡聚体形成（B）→蛋白酶降解受抑（C）→寡聚体反过来促进磷酸化=正反馈（D）。(4)乙为PD模型鼠空白对照=②⑤。(5)随剂量升高多巴胺↑（②对①错），悬挂时间↑（③），TH阳性细胞↑（④）；选②③④。',
+    answer:'(3) ABCD（四项均正确）\n(4) ②⑤（PD模型鼠+注射生理盐水，作为PD模型组的空白对照）\n(5) ②③④（促进多巴胺合成；改善运动功能障碍；保护多巴胺能神经元结构；不促进降解——多巴胺含量升高说明合成增加而非降解减少）'
+  }
+};
+
+function switchTab(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+function toggleMQ(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.mq-chevron');
+  body.classList.toggle('open', !body.classList.contains('open'));
+  chevron.classList.toggle('open', !chevron.classList.contains('open'));
+}
+function filterMQ(topic, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.mq-card').forEach(card => {
+    card.style.display = (topic === 'all' || card.dataset.topic === topic) ? '' : 'none';
+  });
+}
+function openDrawer(key) {
+  const q = QUESTIONS[key]; if (!q) return;
+  document.getElementById('d-badge').textContent = q.badge;
+  document.getElementById('d-badge').className = 'drawer-badge mq-badge ' + q.badgeClass;
+  document.getElementById('d-title').textContent = q.title;
+  document.getElementById('d-ref').textContent = q.ref;
+  document.getElementById('d-stem').textContent = q.stem;
+  document.getElementById('d-focus').textContent = q.focus;
+  document.getElementById('d-answer-text').textContent = q.answer;
+  document.getElementById('d-answer').classList.remove('show');
+  document.getElementById('d-answer-btn').textContent = '显示答案';
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeDrawer() {
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function toggleAnswer() {
+  const ans = document.getElementById('d-answer');
+  const btn = document.getElementById('d-answer-btn');
+  btn.textContent = ans.classList.toggle('show') ? '隐藏答案' : '显示答案';
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (document.getElementById('lb-overlay').classList.contains('open')) closeLightbox();
+    else closeDrawer();
+  }
+});
+
+const STORAGE_KEY = 'T01_M1_checks';
+function loadChecks() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { return {}; } }
+function saveChecks(data) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch {} }
+function updateProgress() {
+  const items = document.querySelectorAll('.check-item');
+  const done = document.querySelectorAll('.check-item.done').length;
+  document.getElementById('check-counter').textContent = done + ' / ' + items.length;
+  document.getElementById('check-bar').style.width = (done / items.length * 100) + '%';
+}
+function toggleCheck(el) {
+  el.classList.toggle('done');
+  const data = loadChecks(); data[el.dataset.key] = el.classList.contains('done'); saveChecks(data); updateProgress();
+}
+function resetChecks() { document.querySelectorAll('.check-item').forEach(el => el.classList.remove('done')); saveChecks({}); updateProgress(); }
+function checkAll() { const data={}; document.querySelectorAll('.check-item').forEach(el=>{el.classList.add('done');data[el.dataset.key]=true;}); saveChecks(data); updateProgress(); }
+(function(){ const data=loadChecks(); document.querySelectorAll('.check-item').forEach(el=>{if(data[el.dataset.key])el.classList.add('done');}); updateProgress(); })();
+
+function openLightbox(src, alt) {
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lb-img').alt = alt || '';
+  document.getElementById('lb-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lb-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('lb-img').addEventListener('click', e => e.stopPropagation());
+</script>
+</body>
+</html>

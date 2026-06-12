@@ -1,0 +1,17 @@
+{
+  "name": "母题速练播放器",
+  "short_name": "母题速练",
+  "description": "面向高中生物母题的多模态速练播放器",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f4f1e8",
+  "theme_color": "#17211b",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "128x128",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

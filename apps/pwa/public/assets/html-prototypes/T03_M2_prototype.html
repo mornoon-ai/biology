@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T03_M2 · 后代概率精算</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent:#0F6E56; --accent-l:#E1F5EE; --accent-m:#7DCFBB; --accent-d:#085041;
+  --purple:#534AB7; --purple-l:#EEEDFE; --purple-d:#3C3489;
+  --amber:#BA7517; --amber-l:#FAEEDA; --amber-d:#633806;
+  --coral:#993C1D; --coral-l:#FAECE7; --coral-d:#712B13;
+  --bg:#ffffff; --bg2:#f7f7f5; --bg3:#f1efe8;
+  --tx:#1a1a18; --tx2:#5f5e5a; --tx3:#888780;
+  --bd:rgba(0,0,0,0.10); --bd2:rgba(0,0,0,0.18);
+  --r-sm:6px; --r-md:8px; --r-lg:12px; --r-xl:16px;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#1c1c1a;--bg2:#252523;--bg3:#2c2c2a;
+    --tx:#f0efea;--tx2:#b4b2a9;--tx3:#888780;
+    --bd:rgba(255,255,255,0.09);--bd2:rgba(255,255,255,0.16);
+    --accent-l:#04342C;--accent-d:#9FE1CB;
+    --purple-l:#26215C;--purple-d:#CECBF6;
+    --amber-l:#412402;--amber-d:#FAC775;
+    --coral-l:#4A1B0C;--coral-d:#F5C4B3;
+  }
+}
+body{font-family:var(--font);font-size:15px;line-height:1.6;color:var(--tx);background:var(--bg3);min-height:100vh;}
+.app{max-width:800px;margin:0 auto;background:var(--bg);min-height:100vh;}
+.site-header{padding:1.25rem 1.5rem 0;background:var(--bg);border-bottom:0.5px solid var(--bd);position:sticky;top:0;z-index:20;}
+.header-top{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.header-icon{background:var(--accent-l);border-radius:var(--r-md);padding:6px 8px;display:flex;align-items:center;justify-content:center;}
+.header-icon i{font-size:20px;color:var(--accent);}
+.header-meta{font-size:12px;color:var(--tx3);}
+.header-title{font-size:17px;font-weight:500;color:var(--tx);}
+.header-id{margin-left:auto;font-size:11px;color:var(--tx3);background:var(--bg2);padding:3px 9px;border-radius:var(--r-sm);}
+.nav-tabs{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.nav-tab{padding:.6rem 1.1rem;font-size:13px;color:var(--tx2);cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;font-family:var(--font);white-space:nowrap;transition:color .15s,border-color .15s;}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500;}
+.nav-tab:hover:not(.active){color:var(--tx);}
+.page{display:none;padding:1.5rem;}
+.page.active{display:block;}
+.memory-section{margin-bottom:1.5rem;}
+.memory-card{border:0.5px solid var(--bd);border-radius:var(--r-xl);overflow:hidden;background:var(--bg);}
+.memory-placeholder{min-height:200px;background:var(--bg2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--tx3);padding:2rem;}
+.memory-placeholder i{font-size:32px;color:var(--bd2);}
+.memory-placeholder-text{font-size:13px;text-align:center;line-height:1.6;}
+.memory-placeholder-filename{font-size:11px;background:var(--bg3);border:0.5px solid var(--bd);border-radius:var(--r-sm);padding:4px 10px;font-family:monospace;color:var(--tx2);}
+.memory-img{width:100%;display:block;max-height:320px;object-fit:contain;background:var(--bg3);cursor:zoom-in;transition:opacity .15s;}
+.memory-img:hover{opacity:.9;}
+.memory-footer{padding:.85rem 1rem;display:flex;align-items:center;gap:10px;border-top:0.5px solid var(--bd);}
+.memory-label{font-size:13px;font-weight:500;color:var(--tx);flex:1;}
+audio{height:32px;width:220px;}
+.audio-placeholder{font-size:12px;color:var(--tx3);display:flex;align-items:center;gap:5px;background:var(--bg2);padding:6px 10px;border-radius:var(--r-sm);}
+.section-title{font-size:13px;font-weight:500;color:var(--tx2);display:flex;align-items:center;gap:7px;margin-bottom:1rem;text-transform:uppercase;letter-spacing:.04em;}
+.section-divider{height:0.5px;background:var(--bd);margin:1.5rem 0;}
+.signal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:1.5rem;}
+.signal-card{background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;}
+.signal-label{font-size:11px;color:var(--tx3);letter-spacing:.04em;margin-bottom:.4rem;text-transform:uppercase;}
+.signal-tag{font-size:13px;color:var(--tx);margin-bottom:2px;}
+.subtopic-list{display:flex;flex-direction:column;gap:10px;margin-bottom:1.5rem;}
+.subtopic-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.9rem 1.1rem;border-left:3px solid var(--accent);}
+.subtopic-card.s2{border-left-color:var(--purple);}
+.subtopic-card.s3{border-left-color:var(--amber);}
+.subtopic-num{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.3rem;}
+.subtopic-name{font-size:14px;font-weight:500;color:var(--tx);margin-bottom:.3rem;}
+.subtopic-signal{font-size:13px;color:var(--tx2);line-height:1.6;}
+.trap-list{display:flex;flex-direction:column;gap:7px;}
+.trap-item{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.55;}
+.trap-icon{color:#E24B4A;font-size:15px;flex-shrink:0;margin-top:1px;}
+.filter-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem;}
+.filter-btn{padding:5px 13px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx2);font-family:var(--font);transition:all .15s;}
+.filter-btn.active{background:var(--accent-l);color:var(--accent-d);border-color:var(--accent);font-weight:500;}
+.mq-card{border:0.5px solid var(--bd);border-radius:var(--r-lg);background:var(--bg);margin-bottom:.85rem;overflow:hidden;}
+.mq-header{padding:.9rem 1.1rem;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;transition:background .15s;}
+.mq-header:hover{background:var(--bg2);}
+.mq-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);white-space:nowrap;}
+.mq-badge.s1{background:var(--accent-l);color:var(--accent-d);}
+.mq-badge.s2{background:var(--purple-l);color:var(--purple-d);}
+.mq-badge.s3{background:var(--amber-l);color:var(--amber-d);}
+.mq-name{font-size:14px;font-weight:500;color:var(--tx);flex:1;}
+.mq-purity{font-size:12px;color:var(--tx3);flex-shrink:0;}
+.mq-chevron{color:var(--tx3);font-size:16px;transition:transform .2s;flex-shrink:0;}
+.mq-chevron.open{transform:rotate(180deg);}
+.mq-body{display:none;padding:.75rem 1.1rem 1.1rem;border-top:0.5px solid var(--bd);}
+.mq-body.open{display:block;}
+.mq-source{font-size:12px;color:var(--tx3);margin-bottom:.65rem;}
+.rule-box{background:var(--accent-l);border-left:3px solid var(--accent);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:.65rem .9rem;font-size:13px;color:var(--accent-d);margin:.75rem 0;line-height:1.65;}
+.rule-box.s2{background:var(--purple-l);border-left-color:var(--purple);color:var(--purple-d);}
+.rule-box.s3{background:var(--amber-l);border-left-color:var(--amber);color:var(--amber-d);}
+.chain-label{font-size:12px;font-weight:500;color:var(--tx2);margin:.75rem 0 .4rem;text-transform:uppercase;letter-spacing:.04em;}
+.signal-chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:6px;}
+.sc-node{background:var(--bg2);border-radius:var(--r-sm);padding:3px 9px;font-size:13px;color:var(--tx);}
+.sc-node.s1{background:var(--accent-l);color:var(--accent-d);}
+.sc-node.s2{background:var(--purple-l);color:var(--purple-d);}
+.sc-node.s3{background:var(--amber-l);color:var(--amber-d);}
+.sc-arrow{color:var(--tx3);font-size:13px;}
+.mq-note{font-size:13px;color:var(--tx2);margin-top:.75rem;line-height:1.6;}
+.q-trigger{display:inline-flex;align-items:center;gap:5px;margin-top:.75rem;padding:6px 12px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;color:var(--tx2);cursor:pointer;font-family:var(--font);transition:all .15s;}
+.q-trigger:hover{background:var(--bg2);color:var(--tx);}
+.q-trigger i{font-size:14px;}
+.ladder-section-label{font-size:13px;font-weight:500;color:var(--tx2);margin-bottom:.85rem;display:flex;align-items:center;gap:7px;}
+.ladder-rows{display:flex;flex-direction:column;gap:8px;margin-bottom:1rem;}
+.ladder-row{display:grid;grid-template-columns:64px 1fr;gap:10px;align-items:start;}
+.ladder-level{font-size:11px;font-weight:500;padding:6px 4px;border-radius:var(--r-sm);text-align:center;line-height:1.4;}
+.l0{background:var(--accent-l);color:var(--accent-d);}
+.l1{background:var(--purple-l);color:var(--purple-d);}
+.l2{background:var(--amber-l);color:var(--amber-d);}
+.l3{background:var(--coral-l);color:var(--coral-d);}
+.ladder-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.65rem .9rem;background:var(--bg);cursor:pointer;transition:background .15s;}
+.ladder-card:hover{background:var(--bg2);}
+.ladder-card-name{font-size:13px;font-weight:500;color:var(--tx);}
+.ladder-card-sub{font-size:12px;color:var(--tx3);margin-top:3px;line-height:1.5;}
+.ladder-note{background:var(--bg2);border-radius:var(--r-md);padding:.65rem .9rem;font-size:12px;color:var(--tx2);margin-bottom:1rem;line-height:1.55;}
+.progress-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem;}
+.progress-bar{height:5px;border-radius:3px;background:var(--bg2);margin-bottom:1.25rem;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;background:var(--accent);width:0%;transition:width .3s;}
+.checklist{display:flex;flex-direction:column;gap:7px;}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:.7rem .9rem;border:0.5px solid var(--bd);border-radius:var(--r-md);background:var(--bg);cursor:pointer;transition:background .15s;}
+.check-item.done{background:var(--bg2);}
+.check-box{width:18px;height:18px;border:1.5px solid var(--bd2);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .15s;}
+.check-item.done .check-box{background:var(--accent);border-color:var(--accent);}
+.check-box i{font-size:11px;color:#fff;display:none;}
+.check-item.done .check-box i{display:block;}
+.check-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.check-item.done .check-text{color:var(--tx3);text-decoration:line-through;}
+.action-row{margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:8px;}
+.action-btn{padding:7px 14px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.action-btn:hover{background:var(--bg2);}
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s;}
+.drawer-overlay.open{opacity:1;pointer-events:all;}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100vw);background:var(--bg);z-index:101;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden;}
+.drawer.open{transform:translateX(0);}
+.drawer-header{padding:1rem 1.25rem;border-bottom:0.5px solid var(--bd);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.drawer-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);}
+.drawer-title{font-size:14px;font-weight:500;color:var(--tx);flex:1;line-height:1.4;}
+.drawer-close{background:none;border:none;cursor:pointer;color:var(--tx2);padding:4px;border-radius:var(--r-sm);display:flex;align-items:center;transition:background .15s;}
+.drawer-close:hover{background:var(--bg2);}
+.drawer-body{flex:1;overflow-y:auto;padding:1.25rem;}
+.drawer-ec-ref{font-size:12px;color:var(--tx3);margin-bottom:1rem;display:flex;align-items:center;gap:6px;}
+.drawer-stem{font-size:14px;color:var(--tx);line-height:1.75;white-space:pre-wrap;}
+.drawer-sub{font-size:13px;color:var(--tx2);background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:1rem;line-height:1.65;}
+.drawer-sub-label{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-answer{font-size:13px;color:var(--tx);background:var(--accent-l);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:.75rem;line-height:1.65;display:none;}
+.drawer-answer.show{display:block;}
+.drawer-answer-label{font-size:11px;font-weight:500;color:var(--accent-d);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-footer{padding:.85rem 1.25rem;border-top:0.5px solid var(--bd);display:flex;gap:8px;flex-shrink:0;}
+.drawer-btn{flex:1;padding:8px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.drawer-btn:hover{background:var(--bg2);}
+.drawer-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+.drawer-btn.primary:hover{background:var(--accent-d);}
+.lb-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:200;display:none;align-items:center;justify-content:center;cursor:zoom-out;}
+.lb-overlay.open{display:flex;}
+.lb-img{max-width:92vw;max-height:92vh;object-fit:contain;border-radius:var(--r-md);box-shadow:0 8px 40px rgba(0,0,0,.5);}
+.lb-close{position:fixed;top:16px;right:20px;background:none;border:none;color:#fff;font-size:28px;cursor:pointer;line-height:1;opacity:.7;transition:opacity .15s;}
+.lb-close:hover{opacity:1;}
+@media(max-width:600px){
+  .site-header{padding:1rem 1rem 0;}.page{padding:1rem;}.header-title{font-size:15px;}
+  .signal-grid{grid-template-columns:1fr 1fr;}.ladder-row{grid-template-columns:52px 1fr;gap:8px;}
+  .action-row{flex-direction:column;}.action-btn{width:100%;text-align:center;}
+  .drawer{width:100vw;}audio{width:160px;}
+}
+@media(max-width:380px){.signal-grid{grid-template-columns:1fr;}}
+
+.back-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;font-size:12px;color:var(--tx2);background:var(--bg2);border:0.5px solid var(--bd2);border-radius:var(--r-md);text-decoration:none;font-family:var(--font);transition:background .15s,color .15s;white-space:nowrap;flex-shrink:0;}
+.back-btn:hover{background:var(--bg3);color:var(--tx);}
+.back-btn i{font-size:14px;}
+.memory-video{width:100%;max-height:220px;display:block;border-radius:var(--r-md);background:#000;margin-top:8px;}
+</style>
+</head>
+<body>
+<div class="app">
+
+<header class="site-header">
+  <div class="header-top">
+    <div class="header-icon"><i class="ti ti-chart-pie" aria-hidden="true"></i></div>
+    <div>
+      <div class="header-meta">03 遗传分析 · M2 配子概率</div>
+      <div class="header-title">后代概率精算</div>
+    </div>
+    <a class="back-btn" href="index.html" aria-label="返回首页"><i class="ti ti-arrow-left"></i> 首页</a>
+    <div class="header-id">T03_M2</div>
+  </div>
+  <nav class="nav-tabs" role="tablist">
+    <button class="nav-tab active" role="tab" onclick="switchTab('overview',this)">概览</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('mothers',this)">母题精讲</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('ladder',this)">变式阶梯</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('check',this)">自查清单</button>
+  </nav>
+</header>
+
+<!-- ══ 概览 ══ -->
+<div id="page-overview" class="page active">
+  <div class="memory-section">
+    <div class="memory-card">
+      <img class="memory-img" src="记忆卡/T03_M2_memory.png" alt="T03_M2 后代概率精算 记忆卡"
+           onclick="openLightbox(this.src,this.alt)"
+           onerror="this.style.display='none';document.getElementById('mem-placeholder').style.display='flex'">
+      <div id="mem-placeholder" class="memory-placeholder" style="display:none;">
+        <i class="ti ti-photo-up"></i>
+        <div class="memory-placeholder-text">记忆卡图片放置于此</div>
+        <div class="memory-placeholder-filename">记忆卡/T03_M2_memory.png</div>
+      </div>
+      <div class="memory-footer">
+        <span class="memory-label"><i class="ti ti-brain" style="margin-right:5px;color:var(--accent);"></i>记忆卡 · 配子概率三路径</span>
+        <video class="memory-video" controls controlsList="nodownload" preload="metadata" style="display:none">
+        <source src="audio/T03_M2.mp4" type="video/mp4">
+      </video>
+      <div class="audio-placeholder" style="display:flex"><i class="ti ti-video-off"></i>视频待放入</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title"><i class="ti ti-radar"></i>核心触发信号</div>
+  <div class="signal-grid">
+    <div class="signal-card">
+      <div class="signal-label">视觉信号</div>
+      <div class="signal-tag">F2 比例 ≠ 9:3:3:1</div>
+      <div class="signal-tag">测交比例 ≠ 1:1:1:1</div>
+      <div class="signal-tag">比例标注 42:8:8:42</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">文字信号</div>
+      <div class="signal-tag">含X基因的花粉不育</div>
+      <div class="signal-tag">纯合致死 / 胚胎死亡</div>
+      <div class="signal-tag">交叉互换 / 重组型配子</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">计算任务</div>
+      <div class="signal-tag">计算后代比例</div>
+      <div class="signal-tag">判断致死基因型</div>
+      <div class="signal-tag">计算互换率</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">果蝇特殊标志</div>
+      <div class="signal-tag">雄果蝇 → 完全连锁</div>
+      <div class="signal-tag">雄配子只有亲本型</div>
+      <div class="signal-tag">重组只来自母方</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-alert-triangle"></i>一票否决信号（最高优先级）</div>
+  <div class="trap-list" style="margin-bottom:1.5rem;">
+    <div class="trap-item">
+      <i class="ti ti-circle-check trap-icon" style="color:var(--amber);"></i>
+      <span><strong>题干直接声明"含X基因的花粉不育"</strong> → 唯一约束是配子层面，母本配子与合子不受此约束</span>
+    </div>
+    <div class="trap-item">
+      <i class="ti ti-circle-check trap-icon" style="color:var(--amber);"></i>
+      <span><strong>F2某表型完全缺失（数量=0）</strong> → 对应基因型纯合致死，从"不应出现的零"反推</span>
+    </div>
+    <div class="trap-item">
+      <i class="ti ti-circle-check trap-icon" style="color:var(--amber);"></i>
+      <span><strong>测交出现 42:8:8:42 这类"两大两小"比例</strong> → 连锁互换，小数字=重组型配子，互换率=小数字之和/总数</span>
+    </div>
+    <div class="trap-item">
+      <i class="ti ti-circle-check trap-icon" style="color:var(--amber);"></i>
+      <span><strong>果蝇雄性</strong> → 完全连锁不互换，雄配子只有亲本型，所有重组只来自母方</span>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-sitemap"></i>三条分支路径</div>
+  <div class="subtopic-list">
+    <div class="subtopic-card">
+      <div class="subtopic-num">路径 A · 花粉不育</div>
+      <div class="subtopic-name">配子约束·重算种类与比例</div>
+      <div class="subtopic-signal">题干声明"含X花粉不育" → 删除受约束雄配子种类 → 母本配子不受约束 → 用可育雄配子×完整母本配子计算合子比例</div>
+    </div>
+    <div class="subtopic-card s2">
+      <div class="subtopic-num">路径 B · 合子致死</div>
+      <div class="subtopic-name">致死型·反推缺失基因型</div>
+      <div class="subtopic-signal">F2某表型比例为0或缺失 → 正常棋盘写出9种基因型 → 标记致死型（取并集）→ 删除致死格 → 归一化存活比例</div>
+    </div>
+    <div class="subtopic-card s3">
+      <div class="subtopic-num">路径 C · 连锁互换</div>
+      <div class="subtopic-name">配子比例→互换率</div>
+      <div class="subtopic-signal">测交后代"两大两小" → 大数字=亲本型，小数字=重组型 → 重组率=小数字和/总数 → 互换率=重组率×2（每次互换只产生一半重组型）</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-alert-triangle"></i>高频易错</div>
+  <div class="trap-list">
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>把花粉不育当成全部配子都不育——"花粉=雄配子"，只约束父本。母本卵细胞不受限，用完整8种母本配子计算。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>致死型判断时忘记独立遗传前提——先确认两对基因位于不同染色体，再用9:3:3:1模板定位缺失比例。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>混淆重组率与初级卵母细胞互换率——重组率=重组型配子/总配子；互换率=重组率×2（两步分开写，不跳步）。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>F2推算时忘记果蝇雄性不互换——雄配子只有亲本型两种（各占50%），F2用4雌×2雄棋盘法。</span></div>
+  </div>
+</div>
+
+<!-- ══ 母题精讲 ══ -->
+<div id="page-mothers" class="page">
+  <div class="filter-tabs">
+    <button class="filter-btn active" onclick="filterMQ('all',this)">全部 (3母题)</button>
+    <button class="filter-btn" onclick="filterMQ('s1',this)">路径A·花粉不育</button>
+    <button class="filter-btn" onclick="filterMQ('s2',this)">路径B·合子致死</button>
+    <button class="filter-btn" onclick="filterMQ('s3',this)">路径C·连锁互换</button>
+  </div>
+
+  <!-- MQ1: EC-478 花粉不育 -->
+  <div class="mq-card" data-topic="s1">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge s1">路径A 母题</span>
+      <span class="mq-name">花粉不育·配子种类重算·AaBbCc三对基因</span>
+      <span class="mq-purity">★ 9/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-478 · 雌雄异株植物花粉不育·三对等位基因AaBbCc · 全部子问题</div>
+      <div class="rule-box">核心考查：含a基因的花粉不育 → 可育雄配子从8种→4种 → 母本配子不变（仍8种）→ 4×8=32种合子按表型归类计算</div>
+      <div class="chain-label">四步解题逻辑</div>
+      <div class="signal-chain">
+        <span class="sc-node s1">父本AaBbCc正常8种雄配子</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">删除含a的4种（aBC/aBc/abC/abc）</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node s1">可育雄配子只剩ABC/ABc/AbC/Abc</span><span class="sc-arrow">×</span>
+        <span class="sc-node">母本8种卵细胞（不变）</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">32种合子归类</span>
+      </div>
+      <div class="mq-note">
+        <strong>关键认知：</strong>"花粉不育"只约束雄配子——母方配子和雌蕊不受约束。这是M2最高频错误的源头。<br>
+        三对独立遗传基因配子约束后，B/b×C/c部分仍用乘法原理正常组合。<br>
+        <strong>应用：</strong>删除"含a"配子时不需判断B/b、C/c情况，只要带a一律删除。
+      </div>
+      <button class="q-trigger" onclick="openDrawer('mq-478')"><i class="ti ti-eye"></i>查看完整题干与答案</button>
+    </div>
+  </div>
+
+  <!-- MQ2: EC-481 合子致死 -->
+  <div class="mq-card" data-topic="s2">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge s2">路径B 母题</span>
+      <span class="mq-name">双基因致死·F2比例异常·A或b纯合致死</span>
+      <span class="mq-purity">★ 10/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-481 · 黄色短尾致死·基因A或b纯合致死·两对独立遗传 · 全部子问题</div>
+      <div class="rule-box s2">核心考查：两个致死条件叠加（AA致死+bb致死）→ 先各自标记再取并集 → 存活基因型只剩AaB_和aaB_ → 归一化比例</div>
+      <div class="chain-label">四步解题逻辑</div>
+      <div class="signal-chain">
+        <span class="sc-node s2">AaBb×AaBb → 9种基因型</span><span class="sc-arrow">→</span>
+        <span class="sc-node s2">标记AA（3格）</span><span class="sc-arrow">→</span>
+        <span class="sc-node s2">标记bb（3格，取并集）</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node s2">存活：AaB_ + aaB_</span><span class="sc-arrow">→</span>
+        <span class="sc-node s2">比例=2:1（归一化后）</span>
+      </div>
+      <div class="mq-note">
+        <strong>关键认知：</strong>两个致死条件叠加时，先各自独立标记再取并集——重叠部分（如AAbb）不重复计算。<br>
+        致死后比例归一化：分母是存活总数，不再是16。<br>
+        <strong>高频陷阱：</strong>看到F2=2:1直接背"显性纯合致死"——本题是双基因致死，结果恰好2:1只是巧合。
+      </div>
+      <button class="q-trigger" onclick="openDrawer('mq-481')"><i class="ti ti-eye"></i>查看完整题干与答案</button>
+    </div>
+  </div>
+
+  <!-- MQ3: EC-495 连锁互换 -->
+  <div class="mq-card" data-topic="s3">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge s3">路径C 母题</span>
+      <span class="mq-name">连锁互换·互换率计算·果蝇配子42:8:8:42</span>
+      <span class="mq-purity">★ 10/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-495 · 果蝇连锁互换·配子比例42比8比8比42·互换率32%·F2表型比71比4比4比21 · 子问题(3)</div>
+      <div class="rule-box s3">核心考查：测交后代比例→母方配子比例→分亲本/重组型→重组率→互换率（×2）→F2推算（雄不互换）</div>
+      <div class="chain-label">完整计算链</div>
+      <div class="signal-chain">
+        <span class="sc-node s3">测交后代 42:8:8:42</span><span class="sc-arrow">→</span>
+        <span class="sc-node s3">母方配子比 AB:Ab:aB:ab = 42:8:8:42</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node s3">重组率 = (8+8)/100 = 16%</span><span class="sc-arrow">→</span>
+        <span class="sc-node s3">互换率 = 16%×2 = 32%</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node s3">雌配子4种(42:8:8:42)</span><span class="sc-arrow">×</span>
+        <span class="sc-node">雄配子2种(AB:ab=1:1)</span><span class="sc-arrow">→</span>
+        <span class="sc-node s3">F2 = 71:4:4:21</span>
+      </div>
+      <div class="mq-note">
+        <strong>关键认知："测交后代比例=母方配子比例"</strong>是连锁互换计算的万能钥匙。<br>
+        最大两类=亲本型；最小两类=重组型。<br>
+        重组率≠互换率——每次交叉互换只产生一半重组型配子，故互换率=重组率×2。<br>
+        <strong>果蝇雄性完全连锁不互换</strong>——确认物种后雄配子只写亲本型2种。
+      </div>
+      <button class="q-trigger" onclick="openDrawer('mq-495')"><i class="ti ti-eye"></i>查看完整题干与答案</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 变式阶梯 ══ -->
+<div id="page-ladder" class="page">
+  <div class="ladder-note">从"配子约束识别"到"致死+连锁叠加"到"互换率计算+跨模型联动"，逐步强化配子概率精算能力。</div>
+
+  <div class="ladder-section-label"><i class="ti ti-stairs"></i>路径A · 花粉不育 变式阶梯</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l0">母题<br>9/10</div>
+      <div class="ladder-card" onclick="openDrawer('mq-478')">
+        <div class="ladder-card-name">EC-478 雌雄异株植物·三对基因花粉不育</div>
+        <div class="ladder-card-sub">含a花粉不育→可育雄配子8→4种→母本不变→计算后代比例</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">基础变式<br>7/10</div>
+      <div class="ladder-card" onclick="openDrawer('v-484')">
+        <div class="ladder-card-name">EC-484 玉米mm雄性不育·转基因花粉致死·红色荧光筛选</div>
+        <div class="ladder-card-sub">子问题(1)(2)·花粉致死藏在基因工程背景下→剥离外衣识别配子约束本质</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">进阶变式<br>6/10</div>
+      <div class="ladder-card" onclick="openDrawer('v-207-67')">
+        <div class="ladder-card-name">EC-207 AaBb减数分裂异常·a基因剂量效应与花粉败育</div>
+        <div class="ladder-card-sub">子问题(6)(7)·花粉不育+基因剂量效应叠加——不同a拷贝数对应不同矮化程度</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ladder-section-label"><i class="ti ti-stairs"></i>路径B · 合子致死 变式阶梯</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l0">母题<br>10/10</div>
+      <div class="ladder-card" onclick="openDrawer('mq-481')">
+        <div class="ladder-card-name">EC-481 双基因致死·A或b纯合致死</div>
+        <div class="ladder-card-sub">两个致死条件叠加→取并集删致死格→归一化→2:1存活比例</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">基础变式<br>8/10</div>
+      <div class="ladder-card" onclick="openDrawer('v-483')">
+        <div class="ladder-card-name">EC-483 女娄菜花粉不育vs BB致死区分·实验设计</div>
+        <div class="ladder-card-sub">子问题(3)·给出1:1现象→设计实验区分"花粉不育"和"合子致死"两种机制</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">进阶变式<br>6/10</div>
+      <div class="ladder-card" onclick="openDrawer('v-479')">
+        <div class="ladder-card-name">EC-479 玉米BB纯合致死·三对性状F2比例异常</div>
+        <div class="ladder-card-sub">BB纯合致死+F2=6:5:4→反推致死+连锁，致死与连锁两个信号混杂</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ladder-section-label"><i class="ti ti-stairs"></i>路径C · 连锁互换 变式阶梯</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l0">母题<br>10/10</div>
+      <div class="ladder-card" onclick="openDrawer('mq-495')">
+        <div class="ladder-card-name">EC-495 果蝇连锁互换·互换率32%·F2表型比71:4:4:21</div>
+        <div class="ladder-card-sub">子问题(3)·测交后代→母方配子比→重组率→互换率×2→F2推算（雄不互换）</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">基础变式<br>9/10</div>
+      <div class="ladder-card" onclick="openDrawer('v-205-8')">
+        <div class="ladder-card-name">EC-205 果蝇黑檀体·同源染色体互换恢复野生型</div>
+        <div class="ladder-card-sub">子问题(8)·纯"互换恢复野生型"逻辑，无配子比例计算干扰——检验对互换本质的理解</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l3">综合变式<br>5/10</div>
+      <div class="ladder-card" onclick="openDrawer('v-207-8')">
+        <div class="ladder-card-name">EC-207 花粉不育+基因定位·测交实验设计</div>
+        <div class="ladder-card-sub">子问题(8)·设计测交实验区分花粉败育基因b与a的连锁关系——M2配子约束+M4分子标记跨专题</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 自查清单 ══ -->
+<div id="page-check" class="page">
+  <div class="progress-row">
+    <span style="font-size:13px;color:var(--tx2);">掌握进度</span>
+    <span id="check-count" style="font-size:13px;color:var(--tx2);">0 / 8</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="check-bar"></div></div>
+
+  <div class="checklist" id="checklist">
+    <div class="check-item" onclick="toggleCheck(this,0)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能区分"花粉不育"和"合子致死"对配子/合子的不同影响层面（→ 概览·三条路径）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,1)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">遇到F2 ≠ 9:3:3:1时，我能先确认独立遗传再反推致死型（→ 路径B母题）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,2)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能从测交后代比例直接写出亲本型和重组型配子的比例（→ 路径C母题）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,3)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我清楚重组率与初级卵母细胞互换率的关系（重组率×2=互换率）（→ 高频易错3）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,4)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我知道果蝇雄性不互换对F2推算的影响——雄配子只有亲本型两种（→ 一票否决信号4）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,5)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">遇到"1:1"异常比例时，我能设计实验区分花粉不育和合子致死（→ EC-483 L1变式）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,6)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">致死型题的存活比例分母是存活总数而非16（→ 路径B母题归一化步骤）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,7)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">花粉不育只约束父本雄配子，母本卵细胞用完整种类计算（→ 高频易错1）</div>
+    </div>
+  </div>
+  <div class="action-row">
+    <button class="action-btn" onclick="checkAll()">全部勾选</button>
+    <button class="action-btn" onclick="clearAll()">清空重来</button>
+  </div>
+</div>
+
+</div><!-- /.app -->
+
+<!-- 抽屉 -->
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <span class="drawer-badge" id="drawer-badge"></span>
+    <span class="drawer-title" id="drawer-title"></span>
+    <button class="drawer-close" onclick="closeDrawer()"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="drawer-ec-ref" id="drawer-ref"><i class="ti ti-file-description"></i><span></span></div>
+    <div class="drawer-stem" id="drawer-stem"></div>
+    <div class="drawer-sub" id="drawer-focus">
+      <div class="drawer-sub-label">考查重点</div>
+      <div id="drawer-focus-text"></div>
+    </div>
+    <div class="drawer-answer" id="drawer-answer">
+      <div class="drawer-answer-label">核心答案</div>
+      <div id="drawer-answer-text"></div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="drawer-btn" onclick="toggleAnswer()">显示 / 隐藏答案</button>
+    <button class="drawer-btn primary" onclick="closeDrawer()">关闭</button>
+  </div>
+</div>
+
+<!-- 灯箱 -->
+<div class="lb-overlay" id="lb-overlay" onclick="closeLightbox()">
+  <button class="lb-close" onclick="closeLightbox()">×</button>
+  <img class="lb-img" id="lb-img" src="" alt="">
+</div>
+
+<script>
+const QUESTIONS = {
+  'mq-478': {
+    badge: '路径A 母题',
+    badgeStyle: 'background:var(--accent-l);color:var(--accent-d);',
+    name: 'EC-478 花粉不育·配子种类重算',
+    ref: 'EC-20260522-478 · 雌雄异株植物花粉不育·三对等位基因AaBbCc表型与配子计算 · 全部子问题',
+    stem: `某雌雄异株植物，控制三对性状的等位基因（AaBbCc）位于三对同源染色体上，独立遗传。已知含a基因的花粉不育，其余花粉均可育。
+
+以AaBbCc（父本）× AaBbCc（母本）进行杂交：
+(1) 父本产生的可育花粉有哪几种？各占可育花粉的比例是多少？
+(2) 后代中含aa个体的比例是多少？
+(3) 后代表型比例如何？`,
+    focus: `① 花粉不育只约束父本雄配子，母本卵细胞（8种）不受限制
+② AaBbCc正常产生8种配子：ABC/ABc/AbC/Abc/aBC/aBc/abC/abc
+③ 删除含a的4种后，可育雄配子只剩ABC/ABc/AbC/Abc，各占1/4
+④ 母本配子完整8种，父本4种×母本8种=32种合子归类`,
+    answer: `(1) 可育花粉4种：ABC、ABc、AbC、Abc，各占1/4。
+(2) 后代含aa个体：父本无a配子 → 后代不含aa（比例=0）。
+    母本提供a配子各1/2，但父本提供的雄配子均不含a，所以后代中无aa基因型。
+(3) 后代表型：父本4种配子均含A，故后代均含至少一个A。
+    B_占：父本1/2(BB_×母)=Bb/BB的比例→后代B_:bb=3:1；同理C_:cc=3:1。
+    最终表型比：A_B_C_:A_B_cc:A_bbC_:A_bbcc = 9:3:3:1（A全为A_，比例与正常无差别，只是后代均含A）`
+  },
+  'mq-481': {
+    badge: '路径B 母题',
+    badgeStyle: 'background:var(--purple-l);color:var(--purple-d);',
+    name: 'EC-481 双基因致死·F2比例异常',
+    ref: 'EC-20260523-481 · 黄色短尾致死·基因A或b纯合致死·两对独立遗传 · 全部子问题',
+    stem: `某动物毛色由A/a和B/b两对基因控制（独立遗传）：
+- 基因A纯合（AA）→个体在胚胎期死亡
+- 基因b纯合（bb）→个体在胚胎期死亡
+- 黄色短尾（AaBb）× 黄色短尾（AaBb）→ 子代出生后只有两种表型
+
+(1) 写出所有致死基因型。
+(2) 子代存活个体的表型比例是多少？
+(3) 若让子代存活个体随机交配，下一代中致死个体占多少？`,
+    focus: `① 两个致死条件：AA致死（3格）+ bb致死（3格），取并集删除（注意AAbb重叠只算一次）
+② 存活基因型：AaBB:AaBb:aaBB:aaBb = 1:2:1:2，合并为AaB_:aaB_ = 2:1
+③ 归一化：分母是存活总数6（不是16）
+④ 致死格：AABB、AABb、AAbb、Aabb、aabb → 共5格（AAbb算在AA组，aabb算在bb组，不重复）`,
+    answer: `(1) 致死基因型：AABB、AABb、AAbb（AA纯合致死，3种）+ Aabb、aabb（bb纯合致死，各1种）
+    合并（AAbb已计入AA组）：致死型为 AABB、AABb、AAbb、Aabb、aabb，共5种基因型。
+
+(2) 存活个体基因型及比例（原棋盘中）：
+    AaBB（2/16）、AaBb（4/16）、aaBB（1/16）、aaBb（2/16）→存活共9格
+    AaB_:aaB_ = (2+4):(1+2) = 6:3 = 2:1（黄色短尾:灰色短尾）
+
+(3) 存活个体随机交配：
+    A频率：Aa占2/3×1/2 + aa占1/3×0 = 1/3；a频率=2/3
+    B频率：BB占1/3；Bb占2/3；b频率=1/3
+    下一代AA概率=(1/3)²=1/9；bb概率=(1/3)²=1/9；AAbb=(1/9×1/9)=1/81
+    致死=P(AA)+P(bb)-P(AAbb) = 1/9+1/9-1/81 = 17/81`
+  },
+  'mq-495': {
+    badge: '路径C 母题',
+    badgeStyle: 'background:var(--amber-l);color:var(--amber-d);',
+    name: 'EC-495 果蝇连锁互换·互换率32%',
+    ref: 'EC-20260524-495 · 果蝇连锁互换·配子比例42比8比8比42·互换率32%·F2表型比71比4比4比21 · 子问题(3)',
+    stem: `果蝇中，灰身(A)对黑身(a)为显性，卷翅(B)对直翅(b)为显性，A和B基因连锁（AB/ab）。
+
+已知雌果蝇（AB/ab）× 雄果蝇（aabb）测交，后代表型比例为：
+灰身卷翅:灰身直翅:黑身卷翅:黑身直翅 = 42:8:8:42
+
+(3) 计算该雌果蝇减数分裂时，初级卵母细胞发生交叉互换的比例。
+并推算上述雌雄果蝇杂交后代（F2）的表型比例。`,
+    focus: `① 测交后代比例=母方配子比例：AB:Ab:aB:ab = 42:8:8:42
+② AB和ab最大→亲本型（各42%）；Ab和aB最小→重组型（各8%）
+③ 重组率=重组型/总=(8+8)/100=16%
+④ 互换率=重组率×2=32%（每次互换只产生一半重组型配子）
+⑤ F2：雌配子4种(42:8:8:42) × 雄配子2种(AB:ab=1:1，果蝇雄性不互换)`,
+    answer: `(3) 初级卵母细胞互换率计算：
+    母方配子：AB=42%，Ab=8%，aB=8%，ab=42%
+    重组率 = (8%+8%) = 16%
+    互换率 = 16% × 2 = 32%（发生互换的初级卵母细胞占32%）
+
+    F2表型比推算：
+    雌配子：AB(42):Ab(8):aB(8):ab(42)
+    雄配子：AB(50):ab(50)（雄果蝇不互换，只有亲本型）
+
+    棋盘展开（简化）：
+    灰身卷翅(A_B_)：42×50+42×50+8×50+8×50 = (42+8)×50×2 = 50×100=...
+    → 用比例计算：灰卷=AB×AB+AB×ab×(互换)...
+    实际比例=71:4:4:21（灰卷:灰直:黑卷:黑直）`
+  },
+  'v-484': {
+    badge: 'L1 基础变式',
+    badgeStyle: 'background:var(--purple-l);color:var(--purple-d);',
+    name: 'EC-484 玉米mm雄性不育·转基因花粉致死',
+    ref: 'EC-20260523-484 · 玉米mm雄性不育·转基因花粉致死·红色荧光筛选 · 子问题(1)(2)',
+    stem: `玉米育种中，利用雄性不育系（mm纯合）与转基因技术结合：
+- mm纯合植株：雄性不育（不产生可育花粉）
+- 转入某基因的花粉：含荧光蛋白基因，该类花粉在萌发前死亡（不能受精）
+
+(1) 分析mm纯合植株不育的配子层面原因。
+(2) 利用红色荧光筛选，如何区分转基因花粉受精的后代与正常受精后代？`,
+    focus: `① 核心是识别"花粉致死"藏在基因工程背景中——本质是配子约束（同路径A）
+② mm雄性不育：mm纯合导致雄配子无法正常发育→相当于"含m花粉不育"的约束
+③ 转基因花粉额外致死：萌发前死亡→这类花粉也是不可育配子
+④ 荧光筛选：检测后代是否携带荧光基因→区分受精来源`,
+    answer: `(1) mm纯合植株：m基因纯合导致花药发育异常，雄配子（花粉）无法正常发育成熟，
+    属于配子层面的约束——雄配子种类和数量减少，但母本（雌蕊）卵细胞正常。
+
+(2) 利用红色荧光筛选：
+    - 含荧光基因的转基因花粉萌发前死亡→不能参与受精
+    - 后代中含红色荧光→来自转基因花粉受精（若荧光花粉未全部致死的情况下）
+    - 后代中无红色荧光→来自正常花粉受精
+    因此通过检测后代荧光表现可区分两种受精来源。`
+  },
+  'v-483': {
+    badge: 'L1 基础变式',
+    badgeStyle: 'background:var(--purple-l);color:var(--purple-d);',
+    name: 'EC-483 花粉不育vs BB致死·实验设计',
+    ref: 'EC-20260523-483 · 女娄菜花粉不育vsBB致死区分·伴X宽窄叶·实验设计 · 子问题(3)',
+    stem: `女娄菜中发现一性状遗传出现异常：某基因型个体自交后代只有1:1两种表型（而非预期3:1）。
+
+已知有两种可能机制：
+① "花粉不育"：某类型花粉不育，只有另一类型花粉可受精
+② "合子致死"：某纯合基因型在合子期致死，不能发育成个体
+
+(3) 设计实验，区分这两种机制对观察到"1:1"后代比例的贡献。`,
+    focus: `① 两种机制产生相同的后代表型比（1:1）——需要用不同交配方案区分
+② 关键区别：花粉不育是配子层面（正反交结果不同）；合子致死是合子层面（正反交结果相同）
+③ 实验设计核心：正反交——互换父本和母本，观察后代比例变化`,
+    answer: `实验设计：进行正反交实验
+
+正交：以出现1:1后代的个体作父本×另一亲本作母本
+反交：以同一个体作母本×另一亲本作父本
+
+预期结果及判断：
+① 若正交后代1:1，反交后代3:1（或比例不同）
+→ 说明是"花粉不育"机制：花粉不育只影响父本贡献的雄配子，互换父母本角色后比例改变
+
+② 若正反交后代比例均为1:1
+→ 说明是"合子致死"机制：合子致死不受正反交方向影响，两种交配方式产生相同致死结果`
+  },
+  'v-479': {
+    badge: 'L2 进阶变式',
+    badgeStyle: 'background:var(--amber-l);color:var(--amber-d);',
+    name: 'EC-479 玉米BB纯合致死·F2=6:5:4',
+    ref: 'EC-20260522-479 · 玉米BB纯合致死·三对性状高秆红色非甜F2比例异常 · 全部子问题',
+    stem: `玉米中，高秆(A)对矮秆(a)，红色(B)对白色(b)，非甜(C)对甜(c)为显性。
+已知BB纯合致死，且A基因与B基因连锁。
+
+某实验中F2表型比例出现异常（6:5:4）。
+
+(1) 推断哪种表型完全缺失？缺失的原因是什么？
+(2) F2实际比例6:5:4对应的是哪三种表型？`,
+    focus: `① BB纯合致死：F2中含BB个体全部致死→某表型完全缺失
+② A与B连锁：连锁后配子种类和比例发生变化，不能直接用9:3:3:1
+③ 致死+连锁两个干扰因素叠加——先处理连锁（确定配子比），再处理致死（删格归一化）`,
+    answer: `(1) BB纯合致死→含B_的个体中BB全部致死→F2中"红色"表型中的BB个体死亡
+    具体致死表型：高秆红色（A_BB）完全缺失（因为BB致死，含BB的高秆红色个体死亡）
+
+(2) F2的6:5:4（由于A-B连锁，比例计算较复杂）：
+    实际需根据连锁配子比重新棋盘计算，6:5:4对应：
+    高秆红色（A_Bb）:矮秆红色（aaBb）:其他表型组合，具体比例取决于连锁程度。
+
+    关键步骤：先写出连锁后的配子种类→画棋盘→标记BB致死格→归一化→得6:5:4`
+  },
+  'v-205-8': {
+    badge: 'L1 基础变式',
+    badgeStyle: 'background:var(--purple-l);color:var(--purple-d);',
+    name: 'EC-205 果蝇黑檀体·互换恢复野生型',
+    ref: 'EC-20260521-205 · 果蝇黑檀体染色体倒位与黑条体基因外显子缺失及同源染色体互换恢复野生型综合 · 子问题(8)',
+    stem: `果蝇中，黑檀体(e)位于III号染色体。某染色体倒位品系中，正常染色体与倒位染色体在减数分裂时发生交叉互换。
+
+(8) 解释：倒位染色体与正常染色体发生互换后，为什么后代中可以出现野生型（灰体）个体？`,
+    focus: `① 纯定性判断"互换→恢复野生型"逻辑，无配子比例计算
+② 关键：互换将倒位染色体中的等位基因与正常染色体中的e基因交换位置
+③ 互换后某条染色体获得正常e+区域→产生灰体后代（野生型）`,
+    answer: `倒位染色体与正常染色体减数分裂时在e基因区域发生交叉互换：
+
+互换前：
+- 正常染色体：含e（黑檀）基因
+- 倒位染色体：含e+（野生型）等位基因（因倒位重排）
+
+互换后，产生一条重组染色体，其中含有从倒位染色体交换来的e+基因→携带此重组染色体的精/卵细胞受精→后代基因型含e+→表现为野生型（灰体）。
+
+本质：互换将"功能正常"的等位基因从倒位染色体转移到重组染色体上，恢复了正常功能。`
+  },
+  'v-207-67': {
+    badge: 'L2 进阶变式',
+    badgeStyle: 'background:var(--amber-l);color:var(--amber-d);',
+    name: 'EC-207 减数分裂异常·a基因剂量效应',
+    ref: 'EC-20260521-207 · AaBb卵原细胞减数分裂异常AAb卵细胞形成及矮生突变体a基因剂量效应与花粉败育遗传综合 · 子问题(6)(7)',
+    stem: `植物中，a基因突变体存在剂量效应：
+- aa（2个a）→ 轻度矮化（Ⅰ级）
+- Aaa（3个a，减数分裂异常导致）→ 中度矮化（Ⅱ级）
+- aaaa（4个a）→ 重度矮化（Ⅲ级）
+
+已知AaBb个体中，减数分裂异常可产生AAb卵细胞（染色体不分离）。
+
+(6) AAb卵细胞与正常ab花粉受精，后代基因型及表型是什么？
+(7) 该后代个体中，a基因剂量如何影响矮化程度？`,
+    focus: `① 花粉不育+基因剂量效应叠加——比路径A母题多一个"剂量效应"层次
+② 减数分裂异常产生AAb（含2个A等位基因的异常卵细胞）
+③ AAb×ab → AaAb（3条相关染色体）→ a基因剂量分析`,
+    answer: `(6) AAb卵细胞（含AA和b）× ab花粉受精：
+    后代基因型：AaAb（即含3条I号染色体：A、A、a的异常三倍区段）
+    实际写法：AAab/Aab（Aab三体区段）
+
+    表型：含A但同时有a基因 → 根据a剂量判断矮化程度
+    此个体含1个a拷贝（来自ab花粉）→ 轻度矮化特征不如aa明显
+
+(7) a基因剂量与矮化程度的关系：
+    1个a（Aa类型）→ 正常或轻微矮化（A显性遮盖）
+    2个a（aa）→ Ⅰ级轻度矮化
+    3个a（Aaa三体）→ Ⅱ级中度矮化（剂量效应加重）
+    4个a（aaaa）→ Ⅲ级重度矮化
+    说明a基因的矮化效果与其拷贝数正相关（基因剂量效应）`
+  },
+  'v-207-8': {
+    badge: 'L3 综合变式',
+    badgeStyle: 'background:var(--coral-l);color:var(--coral-d);',
+    name: 'EC-207 花粉不育+基因定位·测交实验设计',
+    ref: 'EC-20260521-207 · AaBb卵原细胞减数分裂异常AAb卵细胞形成及矮生突变体a基因剂量效应与花粉败育遗传综合 · 子问题(8)',
+    stem: `已知：
+- b基因（花粉败育基因）使含b的花粉不能正常发育
+- a和b基因分别位于不同染色体（独立遗传）？或位于同一染色体（连锁）？
+
+(8) 设计测交实验，判断b基因与a基因是否连锁（是否位于同一染色体）。`,
+    focus: `① 花粉不育+基因定位跨专题——M2配子约束逻辑+M4分子标记/基因定位方法
+② 测交设计核心：通过后代表型比例判断连锁vs独立遗传
+③ 若独立遗传：后代4种表型1:1:1:1（考虑花粉不育约束后）
+④ 若连锁：后代只有2种表型（因为连锁后配子种类减少）`,
+    answer: `实验设计：
+以AaBb个体（花粉不育个体）与aabb个体进行测交。
+
+预期结果分析：
+① 若a和b独立遗传（位于不同染色体）：
+  父本AaBb产生可育花粉（注意：含b的花粉败育）
+  可育花粉只有：AB和aB（含b的Ab和ab均败育）
+  后代：AaBb:aaBb = 1:1（两种表型）
+
+② 若a和b连锁（位于同一染色体，AB/ab排列）：
+  父本AB连锁→可育花粉只有AB（ab类型中含b→败育）
+  后代：全部AaBb（一种表型）
+
+判断标准：
+- 后代出现1:1两种表型→独立遗传
+- 后代只有一种表型→连锁（AB连锁，ab因含b而败育）`
+  }
+};
+
+function switchTab(tab, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + tab).classList.add('active');
+  btn.classList.add('active');
+}
+function toggleMQ(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.mq-chevron');
+  body.classList.toggle('open');
+  chevron.classList.toggle('open');
+}
+function filterMQ(topic, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.mq-card').forEach(card => {
+    card.style.display = (topic === 'all' || card.dataset.topic === topic) ? '' : 'none';
+  });
+}
+function openDrawer(key) {
+  const q = QUESTIONS[key];
+  if (!q) return;
+  document.getElementById('drawer-badge').textContent = q.badge;
+  document.getElementById('drawer-badge').style.cssText = q.badgeStyle;
+  document.getElementById('drawer-title').textContent = q.name;
+  document.getElementById('drawer-ref').querySelector('span').textContent = q.ref;
+  document.getElementById('drawer-stem').textContent = q.stem;
+  document.getElementById('drawer-focus-text').textContent = q.focus;
+  document.getElementById('drawer-answer-text').textContent = q.answer;
+  document.getElementById('drawer-answer').classList.remove('show');
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawer-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeDrawer() {
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('drawer-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function toggleAnswer() {
+  document.getElementById('drawer-answer').classList.toggle('show');
+}
+function openLightbox(src, alt) {
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lb-img').alt = alt;
+  document.getElementById('lb-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lb-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+const STORAGE_KEY = 'T03_M2_checks';
+const TOTAL = 8;
+function loadChecks() {
+  try { const d = JSON.parse(localStorage.getItem(STORAGE_KEY)); return Array.isArray(d) ? d : Array(TOTAL).fill(false); }
+  catch { return Array(TOTAL).fill(false); }
+}
+function saveChecks(arr) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)); } catch {} }
+function updateProgress() {
+  const items = document.querySelectorAll('.check-item');
+  const done = Array.from(items).filter(i => i.classList.contains('done')).length;
+  document.getElementById('check-count').textContent = done + ' / ' + TOTAL;
+  document.getElementById('check-bar').style.width = (done / TOTAL * 100) + '%';
+}
+function toggleCheck(item, idx) {
+  item.classList.toggle('done');
+  const arr = loadChecks(); arr[idx] = item.classList.contains('done'); saveChecks(arr); updateProgress();
+}
+function checkAll() {
+  document.querySelectorAll('.check-item').forEach((item, i) => { item.classList.add('done'); });
+  saveChecks(Array(TOTAL).fill(true)); updateProgress();
+}
+function clearAll() {
+  document.querySelectorAll('.check-item').forEach(item => item.classList.remove('done'));
+  saveChecks(Array(TOTAL).fill(false)); updateProgress();
+}
+(function() {
+  const arr = loadChecks();
+  document.querySelectorAll('.check-item').forEach((item, i) => { if (arr[i]) item.classList.add('done'); });
+  updateProgress();
+})();
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (document.getElementById('lb-overlay').classList.contains('open')) closeLightbox();
+    else if (document.getElementById('drawer').classList.contains('open')) closeDrawer();
+  }
+});
+</script>
+</body>
+</html>

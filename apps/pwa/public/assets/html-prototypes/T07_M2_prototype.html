@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T07_M2 · 能量流动计算</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent:#534AB7; --accent-l:#EEEDFE; --accent-m:#AFA9EC; --accent-d:#3C3489;
+  --teal:#0F6E56; --teal-l:#E1F5EE; --teal-d:#085041;
+  --amber:#BA7517; --amber-l:#FAEEDA; --amber-d:#633806;
+  --coral:#993C1D; --coral-l:#FAECE7; --coral-d:#712B13;
+  --green:#1D7A3A; --green-l:#E6F4EA; --green-d:#0F4A22;
+  --bg:#ffffff; --bg2:#f7f7f5; --bg3:#f1efe8;
+  --tx:#1a1a18; --tx2:#5f5e5a; --tx3:#888780;
+  --bd:rgba(0,0,0,0.10); --bd2:rgba(0,0,0,0.18);
+  --r-sm:6px; --r-md:8px; --r-lg:12px; --r-xl:16px;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#1c1c1a;--bg2:#252523;--bg3:#2c2c2a;
+    --tx:#f0efea;--tx2:#b4b2a9;--tx3:#888780;
+    --bd:rgba(255,255,255,0.09);--bd2:rgba(255,255,255,0.16);
+    --accent-l:#26215C;--accent-d:#CECBF6;
+    --teal-l:#04342C;--teal-d:#9FE1CB;
+    --amber-l:#412402;--amber-d:#FAC775;
+    --coral-l:#4A1B0C;--coral-d:#F5C4B3;
+    --green-l:#0A2D14;--green-d:#86D99A;
+  }
+}
+body{font-family:var(--font);font-size:15px;line-height:1.6;color:var(--tx);background:var(--bg3);min-height:100vh;}
+.app{max-width:800px;margin:0 auto;background:var(--bg);min-height:100vh;}
+
+/* ── Header & Nav ── */
+.site-header{padding:1.25rem 1.5rem 0;background:var(--bg);border-bottom:0.5px solid var(--bd);position:sticky;top:0;z-index:20;}
+.header-top{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.header-icon{background:var(--green-l);border-radius:var(--r-md);padding:6px 8px;display:flex;align-items:center;justify-content:center;}
+.header-icon i{font-size:20px;color:var(--green);}
+.header-meta{font-size:12px;color:var(--tx3);}
+.header-title{font-size:17px;font-weight:500;color:var(--tx);}
+.header-id{margin-left:auto;font-size:11px;color:var(--tx3);background:var(--bg2);padding:3px 9px;border-radius:var(--r-sm);}
+.nav-tabs{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.nav-tab{padding:.6rem 1.1rem;font-size:13px;color:var(--tx2);cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;font-family:var(--font);white-space:nowrap;transition:color .15s,border-color .15s;}
+.nav-tab.active{color:var(--green);border-bottom-color:var(--green);font-weight:500;}
+.nav-tab:hover:not(.active){color:var(--tx);}
+
+/* ── Pages ── */
+.page{display:none;padding:1.5rem;}
+.page.active{display:block;}
+
+/* ── Memory Card ── */
+.memory-section{margin-bottom:1.5rem;}
+.memory-card{border:0.5px solid var(--bd);border-radius:var(--r-xl);overflow:hidden;background:var(--bg);}
+.memory-placeholder{min-height:200px;background:var(--bg2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--tx3);padding:2rem;}
+.memory-placeholder i{font-size:32px;color:var(--bd2);}
+.memory-placeholder-text{font-size:13px;text-align:center;line-height:1.6;}
+.memory-placeholder-filename{font-size:11px;background:var(--bg3);border:0.5px solid var(--bd);border-radius:var(--r-sm);padding:4px 10px;font-family:monospace;color:var(--tx2);}
+.memory-img{width:100%;display:block;max-height:320px;object-fit:contain;background:var(--bg3);cursor:zoom-in;transition:opacity .15s;}
+.memory-img:hover{opacity:.9;}
+.memory-footer{padding:.85rem 1rem;display:flex;align-items:center;gap:10px;border-top:0.5px solid var(--bd);}
+.memory-label{font-size:13px;font-weight:500;color:var(--tx);flex:1;}
+.audio-placeholder{font-size:12px;color:var(--tx3);display:flex;align-items:center;gap:5px;background:var(--bg2);padding:6px 10px;border-radius:var(--r-sm);}
+audio{height:32px;width:220px;}
+/* ── Lightbox ── */
+.lb-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:200;display:none;align-items:center;justify-content:center;cursor:zoom-out;}
+.lb-overlay.open{display:flex;}
+.lb-img{max-width:92vw;max-height:92vh;object-fit:contain;border-radius:var(--r-md);box-shadow:0 8px 40px rgba(0,0,0,.5);}
+.lb-close{position:fixed;top:16px;right:20px;background:none;border:none;color:#fff;font-size:28px;cursor:pointer;line-height:1;opacity:.7;transition:opacity .15s;}
+.lb-close:hover{opacity:1;}
+
+/* ── Overview ── */
+.section-title{font-size:13px;font-weight:500;color:var(--tx2);display:flex;align-items:center;gap:7px;margin-bottom:1rem;text-transform:uppercase;letter-spacing:.04em;}
+.section-divider{height:0.5px;background:var(--bd);margin:1.5rem 0;}
+.signal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:1.5rem;}
+.signal-card{background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;}
+.signal-label{font-size:11px;color:var(--tx3);letter-spacing:.04em;margin-bottom:.4rem;text-transform:uppercase;}
+.signal-tag{font-size:13px;color:var(--tx);}
+
+/* ── Formula Box ── */
+.formula-box{background:var(--green-l);border:0.5px solid var(--bd);border-left:3px solid var(--green);border-radius:0 var(--r-md) var(--r-md) 0;padding:1rem 1.25rem;margin-bottom:1.5rem;}
+.formula-title{font-size:12px;font-weight:500;color:var(--green-d);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.65rem;}
+.formula-main{font-size:15px;font-weight:500;color:var(--tx);margin-bottom:.5rem;}
+.formula-sub{font-size:13px;color:var(--tx2);line-height:1.7;}
+.formula-trap{font-size:13px;color:var(--coral-d);margin-top:.5rem;display:flex;gap:6px;align-items:flex-start;}
+
+/* ── Data types ── */
+.data-type-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:1.5rem;}
+.data-type-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.85rem 1rem;}
+.data-type-label{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;margin-bottom:.35rem;}
+.data-type-name{font-size:13px;font-weight:500;color:var(--tx);margin-bottom:.25rem;}
+.data-type-desc{font-size:12px;color:var(--tx2);line-height:1.55;}
+.difficulty-badge{display:inline-block;font-size:10px;padding:2px 7px;border-radius:var(--r-sm);margin-top:.35rem;}
+.d-basic{background:var(--green-l);color:var(--green-d);}
+.d-mid{background:var(--accent-l);color:var(--accent-d);}
+.d-hard{background:var(--amber-l);color:var(--amber-d);}
+
+.trap-list{display:flex;flex-direction:column;gap:7px;}
+.trap-item{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.55;}
+.trap-icon{color:#E24B4A;font-size:15px;flex-shrink:0;margin-top:1px;}
+
+/* ── Mother Questions ── */
+.mq-card{border:0.5px solid var(--bd);border-radius:var(--r-lg);background:var(--bg);margin-bottom:.85rem;overflow:hidden;}
+.mq-header{padding:.9rem 1.1rem;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;transition:background .15s;}
+.mq-header:hover{background:var(--bg2);}
+.mq-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);white-space:nowrap;}
+.mq-badge.mq{background:var(--green-l);color:var(--green-d);}
+.mq-badge.v{background:var(--bg3);color:var(--tx2);}
+.mq-name{font-size:14px;font-weight:500;color:var(--tx);flex:1;}
+.mq-purity{font-size:12px;color:var(--tx3);flex-shrink:0;}
+.mq-chevron{color:var(--tx3);font-size:16px;transition:transform .2s;flex-shrink:0;}
+.mq-chevron.open{transform:rotate(180deg);}
+.mq-body{display:none;padding:.75rem 1.1rem 1.1rem;border-top:0.5px solid var(--bd);}
+.mq-body.open{display:block;}
+.mq-source{font-size:12px;color:var(--tx3);margin-bottom:.65rem;}
+.rule-box{background:var(--green-l);border-left:3px solid var(--green);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:.65rem .9rem;font-size:13px;color:var(--green-d);margin:.75rem 0;line-height:1.65;}
+.chain-label{font-size:12px;font-weight:500;color:var(--tx2);margin:.75rem 0 .4rem;text-transform:uppercase;letter-spacing:.04em;}
+.signal-chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:6px;}
+.sc-node{background:var(--bg2);border-radius:var(--r-sm);padding:3px 9px;font-size:13px;color:var(--tx);}
+.sc-node.g{background:var(--green-l);color:var(--green-d);}
+.sc-node.a{background:var(--amber-l);color:var(--amber-d);}
+.sc-node.p{background:var(--accent-l);color:var(--accent-d);}
+.sc-arrow{color:var(--tx3);font-size:13px;}
+.mq-note{font-size:13px;color:var(--tx2);margin-top:.75rem;line-height:1.6;}
+.q-trigger{display:inline-flex;align-items:center;gap:5px;margin-top:.75rem;padding:6px 12px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;color:var(--tx2);cursor:pointer;font-family:var(--font);transition:all .15s;}
+.q-trigger:hover{background:var(--bg2);color:var(--tx);}
+.q-trigger i{font-size:14px;}
+
+/* ── Ladder ── */
+.ladder-section-label{font-size:13px;font-weight:500;color:var(--tx2);margin-bottom:.85rem;display:flex;align-items:center;gap:7px;}
+.ladder-rows{display:flex;flex-direction:column;gap:8px;margin-bottom:1rem;}
+.ladder-row{display:grid;grid-template-columns:64px 1fr;gap:10px;align-items:start;}
+.ladder-level{font-size:11px;font-weight:500;padding:6px 4px;border-radius:var(--r-sm);text-align:center;line-height:1.4;}
+.l0{background:var(--green-l);color:var(--green-d);}
+.l1{background:var(--teal-l);color:var(--teal-d);}
+.l2{background:var(--accent-l);color:var(--accent-d);}
+.l3{background:var(--amber-l);color:var(--amber-d);}
+.ladder-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.65rem .9rem;background:var(--bg);cursor:pointer;transition:background .15s;}
+.ladder-card:hover{background:var(--bg2);}
+.ladder-card-name{font-size:13px;font-weight:500;color:var(--tx);}
+.ladder-card-sub{font-size:12px;color:var(--tx3);margin-top:3px;line-height:1.5;}
+.ladder-note{background:var(--bg2);border-radius:var(--r-md);padding:.65rem .9rem;font-size:12px;color:var(--tx2);margin-bottom:1rem;line-height:1.55;}
+.pending-note{background:var(--amber-l);border-radius:var(--r-md);padding:.65rem .9rem;font-size:12px;color:var(--amber-d);margin-top:.5rem;display:flex;align-items:flex-start;gap:6px;}
+
+/* ── Self-check ── */
+.progress-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem;}
+.progress-bar{height:5px;border-radius:3px;background:var(--bg2);margin-bottom:1.25rem;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;background:var(--green);width:0%;transition:width .3s;}
+.checklist{display:flex;flex-direction:column;gap:7px;}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:.7rem .9rem;border:0.5px solid var(--bd);border-radius:var(--r-md);background:var(--bg);cursor:pointer;transition:background .15s;}
+.check-item.done{background:var(--bg2);}
+.check-box{width:18px;height:18px;border:1.5px solid var(--bd2);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .15s;}
+.check-item.done .check-box{background:var(--green);border-color:var(--green);}
+.check-box i{font-size:11px;color:#fff;display:none;}
+.check-item.done .check-box i{display:block;}
+.check-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.check-item.done .check-text{color:var(--tx3);text-decoration:line-through;}
+.action-row{margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:8px;}
+.action-btn{padding:7px 14px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.action-btn:hover{background:var(--bg2);}
+
+/* ── Drawer ── */
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s;}
+.drawer-overlay.open{opacity:1;pointer-events:all;}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100vw);background:var(--bg);z-index:101;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden;}
+.drawer.open{transform:translateX(0);}
+.drawer-header{padding:1rem 1.25rem;border-bottom:0.5px solid var(--bd);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.drawer-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);}
+.drawer-title{font-size:14px;font-weight:500;color:var(--tx);flex:1;line-height:1.4;}
+.drawer-close{background:none;border:none;cursor:pointer;color:var(--tx2);padding:4px;border-radius:var(--r-sm);display:flex;align-items:center;transition:background .15s;}
+.drawer-close:hover{background:var(--bg2);}
+.drawer-body{flex:1;overflow-y:auto;padding:1.25rem;}
+.drawer-ec-ref{font-size:12px;color:var(--tx3);margin-bottom:1rem;display:flex;align-items:center;gap:6px;}
+.drawer-stem{font-size:14px;color:var(--tx);line-height:1.75;white-space:pre-wrap;}
+.drawer-sub{font-size:13px;color:var(--tx2);background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:1rem;line-height:1.65;}
+.drawer-sub-label{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-answer{font-size:13px;color:var(--tx);background:var(--green-l);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:.75rem;line-height:1.65;display:none;}
+.drawer-answer.show{display:block;}
+.drawer-answer-label{font-size:11px;font-weight:500;color:var(--green-d);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-footer{padding:.85rem 1.25rem;border-top:0.5px solid var(--bd);display:flex;gap:8px;flex-shrink:0;}
+.drawer-btn{flex:1;padding:8px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.drawer-btn:hover{background:var(--bg2);}
+.drawer-btn.primary{background:var(--green);color:#fff;border-color:var(--green);}
+.drawer-btn.primary:hover{background:var(--green-d);}
+
+/* ── Mobile ── */
+@media(max-width:600px){
+  .site-header{padding:1rem 1rem 0;}
+  .page{padding:1rem;}
+  .header-title{font-size:15px;}
+  .signal-grid,.data-type-grid{grid-template-columns:1fr 1fr;}
+  .ladder-row{grid-template-columns:52px 1fr;gap:8px;}
+  .action-row{flex-direction:column;}
+  .action-btn{width:100%;text-align:center;}
+  .drawer{width:100vw;}
+}
+@media(max-width:380px){
+  .signal-grid,.data-type-grid{grid-template-columns:1fr;}
+}
+
+.back-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;font-size:12px;color:var(--tx2);background:var(--bg2);border:0.5px solid var(--bd2);border-radius:var(--r-md);text-decoration:none;font-family:var(--font);transition:background .15s,color .15s;white-space:nowrap;flex-shrink:0;}
+.back-btn:hover{background:var(--bg3);color:var(--tx);}
+.back-btn i{font-size:14px;}
+.memory-video{width:100%;max-height:220px;display:block;border-radius:var(--r-md);background:#000;margin-top:8px;}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- Header -->
+<header class="site-header">
+  <div class="header-top">
+    <div class="header-icon"><i class="ti ti-leaf" aria-hidden="true"></i></div>
+    <div>
+      <div class="header-meta">07 生态系统 · M2 能量流动</div>
+      <div class="header-title">能量流动计算</div>
+    </div>
+    <a class="back-btn" href="index.html" aria-label="返回首页"><i class="ti ti-arrow-left"></i> 首页</a>
+    <div class="header-id">T07_M2</div>
+  </div>
+  <nav class="nav-tabs" role="tablist">
+    <button class="nav-tab active" role="tab" onclick="switchTab('overview',this)">概览</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('mothers',this)">母题精讲</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('ladder',this)">变式阶梯</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('check',this)">自查清单</button>
+  </nav>
+</header>
+
+<!-- ══ PAGE: Overview ══ -->
+<div id="page-overview" class="page active">
+
+  <!-- Memory Card: 自行放图 -->
+  <div class="memory-section">
+    <div class="memory-card">
+      <img class="memory-img" src="记忆卡/T07_M2_memory.png" alt="T07_M2 能量流动计算记忆卡"
+           onclick="openLightbox(this.src,this.alt)"
+           onerror="this.style.display='none';document.getElementById('mem-placeholder').style.display='flex'">
+      <div id="mem-placeholder" class="memory-placeholder" style="display:none;">
+        <i class="ti ti-photo-up"></i>
+        <div class="memory-placeholder-text">记忆卡图片放置于此<br>将你生成的图片命名为：</div>
+        <div class="memory-placeholder-filename">记忆卡/T07_M2_memory.png</div>
+        <div style="font-size:11px;color:var(--tx3);margin-top:4px;">PNG 格式，放入「记忆卡」文件夹即可</div>
+      </div>
+      <div class="memory-footer">
+        <span class="memory-label"><i class="ti ti-brain" style="margin-right:5px;color:var(--green);"></i>记忆卡 · 能量流动核心公式</span>
+        <video class="memory-video" controls controlsList="nodownload" preload="metadata" style="display:none">
+        <source src="audio/T07_M2.mp4" type="video/mp4">
+      </video>
+      <div class="audio-placeholder" style="display:flex"><i class="ti ti-video-off"></i>视频待放入</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Core Formula -->
+  <div class="formula-box">
+    <div class="formula-title">核心公式</div>
+    <div class="formula-main">传递效率 = 下一营养级同化量 ÷ 本营养级同化量 × 100%</div>
+    <div class="formula-sub">
+      同化量 = 摄入量 − 粪便量（粪便归上一营养级）<br>
+      同化量 = 呼吸散失量 + 流向下一营养级 + 流向分解者 + 未利用量<br>
+      一般传递效率：10%~20%；超出此范围需特别分析
+    </div>
+    <div class="formula-trap"><i class="ti ti-alert-triangle" style="color:var(--coral);flex-shrink:0;margin-top:1px;"></i>高频陷阱：摄入量 ≠ 同化量。粪便是上一营养级流向分解者的量，不属于本营养级同化量。</div>
+  </div>
+
+  <!-- Signal Cards -->
+  <div class="section-title"><i class="ti ti-radar"></i>核心识别信号</div>
+  <div class="signal-grid">
+    <div class="signal-card">
+      <div class="signal-label">题型触发词</div>
+      <div class="signal-tag">传递效率 / 同化量 / 摄入量 / 能量流动图</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">数据形式</div>
+      <div class="signal-tag">数字代入 / 字母公式 / 图表读取</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">进阶信号</div>
+      <div class="signal-tag">传递效率&gt;20% / 总输入÷总呼吸判演替</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">底层逻辑</div>
+      <div class="signal-tag">单向流动 · 逐级递减 · 不可循环</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- Data type difficulty ladder -->
+  <div class="section-title"><i class="ti ti-stairs"></i>四种数据呈现形式（难度递增）</div>
+  <div class="data-type-grid">
+    <div class="data-type-card">
+      <div class="data-type-label">形式1</div>
+      <div class="data-type-name">纯数字直接代入</div>
+      <div class="data-type-desc">给定各营养级同化量数值，直接代入公式计算</div>
+      <span class="difficulty-badge d-basic">基础</span>
+    </div>
+    <div class="data-type-card">
+      <div class="data-type-label">形式2</div>
+      <div class="data-type-name">字母符号表达</div>
+      <div class="data-type-desc">用字母表示各量，写出传递效率公式（需处理摄入量−粪便=同化量）</div>
+      <span class="difficulty-badge d-basic">基础</span>
+    </div>
+    <div class="data-type-card">
+      <div class="data-type-label">形式3</div>
+      <div class="data-type-name">模型图读取</div>
+      <div class="data-type-desc">从能量流动模型图提取同化量数值；注意图中可能含有分解者、未利用量等多路径</div>
+      <span class="difficulty-badge d-mid">进阶</span>
+    </div>
+    <div class="data-type-card">
+      <div class="data-type-label">形式4</div>
+      <div class="data-type-name">多营养级表格</div>
+      <div class="data-type-desc">6营养级表格；同化量既可算传递效率，也可作为生态系统成熟度的判断依据</div>
+      <span class="difficulty-badge d-hard">综合</span>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- Traps -->
+  <div class="section-title"><i class="ti ti-alert-triangle"></i>高频易错</div>
+  <div class="trap-list">
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>粪便不属于本营养级同化量。第二营养级的粪便仍归第一营养级的同化量范畴（由第一营养级流向分解者）。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>传递效率&gt;20%不是错误，是异常值，需分析原因（如人工干预减少散失量、闭合系统等）。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>总输入/总呼吸 &gt; 1 → 系统能量积累 → 尚未成熟阶段；随演替推进趋近 1（顶极群落）。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>能量流动方向：单向，沿食物链从低营养级→高营养级，不可逆，不可循环。分解者不是食物链节点。</span></div>
+  </div>
+</div>
+
+<!-- ══ PAGE: Mother Questions ══ -->
+<div id="page-mothers" class="page">
+
+  <!-- MQ: EC-217 -->
+  <div class="mq-card">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge mq">母题</span>
+      <span class="mq-name">EC-217 · 河狸营养级能量传递效率计算+同化量去向</span>
+      <span class="mq-purity">★ 9/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-217 · (2)(3) · 2026-05-21</div>
+      <div class="rule-box">核心框架：给定两营养级同化量数字 → 直接套公式计算传递效率 → 再分析同化量的4个去向（呼吸散失/流向下一营养级/流向分解者/未利用）</div>
+      <div class="chain-label">两步解题</div>
+      <div class="signal-chain">
+        <span class="sc-node g">两营养级同化量（数字）</span><span class="sc-arrow">→</span>
+        <span class="sc-node g">传递效率 = 360/2000 = 18%</span>
+      </div>
+      <div class="signal-chain" style="margin-top:6px;">
+        <span class="sc-node">同化量去向（4路）</span><span class="sc-arrow">：</span>
+        <span class="sc-node">呼吸散失</span><span class="sc-arrow">+</span>
+        <span class="sc-node">下一营养级</span><span class="sc-arrow">+</span>
+        <span class="sc-node">分解者</span><span class="sc-arrow">+</span>
+        <span class="sc-node">未利用</span>
+      </div>
+      <div class="mq-note">河狸：初级消费者（第二营养级），以树皮、嫩叶、水生植物为食。同化量 = 780+1220 = 2000×10⁴kJ；下一营养级同化量 = 150+210 = 360×10⁴kJ。传递效率18%在正常范围内（10%~20%）。</div>
+      <button class="q-trigger" onclick="openDrawer('mq-ec217')"><i class="ti ti-file-text"></i>查看完整题干</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ PAGE: Variant Ladder ══ -->
+<div id="page-ladder" class="page">
+
+  <div class="ladder-section-label"><span class="mq-badge mq" style="font-size:12px;">子专题1 · 同化量与传递效率</span>1母题 + 3变式</div>
+  <div class="ladder-note">核心陷阱不变：区分摄入量与同化量。四张题卡按数据呈现形式形成难度阶梯：纯数字→字母公式→模型图→多营养级表格。</div>
+
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l0">母题<br>L0</div>
+      <div class="ladder-card" onclick="openDrawer('mq-ec217')">
+        <div class="ladder-card-name">EC-217 · 河狸营养级能量传递效率（纯数字代入）</div>
+        <div class="ladder-card-sub">(2)(3) · 纯净度9/10 · 两营养级同化量数字直接计算，18%在正常范围</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">基础<br>L1</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec381')">
+        <div class="ladder-card-name">EC-381 · 红树林能量传递效率（字母公式表达）</div>
+        <div class="ladder-card-sub">(7) · 纯净度7/10 · 用字母表示同化量公式；需处理"摄入量−粪便=同化量"换算</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">进阶<br>L2</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec489')">
+        <div class="ladder-card-name">EC-489 · 地穴农场闭合生态系统（模型图读取·45%异常值）</div>
+        <div class="ladder-card-sub">(3) · 纯净度9/10 · 从能量流动模型图提取数值计算；传递效率45%超正常范围，需分析原因</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">进阶<br>L2</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec490')">
+        <div class="ladder-card-name">EC-490 · 海区6营养级表格（逐级递减+成熟度判断）</div>
+        <div class="ladder-card-sub">(1)(3) · 纯净度9/10 · 表格读取验证逐级递减；总输入/总呼吸=2.596判断演替阶段（未成熟）</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pending-note"><i class="ti ti-clock" style="flex-shrink:0;margin-top:1px;"></i><span>⚠️ 综合变式（3+营养级连续传递效率链式计算）待新题源入库</span></div>
+
+</div>
+
+<!-- ══ PAGE: Self-check ══ -->
+<div id="page-check" class="page">
+  <div class="progress-row">
+    <span class="section-title" style="margin:0"><i class="ti ti-checkbox"></i>自查进度</span>
+    <span id="check-counter" style="font-size:13px;color:var(--tx3);">0 / 8</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="check-bar"></div></div>
+
+  <div class="checklist" id="checklist">
+    <div class="check-item" onclick="toggleCheck(this)" data-key="c07m2-1">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">能默写传递效率公式：下一营养级同化量 ÷ 本营养级同化量 × 100%</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)" data-key="c07m2-2">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">知道粪便属于上一营养级（不计入本营养级同化量），同化量 = 摄入量 − 粪便量</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)" data-key="c07m2-3">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">同化量的4个去向：呼吸散失 + 流向下一营养级 + 流向分解者 + 未利用量</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)" data-key="c07m2-4">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">EC-217计算：2000×10⁴kJ（河狸营养级）→ 360×10⁴kJ → 传递效率18%</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)" data-key="c07m2-5">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">EC-489：闭合系统传递效率45%（超20%）的原因：人工系统减少能量散失途径，不违反物理原理</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)" data-key="c07m2-6">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">EC-490：总输入/总呼吸 = 2.596 &gt; 1 → 能量积累 → 系统尚未成熟 → 群落演替进行中</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)" data-key="c07m2-7">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">EC-381字母版：能用字母（e₁、e₂等）写出传递效率公式，而非套数字</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)" data-key="c07m2-8">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">能量单向流动：沿食物链由低→高营养级，不可逆，不循环；分解者不在食物链节点上</div>
+    </div>
+  </div>
+
+  <div class="action-row">
+    <button class="action-btn" onclick="resetChecks()"><i class="ti ti-refresh"></i> 重置</button>
+    <button class="action-btn" onclick="checkAll()"><i class="ti ti-check-all"></i> 全部勾选</button>
+  </div>
+</div>
+
+</div><!-- /app -->
+
+<!-- ── Drawer ── -->
+<div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer" role="dialog" aria-modal="true">
+  <div class="drawer-header">
+    <span class="drawer-badge" id="d-badge"></span>
+    <span class="drawer-title" id="d-title"></span>
+    <button class="drawer-close" onclick="closeDrawer()" aria-label="关闭"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="drawer-ec-ref"><i class="ti ti-link"></i><span id="d-ref"></span></div>
+    <div class="drawer-stem" id="d-stem"></div>
+    <div class="drawer-sub" id="d-sub">
+      <div class="drawer-sub-label">考查焦点</div>
+      <div id="d-focus"></div>
+    </div>
+    <div class="drawer-answer" id="d-answer">
+      <div class="drawer-answer-label">参考答案</div>
+      <div id="d-answer-text"></div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="drawer-btn" onclick="closeDrawer()">关闭</button>
+    <button class="drawer-btn primary" id="d-answer-btn" onclick="toggleAnswer()">显示答案</button>
+  </div>
+</div>
+
+<script>
+/* ── Tab switching ── */
+function switchTab(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+/* ── MQ accordion ── */
+function toggleMQ(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.mq-chevron');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chevron.classList.toggle('open', !isOpen);
+}
+
+/* ── Question data ── */
+const QUESTIONS = {
+  'mq-ec217': {
+    badge: '母题', badgeClass: 'mq',
+    title: '河狸生态工程师·营养级能量传递效率·同化量去向分析',
+    ref: 'EC-20260521-217 · (2)(3)',
+    stem: `河狸适应半水生生活，以树皮、嫩树叶和水生植物为食，偶尔食粪以维持肠道微生物平衡。
+
+（图1：河狸巢穴基本结构；表1：不同年份不同生境类型面积变化）
+
+河狸所在营养级及其下一营养级的部分能量数据：
+· 河狸营养级同化量 = 780 + 1220 = 2000（× 10⁴ kJ）
+· 下一营养级同化量 = 150 + 210 = 360（× 10⁴ kJ）
+
+(2) 根据资料，有关河狸对环境适应性的分析合理的是______。
+A. 因啃咬树枝而进化出了发达的咬肌
+B. 将巢穴入口建在水下是自然选择的结果
+C. 尾巴宽大扁平如舵利于水中生活
+D. 不同地区巢穴结构不同可能与环境差异有关
+
+（附）该生态系统能量流经河狸所在营养级及其下一营养级的传递效率为________。
+
+(3) 河狸被誉为"生态工程师"的原因是其可以影响或改变该地区的______。
+A. 群落演替的方向
+B. 水循环、氮循环等物质循环
+C. 生态系统的营养结构
+D. 生态系统能量的根本来源`,
+    focus: '能量传递效率 = 下一营养级同化量/本营养级同化量 = 360/2000 = 18%。(2)适应性进化：A选项犯拉马克"用进废退"错误；BCD正确。(3)生态工程师影响演替方向/物质循环/营养结构，但不改变能量根本来源（太阳能）。',
+    answer: '传递效率 = 360 ÷ 2000 × 100% = 18%\n(2) BCD（A项"因啃咬而进化出"犯了拉马克用进废退的表述错误，自然选择是结果而非原因）\n(3) ABC（D错：生态系统能量根本来源是生产者固定的太阳能，河狸无法改变）'
+  },
+  'v-ec381': {
+    badge: '基础变式 L1', badgeClass: 'v',
+    title: '红树林能量流动·字母符号表达传递效率公式',
+    ref: 'EC-20260522-381 · (7)',
+    stem: `红树林是生长在热带、亚热带海岸潮间带，由红树科植物为主体的常绿乔木或灌木组成的植物群落。
+
+（图：红树林生态系统能量流动示意图，各营养级用字母表示同化量、摄入量、粪便量等）
+
+设：
+· 第一营养级同化量 = A（×10⁴kJ）
+· 第二营养级摄入量 = B（×10⁴kJ）
+· 第二营养级粪便量 = C（×10⁴kJ）
+· 第二营养级同化量 = D（×10⁴kJ）
+
+(7) 请用字母表示第一营养级到第二营养级的能量传递效率，并写出同化量的计算关系式。
+
+① 第二营养级同化量 = ________
+② 第一营养级→第二营养级的能量传递效率 = ________`,
+    focus: '字母表达版本的关键：同化量 = 摄入量 − 粪便量（粪便归上一营养级）；传递效率 = 第二营养级同化量 / 第一营养级同化量 × 100%。考查能否从字母公式中正确处理粪便项。',
+    answer: '① 第二营养级同化量 = B − C（摄入量减去粪便量）\n② 传递效率 = (B − C) / A × 100%\n（也可写作：D / A × 100%，其中D = B−C）\n注意：粪便C不属于第二营养级同化量，而是第一营养级流向分解者的部分'
+  },
+  'v-ec489': {
+    badge: '进阶变式 L2', badgeClass: 'v',
+    title: '地穴农场闭合生态系统·能量流动模型图·传递效率45%异常值',
+    ref: 'EC-20260524-489 · (3)',
+    stem: `我国科学家在重庆酉阳地穴中模拟建造月球基地，建立"地穴农场"闭合生态系统。
+
+（图：地穴农场能量流动模型图，数值单位为10²kJ·m⁻²·a⁻¹）
+
+图中数据（部分）：
+· 生产者同化量 = 1000 × 10² kJ·m⁻²·a⁻¹
+· 生产者流向分解者 = 85 × 10²
+· 生产者呼吸散失 = 211 × 10²
+· 生产者未利用 = 254 × 10²
+· 初级消费者（黄粉虫）同化量 = 450 × 10² kJ·m⁻²·a⁻¹
+
+(3) ① 据图分析，能量流动具有________的特点。
+② 据图中数据计算，生产者与初级消费者两个营养级之间的能量传递效率是________%。`,
+    focus: '(3)① 单向流动、逐级递减。(3)② 初级消费者同化量 = 1000−211−85−254 = 450；传递效率 = 450/1000 = 45%（远超20%，因为人工闭合系统减少了能量散失途径）。',
+    answer: '① 单向流动、逐级递减（不可逆，不循环）\n② 传递效率 = 450/1000 × 100% = 45%\n（超出正常10%~20%范围，原因：人工闭合系统通过技术手段减少了能量散失，提高了能量转化效率）\n注：初级消费者同化量 = 生产者同化量 − 生产者呼吸 − 流向分解者 − 未利用 = 1000−211−85−254 = 450'
+  },
+  'v-ec490': {
+    badge: '进阶变式 L2', badgeClass: 'v',
+    title: '海区6营养级能量流动表·同化量逐级递减·总输入输出比判演替',
+    ref: 'EC-20260524-490 · (1)(3)',
+    stem: `研究人员对我国某海区生态系统的能量流动情况进行调查，得到如下结果（单位：t·km⁻²·a⁻¹）：
+
+| 营养级 | 未利用量 | 流向分解者 | 呼吸量 | 同化量 |
+|-------|---------|-----------|-------|-------|
+| Ⅵ | 0.109 | 0.044 | 0.099 | 0.252 |
+| Ⅴ | 0.167 | 0.438 | 1.139 | 1.996 |
+| Ⅳ | 1.401 | 5.284 | 14.027 | 22.708 |
+| Ⅲ | 5.298 | 51.067 | 127.094 | 206.167 |
+| Ⅱ | 2.429 | 998.723 | 1885.231 | 3092.550 |
+| Ⅰ | 3227.684 | 3393.045 | 4003.303 | 13716.582 |
+
+(1) 比较表格中各营养级________的数值，可以验证生态系统能量流动逐级递减的特点。
+
+(3) 该海区生态系统输入的总能量是________t·km⁻²·a⁻¹，其与总呼吸量的比值为2.596，表明该系统尚未达到成熟阶段，下列各项中最能概括这一现象的是________。
+A. 群落演替　B. 垂直分层　C. 水平分区　D. S型增长`,
+    focus: '(1) 比较各营养级"同化量"可验证逐级递减（从Ⅰ到Ⅵ同化量依次减小）。(3) 总能量 = 第Ⅰ营养级同化量 = 13716.582；总输入/总呼吸 = 2.596 > 1 → 能量积累 → 未成熟 → 群落演替进行中（选A）。',
+    answer: '(1) 同化量（各营养级同化量从第Ⅰ到第Ⅵ营养级依次减小，体现逐级递减）\n(3) 总能量 = 13716.582 t·km⁻²·a⁻¹（第Ⅰ营养级同化量即生产者固定的总能量）\n答案选 A（群落演替）\n分析：总输入/总呼吸 = 2.596 > 1，说明输入能量大于输出（呼吸散失），能量在系统中积累，说明生物量持续增加，系统尚未达到能量收支平衡的顶极状态，处于群落演替进行中的阶段'
+  }
+};
+
+/* ── Drawer functions ── */
+function openDrawer(key) {
+  const q = QUESTIONS[key];
+  if (!q) return;
+  document.getElementById('d-badge').textContent = q.badge;
+  document.getElementById('d-badge').className = 'drawer-badge mq-badge ' + q.badgeClass;
+  document.getElementById('d-title').textContent = q.title;
+  document.getElementById('d-ref').textContent = q.ref;
+  document.getElementById('d-stem').textContent = q.stem;
+  document.getElementById('d-focus').textContent = q.focus;
+  document.getElementById('d-answer-text').textContent = q.answer;
+  document.getElementById('d-answer').classList.remove('show');
+  document.getElementById('d-answer-btn').textContent = '显示答案';
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeDrawer() {
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function toggleAnswer() {
+  const ans = document.getElementById('d-answer');
+  const btn = document.getElementById('d-answer-btn');
+  const show = ans.classList.toggle('show');
+  btn.textContent = show ? '隐藏答案' : '显示答案';
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (document.getElementById('lb-overlay').classList.contains('open')) closeLightbox();
+    else closeDrawer();
+  }
+});
+
+/* ── Self-check ── */
+const STORAGE_KEY = 'T07_M2_checks';
+function loadChecks() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { return {}; }
+}
+function saveChecks(data) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch {}
+}
+function updateProgress() {
+  const items = document.querySelectorAll('.check-item');
+  const done = document.querySelectorAll('.check-item.done').length;
+  document.getElementById('check-counter').textContent = done + ' / ' + items.length;
+  document.getElementById('check-bar').style.width = (done / items.length * 100) + '%';
+}
+function toggleCheck(el) {
+  el.classList.toggle('done');
+  const data = loadChecks();
+  data[el.dataset.key] = el.classList.contains('done');
+  saveChecks(data);
+  updateProgress();
+}
+function resetChecks() {
+  document.querySelectorAll('.check-item').forEach(el => el.classList.remove('done'));
+  saveChecks({});
+  updateProgress();
+}
+function checkAll() {
+  const data = {};
+  document.querySelectorAll('.check-item').forEach(el => {
+    el.classList.add('done');
+    data[el.dataset.key] = true;
+  });
+  saveChecks(data);
+  updateProgress();
+}
+(function() {
+  const data = loadChecks();
+  document.querySelectorAll('.check-item').forEach(el => {
+    if (data[el.dataset.key]) el.classList.add('done');
+  });
+  updateProgress();
+})();
+</script>
+
+<!-- Lightbox -->
+<div class="lb-overlay" id="lb-overlay" onclick="closeLightbox()">
+  <button class="lb-close" onclick="closeLightbox()" aria-label="关闭">&#x2715;</button>
+  <img class="lb-img" id="lb-img" src="" alt="">
+</div>
+<script>
+function openLightbox(src, alt) {
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lb-img').alt = alt || '';
+  document.getElementById('lb-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lb-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('lb-img').addEventListener('click', e => e.stopPropagation());
+</script>
+</body>
+</html>

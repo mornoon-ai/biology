@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T06_M5 · 实验结论评价</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent:#185FA5; --accent-l:#E6F1FB; --accent-m:#88BAE8; --accent-d:#0C447C;
+  --teal:#0F6E56; --teal-l:#E1F5EE; --teal-d:#085041;
+  --amber:#BA7517; --amber-l:#FAEEDA; --amber-d:#633806;
+  --coral:#993C1D; --coral-l:#FAECE7; --coral-d:#712B13;
+  --bg:#ffffff; --bg2:#f7f7f5; --bg3:#f1efe8;
+  --tx:#1a1a18; --tx2:#5f5e5a; --tx3:#888780;
+  --bd:rgba(0,0,0,0.10); --bd2:rgba(0,0,0,0.18);
+  --r-sm:6px; --r-md:8px; --r-lg:12px; --r-xl:16px;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#1c1c1a;--bg2:#252523;--bg3:#2c2c2a;
+    --tx:#f0efea;--tx2:#b4b2a9;--tx3:#888780;
+    --bd:rgba(255,255,255,0.09);--bd2:rgba(255,255,255,0.16);
+    --accent-l:#042C53;--accent-d:#B5D4F4;
+    --teal-l:#04342C;--teal-d:#9FE1CB;
+    --amber-l:#412402;--amber-d:#FAC775;
+    --coral-l:#4A1B0C;--coral-d:#F5C4B3;
+  }
+}
+body{font-family:var(--font);font-size:15px;line-height:1.6;color:var(--tx);background:var(--bg3);min-height:100vh;}
+.app{max-width:800px;margin:0 auto;background:var(--bg);min-height:100vh;}
+.site-header{padding:1.25rem 1.5rem 0;background:var(--bg);border-bottom:0.5px solid var(--bd);position:sticky;top:0;z-index:20;}
+.header-top{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.header-icon{background:var(--accent-l);border-radius:var(--r-md);padding:6px 8px;display:flex;align-items:center;justify-content:center;}
+.header-icon i{font-size:20px;color:var(--accent);}
+.header-meta{font-size:12px;color:var(--tx3);}
+.header-title{font-size:17px;font-weight:500;color:var(--tx);}
+.header-id{margin-left:auto;font-size:11px;color:var(--tx3);background:var(--bg2);padding:3px 9px;border-radius:var(--r-sm);}
+.nav-tabs{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.nav-tab{padding:.6rem 1.1rem;font-size:13px;color:var(--tx2);cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;font-family:var(--font);white-space:nowrap;transition:color .15s,border-color .15s;}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500;}
+.nav-tab:hover:not(.active){color:var(--tx);}
+.page{display:none;padding:1.5rem;}
+.page.active{display:block;}
+.memory-section{margin-bottom:1.5rem;}
+.memory-card{border:0.5px solid var(--bd);border-radius:var(--r-xl);overflow:hidden;background:var(--bg);}
+.memory-img{width:100%;display:block;max-height:300px;object-fit:contain;background:var(--bg3);cursor:zoom-in;transition:opacity .15s;}
+.memory-img:hover{opacity:.9;}
+.memory-footer{padding:.85rem 1rem;display:flex;align-items:center;gap:10px;border-top:0.5px solid var(--bd);}
+.memory-label{font-size:13px;font-weight:500;color:var(--tx);flex:1;}
+.audio-player{display:flex;align-items:center;gap:8px;}
+audio{height:32px;width:220px;}
+audio::-webkit-media-controls-panel{background:var(--bg2);}
+.lb-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:200;display:none;align-items:center;justify-content:center;cursor:zoom-out;}
+.lb-overlay.open{display:flex;}
+.lb-img{max-width:92vw;max-height:92vh;object-fit:contain;border-radius:var(--r-md);box-shadow:0 8px 40px rgba(0,0,0,.5);}
+.lb-close{position:fixed;top:16px;right:20px;background:none;border:none;color:#fff;font-size:28px;cursor:pointer;line-height:1;opacity:.7;transition:opacity .15s;}
+.lb-close:hover{opacity:1;}
+.section-title{font-size:13px;font-weight:500;color:var(--tx2);display:flex;align-items:center;gap:7px;margin-bottom:1rem;text-transform:uppercase;letter-spacing:.04em;}
+.section-divider{height:0.5px;background:var(--bd);margin:1.5rem 0;}
+.signal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:1.5rem;}
+.signal-card{background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;}
+.signal-label{font-size:11px;color:var(--tx3);letter-spacing:.04em;margin-bottom:.4rem;text-transform:uppercase;}
+.signal-tag{font-size:13px;color:var(--tx);margin-bottom:3px;}
+.mode-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:1.5rem;}
+.mode-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.85rem 1rem;border-left-width:3px;}
+.mode-card-label{font-size:11px;font-weight:500;margin-bottom:.3rem;}
+.mode-card-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.trap-list{display:flex;flex-direction:column;gap:7px;}
+.trap-item{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.55;}
+.trap-icon{color:#E24B4A;font-size:15px;flex-shrink:0;margin-top:1px;}
+.filter-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem;}
+.filter-btn{padding:5px 13px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx2);font-family:var(--font);transition:all .15s;}
+.filter-btn.active{background:var(--accent-l);color:var(--accent-d);border-color:var(--accent-m);font-weight:500;}
+.mq-card{border:0.5px solid var(--bd);border-radius:var(--r-lg);background:var(--bg);margin-bottom:.85rem;overflow:hidden;}
+.mq-header{padding:.9rem 1.1rem;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;transition:background .15s;}
+.mq-header:hover{background:var(--bg2);}
+.mq-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);white-space:nowrap;}
+.mq-badge.scope{background:var(--accent-l);color:var(--accent-d);}
+.mq-badge.logic{background:var(--teal-l);color:var(--teal-d);}
+.mq-badge.flaw{background:var(--amber-l);color:var(--amber-d);}
+.mq-badge.predict{background:var(--coral-l);color:var(--coral-d);}
+.mq-name{font-size:14px;font-weight:500;color:var(--tx);flex:1;}
+.mq-purity{font-size:12px;color:var(--tx3);flex-shrink:0;}
+.mq-chevron{color:var(--tx3);font-size:16px;transition:transform .2s;flex-shrink:0;}
+.mq-chevron.open{transform:rotate(180deg);}
+.mq-body{display:none;padding:.75rem 1.1rem 1.1rem;border-top:0.5px solid var(--bd);}
+.mq-body.open{display:block;}
+.mq-source{font-size:12px;color:var(--tx3);margin-bottom:.65rem;}
+.rule-box{background:var(--accent-l);border-left:3px solid var(--accent);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:.65rem .9rem;font-size:13px;color:var(--accent-d);margin:.75rem 0;line-height:1.65;}
+.chain-label{font-size:12px;font-weight:500;color:var(--tx2);margin:.75rem 0 .4rem;text-transform:uppercase;letter-spacing:.04em;}
+.signal-chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:6px;}
+.sc-node{background:var(--bg2);border-radius:var(--r-sm);padding:3px 9px;font-size:13px;color:var(--tx);}
+.sc-node.scope{background:var(--accent-l);color:var(--accent-d);}
+.sc-node.logic{background:var(--teal-l);color:var(--teal-d);}
+.sc-node.flaw{background:var(--amber-l);color:var(--amber-d);}
+.sc-node.predict{background:var(--coral-l);color:var(--coral-d);}
+.sc-arrow{color:var(--tx3);font-size:13px;}
+.mq-note{font-size:13px;color:var(--tx2);margin-top:.75rem;line-height:1.6;}
+.q-trigger{display:inline-flex;align-items:center;gap:5px;margin-top:.75rem;padding:6px 12px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;color:var(--tx2);cursor:pointer;font-family:var(--font);transition:all .15s;}
+.q-trigger:hover{background:var(--bg2);color:var(--tx);}
+.q-trigger i{font-size:14px;}
+.ladder-section-label{font-size:13px;font-weight:500;color:var(--tx2);margin-bottom:.85rem;display:flex;align-items:center;gap:7px;}
+.ladder-rows{display:flex;flex-direction:column;gap:8px;margin-bottom:1rem;}
+.ladder-row{display:grid;grid-template-columns:64px 1fr;gap:10px;align-items:start;}
+.ladder-level{font-size:11px;font-weight:500;padding:6px 4px;border-radius:var(--r-sm);text-align:center;line-height:1.4;}
+.l1{background:var(--teal-l);color:var(--teal-d);}
+.l2{background:var(--accent-l);color:var(--accent-d);}
+.l3{background:var(--amber-l);color:var(--amber-d);}
+.ladder-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.65rem .9rem;background:var(--bg);}
+.ladder-card-name{font-size:13px;font-weight:500;color:var(--tx);}
+.ladder-card-sub{font-size:12px;color:var(--tx3);margin-top:3px;line-height:1.5;}
+.ladder-note{background:var(--bg2);border-radius:var(--r-md);padding:.65rem .9rem;font-size:12px;color:var(--tx2);margin-bottom:1rem;line-height:1.55;}
+.progress-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem;}
+.progress-bar{height:5px;border-radius:3px;background:var(--bg2);margin-bottom:1.25rem;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;background:var(--accent);width:0%;transition:width .3s;}
+.checklist{display:flex;flex-direction:column;gap:7px;}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:.7rem .9rem;border:0.5px solid var(--bd);border-radius:var(--r-md);background:var(--bg);cursor:pointer;transition:background .15s;}
+.check-item.done{background:var(--bg2);}
+.check-box{width:18px;height:18px;border:1.5px solid var(--bd2);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .15s;}
+.check-item.done .check-box{background:var(--accent);border-color:var(--accent);}
+.check-box i{font-size:11px;color:#fff;display:none;}
+.check-item.done .check-box i{display:block;}
+.check-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.check-item.done .check-text{color:var(--tx3);text-decoration:line-through;}
+.action-row{margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:8px;}
+.action-btn{padding:7px 14px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.action-btn:hover{background:var(--bg2);}
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s;}
+.drawer-overlay.open{opacity:1;pointer-events:all;}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100vw);background:var(--bg);z-index:101;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden;}
+.drawer.open{transform:translateX(0);}
+.drawer-header{padding:1rem 1.25rem;border-bottom:0.5px solid var(--bd);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.drawer-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);}
+.drawer-title{font-size:14px;font-weight:500;color:var(--tx);flex:1;line-height:1.4;}
+.drawer-close{background:none;border:none;cursor:pointer;color:var(--tx2);padding:4px;border-radius:var(--r-sm);display:flex;align-items:center;transition:background .15s;}
+.drawer-close:hover{background:var(--bg2);}
+.drawer-body{flex:1;overflow-y:auto;padding:1.25rem;}
+.drawer-ec-ref{font-size:12px;color:var(--tx3);margin-bottom:1rem;display:flex;align-items:center;gap:6px;}
+.drawer-stem{font-size:14px;color:var(--tx);line-height:1.75;white-space:pre-wrap;}
+.drawer-sub{font-size:13px;color:var(--tx2);background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:1rem;line-height:1.65;}
+.drawer-sub-label{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-answer{font-size:13px;color:var(--tx);background:var(--accent-l);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:.75rem;line-height:1.65;display:none;}
+.drawer-answer.show{display:block;}
+.drawer-answer-label{font-size:11px;font-weight:500;color:var(--accent-d);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-footer{padding:.85rem 1.25rem;border-top:0.5px solid var(--bd);display:flex;gap:8px;flex-shrink:0;}
+.drawer-btn{flex:1;padding:8px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.drawer-btn:hover{background:var(--bg2);}
+.drawer-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+.drawer-btn.primary:hover{background:var(--accent-d);}
+@media(max-width:600px){
+  .site-header{padding:1rem 1rem 0;}
+  .page{padding:1rem;}
+  .header-title{font-size:15px;}
+  .mode-grid{grid-template-columns:1fr 1fr;}
+  .ladder-row{grid-template-columns:52px 1fr;gap:8px;}
+  .action-row{flex-direction:column;}
+  .action-btn{width:100%;text-align:center;}
+  .drawer{width:100vw;}
+  audio{width:160px;}
+}
+@media(max-width:380px){
+  .mode-grid,.signal-grid{grid-template-columns:1fr;}
+}
+
+.back-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;font-size:12px;color:var(--tx2);background:var(--bg2);border:0.5px solid var(--bd2);border-radius:var(--r-md);text-decoration:none;font-family:var(--font);transition:background .15s,color .15s;white-space:nowrap;flex-shrink:0;}
+.back-btn:hover{background:var(--bg3);color:var(--tx);}
+.back-btn i{font-size:14px;}
+.memory-video{width:100%;max-height:220px;display:block;border-radius:var(--r-md);background:#000;margin-top:8px;}
+</style>
+</head>
+<body>
+<div class="app">
+
+<header class="site-header">
+  <div class="header-top">
+    <div class="header-icon"><i class="ti ti-clipboard-check" aria-hidden="true"></i></div>
+    <div>
+      <div class="header-meta">06 实验设计 · M5 结论评价</div>
+      <div class="header-title">实验结论评价</div>
+    </div>
+    <a class="back-btn" href="index.html" aria-label="返回首页"><i class="ti ti-arrow-left"></i> 首页</a>
+    <div class="header-id">T06_M5</div>
+  </div>
+  <nav class="nav-tabs" role="tablist">
+    <button class="nav-tab active" role="tab" onclick="switchTab('overview',this)">概览</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('mothers',this)">母题精讲</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('ladder',this)">变式阶梯</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('self',this)">自查清单</button>
+  </nav>
+</header>
+
+<!-- 概览 -->
+<div id="tab-overview" class="page active" role="tabpanel">
+
+  <div class="memory-section">
+    <div class="memory-card">
+      <img class="memory-img" src="记忆卡/T06_M5_memory.png" alt="实验结论评价记忆卡" onclick="openLightbox(this.src,this.alt)" onerror="this.style.display='none'">
+      <div class="memory-footer">
+        <div>
+          <div class="memory-label">记忆卡 · 结论三维评价框架（范围·逻辑·支撑）</div>
+          <div style="font-size:12px;color:var(--tx3);">点击图片可放大</div>
+        </div>
+        <div class="audio-player">
+          <div id="audio-wrap">
+            <video class="memory-video" controls controlsList="nodownload" preload="metadata" style="display:none">
+              <source src="audio/T06_M5.mp4" type="video/mp4">
+            </video>
+            <div class="audio-placeholder" style="display:flex"><i class="ti ti-video-off"></i>视频待放入</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title"><i class="ti ti-scan" aria-hidden="true"></i> 触发信号速查</div>
+  <div class="signal-grid">
+    <div class="signal-card">
+      <div class="signal-label">图像信号</div>
+      <div class="signal-tag">给定实验方案与数据表</div>
+      <div class="signal-tag">实验流程框图</div>
+      <div class="signal-tag">数据折线图 / 柱状图</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">文字信号</div>
+      <div class="signal-tag">评价该结论是否正确</div>
+      <div class="signal-tag">该实验能否得出…结论</div>
+      <div class="signal-tag">分析方案缺陷并改进</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">任务关键词</div>
+      <div class="signal-tag">结论是否超出实验范围</div>
+      <div class="signal-tag">逻辑是否从结果→原因</div>
+      <div class="signal-tag">数据是否支撑结论</div>
+    </div>
+  </div>
+
+  <div class="section-title"><i class="ti ti-arrow-fork" aria-hidden="true"></i> 结论三维评价框架</div>
+  <div class="mode-grid">
+    <div class="mode-card" style="border-left-color:var(--accent);">
+      <div class="mode-card-label" style="color:var(--accent-d);">① 范围维：结论不超边界</div>
+      <div class="mode-card-text">结论只能涵盖实验所用材料、处理条件、观测指标的范围；不可将"某物质对某细胞的影响"外推为"对所有细胞"；不可将体外实验结论直接推广到体内</div>
+    </div>
+    <div class="mode-card" style="border-left-color:var(--teal);">
+      <div class="mode-card-label" style="color:var(--teal-d);">② 逻辑维：结论有方向性</div>
+      <div class="mode-card-text">从实验结果→结论须有因果逻辑；结论必须有明确方向（促进/抑制，而非"影响"）；相关性≠因果性，无对照时不能做因果推断</div>
+    </div>
+    <div class="mode-card" style="border-left-color:var(--amber);">
+      <div class="mode-card-label" style="color:var(--amber-d);">③ 支撑维：数据充分支持</div>
+      <div class="mode-card-text">结论须与数据一致，不能比数据"说得更多"；若数据仅显示差异显著，不能直接结论"最适"；缺乏重复实验时结论可靠性存疑</div>
+    </div>
+    <div class="mode-card" style="border-left-color:var(--coral);">
+      <div class="mode-card-label" style="color:var(--coral-d);">④ 方案缺陷检查清单</div>
+      <div class="mode-card-text">有无空白对照？无关变量是否统一控制？样本量是否足够？重复实验次数？观测指标是否直接反映研究目的？有无双盲设计（人体实验）？</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-alert-triangle" aria-hidden="true"></i> 高频易错陷阱</div>
+  <div class="trap-list">
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>结论与假说混淆：<b>假说</b>是实验前的推测，<b>结论</b>是实验后由数据归纳，两者不可相互替代</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>以"影响了"代替方向性描述：应明确写"促进""抑制""先促进后抑制"，而非模糊的"影响"</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>单组实验无法得出因果结论：仅有实验组无对照组→只能描述现象，不能推断原因</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>结论超出实验材料范围：以"小麦幼苗"为材料得出的结论，不可推广到"所有植物"</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>混淆"实验结果"与"实验结论"：结果描述现象（颜色/数值变化），结论解释原因或揭示规律，两者不可对换书写</span></div>
+  </div>
+</div>
+
+<!-- 母题精讲 -->
+<div id="tab-mothers" class="page" role="tabpanel">
+  <div class="filter-tabs">
+    <button class="filter-btn active" onclick="filterMQ('all',this)">全部</button>
+    <button class="filter-btn" onclick="filterMQ('scope',this)">结论范围</button>
+    <button class="filter-btn" onclick="filterMQ('logic',this)">逻辑推断</button>
+    <button class="filter-btn" onclick="filterMQ('flaw',this)">方案缺陷</button>
+    <button class="filter-btn" onclick="filterMQ('predict',this)">预期结果</button>
+  </div>
+
+  <!-- EC-620 -->
+  <div class="mq-card" data-tag="scope">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge scope">结论范围</span>
+      <span class="mq-name">EC-620 · 判断结论是否超出实验范围</span>
+      <span class="mq-purity">必考</span>
+      <i class="ti ti-chevron-down mq-chevron" aria-hidden="true"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">来源 · 实验方案评价 × 结论合理性判断</div>
+      <div class="rule-box">
+        核心规则：结论的外延不能超过实验的内涵。实验材料限定物种/细胞类型；处理条件限定浓度/时间范围；观测指标限定结论的测量维度。超出任一维度即为"过度推断"，是典型扣分点。
+      </div>
+      <div class="chain-label">范围核查链</div>
+      <div class="signal-chain">
+        <span class="sc-node scope">实验用了什么材料？</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node scope">测了什么指标？</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node logic">结论说的是什么范围？</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node flaw">是否超出→改写结论</span>
+      </div>
+      <div class="mq-note">⚠ 常见超范围类型：① 物种外推（"小鼠结论→哺乳动物"）；② 体外→体内外推；③ 特定浓度结论→全浓度范围；④ 短期处理结论→长期效应。改写方法：在结论前加限定条件，缩小外延。</div>
+      <button class="q-trigger" onclick="openDrawer('ec620','scope','EC-620 · 结论范围判断','v-ec620-1')"><i class="ti ti-eye"></i> 查看示例题目</button>
+    </div>
+  </div>
+
+  <!-- EC-625 -->
+  <div class="mq-card" data-tag="logic">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge logic">逻辑推断</span>
+      <span class="mq-name">EC-625 · 单组实验 / 缺乏对照的结论缺陷</span>
+      <span class="mq-purity">高频</span>
+      <i class="ti ti-chevron-down mq-chevron" aria-hidden="true"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">来源 · 对照原则 × 逻辑推断</div>
+      <div class="rule-box">
+        核心规则：因果结论成立的最低要求是有实验组+对照组（至少有空白对照）。仅有实验组可描述"实验组出现…现象"，但不能得出"是因为…导致"的因果结论。缺乏对照意味着无法排除其他变量的影响。
+      </div>
+      <div class="chain-label">逻辑漏洞分析链</div>
+      <div class="signal-chain">
+        <span class="sc-node logic">有无对照组？</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node flaw">无→只能描述现象，不能推断原因</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node logic">对照是否合适？</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node scope">空白/阳性对照是否设置正确？</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node predict">结论可信度判断</span>
+      </div>
+      <div class="mq-note">⚠ 特殊情形：只有实验组、观察到"有效果"时，不能得出"该物质有促进作用"，只能说"实验组出现了…"。需补充空白对照才能得出因果结论。相关性研究（如调查）只能说"相关"，不能说"导致"。</div>
+      <button class="q-trigger" onclick="openDrawer('ec625','logic','EC-625 · 缺乏对照的结论缺陷','v-ec625-1')"><i class="ti ti-eye"></i> 查看示例题目</button>
+    </div>
+  </div>
+
+  <!-- EC-630 -->
+  <div class="mq-card" data-tag="flaw">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge flaw">方案缺陷</span>
+      <span class="mq-name">EC-630 · 无关变量未控制导致结论不可靠</span>
+      <span class="mq-purity">高频</span>
+      <i class="ti ti-chevron-down mq-chevron" aria-hidden="true"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">来源 · 实验方案设计 × 方案缺陷分析</div>
+      <div class="rule-box">
+        核心规则：无关变量（非自变量的其他影响因素）须在各组间保持一致，否则因变量的变化可能由无关变量引起，结论不可靠。常见无关变量：温度、pH、样品量、处理时间、光照、培养液浓度等。
+      </div>
+      <div class="chain-label">方案缺陷排查链</div>
+      <div class="signal-chain">
+        <span class="sc-node flaw">列出自变量</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node flaw">列出因变量</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node scope">找出未控制的其他变量</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node logic">说明该变量如何干扰结论</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node predict">提出改进方案</span>
+      </div>
+      <div class="mq-note">⚠ 答题规范：指出缺陷时须说"未控制…（具体变量名）相同/一致"；改进时须说"应将…设置为相同"。仅说"无关变量未控制"不得分，需明确具体变量。</div>
+      <button class="q-trigger" onclick="openDrawer('ec630','flaw','EC-630 · 无关变量控制缺陷','v-ec630-1')"><i class="ti ti-eye"></i> 查看示例题目</button>
+    </div>
+  </div>
+
+  <!-- EC-635 -->
+  <div class="mq-card" data-tag="predict">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge predict">预期结果</span>
+      <span class="mq-name">EC-635 · 预期实验结果与结论的配对书写</span>
+      <span class="mq-purity">必考</span>
+      <i class="ti ti-chevron-down mq-chevron" aria-hidden="true"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">来源 · 实验结果预测 × 结论书写综合</div>
+      <div class="rule-box">
+        核心规则：预期结果需覆盖所有可能情况（通常2–3种），每种情况对应一个结论。标准格式：① 若实验组…（现象），对照组…（现象），则说明…（结论）。② 若两组无差异，则说明…无影响。③ 若实验组低于对照组，则说明…具有抑制作用。
+      </div>
+      <div class="chain-label">预期结果配对模板</div>
+      <div class="signal-chain">
+        <span class="sc-node predict">情况①：实验组＞对照组</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node logic">结论：X促进Y</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node predict">情况②：实验组＝对照组</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node scope">结论：X对Y无影响</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node predict">情况③：实验组＜对照组</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node flaw">结论：X抑制Y</span>
+      </div>
+      <div class="mq-note">⚠ 常见丢分：只写一种情况漏写其他情况；结论与结果方向不对应；结论中遗漏实验条件前提（"在…条件下"）；混淆"结果"（描述）与"结论"（解释）的书写位置。</div>
+      <button class="q-trigger" onclick="openDrawer('ec635','predict','EC-635 · 预期结果与结论配对','v-ec635-1')"><i class="ti ti-eye"></i> 查看示例题目</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- 变式阶梯 -->
+<div id="tab-ladder" class="page" role="tabpanel">
+  <div class="ladder-note">
+    变式题按难度分三级：L1 单点判断（识别单一缺陷/范围错误）→ L2 综合评价（多缺陷识别+改进建议）→ L3 开放设计（预测所有结果并配对完整结论）。
+  </div>
+
+  <div class="ladder-section-label"><i class="ti ti-stairs" aria-hidden="true"></i> L1 · 基础判断</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1<br>范围判断</div>
+      <div class="ladder-card">
+        <div class="ladder-card-name">v-ec620-1 · 判断给定结论是否超出实验范围并改写</div>
+        <div class="ladder-card-sub">给出以"大肠杆菌"为材料的实验，结论却说"细菌"，判断错误原因并改写限定范围的正确结论</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1<br>逻辑判断</div>
+      <div class="ladder-card">
+        <div class="ladder-card-name">v-ec625-1 · 判断单组实验能否得出给定结论</div>
+        <div class="ladder-card-sub">给出只有"处理组"无"空白对照"的实验，判断其能否得出因果结论，并说明理由</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1<br>缺陷识别</div>
+      <div class="ladder-card">
+        <div class="ladder-card-name">v-ec630-1 · 指出方案中未控制的具体无关变量</div>
+        <div class="ladder-card-sub">给出含有明显无关变量控制缺陷的方案（如两组样本量不同、pH未统一），逐一指出并说明干扰机制</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ladder-section-label"><i class="ti ti-stairs" aria-hidden="true"></i> L2 · 综合评价</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2<br>多维评价</div>
+      <div class="ladder-card">
+        <div class="ladder-card-name">v-ec620-23 · 从范围·逻辑·支撑三维综合评价一段结论</div>
+        <div class="ladder-card-sub">给出一段含多处问题的实验结论，分别从范围维、逻辑维、数据支撑维指出问题，共3条</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2<br>改进方案</div>
+      <div class="ladder-card">
+        <div class="ladder-card-name">v-ec630-23 · 针对方案缺陷提出完整改进措施</div>
+        <div class="ladder-card-sub">给出含缺陷实验方案（缺对照+无关变量未控），写出具体改进措施（新增的处理步骤）并说明改进后能得出什么结论</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2<br>配对书写</div>
+      <div class="ladder-card">
+        <div class="ladder-card-name">v-ec635-2 · 写出两种预期结果及对应结论</div>
+        <div class="ladder-card-sub">实验探究某激素对酶活性的影响（实验组+空白对照），写出"有促进""无影响"两种情况下的结果描述与结论各一条</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ladder-section-label"><i class="ti ti-stairs" aria-hidden="true"></i> L3 · 开放推理</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l3">L3<br>全情境设计</div>
+      <div class="ladder-card">
+        <div class="ladder-card-name">v-ec640-135 · 设计验证实验方案并预写三种结果+结论</div>
+        <div class="ladder-card-sub">给定研究问题（某物质对细胞增殖的影响），要求：①设计包含实验组/对照组的完整方案；②识别并控制无关变量；③预写三种可能结果（促进/无效/抑制）及各自对应的规范结论；综合考查实验设计全流程</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 自查清单 -->
+<div id="tab-self" class="page" role="tabpanel">
+  <div class="progress-row">
+    <span style="font-size:13px;color:var(--tx2);">掌握进度</span>
+    <span id="prog-text" style="font-size:13px;color:var(--tx2);">0 / 7</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="prog-fill"></div></div>
+
+  <div class="checklist" id="checklist">
+    <div class="check-item" data-key="0" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能从"范围·逻辑·支撑"三个维度评价实验结论，判断结论是否合理</div>
+    </div>
+    <div class="check-item" data-key="1" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能识别"结论超出实验范围"的典型错误（物种外推、体外→体内、条件外推）并改写限定结论</div>
+    </div>
+    <div class="check-item" data-key="2" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能判断单组实验（无对照）不能得出因果结论，并说明需补充何种对照</div>
+    </div>
+    <div class="check-item" data-key="3" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能找出方案中未控制的具体无关变量，并说明其干扰机制与改进措施（精确到变量名称）</div>
+    </div>
+    <div class="check-item" data-key="4" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能规范书写预期结果（"若…则…"格式），覆盖促进/无影响/抑制三种情况</div>
+    </div>
+    <div class="check-item" data-key="5" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能区分"实验结果"（描述现象）与"实验结论"（解释原因/揭示规律），不混淆书写位置</div>
+    </div>
+    <div class="check-item" data-key="6" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能区分假说（实验前推测）与结论（数据归纳），避免将预期假说写成实验结论</div>
+    </div>
+  </div>
+
+  <div class="action-row">
+    <button class="action-btn" onclick="resetChecklist()">重置清单</button>
+    <button class="action-btn" onclick="switchTab('mothers', document.querySelector('.nav-tab:nth-child(2)'))">回顾母题</button>
+  </div>
+</div>
+
+<!-- Drawer overlay -->
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="题目详情">
+  <div class="drawer-header">
+    <span class="drawer-badge" id="drawer-badge"></span>
+    <span class="drawer-title" id="drawer-title"></span>
+    <button class="drawer-close" onclick="closeDrawer()" aria-label="关闭"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="drawer-ec-ref"><i class="ti ti-hash"></i><span id="drawer-ec-ref"></span></div>
+    <div class="drawer-stem" id="drawer-stem"></div>
+    <div class="drawer-sub" id="drawer-sub">
+      <div class="drawer-sub-label">解题提示</div>
+      <div id="drawer-hint"></div>
+    </div>
+    <div class="drawer-answer" id="drawer-answer">
+      <div class="drawer-answer-label">参考答案</div>
+      <div id="drawer-answer-text"></div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="drawer-btn" onclick="toggleAnswer()">显示 / 隐藏答案</button>
+    <button class="drawer-btn primary" onclick="closeDrawer()">完成</button>
+  </div>
+</div>
+
+<script>
+// ── Tab switching ──────────────────────────────────────
+function switchTab(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+
+// ── MQ accordion ──────────────────────────────────────
+function toggleMQ(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.mq-chevron');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chevron.classList.toggle('open', !isOpen);
+}
+
+// ── Filter ──────────────────────────────────────
+function filterMQ(tag, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.mq-card').forEach(card => {
+    card.style.display = (tag === 'all' || card.dataset.tag === tag) ? '' : 'none';
+  });
+}
+
+// ── Drawer ──────────────────────────────────────
+const drawerData = {
+  'v-ec620-1': {
+    ec: 'EC-620',
+    stem: '某研究者用大肠杆菌为实验材料，探究X物质对细菌DNA复制的影响，实验组加X物质，对照组不加，结果显示实验组复制速率显著低于对照组。\n\n研究者写出结论：" X物质能抑制细菌的DNA复制。"\n\n(1) 该结论是否合理？请说明理由。\n(2) 若不合理，请改写为合理的结论。',
+    hint: '实验仅用了大肠杆菌，结论却说"细菌"（泛指所有细菌）——这超出了实验材料的范围。改写时需将"细菌"限定为"大肠杆菌"，并加上实验条件。',
+    answer: '(1) 不完全合理。该结论将范围从"大肠杆菌"外推到"细菌"（所有细菌），超出了实验材料的范围。实验只能说明X物质对大肠杆菌DNA复制的影响，不能推广至所有细菌（不同菌种对X物质的敏感性可能不同）。\n(2) 改写后的合理结论：在本实验条件下，X物质能抑制大肠杆菌的DNA复制速率。'
+  },
+  'v-ec625-1': {
+    ec: 'EC-625',
+    stem: '某同学在培养基上接种了霉菌孢子，加入抗生素Y后培养48h，观察到霉菌菌落数量明显减少。\n\n该同学据此得出结论："抗生素Y能抑制霉菌的生长。"\n\n(1) 该实验设计有何缺陷？\n(2) 能否从该实验得出上述因果结论？为什么？\n(3) 应如何改进实验？',
+    hint: '没有空白对照组（不加抗生素Y的处理）。菌落减少可能因为培养条件不适（pH/温度/营养）而非抗生素Y的作用。无对照无法排除其他因素，故不能得出因果结论。改进：增设空白对照组（培养基上接种孢子但不加Y，其他条件完全相同）。',
+    answer: '(1) 实验设计缺陷：缺少空白对照组（未设置不加抗生素Y、其他条件完全相同的对照处理）。\n(2) 不能得出该因果结论。因为没有对照组，无法排除菌落减少是由培养条件（温度、pH、营养等）的变化而非抗生素Y引起的，即无法确定Y是菌落减少的原因。\n(3) 改进方案：增设空白对照组——在相同培养基上接种等量霉菌孢子，不加抗生素Y，在相同条件下培养48h，观察菌落数量。若对照组菌落数量正常而实验组明显减少，方可得出"抗生素Y能抑制大肠杆菌生长"的结论。'
+  },
+  'v-ec630-1': {
+    ec: 'EC-630',
+    stem: '某实验探究温度对淀粉酶活性的影响：实验组在40°C下加入3 mL淀粉溶液（1%）和1 mL淀粉酶溶液，对照组在20°C下加入5 mL淀粉溶液（1%）和1 mL淀粉酶溶液，10分钟后用碘液检测。\n\n请找出该方案中未控制的无关变量，并说明其如何干扰实验结论。',
+    hint: '自变量是温度（40°C vs 20°C）。但两组的淀粉溶液体积不同（3 mL vs 5 mL），导致底物总量不同——这是未控制的无关变量。底物量不同会直接影响酶促反应速率，从而干扰对"温度影响"的判断。',
+    answer: '未控制的无关变量：两组淀粉溶液的体积不同（实验组3 mL，对照组5 mL），导致两组底物总量不一致。\n\n干扰机制：底物浓度/量是影响酶促反应速率的重要因素。对照组底物量更多，即使在低温下酶促反应也可能因底物充足而检测到更多水解，无法准确判断温度差异的影响，使实验结论不可靠。\n\n改进措施：应将两组淀粉溶液体积统一为相同值（如均为3 mL或均为5 mL），其他条件（pH、酶液量、底物浓度）也须保持完全一致。'
+  },
+  'v-ec635-1': {
+    ec: 'EC-635',
+    stem: '实验探究植物激素GA（赤霉素）对豌豆茎节间长度的影响。实验组在豌豆幼苗茎节间喷施GA溶液，空白对照组喷施等量蒸馏水，一周后测量各组茎节间平均长度。\n\n请写出三种可能的预期实验结果，并分别写出对应的实验结论。',
+    hint: '因变量是茎节间长度，比较实验组vs对照组。三种情况：实验组＞对照组（促进）；实验组≈对照组（无影响）；实验组＜对照组（抑制）。每种情况对应一个结论，注意结论要有方向性并点明因果关系。',
+    answer: '① 若实验组（GA处理）茎节间平均长度显著大于对照组（蒸馏水处理），则说明GA能促进豌豆茎节间的伸长生长。\n\n② 若实验组与对照组茎节间平均长度无显著差异，则说明GA对豌豆茎节间长度无明显影响（在本实验浓度和条件下）。\n\n③ 若实验组茎节间平均长度显著小于对照组，则说明GA在本实验浓度下抑制豌豆茎节间的伸长生长。'
+  }
+};
+
+function openDrawer(ecId, tag, title, variantId) {
+  const data = drawerData[variantId];
+  if (!data) return;
+  const badgeLabels = { scope:'结论范围', logic:'逻辑推断', flaw:'方案缺陷', predict:'预期结果' };
+  const badge = document.getElementById('drawer-badge');
+  badge.className = 'drawer-badge ' + tag;
+  badge.textContent = badgeLabels[tag] || tag;
+  document.getElementById('drawer-title').textContent = title;
+  document.getElementById('drawer-ec-ref').textContent = data.ec + ' · ' + variantId;
+  document.getElementById('drawer-stem').textContent = data.stem;
+  document.getElementById('drawer-hint').textContent = data.hint;
+  document.getElementById('drawer-answer-text').textContent = data.answer;
+  document.getElementById('drawer-answer').classList.remove('show');
+  document.getElementById('drawer-overlay').classList.add('open');
+  document.getElementById('drawer').classList.add('open');
+}
+
+function closeDrawer() {
+  document.getElementById('drawer-overlay').classList.remove('open');
+  document.getElementById('drawer').classList.remove('open');
+}
+
+function toggleAnswer() {
+  document.getElementById('drawer-answer').classList.toggle('show');
+}
+
+// ── Checklist ──────────────────────────────────────
+const CL_KEY = 'T06_M5_checklist';
+
+function loadChecklist() {
+  const saved = JSON.parse(localStorage.getItem(CL_KEY) || '[]');
+  document.querySelectorAll('.check-item').forEach(item => {
+    if (saved.includes(item.dataset.key)) item.classList.add('done');
+  });
+  updateProgress();
+}
+
+function toggleCheck(item) {
+  item.classList.toggle('done');
+  saveChecklist();
+  updateProgress();
+}
+
+function saveChecklist() {
+  const done = [...document.querySelectorAll('.check-item.done')].map(i => i.dataset.key);
+  localStorage.setItem(CL_KEY, JSON.stringify(done));
+}
+
+function updateProgress() {
+  const total = document.querySelectorAll('.check-item').length;
+  const done = document.querySelectorAll('.check-item.done').length;
+  document.getElementById('prog-text').textContent = done + ' / ' + total;
+  document.getElementById('prog-fill').style.width = (done / total * 100) + '%';
+}
+
+function resetChecklist() {
+  document.querySelectorAll('.check-item').forEach(i => i.classList.remove('done'));
+  localStorage.removeItem(CL_KEY);
+  updateProgress();
+}
+
+loadChecklist();
+</script>
+
+<!-- Lightbox -->
+<div class="lb-overlay" id="lb-overlay" onclick="closeLightbox()">
+  <button class="lb-close" onclick="closeLightbox()" aria-label="关闭">&#x2715;</button>
+  <img class="lb-img" id="lb-img" src="" alt="">
+</div>
+<script>
+function openLightbox(src, alt) {
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lb-img').alt = alt || '';
+  document.getElementById('lb-overlay').classList.add('open');
+}
+function closeLightbox() {
+  document.getElementById('lb-overlay').classList.remove('open');
+}
+document.getElementById('lb-img').addEventListener('click', e => e.stopPropagation());
+</script>
+
+</div>
+</body>
+</html>

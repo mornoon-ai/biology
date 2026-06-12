@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T05_M3 · 呼吸方式与产物比例</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent:#639922; --accent-l:#EAF3DE; --accent-m:#9DC95C; --accent-d:#27500A;
+  --teal:#0F6E56; --teal-l:#E1F5EE; --teal-d:#085041;
+  --amber:#BA7517; --accent-d2:#27500A; --amber-l:#FAEEDA; --amber-d:#633806;
+  --coral:#993C1D; --coral-l:#FAECE7; --coral-d:#712B13;
+  --blue:#185FA5; --blue-l:#E6F1FB; --blue-d:#0C447C;
+  --bg:#ffffff; --bg2:#f7f7f5; --bg3:#f1efe8;
+  --tx:#1a1a18; --tx2:#5f5e5a; --tx3:#888780;
+  --bd:rgba(0,0,0,0.10); --bd2:rgba(0,0,0,0.18);
+  --r-sm:6px; --r-md:8px; --r-lg:12px; --r-xl:16px;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+}
+@media(prefers-color-scheme:dark){
+  :root{--bg:#1c1c1a;--bg2:#252523;--bg3:#2c2c2a;--tx:#f0efea;--tx2:#b4b2a9;--tx3:#888780;--bd:rgba(255,255,255,0.09);--bd2:rgba(255,255,255,0.16);--accent-l:#173404;--accent-d:#C0DD97;--accent-d2:#C0DD97;--teal-l:#04342C;--teal-d:#9FE1CB;--amber-l:#412402;--amber-d:#FAC775;--coral-l:#4A1B0C;--coral-d:#F5C4B3;--blue-l:#042C53;--blue-d:#B5D4F4;}
+}
+body{font-family:var(--font);font-size:15px;line-height:1.6;color:var(--tx);background:var(--bg3);min-height:100vh;}
+.app{max-width:800px;margin:0 auto;background:var(--bg);min-height:100vh;}
+.site-header{padding:1.25rem 1.5rem 0;background:var(--bg);border-bottom:0.5px solid var(--bd);position:sticky;top:0;z-index:20;}
+.header-top{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.header-icon{background:var(--accent-l);border-radius:var(--r-md);padding:6px 8px;display:flex;align-items:center;justify-content:center;}
+.header-icon i{font-size:20px;color:var(--accent);}
+.header-meta{font-size:12px;color:var(--tx3);}
+.header-title{font-size:17px;font-weight:500;color:var(--tx);}
+.header-id{margin-left:auto;font-size:11px;color:var(--tx3);background:var(--bg2);padding:3px 9px;border-radius:var(--r-sm);}
+.nav-tabs{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.nav-tab{padding:.6rem 1.1rem;font-size:13px;color:var(--tx2);cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;font-family:var(--font);white-space:nowrap;transition:color .15s,border-color .15s;}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500;}
+.nav-tab:hover:not(.active){color:var(--tx);}
+.page{display:none;padding:1.5rem;}
+.page.active{display:block;}
+.memory-section{margin-bottom:1.5rem;}
+.memory-card{border:0.5px solid var(--bd);border-radius:var(--r-xl);overflow:hidden;background:var(--bg);}
+.memory-img{width:100%;display:block;max-height:300px;object-fit:contain;background:var(--bg3);cursor:zoom-in;transition:opacity .15s;}
+.memory-img:hover{opacity:.9;}
+.memory-footer{padding:.85rem 1rem;display:flex;align-items:center;gap:10px;border-top:0.5px solid var(--bd);}
+.memory-label{font-size:13px;font-weight:500;color:var(--tx);flex:1;}
+audio{height:32px;width:220px;}
+.lb-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:200;display:none;align-items:center;justify-content:center;cursor:zoom-out;}
+.lb-overlay.open{display:flex;}
+.lb-img{max-width:92vw;max-height:92vh;object-fit:contain;border-radius:var(--r-md);}
+.lb-close{position:fixed;top:16px;right:20px;background:none;border:none;color:#fff;font-size:28px;cursor:pointer;opacity:.7;}
+.lb-close:hover{opacity:1;}
+.section-title{font-size:13px;font-weight:500;color:var(--tx2);display:flex;align-items:center;gap:7px;margin-bottom:1rem;text-transform:uppercase;letter-spacing:.04em;}
+.section-divider{height:0.5px;background:var(--bd);margin:1.5rem 0;}
+.signal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:1.5rem;}
+.signal-card{background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;}
+.signal-label{font-size:11px;color:var(--tx3);letter-spacing:.04em;margin-bottom:.4rem;text-transform:uppercase;}
+.signal-tag{font-size:13px;color:var(--tx);margin-bottom:3px;}
+.mode-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:1.5rem;}
+.mode-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.85rem 1rem;border-left-width:3px;}
+.mode-card-label{font-size:11px;font-weight:500;margin-bottom:.3rem;}
+.mode-card-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.trap-list{display:flex;flex-direction:column;gap:7px;}
+.trap-item{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.55;}
+.trap-icon{color:#E24B4A;font-size:15px;flex-shrink:0;margin-top:1px;}
+.filter-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem;}
+.filter-btn{padding:5px 13px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx2);font-family:var(--font);transition:all .15s;}
+.filter-btn.active{background:var(--accent-l);color:var(--accent-d2);border-color:var(--accent-m);font-weight:500;}
+.mq-card{border:0.5px solid var(--bd);border-radius:var(--r-lg);background:var(--bg);margin-bottom:.85rem;overflow:hidden;}
+.mq-header{padding:.9rem 1.1rem;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;transition:background .15s;}
+.mq-header:hover{background:var(--bg2);}
+.mq-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);white-space:nowrap;}
+.mq-badge.aerobic{background:var(--accent-l);color:var(--accent-d2);}
+.mq-badge.anaerobic{background:var(--coral-l);color:var(--coral-d);}
+.mq-badge.ratio{background:var(--amber-l);color:var(--amber-d);}
+.mq-badge.storage{background:var(--teal-l);color:var(--teal-d);}
+.mq-name{font-size:14px;font-weight:500;color:var(--tx);flex:1;}
+.mq-purity{font-size:12px;color:var(--tx3);flex-shrink:0;}
+.mq-chevron{color:var(--tx3);font-size:16px;transition:transform .2s;flex-shrink:0;}
+.mq-chevron.open{transform:rotate(180deg);}
+.mq-body{display:none;padding:.75rem 1.1rem 1.1rem;border-top:0.5px solid var(--bd);}
+.mq-body.open{display:block;}
+.mq-source{font-size:12px;color:var(--tx3);margin-bottom:.65rem;}
+.rule-box{background:var(--accent-l);border-left:3px solid var(--accent);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:.65rem .9rem;font-size:13px;color:var(--accent-d2);margin:.75rem 0;line-height:1.65;}
+.chain-label{font-size:12px;font-weight:500;color:var(--tx2);margin:.75rem 0 .4rem;text-transform:uppercase;letter-spacing:.04em;}
+.signal-chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:6px;}
+.sc-node{background:var(--bg2);border-radius:var(--r-sm);padding:3px 9px;font-size:13px;color:var(--tx);}
+.sc-node.aerobic{background:var(--accent-l);color:var(--accent-d2);}
+.sc-node.anaerobic{background:var(--coral-l);color:var(--coral-d);}
+.sc-node.ratio{background:var(--amber-l);color:var(--amber-d);}
+.sc-node.storage{background:var(--teal-l);color:var(--teal-d);}
+.sc-arrow{color:var(--tx3);font-size:13px;}
+.mq-note{font-size:13px;color:var(--tx2);margin-top:.75rem;line-height:1.6;}
+.q-trigger{display:inline-flex;align-items:center;gap:5px;margin-top:.75rem;padding:6px 12px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;color:var(--tx2);cursor:pointer;font-family:var(--font);transition:all .15s;}
+.q-trigger:hover{background:var(--bg2);color:var(--tx);}
+.q-trigger i{font-size:14px;}
+.ladder-section-label{font-size:13px;font-weight:500;color:var(--tx2);margin-bottom:.85rem;display:flex;align-items:center;gap:7px;}
+.ladder-rows{display:flex;flex-direction:column;gap:8px;margin-bottom:1rem;}
+.ladder-row{display:grid;grid-template-columns:64px 1fr;gap:10px;align-items:start;}
+.ladder-level{font-size:11px;font-weight:500;padding:6px 4px;border-radius:var(--r-sm);text-align:center;line-height:1.4;}
+.l1{background:var(--teal-l);color:var(--teal-d);}
+.l2{background:var(--accent-l);color:var(--accent-d2);}
+.l3{background:var(--amber-l);color:var(--amber-d);}
+.ladder-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.65rem .9rem;background:var(--bg);}
+.ladder-card-name{font-size:13px;font-weight:500;color:var(--tx);}
+.ladder-card-sub{font-size:12px;color:var(--tx3);margin-top:3px;line-height:1.5;}
+.ladder-note{background:var(--bg2);border-radius:var(--r-md);padding:.65rem .9rem;font-size:12px;color:var(--tx2);margin-bottom:1rem;line-height:1.55;}
+.progress-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem;}
+.progress-bar{height:5px;border-radius:3px;background:var(--bg2);margin-bottom:1.25rem;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;background:var(--accent);width:0%;transition:width .3s;}
+.checklist{display:flex;flex-direction:column;gap:7px;}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:.7rem .9rem;border:0.5px solid var(--bd);border-radius:var(--r-md);background:var(--bg);cursor:pointer;transition:background .15s;}
+.check-item.done{background:var(--bg2);}
+.check-box{width:18px;height:18px;border:1.5px solid var(--bd2);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .15s;}
+.check-item.done .check-box{background:var(--accent);border-color:var(--accent);}
+.check-box i{font-size:11px;color:#fff;display:none;}
+.check-item.done .check-box i{display:block;}
+.check-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.check-item.done .check-text{color:var(--tx3);text-decoration:line-through;}
+.action-row{margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:8px;}
+.action-btn{padding:7px 14px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.action-btn:hover{background:var(--bg2);}
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s;}
+.drawer-overlay.open{opacity:1;pointer-events:all;}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100vw);background:var(--bg);z-index:101;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden;}
+.drawer.open{transform:translateX(0);}
+.drawer-header{padding:1rem 1.25rem;border-bottom:0.5px solid var(--bd);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.drawer-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);}
+.drawer-title{font-size:14px;font-weight:500;color:var(--tx);flex:1;line-height:1.4;}
+.drawer-close{background:none;border:none;cursor:pointer;color:var(--tx2);padding:4px;border-radius:var(--r-sm);display:flex;align-items:center;transition:background .15s;}
+.drawer-close:hover{background:var(--bg2);}
+.drawer-body{flex:1;overflow-y:auto;padding:1.25rem;}
+.drawer-ec-ref{font-size:12px;color:var(--tx3);margin-bottom:1rem;display:flex;align-items:center;gap:6px;}
+.drawer-stem{font-size:14px;color:var(--tx);line-height:1.75;white-space:pre-wrap;}
+.drawer-sub{font-size:13px;color:var(--tx2);background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:1rem;line-height:1.65;}
+.drawer-sub-label{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-answer{font-size:13px;color:var(--tx);background:var(--accent-l);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:.75rem;line-height:1.65;display:none;}
+.drawer-answer.show{display:block;}
+.drawer-answer-label{font-size:11px;font-weight:500;color:var(--accent-d2);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-footer{padding:.85rem 1.25rem;border-top:0.5px solid var(--bd);display:flex;gap:8px;flex-shrink:0;}
+.drawer-btn{flex:1;padding:8px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.drawer-btn:hover{background:var(--bg2);}
+.drawer-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+.drawer-btn.primary:hover{background:var(--accent-d);}
+@media(max-width:600px){.site-header{padding:1rem 1rem 0;}.page{padding:1rem;}.header-title{font-size:15px;}.mode-grid{grid-template-columns:1fr 1fr;}.ladder-row{grid-template-columns:52px 1fr;gap:8px;}.action-row{flex-direction:column;}.action-btn{width:100%;text-align:center;}.drawer{width:100vw;}audio{width:160px;}}
+@media(max-width:380px){.mode-grid,.signal-grid{grid-template-columns:1fr;}}
+
+.back-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;font-size:12px;color:var(--tx2);background:var(--bg2);border:0.5px solid var(--bd2);border-radius:var(--r-md);text-decoration:none;font-family:var(--font);transition:background .15s,color .15s;white-space:nowrap;flex-shrink:0;}
+.back-btn:hover{background:var(--bg3);color:var(--tx);}
+.back-btn i{font-size:14px;}
+.memory-video{width:100%;max-height:220px;display:block;border-radius:var(--r-md);background:#000;margin-top:8px;}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="site-header">
+  <div class="header-top">
+    <div class="header-icon"><i class="ti ti-flame" aria-hidden="true"></i></div>
+    <div>
+      <div class="header-meta">05 植物生理 · M3 细胞呼吸</div>
+      <div class="header-title">呼吸方式与产物比例</div>
+    </div>
+    <a class="back-btn" href="index.html" aria-label="返回首页"><i class="ti ti-arrow-left"></i> 首页</a>
+    <div class="header-id">T05_M3</div>
+  </div>
+  <nav class="nav-tabs" role="tablist">
+    <button class="nav-tab active" role="tab" onclick="switchTab('overview',this)">概览</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('mothers',this)">母题精讲</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('ladder',this)">变式阶梯</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('self',this)">自查清单</button>
+  </nav>
+</header>
+
+<div id="tab-overview" class="page active" role="tabpanel">
+  <div class="memory-section">
+    <div class="memory-card">
+      <img class="memory-img" src="记忆卡/T05_M3_memory.png" alt="呼吸方式与产物比例记忆卡" onclick="openLightbox(this.src,this.alt)" onerror="this.style.display='none'">
+      <div class="memory-footer">
+        <div>
+          <div class="memory-label">记忆卡 · 有氧/无氧呼吸方程式与气体比例判断框架</div>
+          <div style="font-size:12px;color:var(--tx3);">点击图片可放大</div>
+        </div>
+        <video class="memory-video" controls controlsList="nodownload" preload="metadata" style="display:none">
+          <source src="audio/T05_M3.mp4" type="video/mp4">
+        </video>
+          <div class="audio-placeholder" style="display:flex"><i class="ti ti-video-off"></i>视频待放入</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title"><i class="ti ti-scan" aria-hidden="true"></i> 触发信号速查</div>
+  <div class="signal-grid">
+    <div class="signal-card">
+      <div class="signal-label">图像信号</div>
+      <div class="signal-tag">O₂消耗量/CO₂释放量变化图</div>
+      <div class="signal-tag">密封容器气体体积变化</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">文字信号</div>
+      <div class="signal-tag">有氧呼吸 / 无氧呼吸 / 兼性厌氧</div>
+      <div class="signal-tag">酒精 / 乳酸 / CO₂ / 气体比例</div>
+      <div class="signal-tag">呼吸商（RQ）/ O₂与CO₂比值</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">任务关键词</div>
+      <div class="signal-tag">判断呼吸方式（纯有氧/纯无氧/混合）</div>
+      <div class="signal-tag">计算各方式消耗的葡萄糖比例</div>
+      <div class="signal-tag">分析密封容器中气体体积变化</div>
+    </div>
+  </div>
+
+  <div class="section-title"><i class="ti ti-arrow-fork" aria-hidden="true"></i> 核心概念 · 四个分析维度</div>
+  <div class="mode-grid">
+    <div class="mode-card" style="border-left-color:var(--accent);">
+      <div class="mode-card-label" style="color:var(--accent-d2);">有氧呼吸方程式</div>
+      <div class="mode-card-text">C₆H₁₂O₆ + 6H₂O + 6O₂ → 6CO₂ + 12H₂O + 能量；<strong>CO₂释放量 = O₂消耗量</strong>，RQ=1；产生大量ATP（约38mol）</div>
+    </div>
+    <div class="mode-card" style="border-left-color:var(--coral);">
+      <div class="mode-card-label" style="color:var(--coral-d);">无氧呼吸方程式</div>
+      <div class="mode-card-text">植物/酵母：C₆H₁₂O₆ → 2C₂H₅OH + 2CO₂；动物/乳酸菌：C₆H₁₂O₆ → 2C₃H₆O₃；<strong>酒精途径有CO₂释放，乳酸途径无气体变化</strong></div>
+    </div>
+    <div class="mode-card" style="border-left-color:var(--amber);">
+      <div class="mode-card-label" style="color:var(--amber-d);">混合呼吸产物比例计算</div>
+      <div class="mode-card-text">测量CO₂释放量（总）和O₂消耗量：有氧部分CO₂=O₂消耗量；无氧CO₂=总CO₂−有氧CO₂；据此推算两种呼吸消耗葡萄糖的比</div>
+    </div>
+    <div class="mode-card" style="border-left-color:var(--teal);">
+      <div class="mode-card-label" style="color:var(--teal-d);">贮藏与保鲜应用</div>
+      <div class="mode-card-text">低O₂（但>2%）+低温→降低呼吸速率→减少有机物消耗→延长保质期；完全无O₂→无氧呼吸产生酒精→反而有害</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-alert-triangle" aria-hidden="true"></i> 高频陷阱（5 个）</div>
+  <div class="trap-list">
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon"></i><div>无氧呼吸产酒精的CO₂释放量<strong>不等于O₂消耗量</strong>（无氧呼吸不消耗O₂）——CO₂释放 > O₂消耗，说明存在无氧呼吸（酒精途径）</div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon"></i><div>乳酸途径（动物、乳酸菌）<strong>无CO₂释放、无气体体积变化</strong>——密封容器中气体不变不代表不呼吸，可能是纯乳酸发酵</div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon"></i><div>有氧呼吸方程式中，水是<strong>反应物</strong>（参与第二阶段，6H₂O进入线粒体基质），CO₂由丙酮酸脱羧产生——不能说"有氧呼吸不需要水"</div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon"></i><div>贮藏粮食/蔬菜时应用<strong>低O₂不是无O₂</strong>——完全无氧会产生大量酒精，对细胞有毒；适当低O₂（2-5%）才是最优选择</div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon"></i><div>ATP产量：有氧呼吸远多于无氧呼吸——1 mol葡萄糖有氧≈38 mol ATP，无氧（酒精途径）只产生<strong>2 mol ATP</strong>——不能说"无氧产能更多"</div></div>
+  </div>
+</div>
+
+<div id="tab-mothers" class="page" role="tabpanel">
+  <div class="filter-tabs" role="group">
+    <button class="filter-btn active" onclick="filterMode('all',this)">全部（4 类）</button>
+    <button class="filter-btn" onclick="filterMode('aerobic',this)">有氧呼吸</button>
+    <button class="filter-btn" onclick="filterMode('anaerobic',this)">无氧呼吸</button>
+    <button class="filter-btn" onclick="filterMode('ratio',this)">混合比例计算</button>
+    <button class="filter-btn" onclick="filterMode('storage',this)">贮藏保鲜应用</button>
+  </div>
+
+  <div class="mq-card" data-mode="aerobic">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge aerobic">有氧呼吸</span>
+      <span class="mq-name">有氧呼吸三个阶段的场所、物质变化与ATP产量</span>
+      <span class="mq-purity">10/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-460 · 子问题 (1)(2)</div>
+      <div class="rule-box">核心信号：题目要求写出有氧呼吸的总方程式，或填写三个阶段的场所、底物、产物；或分析某阶段产物中H和O的来源。标准母题：三阶段逐一分析。</div>
+      <div class="chain-label">有氧呼吸三阶段速记</div>
+      <div class="signal-chain"><span class="sc-node">第一阶段（细胞质基质）</span><span class="sc-arrow">：</span><span class="sc-node aerobic">葡萄糖→丙酮酸+[H]+少量ATP</span></div>
+      <div class="signal-chain"><span class="sc-node">第二阶段（线粒体基质）</span><span class="sc-arrow">：</span><span class="sc-node aerobic">丙酮酸+H₂O→CO₂+[H]+少量ATP</span></div>
+      <div class="signal-chain"><span class="sc-node">第三阶段（线粒体内膜）</span><span class="sc-arrow">：</span><span class="sc-node aerobic">[H]+O₂→H₂O+大量ATP ✓</span></div>
+      <p class="mq-note">来源辨析：CO₂中的O来自<strong>葡萄糖和水</strong>（第二阶段）；H₂O中的H来自<strong>葡萄糖和水</strong>（[H]来自第一、二阶段），O来自<strong>O₂</strong>（第三阶段）。这是常考的同位素标记追踪题目的分析基础。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec460')"><i class="ti ti-file-text"></i> 查看完整题干</button>
+    </div>
+  </div>
+
+  <div class="mq-card" data-mode="anaerobic">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge anaerobic">无氧呼吸</span>
+      <span class="mq-name">植物无氧呼吸（酒精途径）与动物无氧呼吸（乳酸途径）的产物区别及判断</span>
+      <span class="mq-purity">10/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-464 · 子问题 (1)(2)</div>
+      <div class="rule-box">核心信号：题目要求区分植物/酵母菌的无氧呼吸和动物/乳酸菌的无氧呼吸，或在密封容器实验中，根据CO₂和O₂的变化量判断呼吸方式。</div>
+      <div class="chain-label">两种无氧呼吸对比</div>
+      <div class="signal-chain"><span class="sc-node">酒精途径（植物/酵母）</span><span class="sc-arrow">：</span><span class="sc-node anaerobic">葡萄糖→酒精+CO₂（有CO₂释放）</span></div>
+      <div class="signal-chain"><span class="sc-node">乳酸途径（动物/乳酸菌）</span><span class="sc-arrow">：</span><span class="sc-node anaerobic">葡萄糖→乳酸（无气体变化）✓</span></div>
+      <div class="chain-label">密封容器判断逻辑</div>
+      <div class="signal-chain"><span class="sc-node">CO₂释放 = O₂消耗</span><span class="sc-arrow">→</span><span class="sc-node">纯有氧呼吸（RQ=1）</span></div>
+      <div class="signal-chain"><span class="sc-node">CO₂释放 &gt; O₂消耗</span><span class="sc-arrow">→</span><span class="sc-node anaerobic">有氧+无氧（酒精途径）混合 ✓</span></div>
+      <div class="signal-chain"><span class="sc-node">气体总量不变</span><span class="sc-arrow">→</span><span class="sc-node anaerobic">纯无氧（乳酸）或有氧+乳酸混合 ✓</span></div>
+      <p class="mq-note">⚠️ 用NaOH（吸收CO₂）和清水（不吸收气体）分别测量气体体积变化，可区分O₂消耗量和CO₂释放量，是经典实验设计考点。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec464')"><i class="ti ti-file-text"></i> 查看完整题干</button>
+    </div>
+  </div>
+
+  <div class="mq-card" data-mode="ratio">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge ratio">混合比例计算</span>
+      <span class="mq-name">由O₂消耗量和CO₂释放量推算有氧/无氧呼吸消耗葡萄糖的比例</span>
+      <span class="mq-purity">10/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-468 · 子问题 (2)(3)</div>
+      <div class="rule-box">核心信号：题目给出"O₂消耗量为a mol，CO₂释放量为b mol（b&gt;a）"，要求计算有氧和无氧呼吸各消耗多少葡萄糖。标准方程组解法。</div>
+      <div class="chain-label">计算方程组</div>
+      <div class="signal-chain"><span class="sc-node">有氧部分</span><span class="sc-arrow">：</span><span class="sc-node ratio">CO₂释放 = O₂消耗 = a mol</span></div>
+      <div class="signal-chain"><span class="sc-node">无氧部分CO₂</span><span class="sc-arrow">=</span><span class="sc-node ratio">总CO₂(b) − 有氧CO₂(a) = (b-a) mol</span></div>
+      <div class="signal-chain"><span class="sc-node">无氧葡萄糖</span><span class="sc-arrow">=</span><span class="sc-node ratio">(b-a)/2 mol（每mol葡萄糖产2mol CO₂）✓</span></div>
+      <div class="signal-chain"><span class="sc-node">有氧葡萄糖</span><span class="sc-arrow">=</span><span class="sc-node ratio">a/6 mol（每mol葡萄糖消耗6mol O₂）✓</span></div>
+      <p class="mq-note">注意：此公式适用于植物/酵母（无氧产酒精+CO₂）。若为动物无氧（乳酸途径），CO₂只来自有氧部分，无氧部分不释放CO₂，计算逻辑不同。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec468')"><i class="ti ti-file-text"></i> 查看完整题干</button>
+    </div>
+  </div>
+
+  <div class="mq-card" data-mode="storage">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge storage">贮藏保鲜应用</span>
+      <span class="mq-name">低O₂贮藏蔬菜水果的最优条件分析与无氧呼吸危害评估</span>
+      <span class="mq-purity">9/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-472 · 子问题 (1)(3)</div>
+      <div class="rule-box">核心信号：题目给出不同O₂浓度下蔬菜/水果的呼吸速率曲线或有机物消耗量，要求判断最适O₂浓度，并解释为何不能完全密封。</div>
+      <div class="chain-label">最优贮藏O₂浓度分析</div>
+      <div class="signal-chain"><span class="sc-node">完全无O₂（密封）</span><span class="sc-arrow">→</span><span class="sc-node">纯无氧呼吸→酒精积累→细胞受损</span></div>
+      <div class="signal-chain"><span class="sc-node">O₂过高（21%）</span><span class="sc-arrow">→</span><span class="sc-node">纯有氧呼吸→消耗大量有机物</span></div>
+      <div class="signal-chain"><span class="sc-node">最优O₂约2~5%</span><span class="sc-arrow">→</span><span class="sc-node storage">有氧+少量无氧→总呼吸最低→最省有机物 ✓</span></div>
+      <p class="mq-note">低温同时配合低O₂效果最佳：低温降低酶活性→减慢呼吸速率；低O₂抑制有氧呼吸→两者协同减少有机物消耗。但要避免完全无O₂造成无氧呼吸酒精积累。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec472')"><i class="ti ti-file-text"></i> 查看完整题干</button>
+    </div>
+  </div>
+</div>
+
+<div id="tab-ladder" class="page" role="tabpanel">
+  <div class="ladder-note">按 L1 基础 → L2 进阶 → L3 综合三级递进。点击卡片可查看完整题干。</div>
+  <div class="ladder-section-label"><span class="ladder-level l1" style="width:auto;padding:3px 8px;">L1 基础</span> 方程式书写与呼吸方式判断</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1-1<br>方程式</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec460-1')" style="cursor:pointer;">
+        <div class="ladder-card-name">书写有氧呼吸总方程式，标注各产物来源</div>
+        <div class="ladder-card-sub">EC-460 (1) · C₆H₁₂O₆+6O₂+6H₂O→6CO₂+12H₂O，CO₂和H₂O中原子来源 <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1-2<br>判断</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec464-1')" style="cursor:pointer;">
+        <div class="ladder-card-name">根据CO₂释放量和O₂消耗量的比值判断呼吸方式</div>
+        <div class="ladder-card-sub">EC-464 (1) · CO₂=O₂(纯有氧)；CO₂>O₂(混合)；气体不变(乳酸/密封) <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1-3<br>产物</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec464-2')" style="cursor:pointer;">
+        <div class="ladder-card-name">区分酒精途径（植物/酵母）和乳酸途径（动物）的产物差异</div>
+        <div class="ladder-card-sub">EC-464 (2) · 酒精+CO₂ vs 乳酸（无气体），实验鉴定方法 <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+  </div>
+  <div class="section-divider"></div>
+  <div class="ladder-section-label"><span class="ladder-level l2" style="width:auto;padding:3px 8px;">L2 进阶</span> 混合呼吸计算 + 同位素追踪</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2-1<br>计算</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec468-23')" style="cursor:pointer;">
+        <div class="ladder-card-name">由O₂消耗量和CO₂释放量计算有氧/无氧消耗葡萄糖比例</div>
+        <div class="ladder-card-sub">EC-468 (2)+(3) · 方程组：有氧CO₂=O₂，无氧CO₂=总-O₂，各自葡萄糖量 <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2-2<br>同位素</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec460-23')" style="cursor:pointer;">
+        <div class="ladder-card-name">¹⁸O标记H₂O或葡萄糖，追踪产物CO₂和H₂O中¹⁸O的去向</div>
+        <div class="ladder-card-sub">EC-460 (2)+(3) · 第二阶段H₂O参与，CO₂和H₂O各含哪些原子的来源 <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2-3<br>贮藏</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec472-13')" style="cursor:pointer;">
+        <div class="ladder-card-name">分析不同O₂浓度下水果的最优贮藏条件与原因</div>
+        <div class="ladder-card-sub">EC-472 (1)+(3) · 曲线最低点=最优贮藏O₂浓度，完全密封的危害 <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+  </div>
+  <div class="section-divider"></div>
+  <div class="ladder-section-label"><span class="ladder-level l3" style="width:auto;padding:3px 8px;">L3 综合</span> 呼吸方式判断 + 产物计算 + 实验设计</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l3">L3-1</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec475-135')" style="cursor:pointer;">
+        <div class="ladder-card-name">密封容器实验数据分析：判断呼吸方式 + 计算各类葡萄糖消耗量 + 设计验证实验</div>
+        <div class="ladder-card-sub">EC-475 (1)+(3)+(5) · 综合判断逻辑、定量计算、NaOH/清水实验设计 <i class="ti ti-chevron-right" style="font-size:12px;"></i></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="tab-self" class="page" role="tabpanel">
+  <div class="progress-row">
+    <span style="font-size:13px;color:var(--tx2);">学习自查清单</span>
+    <span style="font-size:13px;color:var(--tx2);" id="progress-text">0 / 7 完成</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="pbar"></div></div>
+  <div class="checklist" id="checklist">
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">能正确书写有氧呼吸总方程式，并说明各产物（CO₂和H₂O）中原子的来源（葡萄糖 vs 水 vs O₂）</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">能区分酒精途径（CO₂释放，植物/酵母）和乳酸途径（无CO₂，动物/乳酸菌），并写出各自的化学方程式</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">能根据CO₂释放量与O₂消耗量的关系（相等/大于/气体不变）判断呼吸方式类型</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">能用方程组计算混合呼吸中有氧/无氧各消耗多少葡萄糖（给出O₂消耗量和总CO₂释放量时）</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">能分析果蔬贮藏的最优O₂浓度（约2~5%），说明完全密封反而有害的原因（酒精积累）</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">完成 L1 全部 3 道基础变式（方程式、呼吸判断、产物区分各 1 道）</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><i class="ti ti-check"></i></div><div class="check-text">完成至少 2 道 L2 进阶变式，能用数据推算有氧/无氧呼吸各消耗葡萄糖的比例</div></div>
+  </div>
+  <div class="action-row">
+    <button class="action-btn" onclick="window.scrollTo(0,0);switchTab('mothers',document.querySelectorAll('.nav-tab')[1])">返回母题精讲 →</button>
+    <button class="action-btn" onclick="window.scrollTo(0,0);switchTab('ladder',document.querySelectorAll('.nav-tab')[2])">进入变式阶梯 →</button>
+  </div>
+</div>
+</div>
+
+<div class="lb-overlay" id="lb-overlay" onclick="closeLightbox()"><button class="lb-close" onclick="closeLightbox()">×</button><img class="lb-img" id="lb-img" src="" alt=""></div>
+<div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer" role="dialog" aria-modal="true">
+  <div class="drawer-header"><span class="drawer-badge" id="drawer-badge"></span><span class="drawer-title" id="drawer-title"></span><button class="drawer-close" onclick="closeDrawer()"><i class="ti ti-x" style="font-size:18px;"></i></button></div>
+  <div class="drawer-body"><div class="drawer-ec-ref" id="drawer-ref"></div><div class="drawer-stem" id="drawer-stem"></div><div class="drawer-sub" id="drawer-sub" style="display:none;"><div class="drawer-sub-label">本题考查重点</div><div id="drawer-sub-text"></div></div><div class="drawer-answer" id="drawer-answer"><div class="drawer-answer-label">参考答案</div><div id="drawer-answer-text"></div></div></div>
+  <div class="drawer-footer"><button class="drawer-btn" id="drawer-ans-btn" onclick="toggleAnswer()">显示答案</button><button class="drawer-btn primary" onclick="closeDrawer()">完成阅读</button></div>
+</div>
+
+<script>
+function switchTab(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');if(btn)btn.classList.add('active');}
+function toggleMQ(h){const b=h.nextElementSibling,c=h.querySelector('.mq-chevron'),o=b.classList.contains('open');b.classList.toggle('open',!o);c.classList.toggle('open',!o);}
+function filterMode(mode,btn){document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.mq-card').forEach(card=>{card.style.display=(mode==='all'||card.dataset.mode===mode)?'':'none';});}
+function toggleCheck(item){item.classList.toggle('done');updateProgress();saveChecklist();}
+function updateProgress(){const total=document.querySelectorAll('.check-item').length,done=document.querySelectorAll('.check-item.done').length;document.getElementById('pbar').style.width=(done/total*100)+'%';document.getElementById('progress-text').textContent=done+' / '+total+' 完成';}
+function saveChecklist(){try{const s=Array.from(document.querySelectorAll('.check-item')).map(el=>el.classList.contains('done'));localStorage.setItem('T05_M3_checklist',JSON.stringify(s));}catch(e){}}
+(function(){try{const s=JSON.parse(localStorage.getItem('T05_M3_checklist')||'[]');document.querySelectorAll('.check-item').forEach((item,i)=>{if(s[i])item.classList.add('done');});updateProgress();}catch(e){}})();
+const QUESTIONS={
+  'mq-ec460':{badge:'有氧呼吸 · 母题',badgeClass:'aerobic',title:'有氧呼吸三阶段场所、物质变化与ATP产量',ref:'EC-20260525-460 · 子问题 (1)(2)',stem:`有氧呼吸是细胞获取能量的主要方式。\n\n(1) 写出有氧呼吸的总反应方程式。该方程式中，H₂O出现在两个位置（反应物和产物），分别代表什么意义？\n(2) 有氧呼吸分为三个阶段，请分别写出每个阶段的反应场所、主要底物和主要产物，并指出哪个阶段产生ATP最多。`,focus:'(1) 总方程式：C₆H₁₂O₆+6O₂+6H₂O→6CO₂+12H₂O+能量。反应物中6H₂O：参与第二阶段，进入线粒体基质与丙酮酸反应（水解）；产物中12H₂O：第三阶段[H]与O₂在线粒体内膜结合产生的水。\n(2) 三阶段：①细胞质基质：葡萄糖→丙酮酸+[H]+少量ATP；②线粒体基质：丙酮酸+H₂O→CO₂+[H]+少量ATP；③线粒体内膜：[H]+O₂→H₂O+大量ATP。第三阶段产ATP最多。',answer:'(1) 总反应方程式：C₆H₁₂O₆ + 6O₂ + 6H₂O → 6CO₂ + 12H₂O + 能量（ATP和热能）\nH₂O的两个位置说明：\n①反应物中6H₂O：在第二阶段（线粒体基质）参与丙酮酸的氧化分解，H₂O中的O与丙酮酸中的C结合形成CO₂（丙酮酸脱羧过程中水参与）；\n②产物中12H₂O：在第三阶段（线粒体内膜）由[H]（NADH等携带的氢）与O₂在氧化磷酸化过程中结合生成的水。\n(2) 三个阶段：\n①第一阶段（细胞质基质）：底物葡萄糖（C₆H₁₂O₆）→产物丙酮酸（2个C₃H₄O₃）+[H]（NADH）+少量ATP（2mol）；\n②第二阶段（线粒体基质）：底物丙酮酸+H₂O→产物CO₂+[H]（NADH/FADH₂）+少量ATP（2mol）；\n③第三阶段（线粒体内膜）：底物[H]+O₂→产物H₂O+大量ATP（约34mol，通过氧化磷酸化合成）。\n产ATP最多的阶段：第三阶段（线粒体内膜上的氧化磷酸化）。'},
+  'mq-ec464':{badge:'无氧呼吸 · 母题',badgeClass:'anaerobic',title:'植物与动物无氧呼吸产物区别及密封容器判断',ref:'EC-20260525-464 · 子问题 (1)(2)',stem:`将等量的酵母菌（兼性厌氧）和乳酸菌分别置于密封容器中，提供相同的葡萄糖溶液。\n\n(1) 分别写出两种生物在无氧条件下的呼吸方程式，并预测密封容器中气体体积的变化。\n(2) 若用NaOH溶液（能吸收CO₂）代替清水填充密封容器，重复实验，气体体积如何变化？说明原因。`,focus:'(1) 酵母菌（无氧）：C₆H₁₂O₆→2C₂H₅OH+2CO₂↑；产生CO₂→容器气体体积增大。乳酸菌：C₆H₁₂O₆→2C₃H₆O₃；无气体产生→体积不变。\n(2) NaOH吸收CO₂后：酵母菌容器：CO₂被NaOH吸收→气体体积减小（净减少，因为消耗O₂产生的CO₂被吸收，O₂也被消耗——但此处是无氧条件，无O₂消耗，CO₂产生后被吸收→体积减小）；乳酸菌：仍无气体变化。',answer:'(1) 呼吸方程式和气体变化：\n酵母菌（无氧呼吸酒精途径）：C₆H₁₂O₆ → 2C₂H₅OH + 2CO₂↑\n气体变化：产生CO₂气体→密封容器内气体体积增大。\n乳酸菌（无氧呼吸乳酸途径）：C₆H₁₂O₆ → 2C₃H₆O₃\n气体变化：无气体产生→密封容器内气体体积不变。\n(2) NaOH替代清水后的气体变化：\n酵母菌容器：酵母菌无氧呼吸产生的CO₂会被NaOH吸收（CO₂+2NaOH→Na₂CO₃+H₂O），气体体积减小（CO₂产生后立即被液体吸收，净效果为气体减少）。\n乳酸菌容器：乳酸菌不产生任何气体，NaOH也无CO₂可吸收，气体体积仍不变。\n意义：此实验设计（NaOH vs 清水配对）可用来区分O₂消耗量和CO₂释放量：NaOH组测净O₂消耗；清水组测CO₂与O₂的净变化量；两者差值=CO₂释放量−O₂消耗量，据此判断是否有无氧呼吸。'},
+  'mq-ec468':{badge:'混合比例计算 · 母题',badgeClass:'ratio',title:'由O₂消耗量和CO₂释放量计算有氧/无氧消耗葡萄糖比',ref:'EC-20260525-468 · 子问题 (2)(3)',stem:`将植物种子置于25°C密封容器中，测得1小时内：O₂消耗量 = 3 mol，CO₂释放量 = 5 mol。（假设种子进行有氧呼吸和无氧呼吸两种方式，无氧呼吸产酒精和CO₂）\n\n(2) 分析有氧呼吸和无氧呼吸各释放多少CO₂，并计算各方式消耗的葡萄糖量。\n(3) 有氧呼吸消耗的葡萄糖与无氧呼吸消耗的葡萄糖比值是多少？`,focus:'(2) 有氧呼吸：CO₂(有氧) = O₂消耗量 = 3 mol；有氧消耗葡萄糖 = 3/6 = 0.5 mol。\n无氧呼吸：CO₂(无氧) = 总CO₂ - 有氧CO₂ = 5-3 = 2 mol；无氧消耗葡萄糖 = 2/2 = 1 mol。\n(3) 有氧：无氧葡萄糖比 = 0.5 : 1 = 1 : 2。',answer:'(2) 计算过程：\n有氧呼吸部分：\n有氧呼吸中CO₂释放量 = O₂消耗量 = 3 mol（有氧呼吸的CO₂:O₂=1:1）\n有氧呼吸消耗葡萄糖量 = 3 mol O₂ ÷ 6（每mol葡萄糖消耗6 mol O₂）= 0.5 mol 葡萄糖\n\n无氧呼吸部分（酒精途径）：\n无氧呼吸释放CO₂ = 总CO₂ - 有氧CO₂ = 5 - 3 = 2 mol\n无氧呼吸消耗葡萄糖量 = 2 mol CO₂ ÷ 2（每mol葡萄糖产2 mol CO₂）= 1 mol 葡萄糖\n\n(3) 有氧：无氧消耗葡萄糖比 = 0.5 : 1 = 1 : 2\n即该种子消耗的葡萄糖中，1/3用于有氧呼吸，2/3用于无氧呼吸（以消耗葡萄糖计）。'},
+  'mq-ec472':{badge:'贮藏保鲜应用 · 母题',badgeClass:'storage',title:'低O₂贮藏蔬菜水果的最优条件与原理',ref:'EC-20260525-472 · 子问题 (1)(3)',stem:`某研究测定了苹果在不同O₂浓度下每小时有机物消耗量（mg）：\nO₂浓度：0%  2%  5%  10%  15%  21%\n有机物消耗：3.0  1.8  1.5  2.0  2.5  3.0\n\n(1) 根据上述数据，判断贮藏苹果的最适O₂浓度，并说明判断依据。\n(3) 为什么不能将苹果完全密封（O₂=0%）贮藏？完全密封与最适O₂贮藏相比有哪些劣势？`,focus:'(1) 最适O₂浓度为5%（有机物消耗量最低，为1.5 mg/h）。依据：最低有机物消耗量对应的O₂浓度即为最优贮藏浓度——此时总呼吸速率（有氧+无氧）之和最小，有机物损耗最少，保鲜效果最好。\n(3) 完全密封（O₂=0%）劣势：①纯无氧呼吸（酒精途径）产生酒精→酒精积累→细胞毒害→品质下降；②有机物消耗量（3.0 mg/h）高于最适O₂浓度（1.5 mg/h）——无氧呼吸效率低；③无氧环境下有害微生物（厌氧菌）可能大量繁殖。',answer:'(1) 最适O₂浓度：5%（有机物消耗量为1.5 mg/h，是所有浓度中最低值）。\n判断依据：有机物消耗量越低，呼吸速率越慢，有机物保存越多，保鲜时间越长。在5% O₂时，有氧呼吸受到抑制（低O₂）而无氧呼吸尚未大量启动，总呼吸速率达到最低，因此选5%为最适贮藏O₂浓度。\n(3) 完全密封（O₂=0%）的劣势：\n①酒精积累危害：无氧环境下苹果进行酒精发酵（无氧呼吸），大量酒精积累，对细胞原生质造成毒害，导致细胞死亡、果实腐败变质，严重影响品质和口感；\n②有机物消耗反而更多：完全密封时有机物消耗3.0 mg/h，是5% O₂条件下（1.5 mg/h）的两倍，反而不利于保鲜（无氧呼吸产ATP少，消耗相同有机物获得能量少，更"浪费"）；\n③抗病能力下降：酒精积累破坏细胞膜完整性，降低果实对腐烂菌的抵抗力，加速变质。'},
+  'v-ec460-1':{badge:'L1 基础变式 · 方程式',badgeClass:'aerobic',title:'书写有氧呼吸方程式并标注原子来源',ref:'EC-20260525-460 · (1)',stem:'（同母题 mq-ec460 (1)）',focus:'同母题分析。',answer:'见母题 EC-460 答案。'},
+  'v-ec464-1':{badge:'L1 基础变式 · 判断',badgeClass:'anaerobic',title:'根据CO₂和O₂关系判断呼吸方式',ref:'EC-20260525-464 · (1)',stem:'（同母题 mq-ec464 (1)）',focus:'同母题分析。',answer:'见母题 EC-464 答案。'},
+  'v-ec464-2':{badge:'L1 基础变式 · 产物',badgeClass:'anaerobic',title:'区分酒精途径和乳酸途径产物',ref:'EC-20260525-464 · (2)',stem:'（同母题 mq-ec464 (2)）',focus:'同母题分析。',answer:'见母题 EC-464 答案。'},
+  'v-ec468-23':{badge:'L2 进阶变式 · 比例计算',badgeClass:'ratio',title:'混合呼吸消耗葡萄糖比例计算',ref:'EC-20260525-468 · (2)+(3)',stem:'（同母题 mq-ec468 (2)(3)）',focus:'同母题分析。',answer:'见母题 EC-468 答案。'},
+  'v-ec460-23':{badge:'L2 进阶变式 · 同位素追踪',badgeClass:'aerobic',title:'¹⁸O标记追踪CO₂和H₂O中的氧原子来源',ref:'EC-20260525-460 · (2)+(3)',stem:`若用含¹⁸O标记的H₂¹⁸O（¹⁸O标记的水）参与有氧呼吸，预测产物CO₂和H₂O中¹⁸O的分布情况。（提示：H₂O参与第二阶段，在线粒体基质中与丙酮酸反应）`,focus:'水（含¹⁸O）在第二阶段参与：H₂¹⁸O + 丙酮酸→CO₂（含¹⁸O，来自水中O）+ [H]；第三阶段：[H] + O₂→H₂O（O来自O₂，不含¹⁸O）。\n因此：¹⁸O出现在CO₂中（第二阶段产物），不在最终H₂O中（第三阶段H₂O的O来自O₂）。',answer:'¹⁸O标记H₂O参与有氧呼吸后的分布：\n第二阶段（线粒体基质）：H₂¹⁸O与丙酮酸发生反应（丙酮酸脱羧，C与¹⁸O结合）→产物CO₂中含有¹⁸O（即CO₂中的氧来自水中的¹⁸O）；\n第三阶段（线粒体内膜）：[H]（来自第一、二阶段）+ ¹⁶O₂（普通O₂）→ H₂O；由于O₂不含¹⁸O，产生的水中O来自O₂，不含¹⁸O。\n结论：¹⁸O出现在CO₂产物中；最终产生的H₂O不含¹⁸O（其O来自O₂）。若改为用¹⁸O标记O₂（¹⁸O₂），则¹⁸O将出现在产物H₂O中，而不在CO₂中。'},
+  'v-ec472-13':{badge:'L2 进阶变式 · 贮藏条件',badgeClass:'storage',title:'分析最优贮藏O₂浓度与完全密封的危害',ref:'EC-20260525-472 · (1)+(3)',stem:'（同母题 mq-ec472 (1)(3)）',focus:'同母题分析。',answer:'见母题 EC-472 答案。'},
+  'v-ec475-135':{badge:'L3 综合变式',badgeClass:'ratio',title:'密封容器实验数据分析+比例计算+实验设计',ref:'EC-20260525-475 · (1)+(3)+(5)',stem:`将100 g马铃薯薄片置于密封容器（充满空气）中，25°C培养2小时。实验结束后测得：O₂消耗量 = 0.6 mol，CO₂释放量 = 0.9 mol。（马铃薯进行有氧呼吸和无氧呼吸，无氧产酒精+CO₂）\n\n(1) 根据数据判断该马铃薯是否同时进行了有氧呼吸和无氧呼吸，说明判断依据。\n(3) 计算2小时内有氧呼吸和无氧呼吸各消耗葡萄糖的质量（g）（葡萄糖分子量=180）。\n(5) 若要区分这两种呼吸方式各释放多少CO₂，应如何改进实验设计？（提示：可用NaOH溶液）`,focus:'(1) CO₂(0.9) > O₂(0.6)，说明有额外CO₂来源（无氧呼吸），因此同时存在有氧和无氧呼吸。\n(3) 有氧：CO₂(有氧)=O₂=0.6 mol；有氧葡萄糖=0.6/6=0.1 mol=18g；无氧：CO₂(无氧)=0.9-0.6=0.3 mol；无氧葡萄糖=0.3/2=0.15 mol=27g。\n(5) 改进：用NaOH溶液替换密封容器中的清水（或在出气口添加NaOH吸收CO₂），测量密封容器的气体体积减少量=O₂消耗量（CO₂被NaOH全部吸收）；再用另一组清水（不吸收CO₂），测量气体净变化=CO₂释放量-O₂消耗量；两者结合可分别得出O₂消耗量和CO₂释放量，进而分别计算两种呼吸的CO₂贡献。',answer:'(1) 判断：马铃薯同时进行有氧呼吸和无氧呼吸（混合呼吸）。\n依据：CO₂释放量（0.9 mol）> O₂消耗量（0.6 mol）。若为纯有氧呼吸，CO₂=O₂；CO₂多余的0.3 mol来自无氧呼吸（酒精途径），证明无氧呼吸同时存在。\n(3) 计算：\n有氧呼吸部分：有氧CO₂=O₂=0.6 mol；消耗葡萄糖=0.6÷6=0.1 mol=0.1×180=18 g\n无氧呼吸部分：无氧CO₂=0.9-0.6=0.3 mol；消耗葡萄糖=0.3÷2=0.15 mol=0.15×180=27 g\n(5) 改进实验设计：\n方案：设置两个平行密封容器，分别放等量马铃薯薄片：\n①容器A（NaOH组）：用NaOH溶液填充封口（NaOH吸收所有CO₂），测量2小时后气体体积减少量=O₂消耗量（CO₂被完全吸收，气体减少全部由O₂消耗引起）；\n②容器B（清水组）：用清水封口（不吸收CO₂），测量2小时后气体体积净变化量=CO₂释放量-O₂消耗量；\n③计算：CO₂释放总量=O₂消耗量（A组）+（B组气体净变化量）；有氧呼吸CO₂=O₂消耗量（A组）；无氧呼吸CO₂=总CO₂-A组O₂消耗量；据此分别确定两种呼吸方式各自的CO₂贡献量。'}
+};
+let answerShown=false;
+function openDrawer(key){const q=QUESTIONS[key];if(!q)return;const badge=document.getElementById('drawer-badge');badge.textContent=q.badge;badge.className='drawer-badge mq-badge '+(q.badgeClass||'');document.getElementById('drawer-title').textContent=q.title;document.getElementById('drawer-ref').innerHTML='<i class="ti ti-source-code" style="font-size:13px;"></i> '+q.ref;document.getElementById('drawer-stem').textContent=q.stem;const sub=document.getElementById('drawer-sub');if(q.focus){document.getElementById('drawer-sub-text').textContent=q.focus;sub.style.display='';}else{sub.style.display='none';}answerShown=false;document.getElementById('drawer-answer').classList.remove('show');document.getElementById('drawer-answer-text').textContent=q.answer||'';const btn=document.getElementById('drawer-ans-btn');btn.textContent='显示答案';btn.style.display=q.answer?'':'none';document.getElementById('overlay').classList.add('open');document.getElementById('drawer').classList.add('open');document.body.style.overflow='hidden';}
+function closeDrawer(){document.getElementById('overlay').classList.remove('open');document.getElementById('drawer').classList.remove('open');document.body.style.overflow='';}
+function toggleAnswer(){answerShown=!answerShown;document.getElementById('drawer-answer').classList.toggle('show',answerShown);document.getElementById('drawer-ans-btn').textContent=answerShown?'隐藏答案':'显示答案';}
+function openLightbox(src,alt){document.getElementById('lb-img').src=src;document.getElementById('lb-img').alt=alt;document.getElementById('lb-overlay').classList.add('open');document.body.style.overflow='hidden';}
+function closeLightbox(){document.getElementById('lb-overlay').classList.remove('open');document.body.style.overflow='';}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(document.getElementById('lb-overlay').classList.contains('open'))closeLightbox();else closeDrawer();}});
+</script>
+</body>
+</html>

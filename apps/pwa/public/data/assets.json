@@ -1,0 +1,2166 @@
+[
+  {
+    "asset_id": "T01_M1_memory",
+    "topic_id": "T01_M1",
+    "related_topic_ids": [],
+    "type": "memory_card",
+    "title": "T01_M1 图片记忆卡",
+    "source_path": "📂 30_互动学习站/记忆卡/T01_M1_memory.png",
+    "public_path": "/assets/memory-cards/T01_M1_memory.png",
+    "format": "png",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T01_M2_memory",
+    "topic_id": "T01_M2",
+    "related_topic_ids": [],
+    "type": "memory_card",
+    "title": "T01_M2 图片记忆卡",
+    "source_path": "📂 30_互动学习站/记忆卡/T01_M2_memory.png",
+    "public_path": "/assets/memory-cards/T01_M2_memory.png",
+    "format": "png",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T01_M3_memory",
+    "topic_id": "T01_M3",
+    "related_topic_ids": [],
+    "type": "memory_card",
+    "title": "T01_M3 图片记忆卡",
+    "source_path": "📂 30_互动学习站/记忆卡/T01_M3_memory.png",
+    "public_path": "/assets/memory-cards/T01_M3_memory.png",
+    "format": "png",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T01_M4_memory",
+    "topic_id": "T01_M4",
+    "related_topic_ids": [],
+    "type": "memory_card",
+    "title": "T01_M4 图片记忆卡",
+    "source_path": "📂 30_互动学习站/记忆卡/T01_M4_memory.png",
+    "public_path": "/assets/memory-cards/T01_M4_memory.png",
+    "format": "png",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T02_M1_memory",
+    "topic_id": "T02_M1",
+    "related_topic_ids": [],
+    "type": "memory_card",
+    "title": "T02_M1 图片记忆卡",
+    "source_path": "📂 30_互动学习站/记忆卡/T02_M1_memory.png",
+    "public_path": "/assets/memory-cards/T02_M1_memory.png",
+    "format": "png",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T02_M2_memory",
+    "topic_id": "T02_M2",
+    "related_topic_ids": [],
+    "type": "memory_card",
+    "title": "T02_M2 图片记忆卡",
+    "source_path": "📂 30_互动学习站/记忆卡/T02_M2_memory.png",
+    "public_path": "/assets/memory-cards/T02_M2_memory.png",
+    "format": "png",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T02_M3_memory",
+    "topic_id": "T02_M3",
+    "related_topic_ids": [],
+    "type": "memory_card",
+    "title": "T02_M3 图片记忆卡",
+    "source_path": "📂 30_互动学习站/记忆卡/T02_M3_memory.png",
+    "public_path": "/assets/memory-cards/T02_M3_memory.png",
+    "format": "png",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T02_M4_memory",
+    "topic_id": "T02_M4",
+    "related_topic_ids": [],
+    "type": "memory_card",
+    "title": "T02_M4 图片记忆卡",
+    "source_path": "📂 30_互动学习站/记忆卡/T02_M4_memory.png",
+    "public_path": "/assets/memory-cards/T02_M4_memory.png",
+    "format": "png",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T03_M1_memory",
+    "topic_id": "T03_M1",
+    "related_topic_ids": [],
+    "type": "memory_card",
+    "title": "T03_M1 图片记忆卡",
+    "source_path": "📂 30_互动学习站/记忆卡/T03_M1_memory.png",
+    "public_path": "/assets/memory-cards/T03_M1_memory.png",
+    "format": "png",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T03_M2_memory",
+    "topic_id": "T03_M2",
+    "related_topic_ids": [],
+    "type": "memory_card",
+    "title": "T03_M2 图片记忆卡",
+    "source_path": "📂 30_互动学习站/记忆卡/T03_M2_memory.png",
+    "public_path": "/assets/memory-cards/T03_M2_memory.png",
+    "format": "png",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T03_M3_memory",
+    "topic_id": "T03_M3",
+    "related_topic_ids": [],
+    "type": "memory_card",
+    "title": "T03_M3 图片记忆卡",
+    "source_path": "📂 30_互动学习站/记忆卡/T03_M3_memory.png",
+    "public_path": "/assets/memory-cards/T03_M3_memory.png",
+    "format": "png",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T03_M4_memory",
+    "topic_id": "T03_M4",
+    "related_topic_ids": [],
+    "type": "memory_card",
+    "title": "T03_M4 图片记忆卡",
+    "source_path": "📂 30_互动学习站/记忆卡/T03_M4_memory.png",
+    "public_path": "/assets/memory-cards/T03_M4_memory.png",
+    "format": "png",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T04_M1_memory",
+    "topic_id": "T04_M1",
+    "related_topic_ids": [],
+    "type": "memory_card",
+    "title": "T04_M1 图片记忆卡",
+    "source_path": "📂 30_互动学习站/记忆卡/T04_M1_memory.png",
+    "public_path": "/assets/memory-cards/T04_M1_memory.png",
+    "format": "png",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T04_M2_memory",
+    "topic_id": "T04_M2",
+    "related_topic_ids": [],
+    "type": "memory_card",
+    "title": "T04_M2 图片记忆卡",
+    "source_path": "📂 30_互动学习站/记忆卡/T04_M2_memory.png",
+    "public_path": "/assets/memory-cards/T04_M2_memory.png",
+    "format": "png",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T04_M3_memory",
+    "topic_id": "T04_M3",
+    "related_topic_ids": [],
+    "type": "memory_card",
+    "title": "T04_M3 图片记忆卡",
+    "source_path": "📂 30_互动学习站/记忆卡/T04_M3_memory.png",
+    "public_path": "/assets/memory-cards/T04_M3_memory.png",
+    "format": "png",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T04_M4_memory",
+    "topic_id": "T04_M4",
+    "related_topic_ids": [],
+    "type": "memory_card",
+    "title": "T04_M4 图片记忆卡",
+    "source_path": "📂 30_互动学习站/记忆卡/T04_M4_memory.png",
+    "public_path": "/assets/memory-cards/T04_M4_memory.png",
+    "format": "png",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T05_M1_memory",
+    "topic_id": "T05_M1",
+    "related_topic_ids": [],
+    "type": "memory_card",
+    "title": "T05_M1 图片记忆卡",
+    "source_path": "📂 30_互动学习站/记忆卡/T05_M1_memory.png",
+    "public_path": "/assets/memory-cards/T05_M1_memory.png",
+    "format": "png",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T05_M2_memory",
+    "topic_id": "T05_M2",
+    "related_topic_ids": [],
+    "type": "memory_card",
+    "title": "T05_M2 图片记忆卡",
+    "source_path": "📂 30_互动学习站/记忆卡/T05_M2_memory.png",
+    "public_path": "/assets/memory-cards/T05_M2_memory.png",
+    "format": "png",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T05_M3_memory",
+    "topic_id": "T05_M3",
+    "related_topic_ids": [],
+    "type": "memory_card",
+    "title": "T05_M3 图片记忆卡",
+    "source_path": "📂 30_互动学习站/记忆卡/T05_M3_memory.png",
+    "public_path": "/assets/memory-cards/T05_M3_memory.png",
+    "format": "png",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T05_M4_memory",
+    "topic_id": "T05_M4",
+    "related_topic_ids": [],
+    "type": "memory_card",
+    "title": "T05_M4 图片记忆卡",
+    "source_path": "📂 30_互动学习站/记忆卡/T05_M4_memory.png",
+    "public_path": "/assets/memory-cards/T05_M4_memory.png",
+    "format": "png",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T06_M1_memory",
+    "topic_id": "T06_M1",
+    "related_topic_ids": [],
+    "type": "memory_card",
+    "title": "T06_M1 图片记忆卡",
+    "source_path": "📂 30_互动学习站/记忆卡/T06_M1_memory.png",
+    "public_path": "/assets/memory-cards/T06_M1_memory.png",
+    "format": "png",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T06_M2_memory",
+    "topic_id": "T06_M2",
+    "related_topic_ids": [],
+    "type": "memory_card",
+    "title": "T06_M2 图片记忆卡",
+    "source_path": "📂 30_互动学习站/记忆卡/T06_M2_memory.png",
+    "public_path": "/assets/memory-cards/T06_M2_memory.png",
+    "format": "png",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T06_M3_memory",
+    "topic_id": "T06_M3",
+    "related_topic_ids": [],
+    "type": "memory_card",
+    "title": "T06_M3 图片记忆卡",
+    "source_path": "📂 30_互动学习站/记忆卡/T06_M3_memory.png",
+    "public_path": "/assets/memory-cards/T06_M3_memory.png",
+    "format": "png",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T06_M4_memory",
+    "topic_id": "T06_M4",
+    "related_topic_ids": [],
+    "type": "memory_card",
+    "title": "T06_M4 图片记忆卡",
+    "source_path": "📂 30_互动学习站/记忆卡/T06_M4_memory.png",
+    "public_path": "/assets/memory-cards/T06_M4_memory.png",
+    "format": "png",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T06_M5_memory",
+    "topic_id": "T06_M5",
+    "related_topic_ids": [],
+    "type": "memory_card",
+    "title": "T06_M5 图片记忆卡",
+    "source_path": "📂 30_互动学习站/记忆卡/T06_M5_memory.png",
+    "public_path": "/assets/memory-cards/T06_M5_memory.png",
+    "format": "png",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T07_M1_memory",
+    "topic_id": "T07_M1",
+    "related_topic_ids": [],
+    "type": "memory_card",
+    "title": "T07_M1 图片记忆卡",
+    "source_path": "📂 30_互动学习站/记忆卡/T07_M1_memory.png",
+    "public_path": "/assets/memory-cards/T07_M1_memory.png",
+    "format": "png",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T07_M2_memory",
+    "topic_id": "T07_M2",
+    "related_topic_ids": [],
+    "type": "memory_card",
+    "title": "T07_M2 图片记忆卡",
+    "source_path": "📂 30_互动学习站/记忆卡/T07_M2_memory.png",
+    "public_path": "/assets/memory-cards/T07_M2_memory.png",
+    "format": "png",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T07_M3_memory",
+    "topic_id": "T07_M3",
+    "related_topic_ids": [],
+    "type": "memory_card",
+    "title": "T07_M3 图片记忆卡",
+    "source_path": "📂 30_互动学习站/记忆卡/T07_M3_memory.png",
+    "public_path": "/assets/memory-cards/T07_M3_memory.png",
+    "format": "png",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T07_M4_memory",
+    "topic_id": "T07_M4",
+    "related_topic_ids": [],
+    "type": "memory_card",
+    "title": "T07_M4 图片记忆卡",
+    "source_path": "📂 30_互动学习站/记忆卡/T07_M4_memory.png",
+    "public_path": "/assets/memory-cards/T07_M4_memory.png",
+    "format": "png",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "diagram_001",
+    "topic_id": "T05_M1",
+    "related_topic_ids": [
+      "T05_M1"
+    ],
+    "type": "diagram",
+    "title": "光合作用反应式 · 光合作用全景图",
+    "source_path": "📂 30_互动学习站/插图/光合作用反应式 · 光合作用全景图.png",
+    "public_path": "/assets/diagrams/diagram_001.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：光合作用反应式"
+  },
+  {
+    "asset_id": "diagram_002",
+    "topic_id": "T05_M1",
+    "related_topic_ids": [
+      "T05_M1"
+    ],
+    "type": "diagram",
+    "title": "光合过程物质变化 · 光反应与暗反应手绘生物图",
+    "source_path": "📂 30_互动学习站/插图/光合过程物质变化 · 光反应与暗反应手绘生物图.png",
+    "public_path": "/assets/diagrams/diagram_002.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：光合过程物质变化"
+  },
+  {
+    "asset_id": "diagram_003",
+    "topic_id": "T05_M1",
+    "related_topic_ids": [
+      "T05_M1"
+    ],
+    "type": "diagram",
+    "title": "光合限制因子 · 三因子短板模型与补偿点:饱和点",
+    "source_path": "📂 30_互动学习站/插图/光合限制因子 · 三因子短板模型与补偿点:饱和点.png",
+    "public_path": "/assets/diagrams/diagram_003.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：光合限制因子"
+  },
+  {
+    "asset_id": "diagram_004",
+    "topic_id": "T04_M3",
+    "related_topic_ids": [
+      "T04_M3"
+    ],
+    "type": "diagram",
+    "title": "免疫全链路 · 固有免疫到适应性免疫的联动 ",
+    "source_path": "📂 30_互动学习站/插图/免疫全链路 · 固有免疫到适应性免疫的联动 .png",
+    "public_path": "/assets/diagrams/diagram_004.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：免疫全链路"
+  },
+  {
+    "asset_id": "diagram_005",
+    "topic_id": "T02_M2",
+    "related_topic_ids": [
+      "T02_M2"
+    ],
+    "type": "diagram",
+    "title": "内膜系统 · 分泌蛋白从合成到胞吐的膜交通 ",
+    "source_path": "📂 30_互动学习站/插图/内膜系统 · 分泌蛋白从合成到胞吐的膜交通 .png",
+    "public_path": "/assets/diagrams/diagram_005.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：内膜系统"
+  },
+  {
+    "asset_id": "diagram_006",
+    "topic_id": "T02_M2",
+    "related_topic_ids": [
+      "T02_M2"
+    ],
+    "type": "diagram",
+    "title": "内膜系统 · 分泌蛋白合成运输路径",
+    "source_path": "📂 30_互动学习站/插图/内膜系统 · 分泌蛋白合成运输路径.png",
+    "public_path": "/assets/diagrams/diagram_006.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：内膜系统"
+  },
+  {
+    "asset_id": "diagram_007",
+    "topic_id": "T03_M3",
+    "related_topic_ids": [
+      "T03_M3"
+    ],
+    "type": "diagram",
+    "title": "减数分裂 · 减数分裂过程",
+    "source_path": "📂 30_互动学习站/插图/减数分裂 · 减数分裂过程.png",
+    "public_path": "/assets/diagrams/diagram_007.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：减数分裂"
+  },
+  {
+    "asset_id": "diagram_008",
+    "topic_id": "T03_M3",
+    "related_topic_ids": [
+      "T03_M3"
+    ],
+    "type": "diagram",
+    "title": "减数分裂异常 · 同源染色体不分离的遗传后果",
+    "source_path": "📂 30_互动学习站/插图/减数分裂异常 · 同源染色体不分离的遗传后果.png",
+    "public_path": "/assets/diagrams/diagram_008.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：减数分裂, 减数分裂异常"
+  },
+  {
+    "asset_id": "diagram_009",
+    "topic_id": "T01_M4",
+    "related_topic_ids": [
+      "T01_M4"
+    ],
+    "type": "diagram",
+    "title": "分子干预策略型 · 从机制到治疗的转化",
+    "source_path": "📂 30_互动学习站/插图/分子干预策略型 · 从机制到治疗的转化.png",
+    "public_path": "/assets/diagrams/diagram_009.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：分子干预策略型"
+  },
+  {
+    "asset_id": "diagram_010",
+    "topic_id": "T06_M4",
+    "related_topic_ids": [
+      "T06_M4"
+    ],
+    "type": "diagram",
+    "title": "分子技术 · PCR:Western:电泳三件套操作流程",
+    "source_path": "📂 30_互动学习站/插图/分子技术 · PCR:Western:电泳三件套操作流程.png",
+    "public_path": "/assets/diagrams/diagram_010.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：分子技术"
+  },
+  {
+    "asset_id": "diagram_011",
+    "topic_id": "T01_M1",
+    "related_topic_ids": [
+      "T01_M1"
+    ],
+    "type": "diagram",
+    "title": "分子空间畸变型 · 从基因突变到功能丧失的全链条 ",
+    "source_path": "📂 30_互动学习站/插图/分子空间畸变型 · 从基因突变到功能丧失的全链条 .png",
+    "public_path": "/assets/diagrams/diagram_011.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：分子空间畸变型"
+  },
+  {
+    "asset_id": "diagram_012",
+    "topic_id": "T02_M1",
+    "related_topic_ids": [
+      "T02_M1"
+    ],
+    "type": "diagram",
+    "title": "动植物细胞差异 · 动植物细胞对比",
+    "source_path": "📂 30_互动学习站/插图/动植物细胞差异 · 动植物细胞对比.png",
+    "public_path": "/assets/diagrams/diagram_012.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：动植物细胞差异"
+  },
+  {
+    "asset_id": "diagram_013",
+    "topic_id": "T02_M1",
+    "related_topic_ids": [
+      "T02_M1"
+    ],
+    "type": "diagram",
+    "title": "动物细胞亚显微结构",
+    "source_path": "📂 30_互动学习站/插图/动物细胞亚显微结构.png",
+    "public_path": "/assets/diagrams/diagram_013.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：动物细胞亚显微结构"
+  },
+  {
+    "asset_id": "diagram_014",
+    "topic_id": "T06_M1",
+    "related_topic_ids": [
+      "T06_M1"
+    ],
+    "type": "diagram",
+    "title": "变量对照 · 实验设计的三大铁律与对照逻辑 ",
+    "source_path": "📂 30_互动学习站/插图/变量对照 · 实验设计的三大铁律与对照逻辑 .png",
+    "public_path": "/assets/diagrams/diagram_014.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：变量对照"
+  },
+  {
+    "asset_id": "diagram_015",
+    "topic_id": "T05_M1",
+    "related_topic_ids": [
+      "T05_M1"
+    ],
+    "type": "diagram",
+    "title": "叶绿体结构 · 叶绿体结构图",
+    "source_path": "📂 30_互动学习站/插图/叶绿体结构 · 叶绿体结构图.png",
+    "public_path": "/assets/diagrams/diagram_015.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：叶绿体结构"
+  },
+  {
+    "asset_id": "diagram_016",
+    "topic_id": "T05_M3",
+    "related_topic_ids": [
+      "T05_M3"
+    ],
+    "type": "diagram",
+    "title": "呼吸与能量 · 有氧呼吸vs无氧呼吸的分岔与能量账本 ",
+    "source_path": "📂 30_互动学习站/插图/呼吸与能量 · 有氧呼吸vs无氧呼吸的分岔与能量账本 .png",
+    "public_path": "/assets/diagrams/diagram_016.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：呼吸与能量"
+  },
+  {
+    "asset_id": "diagram_017",
+    "topic_id": "T03_M1",
+    "related_topic_ids": [
+      "T03_M1"
+    ],
+    "type": "diagram",
+    "title": "家系判型 · 从系谱图到遗传方式的三步判定 ",
+    "source_path": "📂 30_互动学习站/插图/家系判型 · 从系谱图到遗传方式的三步判定 .png",
+    "public_path": "/assets/diagrams/diagram_017.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：家系判型"
+  },
+  {
+    "asset_id": "diagram_018",
+    "topic_id": "T06_M3",
+    "related_topic_ids": [
+      "T06_M3"
+    ],
+    "type": "diagram",
+    "title": "数据图表 · 从图表读取趋势与显著性的标准流程 ",
+    "source_path": "📂 30_互动学习站/插图/数据图表 · 从图表读取趋势与显著性的标准流程 .png",
+    "public_path": "/assets/diagrams/diagram_018.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：数据图表"
+  },
+  {
+    "asset_id": "diagram_019",
+    "topic_id": "T03_M1",
+    "related_topic_ids": [
+      "T03_M1"
+    ],
+    "type": "diagram",
+    "title": "显隐性判断 · 显隐性推理三卡片",
+    "source_path": "📂 30_互动学习站/插图/显隐性判断 · 显隐性推理三卡片.png",
+    "public_path": "/assets/diagrams/diagram_019.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：显隐性判断"
+  },
+  {
+    "asset_id": "diagram_020",
+    "topic_id": "T02_M4",
+    "related_topic_ids": [
+      "T02_M4"
+    ],
+    "type": "diagram",
+    "title": "有丝分裂 · 有丝分裂各时期",
+    "source_path": "📂 30_互动学习站/插图/有丝分裂 · 有丝分裂各时期.png",
+    "public_path": "/assets/diagrams/diagram_020.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：有丝分裂"
+  },
+  {
+    "asset_id": "diagram_021",
+    "topic_id": "T05_M3",
+    "related_topic_ids": [
+      "T05_M3"
+    ],
+    "type": "diagram",
+    "title": "有氧呼吸三阶段全图",
+    "source_path": "📂 30_互动学习站/插图/有氧呼吸三阶段全图.png",
+    "public_path": "/assets/diagrams/diagram_021.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：有氧呼吸三阶段全图"
+  },
+  {
+    "asset_id": "diagram_022",
+    "topic_id": "T01_M3",
+    "related_topic_ids": [
+      "T01_M3",
+      "T01_M4",
+      "T03_M4"
+    ],
+    "type": "diagram",
+    "title": "核苷酸与核酸 · DNA与RNA结构对比 ",
+    "source_path": "📂 30_互动学习站/插图/核苷酸与核酸 · DNA与RNA结构对比 .png",
+    "public_path": "/assets/diagrams/diagram_022.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：核苷酸与核酸, 核苷酸与核酸, 核苷酸与核酸"
+  },
+  {
+    "asset_id": "diagram_023",
+    "topic_id": "T05_M4",
+    "related_topic_ids": [
+      "T05_M4"
+    ],
+    "type": "diagram",
+    "title": "植物激素 · 五大激素的协同与拮抗网络",
+    "source_path": "📂 30_互动学习站/插图/植物激素 · 五大激素的协同与拮抗网络.png",
+    "public_path": "/assets/diagrams/diagram_023.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：植物激素"
+  },
+  {
+    "asset_id": "diagram_024",
+    "topic_id": "T03_M2",
+    "related_topic_ids": [
+      "T03_M2"
+    ],
+    "type": "diagram",
+    "title": "概率计算 · 条件概率与贝叶斯推理",
+    "source_path": "📂 30_互动学习站/插图/概率计算 · 条件概率与贝叶斯推理.png",
+    "public_path": "/assets/diagrams/diagram_024.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：概率计算"
+  },
+  {
+    "asset_id": "diagram_025",
+    "topic_id": "T05_M2",
+    "related_topic_ids": [
+      "T05_M2"
+    ],
+    "type": "diagram",
+    "title": "气孔阀门 · 保卫细胞调控气孔开闭的离子机制",
+    "source_path": "📂 30_互动学习站/插图/气孔阀门 · 保卫细胞调控气孔开闭的离子机制.png",
+    "public_path": "/assets/diagrams/diagram_025.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：气孔阀门"
+  },
+  {
+    "asset_id": "diagram_026",
+    "topic_id": "T01_M1",
+    "related_topic_ids": [
+      "T01_M1"
+    ],
+    "type": "diagram",
+    "title": "氨基酸与蛋白质基础 · 氨基酸结构通式",
+    "source_path": "📂 30_互动学习站/插图/氨基酸与蛋白质基础 · 氨基酸结构通式.png",
+    "public_path": "/assets/diagrams/diagram_026.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：氨基酸与蛋白质基础"
+  },
+  {
+    "asset_id": "diagram_027",
+    "topic_id": "T04_M2",
+    "related_topic_ids": [
+      "T04_M2"
+    ],
+    "type": "diagram",
+    "title": "激素三级轴 · 下丘脑-垂体-靶腺轴的级联放大",
+    "source_path": "📂 30_互动学习站/插图/激素三级轴 · 下丘脑-垂体-靶腺轴的级联放大.png",
+    "public_path": "/assets/diagrams/diagram_027.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：激素三级轴"
+  },
+  {
+    "asset_id": "diagram_028",
+    "topic_id": "T07_M3",
+    "related_topic_ids": [
+      "T07_M3"
+    ],
+    "type": "diagram",
+    "title": "物质循环 · 碳循环与氮循环的双循环路径",
+    "source_path": "📂 30_互动学习站/插图/物质循环 · 碳循环与氮循环的双循环路径.png",
+    "public_path": "/assets/diagrams/diagram_028.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：物质循环"
+  },
+  {
+    "asset_id": "diagram_029",
+    "topic_id": "T06_M2",
+    "related_topic_ids": [
+      "T06_M2"
+    ],
+    "type": "diagram",
+    "title": "物质鉴定 · 四大试剂检测的颜色矩阵",
+    "source_path": "📂 30_互动学习站/插图/物质鉴定 · 四大试剂检测的颜色矩阵.png",
+    "public_path": "/assets/diagrams/diagram_029.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：物质鉴定"
+  },
+  {
+    "asset_id": "diagram_030",
+    "topic_id": "T04_M4",
+    "related_topic_ids": [
+      "T04_M4"
+    ],
+    "type": "diagram",
+    "title": "生物钟 · 昼夜节律的分子振荡与生理输出",
+    "source_path": "📂 30_互动学习站/插图/生物钟 · 昼夜节律的分子振荡与生理输出.png",
+    "public_path": "/assets/diagrams/diagram_030.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：生物钟"
+  },
+  {
+    "asset_id": "diagram_031",
+    "topic_id": "T03_M4",
+    "related_topic_ids": [
+      "T03_M4"
+    ],
+    "type": "diagram",
+    "title": "电泳条带 · 从基因型到条带模式的映射",
+    "source_path": "📂 30_互动学习站/插图/电泳条带 · 从基因型到条带模式的映射.png",
+    "public_path": "/assets/diagrams/diagram_031.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：电泳条带"
+  },
+  {
+    "asset_id": "diagram_032",
+    "topic_id": "T04_M1",
+    "related_topic_ids": [
+      "T04_M1"
+    ],
+    "type": "diagram",
+    "title": "神经体液稳态 · 三大系统的负反馈调控",
+    "source_path": "📂 30_互动学习站/插图/神经体液稳态 · 三大系统的负反馈调控.png",
+    "public_path": "/assets/diagrams/diagram_032.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：神经体液稳态, 负反馈"
+  },
+  {
+    "asset_id": "diagram_033",
+    "topic_id": "T07_M4",
+    "related_topic_ids": [
+      "T07_M4"
+    ],
+    "type": "diagram",
+    "title": "种群增长曲线 · J型与S型曲线",
+    "source_path": "📂 30_互动学习站/插图/种群增长曲线 · J型与S型曲线.png",
+    "public_path": "/assets/diagrams/diagram_033.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：种群增长曲线"
+  },
+  {
+    "asset_id": "diagram_034",
+    "topic_id": "T04_M1",
+    "related_topic_ids": [
+      "T04_M1"
+    ],
+    "type": "diagram",
+    "title": "突触传递 · 突触结构",
+    "source_path": "📂 30_互动学习站/插图/突触传递 · 突触结构.png",
+    "public_path": "/assets/diagrams/diagram_034.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：突触传递"
+  },
+  {
+    "asset_id": "diagram_035",
+    "topic_id": "T07_M4",
+    "related_topic_ids": [
+      "T07_M4"
+    ],
+    "type": "diagram",
+    "title": "系统韧性 · 抵抗力:恢复力与群落演替的平衡",
+    "source_path": "📂 30_互动学习站/插图/系统韧性 · 抵抗力:恢复力与群落演替的平衡.png",
+    "public_path": "/assets/diagrams/diagram_035.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：系统韧性"
+  },
+  {
+    "asset_id": "diagram_036",
+    "topic_id": "T03_M1",
+    "related_topic_ids": [
+      "T03_M1"
+    ],
+    "type": "diagram",
+    "title": "系谱图符号 · 系谱图示例手绘遗传系谱图",
+    "source_path": "📂 30_互动学习站/插图/系谱图符号 · 系谱图示例手绘遗传系谱图.png",
+    "public_path": "/assets/diagrams/diagram_036.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：系谱图符号"
+  },
+  {
+    "asset_id": "diagram_037",
+    "topic_id": "T05_M1",
+    "related_topic_ids": [
+      "T05_M1"
+    ],
+    "type": "diagram",
+    "title": "纸层析 · 光合色素分离四条带 ",
+    "source_path": "📂 30_互动学习站/插图/纸层析 · 光合色素分离四条带 .png",
+    "public_path": "/assets/diagrams/diagram_037.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：纸层析"
+  },
+  {
+    "asset_id": "diagram_038",
+    "topic_id": "T02_M4",
+    "related_topic_ids": [
+      "T02_M4"
+    ],
+    "type": "diagram",
+    "title": "细胞周期调控 · 周期检查点与癌变机制",
+    "source_path": "📂 30_互动学习站/插图/细胞周期调控 · 周期检查点与癌变机制.png",
+    "public_path": "/assets/diagrams/diagram_038.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：细胞周期调控"
+  },
+  {
+    "asset_id": "diagram_039",
+    "topic_id": "T02_M1",
+    "related_topic_ids": [
+      "T02_M1",
+      "T05_M3"
+    ],
+    "type": "diagram",
+    "title": "细胞器对比 · 线粒体与叶绿体 ",
+    "source_path": "📂 30_互动学习站/插图/细胞器对比 · 线粒体与叶绿体 .png",
+    "public_path": "/assets/diagrams/diagram_039.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：细胞器对比, 细胞器对比"
+  },
+  {
+    "asset_id": "diagram_040",
+    "topic_id": "T02_M1",
+    "related_topic_ids": [
+      "T02_M1",
+      "T05_M3"
+    ],
+    "type": "diagram",
+    "title": "细胞器对比 · 线粒体与叶绿体",
+    "source_path": "📂 30_互动学习站/插图/细胞器对比 · 线粒体与叶绿体.png",
+    "public_path": "/assets/diagrams/diagram_040.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：细胞器对比, 细胞器对比"
+  },
+  {
+    "asset_id": "diagram_041",
+    "topic_id": "T02_M3",
+    "related_topic_ids": [
+      "T02_M3"
+    ],
+    "type": "diagram",
+    "title": "细胞膜 · 流动镶嵌模型",
+    "source_path": "📂 30_互动学习站/插图/细胞膜 · 流动镶嵌模型.png",
+    "public_path": "/assets/diagrams/diagram_041.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：细胞膜"
+  },
+  {
+    "asset_id": "diagram_042",
+    "topic_id": "T02_M4",
+    "related_topic_ids": [
+      "T02_M4"
+    ],
+    "type": "diagram",
+    "title": "细胞骨架损伤 · 微管断裂与运输瘫痪",
+    "source_path": "📂 30_互动学习站/插图/细胞骨架损伤 · 微管断裂与运输瘫痪.png",
+    "public_path": "/assets/diagrams/diagram_042.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：细胞骨架损伤"
+  },
+  {
+    "asset_id": "diagram_043",
+    "topic_id": "T06_M5",
+    "related_topic_ids": [
+      "T06_M5"
+    ],
+    "type": "diagram",
+    "title": "结论边界 · 从实验数据到科学结论的五条红线 ",
+    "source_path": "📂 30_互动学习站/插图/结论边界 · 从实验数据到科学结论的五条红线 .png",
+    "public_path": "/assets/diagrams/diagram_043.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：结论边界"
+  },
+  {
+    "asset_id": "diagram_044",
+    "topic_id": "T07_M2",
+    "related_topic_ids": [
+      "T07_M2"
+    ],
+    "type": "diagram",
+    "title": "能量流动 · 能量沿营养级的定量追踪与金字塔",
+    "source_path": "📂 30_互动学习站/插图/能量流动 · 能量沿营养级的定量追踪与金字塔.png",
+    "public_path": "/assets/diagrams/diagram_044.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：能量流动"
+  },
+  {
+    "asset_id": "diagram_045",
+    "topic_id": "T07_M2",
+    "related_topic_ids": [
+      "T07_M2"
+    ],
+    "type": "diagram",
+    "title": "能量流动 · 能量金字",
+    "source_path": "📂 30_互动学习站/插图/能量流动 · 能量金字.png",
+    "public_path": "/assets/diagrams/diagram_045.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：能量流动, 能量金字"
+  },
+  {
+    "asset_id": "diagram_046",
+    "topic_id": "T01_M3",
+    "related_topic_ids": [
+      "T01_M3"
+    ],
+    "type": "diagram",
+    "title": "表观遗传调控型 · 不改变序列但改变表达",
+    "source_path": "📂 30_互动学习站/插图/表观遗传调控型 · 不改变序列但改变表达.png",
+    "public_path": "/assets/diagrams/diagram_046.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：表观遗传调控型"
+  },
+  {
+    "asset_id": "diagram_047",
+    "topic_id": "T02_M1",
+    "related_topic_ids": [
+      "T02_M1"
+    ],
+    "type": "diagram",
+    "title": "识别与功能匹配 · 亚显微结构形态-功能映射 ",
+    "source_path": "📂 30_互动学习站/插图/识别与功能匹配 · 亚显微结构形态-功能映射 .png",
+    "public_path": "/assets/diagrams/diagram_047.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：识别与功能匹配"
+  },
+  {
+    "asset_id": "diagram_048",
+    "topic_id": "T04_M1",
+    "related_topic_ids": [
+      "T04_M1"
+    ],
+    "type": "diagram",
+    "title": "负反馈 · 血糖调节负反馈回路",
+    "source_path": "📂 30_互动学习站/插图/负反馈 · 血糖调节负反馈回路.png",
+    "public_path": "/assets/diagrams/diagram_048.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：负反馈"
+  },
+  {
+    "asset_id": "diagram_049",
+    "topic_id": "T02_M3",
+    "related_topic_ids": [
+      "T02_M3"
+    ],
+    "type": "diagram",
+    "title": "质壁分离 · 质壁分离过程",
+    "source_path": "📂 30_互动学习站/插图/质壁分离 · 质壁分离过程.png",
+    "public_path": "/assets/diagrams/diagram_049.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：质壁分离"
+  },
+  {
+    "asset_id": "diagram_050",
+    "topic_id": "T02_M3",
+    "related_topic_ids": [
+      "T02_M3"
+    ],
+    "type": "diagram",
+    "title": "跨膜运输 · 被动与主动运输的全谱系",
+    "source_path": "📂 30_互动学习站/插图/跨膜运输 · 被动与主动运输的全谱系.png",
+    "public_path": "/assets/diagrams/diagram_050.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：跨膜运输"
+  },
+  {
+    "asset_id": "diagram_051",
+    "topic_id": "T02_M3",
+    "related_topic_ids": [
+      "T02_M3"
+    ],
+    "type": "diagram",
+    "title": "跨膜运输方式 · 三种运输方式对比手绘对比图",
+    "source_path": "📂 30_互动学习站/插图/跨膜运输方式 · 三种运输方式对比手绘对比图.png",
+    "public_path": "/assets/diagrams/diagram_051.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：跨膜运输, 跨膜运输方式"
+  },
+  {
+    "asset_id": "diagram_052",
+    "topic_id": "T01_M2",
+    "related_topic_ids": [
+      "T01_M2"
+    ],
+    "type": "diagram",
+    "title": "酶缺陷型 · 代谢通路阻断机制",
+    "source_path": "📂 30_互动学习站/插图/酶缺陷型 · 代谢通路阻断机制.png",
+    "public_path": "/assets/diagrams/diagram_052.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：酶缺陷型"
+  },
+  {
+    "asset_id": "diagram_053",
+    "topic_id": "T07_M1",
+    "related_topic_ids": [
+      "T07_M1"
+    ],
+    "type": "diagram",
+    "title": "食物链与营养级 · 池塘食物网",
+    "source_path": "📂 30_互动学习站/插图/食物链与营养级 · 池塘食物网.png",
+    "public_path": "/assets/diagrams/diagram_053.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：食物链与营养级"
+  },
+  {
+    "asset_id": "diagram_054",
+    "topic_id": "T07_M1",
+    "related_topic_ids": [
+      "T07_M1"
+    ],
+    "type": "diagram",
+    "title": "食物链与营养级 · 食物网的连锁扰动效应",
+    "source_path": "📂 30_互动学习站/插图/食物链与营养级 · 食物网的连锁扰动效应.png",
+    "public_path": "/assets/diagrams/diagram_054.png",
+    "format": "png",
+    "status": "ready",
+    "notes": "按插图文件名关键词识别：食物链与营养级"
+  },
+  {
+    "asset_id": "T01_M1_lecture_audio",
+    "topic_id": "T01_M1",
+    "related_topic_ids": [],
+    "type": "lecture_audio",
+    "title": "T01_M1 专题讲座",
+    "source_path": "📂 教师专题课讲稿/T01_M1_蛋白质错误折叠与疾病/蛋白质错误折叠与疾病.mp3",
+    "public_path": "/assets/audio/T01_M1_lecture.mp3",
+    "format": "mp3",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T01_M1_lecture_script",
+    "topic_id": "T01_M1",
+    "related_topic_ids": [],
+    "type": "lecture_script",
+    "title": "T01_M1 专题讲稿",
+    "source_path": "📂 教师专题课讲稿/T01_M1_蛋白质错误折叠与疾病/讲稿.md",
+    "public_path": "/assets/scripts/T01_M1_script.md",
+    "format": "md",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T01_M2_lecture_audio",
+    "topic_id": "T01_M2",
+    "related_topic_ids": [],
+    "type": "lecture_audio",
+    "title": "T01_M2 专题讲座",
+    "source_path": "📂 教师专题课讲稿/T01_M2_酶缺陷与代谢阻塞/酶缺陷与代谢阻塞.mp3",
+    "public_path": "/assets/audio/T01_M2_lecture.mp3",
+    "format": "mp3",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T01_M2_lecture_script",
+    "topic_id": "T01_M2",
+    "related_topic_ids": [],
+    "type": "lecture_script",
+    "title": "T01_M2 专题讲稿",
+    "source_path": "📂 教师专题课讲稿/T01_M2_酶缺陷与代谢阻塞/讲稿.md",
+    "public_path": "/assets/scripts/T01_M2_script.md",
+    "format": "md",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T01_M3_lecture_audio",
+    "topic_id": "T01_M3",
+    "related_topic_ids": [],
+    "type": "lecture_audio",
+    "title": "T01_M3 专题讲座",
+    "source_path": "📂 教师专题课讲稿/T01_M3_表观遗传与表达调控/表观遗传与表达调控.mp3",
+    "public_path": "/assets/audio/T01_M3_lecture.mp3",
+    "format": "mp3",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T01_M3_lecture_script",
+    "topic_id": "T01_M3",
+    "related_topic_ids": [],
+    "type": "lecture_script",
+    "title": "T01_M3 专题讲稿",
+    "source_path": "📂 教师专题课讲稿/T01_M3_表观遗传与表达调控/讲稿.md",
+    "public_path": "/assets/scripts/T01_M3_script.md",
+    "format": "md",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T01_M4_lecture_audio",
+    "topic_id": "T01_M4",
+    "related_topic_ids": [],
+    "type": "lecture_audio",
+    "title": "T01_M4 专题讲座",
+    "source_path": "📂 教师专题课讲稿/T01_M4_基因编辑与RNA干扰/基因编辑与RNA干扰.mp3",
+    "public_path": "/assets/audio/T01_M4_lecture.mp3",
+    "format": "mp3",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T01_M4_lecture_script",
+    "topic_id": "T01_M4",
+    "related_topic_ids": [],
+    "type": "lecture_script",
+    "title": "T01_M4 专题讲稿",
+    "source_path": "📂 教师专题课讲稿/T01_M4_基因编辑与RNA干扰/讲稿.md",
+    "public_path": "/assets/scripts/T01_M4_script.md",
+    "format": "md",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T02_M1_lecture_audio",
+    "topic_id": "T02_M1",
+    "related_topic_ids": [],
+    "type": "lecture_audio",
+    "title": "T02_M1 专题讲座",
+    "source_path": "📂 教师专题课讲稿/T02_M1_细胞结构识别与功能匹配/细胞结构识别与功能匹配.mp3",
+    "public_path": "/assets/audio/T02_M1_lecture.mp3",
+    "format": "mp3",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T02_M1_lecture_script",
+    "topic_id": "T02_M1",
+    "related_topic_ids": [],
+    "type": "lecture_script",
+    "title": "T02_M1 专题讲稿",
+    "source_path": "📂 教师专题课讲稿/T02_M1_细胞结构识别与功能匹配/讲稿.md",
+    "public_path": "/assets/scripts/T02_M1_script.md",
+    "format": "md",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T02_M2_lecture_audio",
+    "topic_id": "T02_M2",
+    "related_topic_ids": [],
+    "type": "lecture_audio",
+    "title": "T02_M2 专题讲座",
+    "source_path": "📂 教师专题课讲稿/T02_M2_内膜系统与分泌蛋白运输/内膜系统与分泌蛋白运输.mp3",
+    "public_path": "/assets/audio/T02_M2_lecture.mp3",
+    "format": "mp3",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T02_M2_lecture_script",
+    "topic_id": "T02_M2",
+    "related_topic_ids": [],
+    "type": "lecture_script",
+    "title": "T02_M2 专题讲稿",
+    "source_path": "📂 教师专题课讲稿/T02_M2_内膜系统与分泌蛋白运输/讲稿.md",
+    "public_path": "/assets/scripts/T02_M2_script.md",
+    "format": "md",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T02_M3_lecture_audio",
+    "topic_id": "T02_M3",
+    "related_topic_ids": [],
+    "type": "lecture_audio",
+    "title": "T02_M3 专题讲座",
+    "source_path": "📂 教师专题课讲稿/T02_M3_跨膜运输方式判定/跨膜运输方式判定.mp3",
+    "public_path": "/assets/audio/T02_M3_lecture.mp3",
+    "format": "mp3",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T02_M3_lecture_script",
+    "topic_id": "T02_M3",
+    "related_topic_ids": [],
+    "type": "lecture_script",
+    "title": "T02_M3 专题讲稿",
+    "source_path": "📂 教师专题课讲稿/T02_M3_跨膜运输方式判定/讲稿.md",
+    "public_path": "/assets/scripts/T02_M3_script.md",
+    "format": "md",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T02_M4_lecture_audio",
+    "topic_id": "T02_M4",
+    "related_topic_ids": [],
+    "type": "lecture_audio",
+    "title": "T02_M4 专题讲座",
+    "source_path": "📂 教师专题课讲稿/T02_M4_细胞结构变化与功能适应/细胞结构变化与功能适应.mp3",
+    "public_path": "/assets/audio/T02_M4_lecture.mp3",
+    "format": "mp3",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T02_M4_lecture_script",
+    "topic_id": "T02_M4",
+    "related_topic_ids": [],
+    "type": "lecture_script",
+    "title": "T02_M4 专题讲稿",
+    "source_path": "📂 教师专题课讲稿/T02_M4_细胞结构变化与功能适应/讲稿.md",
+    "public_path": "/assets/scripts/T02_M4_script.md",
+    "format": "md",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T03_M1_lecture_audio",
+    "topic_id": "T03_M1",
+    "related_topic_ids": [],
+    "type": "lecture_audio",
+    "title": "T03_M1 专题讲座",
+    "source_path": "📂 教师专题课讲稿/T03_M1_系谱图遗传方式判定/系谱图遗传方式判定.mp3",
+    "public_path": "/assets/audio/T03_M1_lecture.mp3",
+    "format": "mp3",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T03_M1_lecture_script",
+    "topic_id": "T03_M1",
+    "related_topic_ids": [],
+    "type": "lecture_script",
+    "title": "T03_M1 专题讲稿",
+    "source_path": "📂 教师专题课讲稿/T03_M1_系谱图遗传方式判定/讲稿.md",
+    "public_path": "/assets/scripts/T03_M1_script.md",
+    "format": "md",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T03_M2_lecture_audio",
+    "topic_id": "T03_M2",
+    "related_topic_ids": [],
+    "type": "lecture_audio",
+    "title": "T03_M2 专题讲座",
+    "source_path": "📂 教师专题课讲稿/T03_M2_后代概率精算/后代概率精算.mp3",
+    "public_path": "/assets/audio/T03_M2_lecture.mp3",
+    "format": "mp3",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T03_M2_lecture_script",
+    "topic_id": "T03_M2",
+    "related_topic_ids": [],
+    "type": "lecture_script",
+    "title": "T03_M2 专题讲稿",
+    "source_path": "📂 教师专题课讲稿/T03_M2_后代概率精算/讲稿.md",
+    "public_path": "/assets/scripts/T03_M2_script.md",
+    "format": "md",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T03_M3_lecture_audio",
+    "topic_id": "T03_M3",
+    "related_topic_ids": [],
+    "type": "lecture_audio",
+    "title": "T03_M3 专题讲座",
+    "source_path": "📂 教师专题课讲稿/T03_M3_减数分裂染色体追踪/减数分裂染色体追踪.mp3",
+    "public_path": "/assets/audio/T03_M3_lecture.mp3",
+    "format": "mp3",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T03_M3_lecture_script",
+    "topic_id": "T03_M3",
+    "related_topic_ids": [],
+    "type": "lecture_script",
+    "title": "T03_M3 专题讲稿",
+    "source_path": "📂 教师专题课讲稿/T03_M3_减数分裂染色体追踪/讲稿.md",
+    "public_path": "/assets/scripts/T03_M3_script.md",
+    "format": "md",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T03_M4_lecture_audio",
+    "topic_id": "T03_M4",
+    "related_topic_ids": [],
+    "type": "lecture_audio",
+    "title": "T03_M4 专题讲座",
+    "source_path": "📂 教师专题课讲稿/T03_M4_电泳分子证据判读/电泳分子证据判读.mp3",
+    "public_path": "/assets/audio/T03_M4_lecture.mp3",
+    "format": "mp3",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T03_M4_lecture_script",
+    "topic_id": "T03_M4",
+    "related_topic_ids": [],
+    "type": "lecture_script",
+    "title": "T03_M4 专题讲稿",
+    "source_path": "📂 教师专题课讲稿/T03_M4_电泳分子证据判读/讲稿.md",
+    "public_path": "/assets/scripts/T03_M4_script.md",
+    "format": "md",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T04_M1_lecture_audio",
+    "topic_id": "T04_M1",
+    "related_topic_ids": [],
+    "type": "lecture_audio",
+    "title": "T04_M1 专题讲座",
+    "source_path": "📂 教师专题课讲稿/T04_M1_神经体液稳态调节/神经体液稳态调节.mp3",
+    "public_path": "/assets/audio/T04_M1_lecture.mp3",
+    "format": "mp3",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T04_M1_lecture_script",
+    "topic_id": "T04_M1",
+    "related_topic_ids": [],
+    "type": "lecture_script",
+    "title": "T04_M1 专题讲稿",
+    "source_path": "📂 教师专题课讲稿/T04_M1_神经体液稳态调节/讲稿.md",
+    "public_path": "/assets/scripts/T04_M1_script.md",
+    "format": "md",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T04_M2_lecture_audio",
+    "topic_id": "T04_M2",
+    "related_topic_ids": [],
+    "type": "lecture_audio",
+    "title": "T04_M2 专题讲座",
+    "source_path": "📂 教师专题课讲稿/T04_M2_内分泌分级调节/内分泌分级调节.mp3",
+    "public_path": "/assets/audio/T04_M2_lecture.mp3",
+    "format": "mp3",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T04_M2_lecture_script",
+    "topic_id": "T04_M2",
+    "related_topic_ids": [],
+    "type": "lecture_script",
+    "title": "T04_M2 专题讲稿",
+    "source_path": "📂 教师专题课讲稿/T04_M2_内分泌分级调节/讲稿.md",
+    "public_path": "/assets/scripts/T04_M2_script.md",
+    "format": "md",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T04_M3_lecture_audio",
+    "topic_id": "T04_M3",
+    "related_topic_ids": [],
+    "type": "lecture_audio",
+    "title": "T04_M3 专题讲座",
+    "source_path": "📂 教师专题课讲稿/T04_M3_免疫识别与应答/免疫识别与应答.mp3",
+    "public_path": "/assets/audio/T04_M3_lecture.mp3",
+    "format": "mp3",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T04_M3_lecture_script",
+    "topic_id": "T04_M3",
+    "related_topic_ids": [],
+    "type": "lecture_script",
+    "title": "T04_M3 专题讲稿",
+    "source_path": "📂 教师专题课讲稿/T04_M3_免疫识别与应答/讲稿.md",
+    "public_path": "/assets/scripts/T04_M3_script.md",
+    "format": "md",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T04_M4_lecture_audio",
+    "topic_id": "T04_M4",
+    "related_topic_ids": [],
+    "type": "lecture_audio",
+    "title": "T04_M4 专题讲座",
+    "source_path": "📂 教师专题课讲稿/T04_M4_昼夜节律与褪黑素/昼夜节律与褪黑素.mp3",
+    "public_path": "/assets/audio/T04_M4_lecture.mp3",
+    "format": "mp3",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T04_M4_lecture_script",
+    "topic_id": "T04_M4",
+    "related_topic_ids": [],
+    "type": "lecture_script",
+    "title": "T04_M4 专题讲稿",
+    "source_path": "📂 教师专题课讲稿/T04_M4_昼夜节律与褪黑素/讲稿.md",
+    "public_path": "/assets/scripts/T04_M4_script.md",
+    "format": "md",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T05_M1_lecture_audio",
+    "topic_id": "T05_M1",
+    "related_topic_ids": [],
+    "type": "lecture_audio",
+    "title": "T05_M1 专题讲座",
+    "source_path": "📂 教师专题课讲稿/T05_M1_光合速率与限制因子/光合速率与限制因子.mp3",
+    "public_path": "/assets/audio/T05_M1_lecture.mp3",
+    "format": "mp3",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T05_M1_lecture_script",
+    "topic_id": "T05_M1",
+    "related_topic_ids": [],
+    "type": "lecture_script",
+    "title": "T05_M1 专题讲稿",
+    "source_path": "📂 教师专题课讲稿/T05_M1_光合速率与限制因子/讲稿.md",
+    "public_path": "/assets/scripts/T05_M1_script.md",
+    "format": "md",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T05_M2_lecture_audio",
+    "topic_id": "T05_M2",
+    "related_topic_ids": [],
+    "type": "lecture_audio",
+    "title": "T05_M2 专题讲座",
+    "source_path": "📂 教师专题课讲稿/T05_M2_气孔开闭与蒸腾调节/气孔开闭与蒸腾调节.mp3",
+    "public_path": "/assets/audio/T05_M2_lecture.mp3",
+    "format": "mp3",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T05_M2_lecture_script",
+    "topic_id": "T05_M2",
+    "related_topic_ids": [],
+    "type": "lecture_script",
+    "title": "T05_M2 专题讲稿",
+    "source_path": "📂 教师专题课讲稿/T05_M2_气孔开闭与蒸腾调节/讲稿.md",
+    "public_path": "/assets/scripts/T05_M2_script.md",
+    "format": "md",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T05_M3_lecture_audio",
+    "topic_id": "T05_M3",
+    "related_topic_ids": [],
+    "type": "lecture_audio",
+    "title": "T05_M3 专题讲座",
+    "source_path": "📂 教师专题课讲稿/T05_M3_呼吸方式与产物比例/呼吸方式与产物比例.mp3",
+    "public_path": "/assets/audio/T05_M3_lecture.mp3",
+    "format": "mp3",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T05_M3_lecture_script",
+    "topic_id": "T05_M3",
+    "related_topic_ids": [],
+    "type": "lecture_script",
+    "title": "T05_M3 专题讲稿",
+    "source_path": "📂 教师专题课讲稿/T05_M3_呼吸方式与产物比例/讲稿.md",
+    "public_path": "/assets/scripts/T05_M3_script.md",
+    "format": "md",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T05_M4_lecture_audio",
+    "topic_id": "T05_M4",
+    "related_topic_ids": [],
+    "type": "lecture_audio",
+    "title": "T05_M4 专题讲座",
+    "source_path": "📂 教师专题课讲稿/T05_M4_植物激素与生长调控/植物激素与生长调控.mp3",
+    "public_path": "/assets/audio/T05_M4_lecture.mp3",
+    "format": "mp3",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T05_M4_lecture_script",
+    "topic_id": "T05_M4",
+    "related_topic_ids": [],
+    "type": "lecture_script",
+    "title": "T05_M4 专题讲稿",
+    "source_path": "📂 教师专题课讲稿/T05_M4_植物激素与生长调控/讲稿.md",
+    "public_path": "/assets/scripts/T05_M4_script.md",
+    "format": "md",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T06_M1_lecture_audio",
+    "topic_id": "T06_M1",
+    "related_topic_ids": [],
+    "type": "lecture_audio",
+    "title": "T06_M1 专题讲座",
+    "source_path": "📂 教师专题课讲稿/T06_M1_实验变量与对照设计/实验变量与对照设计.mp3",
+    "public_path": "/assets/audio/T06_M1_lecture.mp3",
+    "format": "mp3",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T06_M1_lecture_script",
+    "topic_id": "T06_M1",
+    "related_topic_ids": [],
+    "type": "lecture_script",
+    "title": "T06_M1 专题讲稿",
+    "source_path": "📂 教师专题课讲稿/T06_M1_实验变量与对照设计/讲稿.md",
+    "public_path": "/assets/scripts/T06_M1_script.md",
+    "format": "md",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T06_M2_lecture_audio",
+    "topic_id": "T06_M2",
+    "related_topic_ids": [],
+    "type": "lecture_audio",
+    "title": "T06_M2 专题讲座",
+    "source_path": "📂 教师专题课讲稿/T06_M2_生物物质鉴定实验/生物物质鉴定实验.mp3",
+    "public_path": "/assets/audio/T06_M2_lecture.mp3",
+    "format": "mp3",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T06_M2_lecture_script",
+    "topic_id": "T06_M2",
+    "related_topic_ids": [],
+    "type": "lecture_script",
+    "title": "T06_M2 专题讲稿",
+    "source_path": "📂 教师专题课讲稿/T06_M2_生物物质鉴定实验/讲稿.md",
+    "public_path": "/assets/scripts/T06_M2_script.md",
+    "format": "md",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T06_M3_lecture_audio",
+    "topic_id": "T06_M3",
+    "related_topic_ids": [],
+    "type": "lecture_audio",
+    "title": "T06_M3 专题讲座",
+    "source_path": "📂 教师专题课讲稿/T06_M3_数据图表分析与判读/数据图表分析与判读.mp3",
+    "public_path": "/assets/audio/T06_M3_lecture.mp3",
+    "format": "mp3",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T06_M3_lecture_script",
+    "topic_id": "T06_M3",
+    "related_topic_ids": [],
+    "type": "lecture_script",
+    "title": "T06_M3 专题讲稿",
+    "source_path": "📂 教师专题课讲稿/T06_M3_数据图表分析与判读/讲稿.md",
+    "public_path": "/assets/scripts/T06_M3_script.md",
+    "format": "md",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T06_M4_lecture_audio",
+    "topic_id": "T06_M4",
+    "related_topic_ids": [],
+    "type": "lecture_audio",
+    "title": "T06_M4 专题讲座",
+    "source_path": "📂 教师专题课讲稿/T06_M4_PCR技术与电泳分析/PCR技术与电泳分析.mp3",
+    "public_path": "/assets/audio/T06_M4_lecture.mp3",
+    "format": "mp3",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T06_M4_lecture_script",
+    "topic_id": "T06_M4",
+    "related_topic_ids": [],
+    "type": "lecture_script",
+    "title": "T06_M4 专题讲稿",
+    "source_path": "📂 教师专题课讲稿/T06_M4_PCR技术与电泳分析/讲稿.md",
+    "public_path": "/assets/scripts/T06_M4_script.md",
+    "format": "md",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T06_M5_lecture_audio",
+    "topic_id": "T06_M5",
+    "related_topic_ids": [],
+    "type": "lecture_audio",
+    "title": "T06_M5 专题讲座",
+    "source_path": "📂 教师专题课讲稿/T06_M5_实验结论评价/实验结论评价.mp3",
+    "public_path": "/assets/audio/T06_M5_lecture.mp3",
+    "format": "mp3",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T06_M5_lecture_script",
+    "topic_id": "T06_M5",
+    "related_topic_ids": [],
+    "type": "lecture_script",
+    "title": "T06_M5 专题讲稿",
+    "source_path": "📂 教师专题课讲稿/T06_M5_实验结论评价/讲稿.md",
+    "public_path": "/assets/scripts/T06_M5_script.md",
+    "format": "md",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T07_M1_lecture_audio",
+    "topic_id": "T07_M1",
+    "related_topic_ids": [],
+    "type": "lecture_audio",
+    "title": "T07_M1 专题讲座",
+    "source_path": "📂 教师专题课讲稿/T07_M1_食物链与营养级分析/食物链与营养级分析.mp3",
+    "public_path": "/assets/audio/T07_M1_lecture.mp3",
+    "format": "mp3",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T07_M1_lecture_script",
+    "topic_id": "T07_M1",
+    "related_topic_ids": [],
+    "type": "lecture_script",
+    "title": "T07_M1 专题讲稿",
+    "source_path": "📂 教师专题课讲稿/T07_M1_食物链与营养级分析/讲稿.md",
+    "public_path": "/assets/scripts/T07_M1_script.md",
+    "format": "md",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T07_M2_lecture_audio",
+    "topic_id": "T07_M2",
+    "related_topic_ids": [],
+    "type": "lecture_audio",
+    "title": "T07_M2 专题讲座",
+    "source_path": "📂 教师专题课讲稿/T07_M2_能量流动计算/能量流动计算.mp3",
+    "public_path": "/assets/audio/T07_M2_lecture.mp3",
+    "format": "mp3",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T07_M2_lecture_script",
+    "topic_id": "T07_M2",
+    "related_topic_ids": [],
+    "type": "lecture_script",
+    "title": "T07_M2 专题讲稿",
+    "source_path": "📂 教师专题课讲稿/T07_M2_能量流动计算/讲稿.md",
+    "public_path": "/assets/scripts/T07_M2_script.md",
+    "format": "md",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T07_M3_lecture_audio",
+    "topic_id": "T07_M3",
+    "related_topic_ids": [],
+    "type": "lecture_audio",
+    "title": "T07_M3 专题讲座",
+    "source_path": "📂 教师专题课讲稿/T07_M3_物质循环与碳氮循环/物质循环与碳氮循环.mp3",
+    "public_path": "/assets/audio/T07_M3_lecture.mp3",
+    "format": "mp3",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T07_M3_lecture_script",
+    "topic_id": "T07_M3",
+    "related_topic_ids": [],
+    "type": "lecture_script",
+    "title": "T07_M3 专题讲稿",
+    "source_path": "📂 教师专题课讲稿/T07_M3_物质循环与碳氮循环/讲稿.md",
+    "public_path": "/assets/scripts/T07_M3_script.md",
+    "format": "md",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T07_M4_lecture_audio",
+    "topic_id": "T07_M4",
+    "related_topic_ids": [],
+    "type": "lecture_audio",
+    "title": "T07_M4 专题讲座",
+    "source_path": "📂 教师专题课讲稿/T07_M4_群落演替与生态稳定性/群落演替与生态稳定性.mp3",
+    "public_path": "/assets/audio/T07_M4_lecture.mp3",
+    "format": "mp3",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T07_M4_lecture_script",
+    "topic_id": "T07_M4",
+    "related_topic_ids": [],
+    "type": "lecture_script",
+    "title": "T07_M4 专题讲稿",
+    "source_path": "📂 教师专题课讲稿/T07_M4_群落演替与生态稳定性/讲稿.md",
+    "public_path": "/assets/scripts/T07_M4_script.md",
+    "format": "md",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T01_M1_html_prototype",
+    "topic_id": "T01_M1",
+    "related_topic_ids": [],
+    "type": "html_prototype",
+    "title": "T01_M1_分子空间畸变型",
+    "source_path": "📂 30_互动学习站/T01_M1_分子空间畸变型.html",
+    "public_path": "/assets/html-prototypes/T01_M1_prototype.html",
+    "format": "html",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T01_M2_html_prototype",
+    "topic_id": "T01_M2",
+    "related_topic_ids": [],
+    "type": "html_prototype",
+    "title": "T01_M2_酶缺陷与代谢阻塞型",
+    "source_path": "📂 30_互动学习站/T01_M2_酶缺陷与代谢阻塞型.html",
+    "public_path": "/assets/html-prototypes/T01_M2_prototype.html",
+    "format": "html",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T01_M3_html_prototype",
+    "topic_id": "T01_M3",
+    "related_topic_ids": [],
+    "type": "html_prototype",
+    "title": "T01_M3_表观遗传与表达调控型",
+    "source_path": "📂 30_互动学习站/T01_M3_表观遗传与表达调控型.html",
+    "public_path": "/assets/html-prototypes/T01_M3_prototype.html",
+    "format": "html",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T01_M4_html_prototype",
+    "topic_id": "T01_M4",
+    "related_topic_ids": [],
+    "type": "html_prototype",
+    "title": "T01_M4_前沿分子干预与治疗型",
+    "source_path": "📂 30_互动学习站/T01_M4_前沿分子干预与治疗型.html",
+    "public_path": "/assets/html-prototypes/T01_M4_prototype.html",
+    "format": "html",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T02_M1_html_prototype",
+    "topic_id": "T02_M1",
+    "related_topic_ids": [],
+    "type": "html_prototype",
+    "title": "T02_M1_识别与功能匹配型",
+    "source_path": "📂 30_互动学习站/T02_M1_识别与功能匹配型.html",
+    "public_path": "/assets/html-prototypes/T02_M1_prototype.html",
+    "format": "html",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T02_M2_html_prototype",
+    "topic_id": "T02_M2",
+    "related_topic_ids": [],
+    "type": "html_prototype",
+    "title": "T02_M2_内膜系统与分泌蛋白运输",
+    "source_path": "📂 30_互动学习站/T02_M2_内膜系统与分泌蛋白运输.html",
+    "public_path": "/assets/html-prototypes/T02_M2_prototype.html",
+    "format": "html",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T02_M3_html_prototype",
+    "topic_id": "T02_M3",
+    "related_topic_ids": [],
+    "type": "html_prototype",
+    "title": "T02_M3_跨膜运输方式判定",
+    "source_path": "📂 30_互动学习站/T02_M3_跨膜运输方式判定.html",
+    "public_path": "/assets/html-prototypes/T02_M3_prototype.html",
+    "format": "html",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T02_M4_html_prototype",
+    "topic_id": "T02_M4",
+    "related_topic_ids": [],
+    "type": "html_prototype",
+    "title": "T02_M4_结构变化与功能适应",
+    "source_path": "📂 30_互动学习站/T02_M4_结构变化与功能适应.html",
+    "public_path": "/assets/html-prototypes/T02_M4_prototype.html",
+    "format": "html",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T03_M1_html_prototype",
+    "topic_id": "T03_M1",
+    "related_topic_ids": [],
+    "type": "html_prototype",
+    "title": "T03_M1_系谱图遗传方式判定",
+    "source_path": "📂 30_互动学习站/T03_M1_系谱图遗传方式判定.html",
+    "public_path": "/assets/html-prototypes/T03_M1_prototype.html",
+    "format": "html",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T03_M2_html_prototype",
+    "topic_id": "T03_M2",
+    "related_topic_ids": [],
+    "type": "html_prototype",
+    "title": "T03_M2_后代概率精算",
+    "source_path": "📂 30_互动学习站/T03_M2_后代概率精算.html",
+    "public_path": "/assets/html-prototypes/T03_M2_prototype.html",
+    "format": "html",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T03_M3_html_prototype",
+    "topic_id": "T03_M3",
+    "related_topic_ids": [],
+    "type": "html_prototype",
+    "title": "T03_M3_减数分裂染色体追踪",
+    "source_path": "📂 30_互动学习站/T03_M3_减数分裂染色体追踪.html",
+    "public_path": "/assets/html-prototypes/T03_M3_prototype.html",
+    "format": "html",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T03_M4_html_prototype",
+    "topic_id": "T03_M4",
+    "related_topic_ids": [],
+    "type": "html_prototype",
+    "title": "T03_M4_电泳分子证据判读",
+    "source_path": "📂 30_互动学习站/T03_M4_电泳分子证据判读.html",
+    "public_path": "/assets/html-prototypes/T03_M4_prototype.html",
+    "format": "html",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T04_M1_html_prototype",
+    "topic_id": "T04_M1",
+    "related_topic_ids": [],
+    "type": "html_prototype",
+    "title": "T04_M1_神经体液稳态调节",
+    "source_path": "📂 30_互动学习站/T04_M1_神经体液稳态调节.html",
+    "public_path": "/assets/html-prototypes/T04_M1_prototype.html",
+    "format": "html",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T04_M2_html_prototype",
+    "topic_id": "T04_M2",
+    "related_topic_ids": [],
+    "type": "html_prototype",
+    "title": "T04_M2_内分泌分级调节",
+    "source_path": "📂 30_互动学习站/T04_M2_内分泌分级调节.html",
+    "public_path": "/assets/html-prototypes/T04_M2_prototype.html",
+    "format": "html",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T04_M3_html_prototype",
+    "topic_id": "T04_M3",
+    "related_topic_ids": [],
+    "type": "html_prototype",
+    "title": "T04_M3_免疫识别与应答",
+    "source_path": "📂 30_互动学习站/T04_M3_免疫识别与应答.html",
+    "public_path": "/assets/html-prototypes/T04_M3_prototype.html",
+    "format": "html",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T04_M4_html_prototype",
+    "topic_id": "T04_M4",
+    "related_topic_ids": [],
+    "type": "html_prototype",
+    "title": "T04_M4_昼夜节律与褪黑素",
+    "source_path": "📂 30_互动学习站/T04_M4_昼夜节律与褪黑素.html",
+    "public_path": "/assets/html-prototypes/T04_M4_prototype.html",
+    "format": "html",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T05_M1_html_prototype",
+    "topic_id": "T05_M1",
+    "related_topic_ids": [],
+    "type": "html_prototype",
+    "title": "T05_M1_光合速率与限制因子",
+    "source_path": "📂 30_互动学习站/T05_M1_光合速率与限制因子.html",
+    "public_path": "/assets/html-prototypes/T05_M1_prototype.html",
+    "format": "html",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T05_M2_html_prototype",
+    "topic_id": "T05_M2",
+    "related_topic_ids": [],
+    "type": "html_prototype",
+    "title": "T05_M2_气孔开闭与蒸腾调节",
+    "source_path": "📂 30_互动学习站/T05_M2_气孔开闭与蒸腾调节.html",
+    "public_path": "/assets/html-prototypes/T05_M2_prototype.html",
+    "format": "html",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T05_M3_html_prototype",
+    "topic_id": "T05_M3",
+    "related_topic_ids": [],
+    "type": "html_prototype",
+    "title": "T05_M3_呼吸方式与产物比例",
+    "source_path": "📂 30_互动学习站/T05_M3_呼吸方式与产物比例.html",
+    "public_path": "/assets/html-prototypes/T05_M3_prototype.html",
+    "format": "html",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T05_M4_html_prototype",
+    "topic_id": "T05_M4",
+    "related_topic_ids": [],
+    "type": "html_prototype",
+    "title": "T05_M4_植物激素与生长调控",
+    "source_path": "📂 30_互动学习站/T05_M4_植物激素与生长调控.html",
+    "public_path": "/assets/html-prototypes/T05_M4_prototype.html",
+    "format": "html",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T06_M1_html_prototype",
+    "topic_id": "T06_M1",
+    "related_topic_ids": [],
+    "type": "html_prototype",
+    "title": "T06_M1_实验变量与对照设计",
+    "source_path": "📂 30_互动学习站/T06_M1_实验变量与对照设计.html",
+    "public_path": "/assets/html-prototypes/T06_M1_prototype.html",
+    "format": "html",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T06_M2_html_prototype",
+    "topic_id": "T06_M2",
+    "related_topic_ids": [],
+    "type": "html_prototype",
+    "title": "T06_M2_生物物质鉴定实验",
+    "source_path": "📂 30_互动学习站/T06_M2_生物物质鉴定实验.html",
+    "public_path": "/assets/html-prototypes/T06_M2_prototype.html",
+    "format": "html",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T06_M3_html_prototype",
+    "topic_id": "T06_M3",
+    "related_topic_ids": [],
+    "type": "html_prototype",
+    "title": "T06_M3_数据图表分析与判读",
+    "source_path": "📂 30_互动学习站/T06_M3_数据图表分析与判读.html",
+    "public_path": "/assets/html-prototypes/T06_M3_prototype.html",
+    "format": "html",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T06_M4_html_prototype",
+    "topic_id": "T06_M4",
+    "related_topic_ids": [],
+    "type": "html_prototype",
+    "title": "T06_M4_PCR技术与电泳分析",
+    "source_path": "📂 30_互动学习站/T06_M4_PCR技术与电泳分析.html",
+    "public_path": "/assets/html-prototypes/T06_M4_prototype.html",
+    "format": "html",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T06_M5_html_prototype",
+    "topic_id": "T06_M5",
+    "related_topic_ids": [],
+    "type": "html_prototype",
+    "title": "T06_M5_实验结论评价",
+    "source_path": "📂 30_互动学习站/T06_M5_实验结论评价.html",
+    "public_path": "/assets/html-prototypes/T06_M5_prototype.html",
+    "format": "html",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T07_M1_html_prototype",
+    "topic_id": "T07_M1",
+    "related_topic_ids": [],
+    "type": "html_prototype",
+    "title": "T07_M1_食物链与营养级分析",
+    "source_path": "📂 30_互动学习站/T07_M1_食物链与营养级分析.html",
+    "public_path": "/assets/html-prototypes/T07_M1_prototype.html",
+    "format": "html",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T07_M2_html_prototype",
+    "topic_id": "T07_M2",
+    "related_topic_ids": [],
+    "type": "html_prototype",
+    "title": "T07_M2_能量流动计算",
+    "source_path": "📂 30_互动学习站/T07_M2_能量流动计算.html",
+    "public_path": "/assets/html-prototypes/T07_M2_prototype.html",
+    "format": "html",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T07_M3_html_prototype",
+    "topic_id": "T07_M3",
+    "related_topic_ids": [],
+    "type": "html_prototype",
+    "title": "T07_M3_物质循环与碳氮循环",
+    "source_path": "📂 30_互动学习站/T07_M3_物质循环与碳氮循环.html",
+    "public_path": "/assets/html-prototypes/T07_M3_prototype.html",
+    "format": "html",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "T07_M4_html_prototype",
+    "topic_id": "T07_M4",
+    "related_topic_ids": [],
+    "type": "html_prototype",
+    "title": "T07_M4_群落演替与生态稳定性",
+    "source_path": "📂 30_互动学习站/T07_M4_群落演替与生态稳定性.html",
+    "public_path": "/assets/html-prototypes/T07_M4_prototype.html",
+    "format": "html",
+    "status": "ready",
+    "notes": null
+  },
+  {
+    "asset_id": "interactive_index",
+    "topic_id": null,
+    "related_topic_ids": [],
+    "type": "html_prototype",
+    "title": "互动专题入口",
+    "source_path": "📂 30_互动学习站/index.html",
+    "public_path": "/assets/html-prototypes/index.html",
+    "format": "html",
+    "status": "ready",
+    "notes": null
+  }
+]

@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T06_M3 · 数据图表分析与判读</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent:#185FA5; --accent-l:#E6F1FB; --accent-m:#88BAE8; --accent-d:#0C447C;
+  --teal:#0F6E56; --teal-l:#E1F5EE; --teal-d:#085041;
+  --amber:#BA7517; --amber-l:#FAEEDA; --amber-d:#633806;
+  --coral:#993C1D; --coral-l:#FAECE7; --coral-d:#712B13;
+  --bg:#ffffff; --bg2:#f7f7f5; --bg3:#f1efe8;
+  --tx:#1a1a18; --tx2:#5f5e5a; --tx3:#888780;
+  --bd:rgba(0,0,0,0.10); --bd2:rgba(0,0,0,0.18);
+  --r-sm:6px; --r-md:8px; --r-lg:12px; --r-xl:16px;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#1c1c1a;--bg2:#252523;--bg3:#2c2c2a;
+    --tx:#f0efea;--tx2:#b4b2a9;--tx3:#888780;
+    --bd:rgba(255,255,255,0.09);--bd2:rgba(255,255,255,0.16);
+    --accent-l:#042C53;--accent-d:#B5D4F4;
+    --teal-l:#04342C;--teal-d:#9FE1CB;
+    --amber-l:#412402;--amber-d:#FAC775;
+    --coral-l:#4A1B0C;--coral-d:#F5C4B3;
+  }
+}
+body{font-family:var(--font);font-size:15px;line-height:1.6;color:var(--tx);background:var(--bg3);min-height:100vh;}
+.app{max-width:800px;margin:0 auto;background:var(--bg);min-height:100vh;}
+.site-header{padding:1.25rem 1.5rem 0;background:var(--bg);border-bottom:0.5px solid var(--bd);position:sticky;top:0;z-index:20;}
+.header-top{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.header-icon{background:var(--accent-l);border-radius:var(--r-md);padding:6px 8px;display:flex;align-items:center;justify-content:center;}
+.header-icon i{font-size:20px;color:var(--accent);}
+.header-meta{font-size:12px;color:var(--tx3);}
+.header-title{font-size:17px;font-weight:500;color:var(--tx);}
+.header-id{margin-left:auto;font-size:11px;color:var(--tx3);background:var(--bg2);padding:3px 9px;border-radius:var(--r-sm);}
+.nav-tabs{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.nav-tab{padding:.6rem 1.1rem;font-size:13px;color:var(--tx2);cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;font-family:var(--font);white-space:nowrap;transition:color .15s,border-color .15s;}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500;}
+.nav-tab:hover:not(.active){color:var(--tx);}
+.page{display:none;padding:1.5rem;}
+.page.active{display:block;}
+.memory-section{margin-bottom:1.5rem;}
+.memory-card{border:0.5px solid var(--bd);border-radius:var(--r-xl);overflow:hidden;background:var(--bg);}
+.memory-img{width:100%;display:block;max-height:300px;object-fit:contain;background:var(--bg3);cursor:zoom-in;transition:opacity .15s;}
+.memory-img:hover{opacity:.9;}
+.memory-footer{padding:.85rem 1rem;display:flex;align-items:center;gap:10px;border-top:0.5px solid var(--bd);}
+.memory-label{font-size:13px;font-weight:500;color:var(--tx);flex:1;}
+.audio-player{display:flex;align-items:center;gap:8px;}
+audio{height:32px;width:220px;}
+audio::-webkit-media-controls-panel{background:var(--bg2);}
+.lb-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:200;display:none;align-items:center;justify-content:center;cursor:zoom-out;}
+.lb-overlay.open{display:flex;}
+.lb-img{max-width:92vw;max-height:92vh;object-fit:contain;border-radius:var(--r-md);box-shadow:0 8px 40px rgba(0,0,0,.5);}
+.lb-close{position:fixed;top:16px;right:20px;background:none;border:none;color:#fff;font-size:28px;cursor:pointer;line-height:1;opacity:.7;transition:opacity .15s;}
+.lb-close:hover{opacity:1;}
+.section-title{font-size:13px;font-weight:500;color:var(--tx2);display:flex;align-items:center;gap:7px;margin-bottom:1rem;text-transform:uppercase;letter-spacing:.04em;}
+.section-divider{height:0.5px;background:var(--bd);margin:1.5rem 0;}
+.signal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:1.5rem;}
+.signal-card{background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;}
+.signal-label{font-size:11px;color:var(--tx3);letter-spacing:.04em;margin-bottom:.4rem;text-transform:uppercase;}
+.signal-tag{font-size:13px;color:var(--tx);margin-bottom:3px;}
+.mode-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:1.5rem;}
+.mode-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.85rem 1rem;border-left-width:3px;}
+.mode-card-label{font-size:11px;font-weight:500;margin-bottom:.3rem;}
+.mode-card-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.trap-list{display:flex;flex-direction:column;gap:7px;}
+.trap-item{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.55;}
+.trap-icon{color:#E24B4A;font-size:15px;flex-shrink:0;margin-top:1px;}
+.filter-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem;}
+.filter-btn{padding:5px 13px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx2);font-family:var(--font);transition:all .15s;}
+.filter-btn.active{background:var(--accent-l);color:var(--accent-d);border-color:var(--accent-m);font-weight:500;}
+.mq-card{border:0.5px solid var(--bd);border-radius:var(--r-lg);background:var(--bg);margin-bottom:.85rem;overflow:hidden;}
+.mq-header{padding:.9rem 1.1rem;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;transition:background .15s;}
+.mq-header:hover{background:var(--bg2);}
+.mq-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);white-space:nowrap;}
+.mq-badge.curve{background:var(--accent-l);color:var(--accent-d);}
+.mq-badge.keypoint{background:var(--teal-l);color:var(--teal-d);}
+.mq-badge.compare{background:var(--amber-l);color:var(--amber-d);}
+.mq-badge.conclude{background:var(--coral-l);color:var(--coral-d);}
+.mq-name{font-size:14px;font-weight:500;color:var(--tx);flex:1;}
+.mq-purity{font-size:12px;color:var(--tx3);flex-shrink:0;}
+.mq-chevron{color:var(--tx3);font-size:16px;transition:transform .2s;flex-shrink:0;}
+.mq-chevron.open{transform:rotate(180deg);}
+.mq-body{display:none;padding:.75rem 1.1rem 1.1rem;border-top:0.5px solid var(--bd);}
+.mq-body.open{display:block;}
+.mq-source{font-size:12px;color:var(--tx3);margin-bottom:.65rem;}
+.rule-box{background:var(--accent-l);border-left:3px solid var(--accent);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:.65rem .9rem;font-size:13px;color:var(--accent-d);margin:.75rem 0;line-height:1.65;}
+.chain-label{font-size:12px;font-weight:500;color:var(--tx2);margin:.75rem 0 .4rem;text-transform:uppercase;letter-spacing:.04em;}
+.signal-chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:6px;}
+.sc-node{background:var(--bg2);border-radius:var(--r-sm);padding:3px 9px;font-size:13px;color:var(--tx);}
+.sc-node.curve{background:var(--accent-l);color:var(--accent-d);}
+.sc-node.keypoint{background:var(--teal-l);color:var(--teal-d);}
+.sc-node.compare{background:var(--amber-l);color:var(--amber-d);}
+.sc-node.conclude{background:var(--coral-l);color:var(--coral-d);}
+.sc-arrow{color:var(--tx3);font-size:13px;}
+.mq-note{font-size:13px;color:var(--tx2);margin-top:.75rem;line-height:1.6;}
+.q-trigger{display:inline-flex;align-items:center;gap:5px;margin-top:.75rem;padding:6px 12px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;color:var(--tx2);cursor:pointer;font-family:var(--font);transition:all .15s;}
+.q-trigger:hover{background:var(--bg2);color:var(--tx);}
+.q-trigger i{font-size:14px;}
+.ladder-section-label{font-size:13px;font-weight:500;color:var(--tx2);margin-bottom:.85rem;display:flex;align-items:center;gap:7px;}
+.ladder-rows{display:flex;flex-direction:column;gap:8px;margin-bottom:1rem;}
+.ladder-row{display:grid;grid-template-columns:64px 1fr;gap:10px;align-items:start;}
+.ladder-level{font-size:11px;font-weight:500;padding:6px 4px;border-radius:var(--r-sm);text-align:center;line-height:1.4;}
+.l1{background:var(--teal-l);color:var(--teal-d);}
+.l2{background:var(--accent-l);color:var(--accent-d);}
+.l3{background:var(--amber-l);color:var(--amber-d);}
+.ladder-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.65rem .9rem;background:var(--bg);}
+.ladder-card-name{font-size:13px;font-weight:500;color:var(--tx);}
+.ladder-card-sub{font-size:12px;color:var(--tx3);margin-top:3px;line-height:1.5;}
+.ladder-note{background:var(--bg2);border-radius:var(--r-md);padding:.65rem .9rem;font-size:12px;color:var(--tx2);margin-bottom:1rem;line-height:1.55;}
+.progress-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem;}
+.progress-bar{height:5px;border-radius:3px;background:var(--bg2);margin-bottom:1.25rem;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;background:var(--accent);width:0%;transition:width .3s;}
+.checklist{display:flex;flex-direction:column;gap:7px;}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:.7rem .9rem;border:0.5px solid var(--bd);border-radius:var(--r-md);background:var(--bg);cursor:pointer;transition:background .15s;}
+.check-item.done{background:var(--bg2);}
+.check-box{width:18px;height:18px;border:1.5px solid var(--bd2);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .15s;}
+.check-item.done .check-box{background:var(--accent);border-color:var(--accent);}
+.check-box i{font-size:11px;color:#fff;display:none;}
+.check-item.done .check-box i{display:block;}
+.check-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.check-item.done .check-text{color:var(--tx3);text-decoration:line-through;}
+.action-row{margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:8px;}
+.action-btn{padding:7px 14px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.action-btn:hover{background:var(--bg2);}
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s;}
+.drawer-overlay.open{opacity:1;pointer-events:all;}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100vw);background:var(--bg);z-index:101;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden;}
+.drawer.open{transform:translateX(0);}
+.drawer-header{padding:1rem 1.25rem;border-bottom:0.5px solid var(--bd);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.drawer-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);}
+.drawer-title{font-size:14px;font-weight:500;color:var(--tx);flex:1;line-height:1.4;}
+.drawer-close{background:none;border:none;cursor:pointer;color:var(--tx2);padding:4px;border-radius:var(--r-sm);display:flex;align-items:center;transition:background .15s;}
+.drawer-close:hover{background:var(--bg2);}
+.drawer-body{flex:1;overflow-y:auto;padding:1.25rem;}
+.drawer-ec-ref{font-size:12px;color:var(--tx3);margin-bottom:1rem;display:flex;align-items:center;gap:6px;}
+.drawer-stem{font-size:14px;color:var(--tx);line-height:1.75;white-space:pre-wrap;}
+.drawer-sub{font-size:13px;color:var(--tx2);background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:1rem;line-height:1.65;}
+.drawer-sub-label{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-answer{font-size:13px;color:var(--tx);background:var(--accent-l);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:.75rem;line-height:1.65;display:none;}
+.drawer-answer.show{display:block;}
+.drawer-answer-label{font-size:11px;font-weight:500;color:var(--accent-d);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-footer{padding:.85rem 1.25rem;border-top:0.5px solid var(--bd);display:flex;gap:8px;flex-shrink:0;}
+.drawer-btn{flex:1;padding:8px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.drawer-btn:hover{background:var(--bg2);}
+.drawer-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+.drawer-btn.primary:hover{background:var(--accent-d);}
+@media(max-width:600px){
+  .site-header{padding:1rem 1rem 0;}
+  .page{padding:1rem;}
+  .header-title{font-size:15px;}
+  .mode-grid{grid-template-columns:1fr 1fr;}
+  .ladder-row{grid-template-columns:52px 1fr;gap:8px;}
+  .action-row{flex-direction:column;}
+  .action-btn{width:100%;text-align:center;}
+  .drawer{width:100vw;}
+  audio{width:160px;}
+}
+@media(max-width:380px){
+  .mode-grid,.signal-grid{grid-template-columns:1fr;}
+}
+
+.back-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;font-size:12px;color:var(--tx2);background:var(--bg2);border:0.5px solid var(--bd2);border-radius:var(--r-md);text-decoration:none;font-family:var(--font);transition:background .15s,color .15s;white-space:nowrap;flex-shrink:0;}
+.back-btn:hover{background:var(--bg3);color:var(--tx);}
+.back-btn i{font-size:14px;}
+.memory-video{width:100%;max-height:220px;display:block;border-radius:var(--r-md);background:#000;margin-top:8px;}
+</style>
+</head>
+<body>
+<div class="app">
+
+<header class="site-header">
+  <div class="header-top">
+    <div class="header-icon"><i class="ti ti-chart-line" aria-hidden="true"></i></div>
+    <div>
+      <div class="header-meta">06 实验设计 · M3 图表判读</div>
+      <div class="header-title">数据图表分析与判读</div>
+    </div>
+    <a class="back-btn" href="index.html" aria-label="返回首页"><i class="ti ti-arrow-left"></i> 首页</a>
+    <div class="header-id">T06_M3</div>
+  </div>
+  <nav class="nav-tabs" role="tablist">
+    <button class="nav-tab active" role="tab" onclick="switchTab('overview',this)">概览</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('mothers',this)">母题精讲</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('ladder',this)">变式阶梯</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('self',this)">自查清单</button>
+  </nav>
+</header>
+
+<div id="tab-overview" class="page active" role="tabpanel">
+
+  <div class="memory-section">
+    <div class="memory-card">
+      <img class="memory-img" src="记忆卡/T06_M3_memory.png" alt="数据图表分析与判读记忆卡" onclick="openLightbox(this.src,this.alt)" onerror="this.style.display='none'">
+      <div class="memory-footer">
+        <div>
+          <div class="memory-label">记忆卡 · 四步读图法 × 关键特征点速查</div>
+          <div style="font-size:12px;color:var(--tx3);">点击图片可放大</div>
+        </div>
+        <div class="audio-player">
+          <div id="audio-wrap">
+            <video class="memory-video" controls controlsList="nodownload" preload="metadata" style="display:none">
+              <source src="audio/T06_M3.mp4" type="video/mp4">
+            </video>
+            <div class="audio-placeholder" style="display:flex"><i class="ti ti-video-off"></i>视频待放入</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title"><i class="ti ti-scan" aria-hidden="true"></i> 触发信号速查</div>
+  <div class="signal-grid">
+    <div class="signal-card">
+      <div class="signal-label">图像信号</div>
+      <div class="signal-tag">折线图 / 曲线图</div>
+      <div class="signal-tag">柱状图 / 直方图</div>
+      <div class="signal-tag">散点图 / 双坐标轴图</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">文字信号</div>
+      <div class="signal-tag">光合速率 / 呼吸速率曲线</div>
+      <div class="signal-tag">酶促反应速率图</div>
+      <div class="signal-tag">种群增长曲线 / 激素浓度图</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">任务关键词</div>
+      <div class="signal-tag">读取关键点（补偿点/饱和点）</div>
+      <div class="signal-tag">分析曲线走势原因</div>
+      <div class="signal-tag">依据图表得出结论</div>
+    </div>
+  </div>
+
+  <div class="section-title"><i class="ti ti-arrow-fork" aria-hidden="true"></i> 四步读图法 · 万能框架</div>
+  <div class="mode-grid">
+    <div class="mode-card" style="border-left-color:var(--accent);">
+      <div class="mode-card-label" style="color:var(--accent-d);">① 读轴：明确变量</div>
+      <div class="mode-card-text">先看横轴（自变量）再看纵轴（因变量），确认单位与量纲；双纵轴需辨清各轴对应曲线</div>
+    </div>
+    <div class="mode-card" style="border-left-color:var(--teal);">
+      <div class="mode-card-label" style="color:var(--teal-d);">② 找点：定特征值</div>
+      <div class="mode-card-text">光合：补偿点（净=0）、饱和点（最大净）；酶：最适温/pH；种群：K/2（增长速率最大）、K（零增长）</div>
+    </div>
+    <div class="mode-card" style="border-left-color:var(--amber);">
+      <div class="mode-card-label" style="color:var(--amber-d);">③ 析势：看趋势段</div>
+      <div class="mode-card-text">上升段→促进/增强；平台段→限制因子存在；下降段→抑制/损伤；注意转折点前后机制不同</div>
+    </div>
+    <div class="mode-card" style="border-left-color:var(--coral);">
+      <div class="mode-card-label" style="color:var(--coral-d);">④ 写结论：规范表达</div>
+      <div class="mode-card-text">结论＝"在…条件下，随…增大/减小，…呈…变化，说明…"；避免用"影响了"等模糊词</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-alert-triangle" aria-hidden="true"></i> 高频易错陷阱</div>
+  <div class="trap-list">
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>混淆<b>净光合速率</b>与<b>总（真正）光合速率</b>：曲线图中测的是净光合，总光合＝净光合＋呼吸消耗</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>将<b>光饱和点</b>时的值误读为最大总光合速率，忽略呼吸速率对纵截距的意义</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>酶促反应曲线：超过最适温后速率下降，原因是<b>酶（蛋白质）变性失活</b>，而非底物不足</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>种群增长曲线：<b>J型</b>增长速率随时间持续增大；<b>S型</b>增长速率先增后减，K/2时最大，K时为0</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>双坐标轴图：右轴对应右侧曲线，读数时不可张冠李戴；不同组曲线须对应正确纵轴刻度</span></div>
+  </div>
+</div>
+
+<!-- 母题精讲 -->
+<div id="tab-mothers" class="page" role="tabpanel">
+  <div class="filter-tabs" id="filter-tabs">
+    <button class="filter-btn active" onclick="filterMQ('all',this)">全部</button>
+    <button class="filter-btn" onclick="filterMQ('curve',this)">曲线图判读</button>
+    <button class="filter-btn" onclick="filterMQ('keypoint',this)">关键特征点</button>
+    <button class="filter-btn" onclick="filterMQ('compare',this)">多图对比</button>
+    <button class="filter-btn" onclick="filterMQ('conclude',this)">结论书写</button>
+  </div>
+
+  <!-- EC-560 -->
+  <div class="mq-card" data-tag="curve">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge curve">曲线图判读</span>
+      <span class="mq-name">EC-560 · 光合速率曲线四步精解</span>
+      <span class="mq-purity">高频</span>
+      <i class="ti ti-chevron-down mq-chevron" aria-hidden="true"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">来源 · 光合作用 × 图表判读综合题型</div>
+      <div class="rule-box">
+        核心规则：净光合速率＝总光合速率－呼吸速率。图中纵轴截距（光强为0时）的绝对值即为<b>呼吸速率</b>；曲线与横轴交点为<b>光补偿点</b>；曲线趋于平稳处为<b>光饱和点</b>。
+      </div>
+      <div class="chain-label">解题信号链</div>
+      <div class="signal-chain">
+        <span class="sc-node curve">读纵轴截距→呼吸速率</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node curve">找零点→光补偿点</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node keypoint">曲线拐平→光饱和点</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node conclude">饱和点值＋呼吸速率＝总光合速率</span>
+      </div>
+      <div class="mq-note">⚠ 易错：曲线最高点为净光合最大值，并非总光合速率；总光合速率还需加上暗呼吸速率。温度/CO₂变化时，两条曲线位移方向不同，需分别分析补偿点和饱和点的移动。</div>
+      <button class="q-trigger" onclick="openDrawer('ec560','curve','EC-560 · 光合速率曲线读图','v-ec560-1')"><i class="ti ti-eye"></i> 查看示例题目</button>
+    </div>
+  </div>
+
+  <!-- EC-565 -->
+  <div class="mq-card" data-tag="keypoint">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge keypoint">关键特征点</span>
+      <span class="mq-name">EC-565 · 酶促反应曲线特征点辨析</span>
+      <span class="mq-purity">高频</span>
+      <i class="ti ti-chevron-down mq-chevron" aria-hidden="true"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">来源 · 酶的特性 × 图表判读</div>
+      <div class="rule-box">
+        核心规则：温度/pH曲线中，最高点为<b>最适温度/最适pH</b>；超最适后下降原因是酶<b>变性失活（肽链空间结构破坏）</b>，不可逆；底物浓度曲线中平台由<b>酶的数量（活性位点）</b>限制，与底物无关。
+      </div>
+      <div class="chain-label">解题信号链</div>
+      <div class="signal-chain">
+        <span class="sc-node keypoint">找最高点→最适值</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node curve">左侧上升→活性增强</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node compare">右侧下降→变性原因分析</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node conclude">平台段→限制因子判断</span>
+      </div>
+      <div class="mq-note">⚠ 区分：低温抑制酶活性（可逆）vs 高温使酶变性（不可逆）。pH影响与温度类似，强酸强碱均导致不可逆变性。底物浓度曲线的平台处，增大酶量可使曲线继续上升。</div>
+      <button class="q-trigger" onclick="openDrawer('ec565','keypoint','EC-565 · 酶促反应曲线特征点','v-ec565-1')"><i class="ti ti-eye"></i> 查看示例题目</button>
+    </div>
+  </div>
+
+  <!-- EC-570 -->
+  <div class="mq-card" data-tag="compare">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge compare">多图对比</span>
+      <span class="mq-name">EC-570 · 种群增长曲线J型与S型对比</span>
+      <span class="mq-purity">高频</span>
+      <i class="ti ti-chevron-down mq-chevron" aria-hidden="true"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">来源 · 种群数量变化 × 图表判读</div>
+      <div class="rule-box">
+        核心规则：J型曲线—λ（增长倍率）恒定，增长速率随时间持续增大；S型曲线—存在K值，种群数量为K/2时增长速率最大，到达K时增长速率为0，增长率持续下降。
+      </div>
+      <div class="chain-label">J型 vs S型对比链</div>
+      <div class="signal-chain">
+        <span class="sc-node curve">J型：增长速率↗（持续上升）</span>
+        <span class="sc-arrow">vs</span>
+        <span class="sc-node compare">S型：增长速率↗后↘</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node keypoint">K/2：增长速率最大</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node conclude">K：增长速率=0，增长率=0</span>
+      </div>
+      <div class="mq-note">⚠ 增长速率（Δ数量/Δ时间）与增长率（增长量/原有量）是两个不同概念：S型曲线中增长率从始至终持续下降，而增长速率先增后减。捕鱼/害虫防治：维持K/2以保持最大增长速率。</div>
+      <button class="q-trigger" onclick="openDrawer('ec570','compare','EC-570 · 种群增长曲线对比','v-ec570-1')"><i class="ti ti-eye"></i> 查看示例题目</button>
+    </div>
+  </div>
+
+  <!-- EC-575 -->
+  <div class="mq-card" data-tag="conclude">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge conclude">结论书写</span>
+      <span class="mq-name">EC-575 · 由图得结论规范表达模板</span>
+      <span class="mq-purity">必考</span>
+      <i class="ti ti-chevron-down mq-chevron" aria-hidden="true"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">来源 · 实验结论书写 × 各类图表通用</div>
+      <div class="rule-box">
+        核心模板：① 结果描述句："在…条件下，随[自变量]的增大/减小，[因变量]呈[上升/下降/先升后降]趋势，在[特征点]处达到[最大/最小/拐点]值。" ② 结论句："说明[自变量]对[因变量]有[促进/抑制/先促后抑]作用，最适[自变量]为[特征值]。"
+      </div>
+      <div class="chain-label">结论书写五步流程</div>
+      <div class="signal-chain">
+        <span class="sc-node curve">读自变量名称</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node keypoint">读因变量名称</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node compare">描述趋势</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node conclude">定特征点数值</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node curve">写生物学意义</span>
+      </div>
+      <div class="mq-note">⚠ 常见扣分：用"影响了"代替具体方向性描述（应为"促进"或"抑制"）；遗漏实验条件前提；混淆"实验结果"（描述现象）与"实验结论"（解释原因/规律）。</div>
+      <button class="q-trigger" onclick="openDrawer('ec575','conclude','EC-575 · 结论书写规范','v-ec575-1')"><i class="ti ti-eye"></i> 查看示例题目</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- 变式阶梯 -->
+<div id="tab-ladder" class="page" role="tabpanel">
+  <div class="ladder-note">
+    变式题按难度分三级：L1 直接读图（单图单问）→ L2 综合分析（多图联动 / 需计算）→ L3 开放推理（设计变量 / 预测趋势）。
+  </div>
+
+  <div class="ladder-section-label"><i class="ti ti-stairs" aria-hidden="true"></i> L1 · 基础读图</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1<br>单图读值</div>
+      <div class="ladder-card">
+        <div class="ladder-card-name">v-ec560-1 · 光合速率曲线截距与交点读取</div>
+        <div class="ladder-card-sub">给定光合速率-光照强度曲线，读取呼吸速率、光补偿点、光饱和点数值</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1<br>特征点定位</div>
+      <div class="ladder-card">
+        <div class="ladder-card-name">v-ec565-1 · 最适温度/pH读取与原因分析</div>
+        <div class="ladder-card-sub">酶促反应速率-温度曲线，找最高点并解释右侧下降原因（变性 vs 低温）</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1<br>趋势判断</div>
+      <div class="ladder-card">
+        <div class="ladder-card-name">v-ec570-1 · S型曲线增长速率与增长率方向判断</div>
+        <div class="ladder-card-sub">种群增长S型曲线，判断K/2前后增长速率、增长率的变化方向</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ladder-section-label"><i class="ti ti-stairs" aria-hidden="true"></i> L2 · 综合分析</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2<br>双变量</div>
+      <div class="ladder-card">
+        <div class="ladder-card-name">v-ec560-23 · CO₂浓度变化对光合曲线的影响</div>
+        <div class="ladder-card-sub">CO₂升高/降低时，光补偿点和光饱和点如何移动？原因机制分析</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2<br>计算推导</div>
+      <div class="ladder-card">
+        <div class="ladder-card-name">v-ec565-34 · 由图计算总光合速率与净有机物积累量</div>
+        <div class="ladder-card-sub">已知光照12h/黑暗12h，根据曲线计算一昼夜有机物净积累量</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2<br>多图联动</div>
+      <div class="ladder-card">
+        <div class="ladder-card-name">v-ec570-23 · 种群曲线与增长速率曲线联合判读</div>
+        <div class="ladder-card-sub">给出数量-时间曲线和速率-时间曲线，分析两图对应关系及K值判断</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2<br>结论规范</div>
+      <div class="ladder-card">
+        <div class="ladder-card-name">v-ec575-2 · 规范书写实验结论（给定柱状图）</div>
+        <div class="ladder-card-sub">根据不同处理组柱状图数据，规范书写实验结果描述与结论各1条</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ladder-section-label"><i class="ti ti-stairs" aria-hidden="true"></i> L3 · 开放推理</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l3">L3<br>预测图形</div>
+      <div class="ladder-card">
+        <div class="ladder-card-name">v-ec578-135 · 预测实验结果图形走势并说明依据</div>
+        <div class="ladder-card-sub">给定实验方案（含自变量设定），要求预测结果曲线走势并用生物学原理解释；涉及光合、酶活性、种群三类情境综合</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 自查清单 -->
+<div id="tab-self" class="page" role="tabpanel">
+  <div class="progress-row">
+    <span style="font-size:13px;color:var(--tx2);">掌握进度</span>
+    <span id="prog-text" style="font-size:13px;color:var(--tx2);">0 / 7</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="prog-fill"></div></div>
+
+  <div class="checklist" id="checklist">
+    <div class="check-item" data-key="0" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能说出四步读图法的步骤：读轴→找点→析势→写结论</div>
+    </div>
+    <div class="check-item" data-key="1" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能从光合速率曲线中准确读取：呼吸速率（纵截距绝对值）、光补偿点（零点）、光饱和点（拐平处）</div>
+    </div>
+    <div class="check-item" data-key="2" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能计算总光合速率＝净光合速率＋呼吸速率，并应用到昼夜有机物积累量计算</div>
+    </div>
+    <div class="check-item" data-key="3" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能区分酶促反应曲线中低温抑制（可逆）与高温变性（不可逆），判断平台段限制因子为酶量</div>
+    </div>
+    <div class="check-item" data-key="4" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能区分S型种群曲线中"增长速率"（先增后减）与"增长率"（持续下降）的变化方向</div>
+    </div>
+    <div class="check-item" data-key="5" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能用规范句式书写实验结果（现象描述）与实验结论（原因/规律），不混淆两者</div>
+    </div>
+    <div class="check-item" data-key="6" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能在多图联动题中正确对应双纵轴坐标，不混读不同曲线的纵轴刻度</div>
+    </div>
+  </div>
+
+  <div class="action-row">
+    <button class="action-btn" onclick="resetChecklist()">重置清单</button>
+    <button class="action-btn" onclick="switchTab('mothers', document.querySelector('.nav-tab:nth-child(2)'))">回顾母题</button>
+  </div>
+</div>
+
+<!-- Drawer overlay -->
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="题目详情">
+  <div class="drawer-header">
+    <span class="drawer-badge" id="drawer-badge"></span>
+    <span class="drawer-title" id="drawer-title"></span>
+    <button class="drawer-close" onclick="closeDrawer()" aria-label="关闭"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="drawer-ec-ref"><i class="ti ti-hash"></i><span id="drawer-ec-ref"></span></div>
+    <div class="drawer-stem" id="drawer-stem"></div>
+    <div class="drawer-sub" id="drawer-sub">
+      <div class="drawer-sub-label">解题提示</div>
+      <div id="drawer-hint"></div>
+    </div>
+    <div class="drawer-answer" id="drawer-answer">
+      <div class="drawer-answer-label">参考答案</div>
+      <div id="drawer-answer-text"></div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="drawer-btn" onclick="toggleAnswer()">显示 / 隐藏答案</button>
+    <button class="drawer-btn primary" onclick="closeDrawer()">完成</button>
+  </div>
+</div>
+
+<script>
+// ── Tab switching ──────────────────────────────────────
+function switchTab(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+
+// ── MQ accordion ──────────────────────────────────────
+function toggleMQ(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.mq-chevron');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chevron.classList.toggle('open', !isOpen);
+}
+
+// ── Filter ──────────────────────────────────────
+function filterMQ(tag, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.mq-card').forEach(card => {
+    card.style.display = (tag === 'all' || card.dataset.tag === tag) ? '' : 'none';
+  });
+}
+
+// ── Drawer ──────────────────────────────────────
+const drawerData = {
+  'v-ec560-1': {
+    ec: 'EC-560',
+    stem: '下图为某植物在不同光照强度下的净光合速率曲线（25°C，CO₂浓度正常）。\n\n[示意图：纵轴为净光合速率(μmol CO₂/m²·s)，横轴为光照强度(klux)；曲线从负值起点上升，与横轴交于某点，后趋于平稳]\n\n请根据图回答：\n(1) 黑暗条件下，该植物的呼吸速率为多少（取纵轴截距绝对值）？\n(2) 指出图中光补偿点和光饱和点对应的光照强度。\n(3) 若光照强度为光饱和点时，总光合速率等于多少？',
+    hint: '先找纵轴截距（负值，代表黑暗时净光合=−呼吸速率）；再找曲线与横轴交点（净光合=0处即补偿点）；曲线变平处为饱和点。总光合=净光合（饱和点处）+呼吸速率。',
+    answer: '(1) 呼吸速率 = 纵轴截距绝对值（如 2 μmol CO₂/m²·s）。\n(2) 光补偿点 = 曲线与横轴交点横坐标（如 2 klux）；光饱和点 = 曲线趋平处横坐标（如 8 klux）。\n(3) 总光合速率 = 饱和点时净光合速率 + 呼吸速率（如 10 + 2 = 12 μmol CO₂/m²·s）。'
+  },
+  'v-ec565-1': {
+    ec: 'EC-565',
+    stem: '下图为某酶在不同温度下催化某反应的速率曲线。\n\n[示意图：纵轴为反应速率，横轴为温度(°C)；曲线先升后降，峰值在某温度处]\n\n(1) 该酶的最适温度约为多少？\n(2) 超过最适温度后，反应速率下降的原因是什么？\n(3) 若将温度从40°C降回最适温度，反应速率能否恢复？为什么？',
+    hint: '找曲线最高点横坐标即为最适温度。右侧下降的本质是高温导致酶蛋白的空间结构（肽链折叠）破坏，即变性失活。低温只是降低酶活性，属可逆抑制；高温变性不可逆。',
+    answer: '(1) 最适温度 = 曲线最高点对应温度（如 37°C）。\n(2) 超过最适温度后，温度升高导致酶（蛋白质）空间结构破坏，酶变性失活，活性位点改变，不能与底物结合，反应速率下降。\n(3) 不能恢复。因为高温导致酶变性失活是不可逆的，酶的空间结构已永久破坏，降温无法使其复原。'
+  },
+  'v-ec570-1': {
+    ec: 'EC-570',
+    stem: '某鱼类种群在特定环境中呈S型增长，K值为800条。\n\n(1) 当种群数量为400条时，种群的增长速率处于什么状态？\n(2) 从K/2到K的过程中，增长速率和增长率分别如何变化？\n(3) 为使捕捞后种群能快速恢复，捕捞后应将种群数量维持在什么水平？',
+    hint: 'K/2=400条时增长速率最大。从K/2到K：增长速率先维持高位后下降至0；增长率从起始就一直下降（整个S型过程增长率单调递减）。捕鱼后维持K/2可使增长速率最大，种群恢复最快。',
+    answer: '(1) 种群数量400条=K/2时，增长速率达到最大值。\n(2) 从K/2到K：增长速率由最大值逐渐降低至0（先减后为零）；增长率持续下降（整个S型曲线中增长率一直在减小）。\n(3) 捕捞后应将种群数量维持在K/2（400条）附近，此时种群增长速率最大，种群能以最快速度补充被捕的个体。'
+  },
+  'v-ec575-1': {
+    ec: 'EC-575',
+    stem: '实验探究不同NaCl浓度（0%、0.9%、1.8%、3.6%）对蛙心肌细胞搏动频率的影响，结果柱状图显示：0%组搏动最慢，0.9%组最快，1.8%组中等，3.6%组停止搏动。\n\n请依据以上数据：\n(1) 用一句话规范描述实验结果。\n(2) 用一句话规范书写实验结论。',
+    hint: '结果描述句：说清自变量范围、因变量变化趋势及特征值，不能出现"说明"等解释性词汇。结论句：从结果推出的规律，需指出关系方向（促/抑）和最适条件。',
+    answer: '(1) 实验结果：在NaCl浓度0%～3.6%范围内，随NaCl浓度升高，蛙心肌细胞搏动频率呈先升后降趋势，0.9%组搏动频率最高，3.6%组搏动停止。\n(2) 实验结论：NaCl浓度影响蛙心肌细胞的搏动频率，最适NaCl浓度约为0.9%（即生理盐水浓度），过高或过低的NaCl浓度均会降低甚至抑制心肌细胞的搏动，说明适宜的无机盐浓度是维持细胞正常生命活动的必要条件。'
+  }
+};
+
+let currentDrawerId = null;
+
+function openDrawer(ecId, tag, title, variantId) {
+  const data = drawerData[variantId];
+  if (!data) return;
+
+  const badgeClasses = { curve:'curve', keypoint:'keypoint', compare:'compare', conclude:'conclude' };
+  const badgeLabels = { curve:'曲线图判读', keypoint:'关键特征点', compare:'多图对比', conclude:'结论书写' };
+
+  const badge = document.getElementById('drawer-badge');
+  badge.className = 'drawer-badge ' + (badgeClasses[tag] || '');
+  badge.textContent = badgeLabels[tag] || tag;
+
+  document.getElementById('drawer-title').textContent = title;
+  document.getElementById('drawer-ec-ref').textContent = data.ec + ' · ' + variantId;
+  document.getElementById('drawer-stem').textContent = data.stem;
+  document.getElementById('drawer-hint').textContent = data.hint;
+  document.getElementById('drawer-answer-text').textContent = data.answer;
+  document.getElementById('drawer-answer').classList.remove('show');
+
+  document.getElementById('drawer-overlay').classList.add('open');
+  document.getElementById('drawer').classList.add('open');
+  currentDrawerId = variantId;
+}
+
+function closeDrawer() {
+  document.getElementById('drawer-overlay').classList.remove('open');
+  document.getElementById('drawer').classList.remove('open');
+  currentDrawerId = null;
+}
+
+function toggleAnswer() {
+  document.getElementById('drawer-answer').classList.toggle('show');
+}
+
+// ── Checklist ──────────────────────────────────────
+const CL_KEY = 'T06_M3_checklist';
+
+function loadChecklist() {
+  const saved = JSON.parse(localStorage.getItem(CL_KEY) || '[]');
+  document.querySelectorAll('.check-item').forEach(item => {
+    if (saved.includes(item.dataset.key)) item.classList.add('done');
+  });
+  updateProgress();
+}
+
+function toggleCheck(item) {
+  item.classList.toggle('done');
+  saveChecklist();
+  updateProgress();
+}
+
+function saveChecklist() {
+  const done = [...document.querySelectorAll('.check-item.done')].map(i => i.dataset.key);
+  localStorage.setItem(CL_KEY, JSON.stringify(done));
+}
+
+function updateProgress() {
+  const total = document.querySelectorAll('.check-item').length;
+  const done = document.querySelectorAll('.check-item.done').length;
+  document.getElementById('prog-text').textContent = done + ' / ' + total;
+  document.getElementById('prog-fill').style.width = (done / total * 100) + '%';
+}
+
+function resetChecklist() {
+  document.querySelectorAll('.check-item').forEach(i => i.classList.remove('done'));
+  localStorage.removeItem(CL_KEY);
+  updateProgress();
+}
+
+loadChecklist();
+</script>
+
+<!-- Lightbox -->
+<div class="lb-overlay" id="lb-overlay" onclick="closeLightbox()">
+  <button class="lb-close" onclick="closeLightbox()" aria-label="关闭">&#x2715;</button>
+  <img class="lb-img" id="lb-img" src="" alt="">
+</div>
+<script>
+function openLightbox(src, alt) {
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lb-img').alt = alt || '';
+  document.getElementById('lb-overlay').classList.add('open');
+}
+function closeLightbox() {
+  document.getElementById('lb-overlay').classList.remove('open');
+}
+document.getElementById('lb-img').addEventListener('click', e => e.stopPropagation());
+</script>
+
+</div>
+</body>
+</html>

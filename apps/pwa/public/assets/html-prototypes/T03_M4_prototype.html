@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T03_M4 · 电泳分子证据判读</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent:#0F6E56; --accent-l:#E1F5EE; --accent-m:#7DCFBB; --accent-d:#085041;
+  --purple:#534AB7; --purple-l:#EEEDFE; --purple-d:#3C3489;
+  --amber:#BA7517; --amber-l:#FAEEDA; --amber-d:#633806;
+  --coral:#993C1D; --coral-l:#FAECE7; --coral-d:#712B13;
+  --bg:#ffffff; --bg2:#f7f7f5; --bg3:#f1efe8;
+  --tx:#1a1a18; --tx2:#5f5e5a; --tx3:#888780;
+  --bd:rgba(0,0,0,0.10); --bd2:rgba(0,0,0,0.18);
+  --r-sm:6px; --r-md:8px; --r-lg:12px; --r-xl:16px;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+}
+@media(prefers-color-scheme:dark){
+  :root{ --bg:#1c1c1a;--bg2:#252523;--bg3:#2c2c2a;--tx:#f0efea;--tx2:#b4b2a9;--tx3:#888780;
+    --bd:rgba(255,255,255,0.09);--bd2:rgba(255,255,255,0.16);
+    --accent-l:#04342C;--accent-d:#9FE1CB;--purple-l:#26215C;--purple-d:#CECBF6;
+    --amber-l:#412402;--amber-d:#FAC775;--coral-l:#4A1B0C;--coral-d:#F5C4B3; }
+}
+body{font-family:var(--font);font-size:15px;line-height:1.6;color:var(--tx);background:var(--bg3);min-height:100vh;}
+.app{max-width:800px;margin:0 auto;background:var(--bg);min-height:100vh;}
+.site-header{padding:1.25rem 1.5rem 0;background:var(--bg);border-bottom:0.5px solid var(--bd);position:sticky;top:0;z-index:20;}
+.header-top{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.header-icon{background:var(--accent-l);border-radius:var(--r-md);padding:6px 8px;display:flex;align-items:center;justify-content:center;}
+.header-icon i{font-size:20px;color:var(--accent);}
+.header-meta{font-size:12px;color:var(--tx3);}
+.header-title{font-size:17px;font-weight:500;color:var(--tx);}
+.header-id{margin-left:auto;font-size:11px;color:var(--tx3);background:var(--bg2);padding:3px 9px;border-radius:var(--r-sm);}
+.nav-tabs{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.nav-tab{padding:.6rem 1.1rem;font-size:13px;color:var(--tx2);cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;font-family:var(--font);white-space:nowrap;transition:color .15s,border-color .15s;}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500;}
+.nav-tab:hover:not(.active){color:var(--tx);}
+.page{display:none;padding:1.5rem;} .page.active{display:block;}
+.memory-section{margin-bottom:1.5rem;}
+.memory-card{border:0.5px solid var(--bd);border-radius:var(--r-xl);overflow:hidden;background:var(--bg);}
+.memory-placeholder{min-height:200px;background:var(--bg2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--tx3);padding:2rem;}
+.memory-placeholder i{font-size:32px;color:var(--bd2);}
+.memory-placeholder-text{font-size:13px;text-align:center;line-height:1.6;}
+.memory-placeholder-filename{font-size:11px;background:var(--bg3);border:0.5px solid var(--bd);border-radius:var(--r-sm);padding:4px 10px;font-family:monospace;color:var(--tx2);}
+.memory-img{width:100%;display:block;max-height:320px;object-fit:contain;background:var(--bg3);cursor:zoom-in;transition:opacity .15s;}
+.memory-img:hover{opacity:.9;}
+.memory-footer{padding:.85rem 1rem;display:flex;align-items:center;gap:10px;border-top:0.5px solid var(--bd);}
+.memory-label{font-size:13px;font-weight:500;color:var(--tx);flex:1;}
+audio{height:32px;width:220px;}
+.audio-placeholder{font-size:12px;color:var(--tx3);display:flex;align-items:center;gap:5px;background:var(--bg2);padding:6px 10px;border-radius:var(--r-sm);}
+.section-title{font-size:13px;font-weight:500;color:var(--tx2);display:flex;align-items:center;gap:7px;margin-bottom:1rem;text-transform:uppercase;letter-spacing:.04em;}
+.section-divider{height:0.5px;background:var(--bd);margin:1.5rem 0;}
+.signal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:1.5rem;}
+.signal-card{background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;}
+.signal-label{font-size:11px;color:var(--tx3);letter-spacing:.04em;margin-bottom:.4rem;text-transform:uppercase;}
+.signal-tag{font-size:13px;color:var(--tx);margin-bottom:2px;}
+.subtopic-list{display:flex;flex-direction:column;gap:10px;margin-bottom:1.5rem;}
+.subtopic-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.9rem 1.1rem;border-left:3px solid var(--accent);}
+.subtopic-card.s2{border-left-color:var(--purple);} .subtopic-card.s3{border-left-color:var(--amber);}
+.subtopic-num{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.3rem;}
+.subtopic-name{font-size:14px;font-weight:500;color:var(--tx);margin-bottom:.3rem;}
+.subtopic-signal{font-size:13px;color:var(--tx2);line-height:1.6;}
+.trap-list{display:flex;flex-direction:column;gap:7px;}
+.trap-item{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.55;}
+.trap-icon{color:#E24B4A;font-size:15px;flex-shrink:0;margin-top:1px;}
+.filter-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem;}
+.filter-btn{padding:5px 13px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx2);font-family:var(--font);transition:all .15s;}
+.filter-btn.active{background:var(--accent-l);color:var(--accent-d);border-color:var(--accent);font-weight:500;}
+.mq-card{border:0.5px solid var(--bd);border-radius:var(--r-lg);background:var(--bg);margin-bottom:.85rem;overflow:hidden;}
+.mq-header{padding:.9rem 1.1rem;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;transition:background .15s;}
+.mq-header:hover{background:var(--bg2);}
+.mq-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);white-space:nowrap;}
+.mq-badge.s1{background:var(--accent-l);color:var(--accent-d);} .mq-badge.s2{background:var(--purple-l);color:var(--purple-d);} .mq-badge.s3{background:var(--amber-l);color:var(--amber-d);}
+.mq-name{font-size:14px;font-weight:500;color:var(--tx);flex:1;}
+.mq-purity{font-size:12px;color:var(--tx3);flex-shrink:0;}
+.mq-chevron{color:var(--tx3);font-size:16px;transition:transform .2s;flex-shrink:0;}
+.mq-chevron.open{transform:rotate(180deg);}
+.mq-body{display:none;padding:.75rem 1.1rem 1.1rem;border-top:0.5px solid var(--bd);}
+.mq-body.open{display:block;}
+.mq-source{font-size:12px;color:var(--tx3);margin-bottom:.65rem;}
+.rule-box{background:var(--accent-l);border-left:3px solid var(--accent);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:.65rem .9rem;font-size:13px;color:var(--accent-d);margin:.75rem 0;line-height:1.65;}
+.rule-box.s2{background:var(--purple-l);border-left-color:var(--purple);color:var(--purple-d);}
+.rule-box.s3{background:var(--amber-l);border-left-color:var(--amber);color:var(--amber-d);}
+.chain-label{font-size:12px;font-weight:500;color:var(--tx2);margin:.75rem 0 .4rem;text-transform:uppercase;letter-spacing:.04em;}
+.signal-chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:6px;}
+.sc-node{background:var(--bg2);border-radius:var(--r-sm);padding:3px 9px;font-size:13px;color:var(--tx);}
+.sc-node.s1{background:var(--accent-l);color:var(--accent-d);} .sc-node.s2{background:var(--purple-l);color:var(--purple-d);} .sc-node.s3{background:var(--amber-l);color:var(--amber-d);}
+.sc-arrow{color:var(--tx3);font-size:13px;}
+.mq-note{font-size:13px;color:var(--tx2);margin-top:.75rem;line-height:1.6;}
+.q-trigger{display:inline-flex;align-items:center;gap:5px;margin-top:.75rem;padding:6px 12px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;color:var(--tx2);cursor:pointer;font-family:var(--font);transition:all .15s;}
+.q-trigger:hover{background:var(--bg2);color:var(--tx);} .q-trigger i{font-size:14px;}
+.ladder-section-label{font-size:13px;font-weight:500;color:var(--tx2);margin-bottom:.85rem;display:flex;align-items:center;gap:7px;}
+.ladder-rows{display:flex;flex-direction:column;gap:8px;margin-bottom:1rem;}
+.ladder-row{display:grid;grid-template-columns:64px 1fr;gap:10px;align-items:start;}
+.ladder-level{font-size:11px;font-weight:500;padding:6px 4px;border-radius:var(--r-sm);text-align:center;line-height:1.4;}
+.l0{background:var(--accent-l);color:var(--accent-d);} .l1{background:var(--purple-l);color:var(--purple-d);} .l2{background:var(--amber-l);color:var(--amber-d);} .l3{background:var(--coral-l);color:var(--coral-d);}
+.ladder-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.65rem .9rem;background:var(--bg);cursor:pointer;transition:background .15s;}
+.ladder-card:hover{background:var(--bg2);}
+.ladder-card-name{font-size:13px;font-weight:500;color:var(--tx);}
+.ladder-card-sub{font-size:12px;color:var(--tx3);margin-top:3px;line-height:1.5;}
+.ladder-note{background:var(--bg2);border-radius:var(--r-md);padding:.65rem .9rem;font-size:12px;color:var(--tx2);margin-bottom:1rem;line-height:1.55;}
+.progress-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem;}
+.progress-bar{height:5px;border-radius:3px;background:var(--bg2);margin-bottom:1.25rem;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;background:var(--accent);width:0%;transition:width .3s;}
+.checklist{display:flex;flex-direction:column;gap:7px;}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:.7rem .9rem;border:0.5px solid var(--bd);border-radius:var(--r-md);background:var(--bg);cursor:pointer;transition:background .15s;}
+.check-item.done{background:var(--bg2);}
+.check-box{width:18px;height:18px;border:1.5px solid var(--bd2);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .15s;}
+.check-item.done .check-box{background:var(--accent);border-color:var(--accent);}
+.check-box i{font-size:11px;color:#fff;display:none;} .check-item.done .check-box i{display:block;}
+.check-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.check-item.done .check-text{color:var(--tx3);text-decoration:line-through;}
+.action-row{margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:8px;}
+.action-btn{padding:7px 14px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.action-btn:hover{background:var(--bg2);}
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s;}
+.drawer-overlay.open{opacity:1;pointer-events:all;}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100vw);background:var(--bg);z-index:101;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden;}
+.drawer.open{transform:translateX(0);}
+.drawer-header{padding:1rem 1.25rem;border-bottom:0.5px solid var(--bd);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.drawer-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);}
+.drawer-title{font-size:14px;font-weight:500;color:var(--tx);flex:1;line-height:1.4;}
+.drawer-close{background:none;border:none;cursor:pointer;color:var(--tx2);padding:4px;border-radius:var(--r-sm);display:flex;align-items:center;transition:background .15s;}
+.drawer-close:hover{background:var(--bg2);}
+.drawer-body{flex:1;overflow-y:auto;padding:1.25rem;}
+.drawer-ec-ref{font-size:12px;color:var(--tx3);margin-bottom:1rem;display:flex;align-items:center;gap:6px;}
+.drawer-stem{font-size:14px;color:var(--tx);line-height:1.75;white-space:pre-wrap;}
+.drawer-sub{font-size:13px;color:var(--tx2);background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:1rem;line-height:1.65;}
+.drawer-sub-label{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-answer{font-size:13px;color:var(--tx);background:var(--accent-l);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:.75rem;line-height:1.65;display:none;}
+.drawer-answer.show{display:block;}
+.drawer-answer-label{font-size:11px;font-weight:500;color:var(--accent-d);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-footer{padding:.85rem 1.25rem;border-top:0.5px solid var(--bd);display:flex;gap:8px;flex-shrink:0;}
+.drawer-btn{flex:1;padding:8px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.drawer-btn:hover{background:var(--bg2);}
+.drawer-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+.drawer-btn.primary:hover{background:var(--accent-d);}
+.lb-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:200;display:none;align-items:center;justify-content:center;cursor:zoom-out;}
+.lb-overlay.open{display:flex;}
+.lb-img{max-width:92vw;max-height:92vh;object-fit:contain;border-radius:var(--r-md);box-shadow:0 8px 40px rgba(0,0,0,.5);}
+.lb-close{position:fixed;top:16px;right:20px;background:none;border:none;color:#fff;font-size:28px;cursor:pointer;line-height:1;opacity:.7;transition:opacity .15s;}
+.lb-close:hover{opacity:1;}
+@media(max-width:600px){
+  .site-header{padding:1rem 1rem 0;}.page{padding:1rem;}.header-title{font-size:15px;}
+  .signal-grid{grid-template-columns:1fr 1fr;}.ladder-row{grid-template-columns:52px 1fr;gap:8px;}
+  .action-row{flex-direction:column;}.action-btn{width:100%;text-align:center;}.drawer{width:100vw;}audio{width:160px;}
+}
+@media(max-width:380px){.signal-grid{grid-template-columns:1fr;}}
+
+.back-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;font-size:12px;color:var(--tx2);background:var(--bg2);border:0.5px solid var(--bd2);border-radius:var(--r-md);text-decoration:none;font-family:var(--font);transition:background .15s,color .15s;white-space:nowrap;flex-shrink:0;}
+.back-btn:hover{background:var(--bg3);color:var(--tx);}
+.back-btn i{font-size:14px;}
+.memory-video{width:100%;max-height:220px;display:block;border-radius:var(--r-md);background:#000;margin-top:8px;}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="site-header">
+  <div class="header-top">
+    <div class="header-icon"><i class="ti ti-test-pipe" aria-hidden="true"></i></div>
+    <div>
+      <div class="header-meta">03 遗传分析 · M4 分子证据</div>
+      <div class="header-title">电泳分子证据判读</div>
+    </div>
+    <a class="back-btn" href="index.html" aria-label="返回首页"><i class="ti ti-arrow-left"></i> 首页</a>
+    <div class="header-id">T03_M4</div>
+  </div>
+  <nav class="nav-tabs" role="tablist">
+    <button class="nav-tab active" role="tab" onclick="switchTab('overview',this)">概览</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('mothers',this)">母题精讲</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('ladder',this)">变式阶梯</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('check',this)">自查清单</button>
+  </nav>
+</header>
+
+<!-- 概览 -->
+<div id="page-overview" class="page active">
+  <div class="memory-section">
+    <div class="memory-card">
+      <img class="memory-img" src="记忆卡/T03_M4_memory.png" alt="T03_M4 记忆卡"
+           onclick="openLightbox(this.src,this.alt)"
+           onerror="this.style.display='none';document.getElementById('mem-placeholder').style.display='flex'">
+      <div id="mem-placeholder" class="memory-placeholder" style="display:none;">
+        <i class="ti ti-photo-up"></i>
+        <div class="memory-placeholder-text">记忆卡图片放置于此</div>
+        <div class="memory-placeholder-filename">记忆卡/T03_M4_memory.png</div>
+      </div>
+      <div class="memory-footer">
+        <span class="memory-label"><i class="ti ti-brain" style="margin-right:5px;color:var(--accent);"></i>记忆卡 · 三种分子证据技术</span>
+        <video class="memory-video" controls controlsList="nodownload" preload="metadata" style="display:none">
+        <source src="audio/T03_M4.mp4" type="video/mp4">
+      </video>
+      <div class="audio-placeholder" style="display:flex"><i class="ti ti-video-off"></i>视频待放入</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title"><i class="ti ti-radar"></i>核心触发信号</div>
+  <div class="signal-grid">
+    <div class="signal-card">
+      <div class="signal-label">视觉信号</div>
+      <div class="signal-tag">凝胶电泳图（多条带）</div>
+      <div class="signal-tag">限制酶切图谱</div>
+      <div class="signal-tag">RFLP/STR 分型表</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">技术关键词</div>
+      <div class="signal-tag">限制性内切酶 / RFLP</div>
+      <div class="signal-tag">STR / SSR / 微卫星</div>
+      <div class="signal-tag">分子标记 / 连锁分析</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">计算任务</div>
+      <div class="signal-tag">判断基因型（纯合/杂合）</div>
+      <div class="signal-tag">推测条带数与位置</div>
+      <div class="signal-tag">确定致病基因连锁标记</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">一票否决信号</div>
+      <div class="signal-tag">1条带=纯合 / 2条带=杂合</div>
+      <div class="signal-tag">RFLP标记≠致病基因本身</div>
+      <div class="signal-tag">STR匹配="不排除"≠"确认"</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-sitemap"></i>三条技术路线</div>
+  <div class="subtopic-list">
+    <div class="subtopic-card">
+      <div class="subtopic-num">路径 A · 直接电泳</div>
+      <div class="subtopic-name">条带位置→等位基因→基因型</div>
+      <div class="subtopic-signal">题面给出电泳图 → 相同位置=相同等位基因 → 1条带=纯合(两个相同等位基因)，2条带=杂合 → 对照已知基因型个体的条带位置逐一判读</div>
+    </div>
+    <div class="subtopic-card s2">
+      <div class="subtopic-num">路径 B · RFLP</div>
+      <div class="subtopic-name">酶切位点改变→片段长度→条带差异</div>
+      <div class="subtopic-signal">限制酶识别特定序列 → 突变创建新位点(多切一刀→条带增多)或破坏位点(少切一刀→条带减少) → 片段长度组合反映等位基因状态 → 连锁分析定位致病基因</div>
+    </div>
+    <div class="subtopic-card s3">
+      <div class="subtopic-num">路径 C · STR/SSR</div>
+      <div class="subtopic-name">重复次数不同→PCR产物长度→分型</div>
+      <div class="subtopic-signal">短串联重复序列(STR)在不同个体间重复次数不同 → PCR扩增 → 电泳显示不同长度条带 → 与致病基因紧密连锁→间接追踪致病基因传递 → 亲子鉴定/连锁诊断</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-alert-triangle"></i>高频易错</div>
+  <div class="trap-list">
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>认为三条带=三倍体——RFLP杂合子酶切后可出现3条带（2个等位基因各产生不同数量片段），条带数≠染色体组数。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>条带变多→突变破坏酶切位点（方向反了）——突变<strong>创建</strong>新位点→多切→条带增加；突变<strong>破坏</strong>位点→少切→条带减少。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>把RFLP标记当作致病基因——标记是与致病基因连锁的中性路标，本身不致病，诊断价值来自"连锁"不来自"功能"。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>STR分型匹配→"确认"亲子——只能说"不排除"；确认需多位点联合，随机匹配概率极低但非零。</span></div>
+  </div>
+</div>
+
+<!-- 母题精讲 -->
+<div id="page-mothers" class="page">
+  <div class="filter-tabs">
+    <button class="filter-btn active" onclick="filterMQ('all',this)">全部 (3母题)</button>
+    <button class="filter-btn" onclick="filterMQ('s1',this)">路径A·直接电泳</button>
+    <button class="filter-btn" onclick="filterMQ('s2',this)">路径B·RFLP</button>
+    <button class="filter-btn" onclick="filterMQ('s3',this)">路径C·STR</button>
+  </div>
+
+  <div class="mq-card" data-topic="s1">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge s1">路径A 母题</span>
+      <span class="mq-name">镰状细胞贫血·电泳条带→HbA/HbS等位基因</span>
+      <span class="mq-purity">★ 10/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-162 · 疟原虫/镰状细胞贫血HbS基因频率进化与系谱分析综合 · (7)</div>
+      <div class="rule-box">核心考查：表2给出1~4号个体Hb电泳条带 → 条带1含哪个基因(HbA/HbS) → 不依赖背景知识，纯条带→等位基因映射</div>
+      <div class="chain-label">四步解题</div>
+      <div class="signal-chain">
+        <span class="sc-node s1">定位标准条带</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">已知纯合个体条带位置=该等位基因</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">对照判断未知个体</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node s1">1条带=纯合 / 2条带=杂合</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">写出基因型</span>
+      </div>
+      <div class="mq-note">
+        <strong>关键认知：</strong>HbA与HbS因氨基酸替换→电荷不同→电泳迁移率不同→跑到不同位置。<br>
+        条带高度=分子迁移速率，不同等位基因→不同位置。纯合子2个相同等位基因→同一位置叠加→1条带；杂合子→2条带。
+      </div>
+      <button class="q-trigger" onclick="openDrawer('mq-162-7')"><i class="ti ti-eye"></i>查看完整题干与答案</button>
+    </div>
+  </div>
+
+  <div class="mq-card" data-topic="s2">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge s2">路径B 母题</span>
+      <span class="mq-name">RFLP双酶切+连锁→常隐致病基因定位</span>
+      <span class="mq-purity">★ 9/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-498 · RFLP分子标记·SphI_HindIII酶切·常隐系谱连锁分析·致病基因定位 · (2)(3)</div>
+      <div class="rule-box s2">核心考查：SphI+HindIII两标记完全连锁 → 从酶切片段推断父/母本与致病基因连锁的RFLP长度 → 再推断子代基因型与交换概率</div>
+      <div class="chain-label">四步解题</div>
+      <div class="signal-chain">
+        <span class="sc-node s2">系谱判遗传方式（常隐）</span><span class="sc-arrow">→</span>
+        <span class="sc-node s2">读父本SphI标记（7.0kb）</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node s2">从患者子代倒推母本标记连锁</span><span class="sc-arrow">→</span>
+        <span class="sc-node s2">确定致病基因连锁的RFLP组合</span>
+      </div>
+      <div class="mq-note">
+        <strong>关键认知：</strong>RFLP标记本身不致病，是与致病基因物理连锁的中性标记。子代只有某种标记组合→亲本对应染色体上标记必为该连锁方式（倒推法）。
+      </div>
+      <button class="q-trigger" onclick="openDrawer('mq-498')"><i class="ti ti-eye"></i>查看完整题干与答案</button>
+    </div>
+  </div>
+
+  <div class="mq-card" data-topic="s3">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge s3">路径C 母题</span>
+      <span class="mq-name">STR标记+伴X连锁→血友病间接诊断</span>
+      <span class="mq-purity">★ 8/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-109 · STR短串联重复序列亲子鉴定与葡萄胎染色体来源分析及伴X遗传连锁判断 · (3)</div>
+      <div class="rule-box s3">核心考查：血友病(伴X隐)+DX1205(X染色体STR)完全连锁 → 追踪STR等位基因传递=追踪致病基因传递 → 可间接诊断未出生个体</div>
+      <div class="chain-label">四步解题</div>
+      <div class="signal-chain">
+        <span class="sc-node s3">确认血友病=伴X隐</span><span class="sc-arrow">→</span>
+        <span class="sc-node s3">读DX1205分型（X染色体STR）</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node s3">追踪患者X染色体上的STR等位基因</span><span class="sc-arrow">→</span>
+        <span class="sc-node s3">间接诊断=高概率推断（非100%）</span>
+      </div>
+      <div class="mq-note">
+        <strong>性别差异：</strong>男性XY→X染色体STR只有一条带；女性XX→可能一或两条带。<br>
+        <strong>连锁诊断本质：</strong>因为STR与致病基因物理位置接近→很少被互换分开→STR传递≈致病基因传递，但不是100%确定。
+      </div>
+      <button class="q-trigger" onclick="openDrawer('mq-109-3')"><i class="ti ti-eye"></i>查看完整题干与答案</button>
+    </div>
+  </div>
+</div>
+
+<!-- 变式阶梯 -->
+<div id="page-ladder" class="page">
+  <div class="ladder-note">从"纯条带判读"到"系谱+RFLP串联"到"系谱·条带·概率三合一闭环"，逐步强化分子证据判读能力。</div>
+
+  <div class="ladder-section-label"><i class="ti ti-stairs"></i>路径A · 直接电泳 变式阶梯</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l0">母题<br>10/10</div>
+      <div class="ladder-card" onclick="openDrawer('mq-162-7')">
+        <div class="ladder-card-name">EC-162 镰状细胞·电泳条带→HbA/HbS基因型</div>
+        <div class="ladder-card-sub">子问题(7)·纯条带位置→等位基因映射，无系谱干扰</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">基础变式<br>8/10</div>
+      <div class="ladder-card" onclick="openDrawer('v-134-2')">
+        <div class="ladder-card-name">EC-134 CRIA综合征·电泳条带验证常染色体显性遗传</div>
+        <div class="ladder-card-sub">子问题(2)·电泳条带作为系谱判型的分子验证——从电泳图读出基因型→印证系谱推断</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">进阶变式<br>7/10</div>
+      <div class="ladder-card" onclick="openDrawer('v-162-8')">
+        <div class="ladder-card-name">EC-162 条带读图+系谱概率推断</div>
+        <div class="ladder-card-sub">子问题(8)·对未检测个体推断"出现两种条带的概率"，条带判读叠加概率计算</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l3">综合变式<br>5/10</div>
+      <div class="ladder-card" onclick="openDrawer('v-162-67')">
+        <div class="ladder-card-name">EC-162 系谱判遗传方式→条带验证闭环</div>
+        <div class="ladder-card-sub">子问题(6)+(7)·先系谱推断遗传方式→再用分子条带验证——表型推理+分子证据双向印证</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ladder-section-label"><i class="ti ti-stairs"></i>路径B · RFLP 变式阶梯</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l0">母题<br>9/10</div>
+      <div class="ladder-card" onclick="openDrawer('mq-498')">
+        <div class="ladder-card-name">EC-498 RFLP双酶切+常隐系谱·致病基因定位</div>
+        <div class="ladder-card-sub">子问题(2)(3)·SphI+HindIII两标记连锁分析</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">基础变式<br>10/10</div>
+      <div class="ladder-card" onclick="openDrawer('v-482')">
+        <div class="ladder-card-name">EC-482 豌豆Ww基因RFLP酶切·WW/Ww/ww条带直接判读</div>
+        <div class="ladder-card-sub">子问题(49)(50)·纯酶切无系谱——RFLP最基础教学案例，酶切→基因型直接对应</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">进阶变式<br>5/10</div>
+      <div class="ladder-card" onclick="openDrawer('v-143')">
+        <div class="ladder-card-name">EC-143 多囊肾病系谱判型→基因型→RFLP验证三串联</div>
+        <div class="ladder-card-sub">子问题(1)+(2)+(4)·系谱判型→基因型确定→RFLP验证，三步串联叠加干扰</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ladder-section-label"><i class="ti ti-stairs"></i>路径C · STR 变式阶梯</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l0">母题<br>8/10</div>
+      <div class="ladder-card" onclick="openDrawer('mq-109-3')">
+        <div class="ladder-card-name">EC-109 STR+伴X连锁·血友病间接诊断</div>
+        <div class="ladder-card-sub">子问题(3)·DX1205 STR与血友病致病基因共分离→间接诊断</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">基础变式<br>8/10</div>
+      <div class="ladder-card" onclick="openDrawer('v-109-1')">
+        <div class="ladder-card-name">EC-109 STR基本原理·亲子鉴定逻辑</div>
+        <div class="ladder-card-sub">子问题(1)·纯知识判断——STR为何适用遗传标记，不变性/多位点/有丝分裂分配/X染色体STR概率</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l3">综合变式<br>7/10</div>
+      <div class="ladder-card" onclick="openDrawer('v-109-4')">
+        <div class="ladder-card-name">EC-109 STR+葡萄胎染色体来源诊断</div>
+        <div class="ladder-card-sub">子问题(4)·DYS219(Y染色体STR)对母源比对无诊断意义——综合染色体来源推断</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 自查清单 -->
+<div id="page-check" class="page">
+  <div class="progress-row">
+    <span style="font-size:13px;color:var(--tx2);">掌握进度</span>
+    <span id="check-count" style="font-size:13px;color:var(--tx2);">0 / 5</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="check-bar"></div></div>
+  <div class="checklist" id="checklist">
+    <div class="check-item" onclick="toggleCheck(this,0)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能从电泳图根据条带数判断纯合/杂合：1条带=纯合，2条带=杂合（→ 概览·路径A）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,1)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我理解RFLP原理并能区分"突变创建酶切位点（条带增多）"与"突变破坏酶切位点（条带减少）"（→ 高频易错2）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,2)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能从多酶切+系谱中用"倒推法"推断致病基因与哪个RFLP标记连锁（→ 路径B母题EC-498）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,3)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我知道STR在遗传诊断中"匹配=不排除"≠"确认亲子"，需要多位点联合计算（→ 高频易错4）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,4)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">遇到"酶切→电泳→基因型"链时我不跳步：先判断技术类型→再按路径A/B/C逻辑解读（→ 概览·三条路线）</div>
+    </div>
+  </div>
+  <div class="action-row">
+    <button class="action-btn" onclick="checkAll()">全部勾选</button>
+    <button class="action-btn" onclick="clearAll()">清空重来</button>
+  </div>
+</div>
+</div>
+
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <span class="drawer-badge" id="drawer-badge"></span>
+    <span class="drawer-title" id="drawer-title"></span>
+    <button class="drawer-close" onclick="closeDrawer()"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="drawer-ec-ref" id="drawer-ref"><i class="ti ti-file-description"></i><span></span></div>
+    <div class="drawer-stem" id="drawer-stem"></div>
+    <div class="drawer-sub" id="drawer-focus">
+      <div class="drawer-sub-label">考查重点</div>
+      <div id="drawer-focus-text"></div>
+    </div>
+    <div class="drawer-answer" id="drawer-answer">
+      <div class="drawer-answer-label">核心答案</div>
+      <div id="drawer-answer-text"></div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="drawer-btn" onclick="toggleAnswer()">显示 / 隐藏答案</button>
+    <button class="drawer-btn primary" onclick="closeDrawer()">关闭</button>
+  </div>
+</div>
+
+<div class="lb-overlay" id="lb-overlay" onclick="closeLightbox()">
+  <button class="lb-close" onclick="closeLightbox()">×</button>
+  <img class="lb-img" id="lb-img" src="" alt="">
+</div>
+
+<script>
+const QUESTIONS = {
+  'mq-162-7':{badge:'路径A 母题',badgeStyle:'background:var(--accent-l);color:var(--accent-d);',name:'EC-162 镰状细胞·电泳条带→HbA/HbS',ref:'EC-20260520-162 · 子问题(7)',stem:`某遗传病研究中，对家系1~4号个体进行Hb蛋白电泳检测，结果如表2所示（条带1位置高于条带2）。已知正常个体HbA与镰状细胞HbS因氨基酸替换导致电荷不同，电泳迁移率不同。\n\n(7) 条带1含有____基因（HbA/HbS）？\n请根据表2中电泳结果判断3号个体的基因型。`,focus:`① 相同位置条带=相同等位基因产物\n② 已知纯合个体（患者/正常人）条带位置→标定A/S位置\n③ 1条带=纯合（HbAHbA或HbSHbS），2条带=杂合（HbAHbS）\n④ 对照标准位置判断目标个体基因型`,answer:`条带1含HbA基因（正常等位基因，分子量较大/电荷差异→迁移率与HbS不同，通常正常HbA跑到固定位置）。\n\n判断逻辑：正常个体（无症状纯合）只有条带1=HbA；患者（纯合症状）只有条带2=HbS；携带者出现两条带=杂合HbAHbS。\n\n3号个体按表2条带情况：若出现两条带→HbAHbS（携带者）；若只有条带1→HbAHbA（正常纯合）。`},
+  'mq-498':{badge:'路径B 母题',badgeStyle:'background:var(--purple-l);color:var(--purple-d);',name:'EC-498 RFLP双酶切+连锁·致病基因定位',ref:'EC-20260524-498 · SphI_HindIII酶切·常隐系谱连锁分析 · (2)(3)',stem:`某常染色体隐性遗传病家系中，致病基因附近有两个完全连锁的RFLP标记（SphI和HindIII）。\n家系成员电泳分型结果（单位kb）：\n- 父本：SphI=7.0（纯合），HindIII=4.2/4.0（杂合）\n- 母本：SphI=7.0（纯合），HindIII待定\n- 子代1（患者）：SphI=7.0，HindIII=4.2/4.0\n- 子代2（表型正常）：SphI=7.0，HindIII=4.2\n\n(2) 父本两条染色体上，与致病基因连锁的RFLP标记组合各是什么？\n(3) 子代产生携带者的概率是多少？`,focus:`① 常隐遗传：无病父母×→有病孩子\n② 父本SphI纯合7.0→两条染色体均含7.0标记；HindIII杂合→4.2/4.0各在一条染色体上\n③ 子代1为患者（隐性纯合）→必须从父母各获得一条携带致病基因的染色体\n④ 从子代标记组合倒推亲本连锁关系`,answer:`(2) 父本致病基因连锁分析：\n父本HindIII=4.2/4.0杂合→两条染色体上标记不同\n子代1（患者）HindIII=4.2/4.0→同时含4.2和4.0→分别来自父本和母本\n设：父本携带致病基因的染色体上HindIII=4.0（与致病基因连锁）\n  则父本另一条正常染色体上HindIII=4.2（与正常基因连锁）\n父本连锁关系：[致病基因·7.0·4.0]  vs  [正常基因·7.0·4.2]\n\n(3) 携带者概率：\n子代中表型正常且携带一个致病基因=携带者\n理论上正常子代中：1/3正常纯合，2/3携带者（常规隐性遗传）\n结合RFLP可直接从分子分型判断，而非统计概率推算。`},
+  'mq-109-3':{badge:'路径C 母题',badgeStyle:'background:var(--amber-l);color:var(--amber-d);',name:'EC-109 STR标记+伴X连锁·血友病间接诊断',ref:'EC-20260519-109 · STR亲子鉴定与葡萄胎染色体来源分析及伴X遗传连锁判断 · (3)',stem:`血友病为伴X染色体隐性遗传（致病基因在X染色体上）。DX1205为X染色体上的STR标记，与血友病致病基因紧密连锁。\n\n某家系中：\n- 患病男孩甲：DX1205 STR分型为等位基因"112"\n- 携带者母亲：DX1205 STR分型为"112/120"\n- 父亲正常：DX1205 STR分型为"120"\n\n(3) 若该家系中一未出生胎儿（女性）的DX1205 STR分型为"112/120"，分析该胎儿是血友病携带者的可能性。`,focus:`① 血友病=伴X隐，致病基因在X染色体上\n② DX1205与血友病基因完全（紧密）连锁→DX1205传递≈血友病基因传递\n③ 母亲携带者：含致病基因的X染色体上STR=112；含正常基因的X染色体上STR=120\n④ 胎儿"112/120"→继承了母亲的两种X染色体`,answer:`(3) 分析：\n母亲携带者的两条X染色体：\n- X(致病基因·STR=112)\n- X(正常基因·STR=120)\n\n父亲正常：X(正常基因·STR=120)，Y\n\n胎儿（女性，XX）分型"112/120"：\n- 112来自母亲（与致病基因连锁）→该X染色体很可能携带血友病基因\n- 120来自父亲（正常基因）\n\n结论：该胎儿很可能是血友病携带者（含一个致病X和一个正常X）。\n\n重要限制：这是"高概率推断"而非"确定性诊断"——若DX1205与致病基因之间在母亲的减数分裂中发生了交叉互换，则连锁关系被打破，诊断失效（概率极低但不为零）。`},
+  'v-134-2':{badge:'L1 基础变式',badgeStyle:'background:var(--purple-l);color:var(--purple-d);',name:'EC-134 电泳条带验证系谱判型（常显）',ref:'EC-20260519-134 · CRIA综合征PIPK1基因突变·系谱电泳确认 · (2)',stem:`CRIA综合征由PIPK1基因突变引起（常染色体显性遗传）。对家系成员进行基因电泳检测。\n\n(2) 若电泳图显示：\n- 正常个体：只有1条带（位置A）\n- 患者纯合：只有1条带（位置B）\n- 患者杂合：2条带（位置A和B）\n\n请根据电泳图验证该病的遗传方式，并判断图中各成员基因型。`,focus:`① 常染色体显性遗传→患者基因型为Aa（杂合，2条带）或AA（纯合，1条带B位）\n② 电泳作为系谱判型的分子验证——从电泳→基因型→印证表型推断\n③ 分子证据与系谱双向验证：系谱判型→预测基因型→电泳检验`,answer:`验证过程：\n常染色体显性遗传预测：患者应含突变等位基因（显性），表现为电泳图中出现条带B或含B的组合。\n\n电泳观察：\n- 正常家系成员：1条带（位置A）→AA纯合，只含正常等位基因\n- 患病成员：2条带（A+B）→Aa杂合，含一个突变等位基因→显性表现\n\n验证结论：电泳结果与常染色体显性遗传预测一致——患者均为Aa杂合子，正常人为AA，符合常显遗传方式。`},
+  'v-162-8':{badge:'L2 进阶变式',badgeStyle:'background:var(--amber-l);color:var(--amber-d);',name:'EC-162 条带读图+系谱概率推断',ref:'EC-20260520-162 · 子问题(8)',stem:`续EC-162 镰状细胞贫血家系。\n\n(8) 对家系中未检测的个体（表型正常），根据其父母电泳分型结果，推断该个体"电泳出现两种条带（HbAHbS杂合）"的概率是多少？`,focus:`① 先从父母电泳结果确定父母基因型\n② 再用孟德尔遗传比例推算后代基因型概率\n③ "两种条带"=杂合子HbAHbS=携带者`,answer:`步骤：\n1. 读父母基因型：\n   - 若父亲电泳=2条带→HbAHbS（携带者）\n   - 若母亲电泳=2条带→HbAHbS（携带者）\n\n2. HbAHbS × HbAHbS后代基因型比：\n   HbAHbA(1) : HbAHbS(2) : HbSHbS(1) = 1:2:1\n   表型正常（排除HbSHbS患者）→已知正常的条件下：\n   P(HbAHbA|正常) = 1/3，P(HbAHbS|正常) = 2/3\n\n3. 该个体电泳出现两种条带（杂合子HbAHbS）的概率 = 2/3\n\n（注：具体数值取决于父母实际基因型，此处以两者均为携带者为例。）`},
+  'v-162-67':{badge:'L3 综合变式',badgeStyle:'background:var(--coral-l);color:var(--coral-d);',name:'EC-162 系谱判遗传方式→条带验证闭环',ref:'EC-20260520-162 · 子问题(6)+(7)',stem:`EC-162 镰状细胞贫血家系综合分析。\n\n(6) 根据家系图分析：镰状细胞贫血是常染色体隐性遗传还是常染色体显性遗传？理由是什么？\n\n(7) 根据(6)的判断，预测3号携带者的电泳图应呈现几条带？对照表2实际电泳结果验证你的预测。`,focus:`① 先从系谱（表型遗传模式）判断遗传方式\n② 再根据遗传方式预测各成员基因型\n③ 再用电泳结果验证预测——分子证据闭环`,answer:`(6) 遗传方式判断：\n如果双亲无病但后代有患者→常染色体隐性遗传（排除显性，因为显性患者必须有一个显性基因且表现症状）。\n若患者均为男性且遗传自母亲→可能伴X隐，需进一步分析。\n\n镰状细胞贫血已知为常染色体隐性（HbS为隐性等位基因），系谱中无病父母生有病孩子→印证常隐。\n\n(7) 预测：\n3号携带者（HbAHbS杂合子）→含两种等位基因→应出现2条带（条带1=HbA位置，条带2=HbS位置）。\n\n验证：对照表2，3号泳道若确实显示2条带→预测成立，分子证据与系谱推断双向印证。`},
+  'v-482':{badge:'L1 基础变式',badgeStyle:'background:var(--purple-l);color:var(--purple-d);',name:'EC-482 豌豆Ww基因RFLP·WW/Ww/ww条带判读',ref:'EC-20260523-482 · 豌豆Ww基因RFLP酶切电泳·条带→基因型推断 · (49)(50)',stem:`豌豆圆粒(W)对皱粒(w)为显性。对豌豆Ww基因进行RFLP分析：\n- W等位基因：无酶切位点→不被切→1条带（较大片段）\n- w等位基因：含酶切位点→被切成两个片段→2条带\n\n(49) WW纯合圆粒豌豆的电泳图应出现几条带？各条带来自哪个等位基因？\n(50) Ww杂合圆粒豌豆的电泳图应出现几条带？为什么？`,focus:`① 最基础RFLP教学案例：无系谱干扰，纯酶切→基因型\n② W等位基因无酶切位点→1条带（大片段）；w等位基因有酶切位点→2条带（2个小片段）\n③ WW：只有W等位基因→1条带；Ww：含W和w两种→3条带（W产生1大条带+w产生2小条带）`,answer:`(49) WW纯合圆粒：\n两条染色体均含W等位基因（无酶切位点）→各产生1条大片段带→电泳显示1条带（两个相同大片段叠加在同一位置）。\n\n(50) Ww杂合圆粒：\nW等位基因：无酶切位点→产生1条大片段带\nw等位基因：有酶切位点→被切成2个片段→产生2条小片段带\n共3条带（1大+2小），分别来自：\n- 条带1（最大）：W等位基因完整片段\n- 条带2（中等）：w等位基因酶切片段之一\n- 条带3（最小）：w等位基因酶切片段之二\n\n这就是为什么RFLP杂合子可能出现3条带而非2条带——条带数=等位基因酶切后的片段总数，不等于等位基因数。`},
+  'v-143':{badge:'L2 进阶变式',badgeStyle:'background:var(--amber-l);color:var(--amber-d);',name:'EC-143 多囊肾病·系谱→基因型→RFLP三串联',ref:'EC-20260519-143 · 多囊肾病PKD甲乙两家系常染色体隐性显性遗传及限制酶E切割片段 · (1)+(2)+(4)',stem:`两个多囊肾病家系：\n- 甲家系：符合常染色体隐性遗传（PKD-AR型）\n- 乙家系：符合常染色体显性遗传（PKD-AD型）\n\n(1) 分别判断甲乙两家系的遗传方式，写出判断依据。\n(2) 确定甲家系患者的基因型。\n(4) 用限制酶E对甲家系成员的目的基因片段酶切后电泳，预测患者与携带者的条带数差异。`,focus:`① 三步串联：系谱判型→基因型确定→RFLP验证，每步都会干扰\n② 系谱判型先于分子分析——遗传方式是解读分子证据的框架\n③ RFLP验证步骤：已知基因型→预测酶切结果→与实验比对`,answer:`(1) 遗传方式判断：\n甲家系：无病父母有病孩子→常染色体隐性遗传\n乙家系：代代均有患者，病父子（不跳代）→常染色体显性遗传\n\n(2) 甲家系患者基因型：\n常隐遗传，设致病基因为a→患者基因型=aa（隐性纯合）\n\n(4) 限制酶E切割预测：\n设：a等位基因含酶切位点，A等位基因无酶切位点\n- aa患者：2个a→各被切→出现2条带（2个片段）\n- Aa携带者：1个A（1大带）+1个a（2小带）→共3条带\n- AA正常：1个A→1条带（大片段）\n\n差异：患者=2条带；携带者=3条带；正常=1条带。`},
+  'v-109-1':{badge:'L1 基础变式',badgeStyle:'background:var(--purple-l);color:var(--purple-d);',name:'EC-109 STR基本原理·为何适用遗传标记',ref:'EC-20260519-109 · 子问题(1)',stem:`短串联重复序列（STR）被广泛应用于亲子鉴定和遗传连锁分析。\n\n(1) 判断下列关于STR的描述，哪些是正确的：\nA. STR位点在减数分裂时重复次数不易改变\nB. 亲子鉴定只需一个STR位点即可确定\nC. STR在有丝分裂中随染色体分配传递给子细胞\nD. X染色体上的STR在男性中只有一个等位基因`,focus:`① STR=短串联重复，不同个体重复次数不同→多态性\n② STR的遗传特性：不易突变（重复次数稳定）、按孟德尔规律传递（有丝分裂随染色体分配）\n③ 多位点必要性：单一位点偶然匹配概率非零，需多位点联合降低随机匹配率\n④ 性别差异：X染色体STR在男性只有一条X→只有一个等位基因`,answer:`正确描述：A、C、D\n\nA正确：STR重复次数在减数分裂时相对稳定（突变率很低），因此可作为稳定的遗传标记。\n\nB错误：单一STR位点不能确认亲子，因为人群中存在偶然匹配的可能（随机匹配概率不为零）。实际鉴定需要多个位点联合，使随机匹配概率<10⁻⁸。\n\nC正确：STR随染色体在有丝分裂中复制并分配给子细胞，遵循孟德尔分离定律。\n\nD正确：X染色体STR在男性（XY）只存在于X染色体上，男性只有一个等位基因（一条带）；女性（XX）可能有两个不同等位基因（两条带）。`},
+  'v-109-4':{badge:'L3 综合变式',badgeStyle:'background:var(--coral-l);color:var(--coral-d);',name:'EC-109 STR+葡萄胎·DYS219染色体来源诊断',ref:'EC-20260519-109 · 子问题(4)',stem:`完全性葡萄胎（绒毛膜癌前病变）的染色体来源有两种可能：\n① 雄核发育型：1个精子受精无核卵→染色体全部来自父方\n② 双精子受精型：2个精子受精无核卵→染色体全来自父方但来自两个精子\n\nDX1205（X染色体STR）和DYS219（Y染色体STR）用于葡萄胎染色体来源分析。\n\n(4) 对葡萄胎样本进行DX1205和DYS219 STR分型：\n- 葡萄胎样本：DX1205=120，DYS219=无条带\n- 患者母亲：DX1205=112/120\n- 患者父亲：DX1205=112，DYS219=某条带\n\n分析此葡萄胎的染色体来源类型及DYS219分型的诊断意义。`,focus:`① Y染色体STR(DYS219)对鉴定"是否来自母源X"没有诊断意义——因为完全性葡萄胎的X染色体均来自父方\n② DX1205=120→与父亲X染色体STR对比→判断是否纯合（雄核发育1精子）或杂合（2精子）\n③ 综合染色体来源推断：X染色体STR纯合→雄核发育型；杂合→双精子型`,answer:`分析：\n\n1. DYS219分型的诊断意义：\n完全性葡萄胎染色体全部来自父方，不含母方X染色体。\nDYS219在Y染色体上，用于检测Y染色体STR。\n若葡萄胎含Y染色体（XY型）→DYS219有条带；若为XX型→DYS219无条带。\n此例DYS219=无条带→此葡萄胎为XX型（来自两条X染色体，无Y染色体），DYS219对"母源还是父源X"无诊断意义（因为不管哪种类型都没有母源X）。\n\n2. 染色体来源推断（用DX1205）：\n- 样本DX1205=120（只有一种等位基因）→纯合\n- 父亲DX1205=112，母亲=112/120\n- 样本120等位基因=来自母亲（120）或父亲（无112所以父亲DX1205≠120）？\n  实际应与父亲DX1205对比确认。\n- 若样本DX1205纯合→雄核发育型（单精子→染色体自我复制）\n- 若样本DX1205杂合（两种等位基因）→双精子型`}
+};
+function switchTab(tab,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));document.getElementById('page-'+tab).classList.add('active');btn.classList.add('active');}
+function toggleMQ(header){const body=header.nextElementSibling;const chevron=header.querySelector('.mq-chevron');body.classList.toggle('open');chevron.classList.toggle('open');}
+function filterMQ(topic,btn){document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.mq-card').forEach(card=>{card.style.display=(topic==='all'||card.dataset.topic===topic)?'':'none';});}
+function openDrawer(key){const q=QUESTIONS[key];if(!q)return;document.getElementById('drawer-badge').textContent=q.badge;document.getElementById('drawer-badge').style.cssText=q.badgeStyle;document.getElementById('drawer-title').textContent=q.name;document.getElementById('drawer-ref').querySelector('span').textContent=q.ref;document.getElementById('drawer-stem').textContent=q.stem;document.getElementById('drawer-focus-text').textContent=q.focus;document.getElementById('drawer-answer-text').textContent=q.answer;document.getElementById('drawer-answer').classList.remove('show');document.getElementById('drawer').classList.add('open');document.getElementById('drawer-overlay').classList.add('open');document.body.style.overflow='hidden';}
+function closeDrawer(){document.getElementById('drawer').classList.remove('open');document.getElementById('drawer-overlay').classList.remove('open');document.body.style.overflow='';}
+function toggleAnswer(){document.getElementById('drawer-answer').classList.toggle('show');}
+function openLightbox(src,alt){document.getElementById('lb-img').src=src;document.getElementById('lb-img').alt=alt;document.getElementById('lb-overlay').classList.add('open');document.body.style.overflow='hidden';}
+function closeLightbox(){document.getElementById('lb-overlay').classList.remove('open');document.body.style.overflow='';}
+const STORAGE_KEY='T03_M4_checks';const TOTAL=5;
+function loadChecks(){try{const d=JSON.parse(localStorage.getItem(STORAGE_KEY));return Array.isArray(d)?d:Array(TOTAL).fill(false);}catch{return Array(TOTAL).fill(false);}}
+function saveChecks(arr){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(arr));}catch{}}
+function updateProgress(){const items=document.querySelectorAll('.check-item');const done=Array.from(items).filter(i=>i.classList.contains('done')).length;document.getElementById('check-count').textContent=done+' / '+TOTAL;document.getElementById('check-bar').style.width=(done/TOTAL*100)+'%';}
+function toggleCheck(item,idx){item.classList.toggle('done');const arr=loadChecks();arr[idx]=item.classList.contains('done');saveChecks(arr);updateProgress();}
+function checkAll(){document.querySelectorAll('.check-item').forEach(item=>item.classList.add('done'));saveChecks(Array(TOTAL).fill(true));updateProgress();}
+function clearAll(){document.querySelectorAll('.check-item').forEach(item=>item.classList.remove('done'));saveChecks(Array(TOTAL).fill(false));updateProgress();}
+(function(){const arr=loadChecks();document.querySelectorAll('.check-item').forEach((item,i)=>{if(arr[i])item.classList.add('done');});updateProgress();})();
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(document.getElementById('lb-overlay').classList.contains('open'))closeLightbox();else if(document.getElementById('drawer').classList.contains('open'))closeDrawer();}});
+</script>
+</body>
+</html>

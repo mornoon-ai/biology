@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T04_M2 · 内分泌分级调节</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent:#993C1D; --accent-l:#FAECE7; --accent-m:#E09080; --accent-d:#712B13;
+  --teal:#0F6E56; --teal-l:#E1F5EE; --teal-d:#085041;
+  --amber:#BA7517; --amber-l:#FAEEDA; --amber-d:#633806;
+  --blue:#185FA5; --blue-l:#E6F1FB; --blue-d:#0C447C;
+  --bg:#ffffff; --bg2:#f7f7f5; --bg3:#f1efe8;
+  --tx:#1a1a18; --tx2:#5f5e5a; --tx3:#888780;
+  --bd:rgba(0,0,0,0.10); --bd2:rgba(0,0,0,0.18);
+  --r-sm:6px; --r-md:8px; --r-lg:12px; --r-xl:16px;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#1c1c1a;--bg2:#252523;--bg3:#2c2c2a;
+    --tx:#f0efea;--tx2:#b4b2a9;--tx3:#888780;
+    --bd:rgba(255,255,255,0.09);--bd2:rgba(255,255,255,0.16);
+    --accent-l:#4A1B0C;--accent-d:#F5C4B3;
+    --teal-l:#04342C;--teal-d:#9FE1CB;
+    --amber-l:#412402;--amber-d:#FAC775;
+    --blue-l:#042C53;--blue-d:#B5D4F4;
+  }
+}
+body{font-family:var(--font);font-size:15px;line-height:1.6;color:var(--tx);background:var(--bg3);min-height:100vh;}
+.app{max-width:800px;margin:0 auto;background:var(--bg);min-height:100vh;}
+
+/* ── Header & Nav ── */
+.site-header{padding:1.25rem 1.5rem 0;background:var(--bg);border-bottom:0.5px solid var(--bd);position:sticky;top:0;z-index:20;}
+.header-top{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.header-icon{background:var(--accent-l);border-radius:var(--r-md);padding:6px 8px;display:flex;align-items:center;justify-content:center;}
+.header-icon i{font-size:20px;color:var(--accent);}
+.header-meta{font-size:12px;color:var(--tx3);}
+.header-title{font-size:17px;font-weight:500;color:var(--tx);}
+.header-id{margin-left:auto;font-size:11px;color:var(--tx3);background:var(--bg2);padding:3px 9px;border-radius:var(--r-sm);}
+.nav-tabs{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.nav-tab{padding:.6rem 1.1rem;font-size:13px;color:var(--tx2);cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;font-family:var(--font);white-space:nowrap;transition:color .15s,border-color .15s;}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500;}
+.nav-tab:hover:not(.active){color:var(--tx);}
+
+/* ── Pages ── */
+.page{display:none;padding:1.5rem;}
+.page.active{display:block;}
+
+/* ── Memory Card ── */
+.memory-section{margin-bottom:1.5rem;}
+.memory-card{border:0.5px solid var(--bd);border-radius:var(--r-xl);overflow:hidden;background:var(--bg);}
+.memory-img{width:100%;display:block;max-height:300px;object-fit:contain;background:var(--bg3);cursor:zoom-in;transition:opacity .15s;}
+.memory-img:hover{opacity:.9;}
+.memory-footer{padding:.85rem 1rem;display:flex;align-items:center;gap:10px;border-top:0.5px solid var(--bd);}
+.memory-label{font-size:13px;font-weight:500;color:var(--tx);flex:1;}
+.audio-player{display:flex;align-items:center;gap:8px;}
+audio{height:32px;width:220px;}
+audio::-webkit-media-controls-panel{background:var(--bg2);}
+/* ── Lightbox ── */
+.lb-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:200;display:none;align-items:center;justify-content:center;cursor:zoom-out;}
+.lb-overlay.open{display:flex;}
+.lb-img{max-width:92vw;max-height:92vh;object-fit:contain;border-radius:var(--r-md);box-shadow:0 8px 40px rgba(0,0,0,.5);}
+.lb-close{position:fixed;top:16px;right:20px;background:none;border:none;color:#fff;font-size:28px;cursor:pointer;line-height:1;opacity:.7;transition:opacity .15s;}
+.lb-close:hover{opacity:1;}
+
+/* ── Overview cards ── */
+.section-title{font-size:13px;font-weight:500;color:var(--tx2);display:flex;align-items:center;gap:7px;margin-bottom:1rem;text-transform:uppercase;letter-spacing:.04em;}
+.section-divider{height:0.5px;background:var(--bd);margin:1.5rem 0;}
+.signal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:1.5rem;}
+.signal-card{background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;}
+.signal-label{font-size:11px;color:var(--tx3);letter-spacing:.04em;margin-bottom:.4rem;text-transform:uppercase;}
+.signal-tag{font-size:13px;color:var(--tx);margin-bottom:3px;}
+.mode-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:1.5rem;}
+.mode-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.85rem 1rem;border-left-width:3px;}
+.mode-card-label{font-size:11px;font-weight:500;margin-bottom:.3rem;}
+.mode-card-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.trap-list{display:flex;flex-direction:column;gap:7px;}
+.trap-item{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.55;}
+.trap-icon{color:#E24B4A;font-size:15px;flex-shrink:0;margin-top:1px;}
+
+/* ── Mother Questions ── */
+.filter-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem;}
+.filter-btn{padding:5px 13px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx2);font-family:var(--font);transition:all .15s;}
+.filter-btn.active{background:var(--accent-l);color:var(--accent-d);border-color:var(--accent-m);font-weight:500;}
+.mq-card{border:0.5px solid var(--bd);border-radius:var(--r-lg);background:var(--bg);margin-bottom:.85rem;overflow:hidden;}
+.mq-header{padding:.9rem 1.1rem;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;transition:background .15s;}
+.mq-header:hover{background:var(--bg2);}
+.mq-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);white-space:nowrap;}
+.mq-badge.hpa{background:var(--accent-l);color:var(--accent-d);}
+.mq-badge.thyroid{background:var(--amber-l);color:var(--amber-d);}
+.mq-badge.feedback{background:var(--teal-l);color:var(--teal-d);}
+.mq-badge.stress{background:var(--blue-l);color:var(--blue-d);}
+.mq-name{font-size:14px;font-weight:500;color:var(--tx);flex:1;}
+.mq-purity{font-size:12px;color:var(--tx3);flex-shrink:0;}
+.mq-chevron{color:var(--tx3);font-size:16px;transition:transform .2s;flex-shrink:0;}
+.mq-chevron.open{transform:rotate(180deg);}
+.mq-body{display:none;padding:.75rem 1.1rem 1.1rem;border-top:0.5px solid var(--bd);}
+.mq-body.open{display:block;}
+.mq-source{font-size:12px;color:var(--tx3);margin-bottom:.65rem;}
+.rule-box{background:var(--accent-l);border-left:3px solid var(--accent);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:.65rem .9rem;font-size:13px;color:var(--accent-d);margin:.75rem 0;line-height:1.65;}
+.chain-label{font-size:12px;font-weight:500;color:var(--tx2);margin:.75rem 0 .4rem;text-transform:uppercase;letter-spacing:.04em;}
+.signal-chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:6px;}
+.sc-node{background:var(--bg2);border-radius:var(--r-sm);padding:3px 9px;font-size:13px;color:var(--tx);}
+.sc-node.hpa{background:var(--accent-l);color:var(--accent-d);}
+.sc-node.thyroid{background:var(--amber-l);color:var(--amber-d);}
+.sc-node.feedback{background:var(--teal-l);color:var(--teal-d);}
+.sc-node.stress{background:var(--blue-l);color:var(--blue-d);}
+.sc-arrow{color:var(--tx3);font-size:13px;}
+.mq-note{font-size:13px;color:var(--tx2);margin-top:.75rem;line-height:1.6;}
+
+/* ── Question Trigger Button ── */
+.q-trigger{display:inline-flex;align-items:center;gap:5px;margin-top:.75rem;padding:6px 12px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;color:var(--tx2);cursor:pointer;font-family:var(--font);transition:all .15s;}
+.q-trigger:hover{background:var(--bg2);color:var(--tx);border-color:var(--bd2);}
+.q-trigger i{font-size:14px;}
+
+/* ── Ladder ── */
+.ladder-section-label{font-size:13px;font-weight:500;color:var(--tx2);margin-bottom:.85rem;display:flex;align-items:center;gap:7px;}
+.ladder-rows{display:flex;flex-direction:column;gap:8px;margin-bottom:1rem;}
+.ladder-row{display:grid;grid-template-columns:64px 1fr;gap:10px;align-items:start;}
+.ladder-level{font-size:11px;font-weight:500;padding:6px 4px;border-radius:var(--r-sm);text-align:center;line-height:1.4;}
+.l1{background:var(--teal-l);color:var(--teal-d);}
+.l2{background:var(--accent-l);color:var(--accent-d);}
+.l3{background:var(--amber-l);color:var(--amber-d);}
+.ladder-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.65rem .9rem;background:var(--bg);}
+.ladder-card-name{font-size:13px;font-weight:500;color:var(--tx);}
+.ladder-card-sub{font-size:12px;color:var(--tx3);margin-top:3px;line-height:1.5;}
+.ladder-note{background:var(--bg2);border-radius:var(--r-md);padding:.65rem .9rem;font-size:12px;color:var(--tx2);margin-bottom:1rem;line-height:1.55;}
+
+/* ── Self-check ── */
+.progress-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem;}
+.progress-bar{height:5px;border-radius:3px;background:var(--bg2);margin-bottom:1.25rem;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;background:var(--accent);width:0%;transition:width .3s;}
+.checklist{display:flex;flex-direction:column;gap:7px;}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:.7rem .9rem;border:0.5px solid var(--bd);border-radius:var(--r-md);background:var(--bg);cursor:pointer;transition:background .15s;}
+.check-item.done{background:var(--bg2);}
+.check-box{width:18px;height:18px;border:1.5px solid var(--bd2);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .15s;}
+.check-item.done .check-box{background:var(--accent);border-color:var(--accent);}
+.check-box i{font-size:11px;color:#fff;display:none;}
+.check-item.done .check-box i{display:block;}
+.check-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.check-item.done .check-text{color:var(--tx3);text-decoration:line-through;}
+.action-row{margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:8px;}
+.action-btn{padding:7px 14px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.action-btn:hover{background:var(--bg2);}
+
+/* ══ DRAWER OVERLAY ══ */
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s;}
+.drawer-overlay.open{opacity:1;pointer-events:all;}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100vw);background:var(--bg);z-index:101;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden;}
+.drawer.open{transform:translateX(0);}
+.drawer-header{padding:1rem 1.25rem;border-bottom:0.5px solid var(--bd);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.drawer-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);}
+.drawer-title{font-size:14px;font-weight:500;color:var(--tx);flex:1;line-height:1.4;}
+.drawer-close{background:none;border:none;cursor:pointer;color:var(--tx2);padding:4px;border-radius:var(--r-sm);display:flex;align-items:center;transition:background .15s;}
+.drawer-close:hover{background:var(--bg2);}
+.drawer-body{flex:1;overflow-y:auto;padding:1.25rem;}
+.drawer-ec-ref{font-size:12px;color:var(--tx3);margin-bottom:1rem;display:flex;align-items:center;gap:6px;}
+.drawer-stem{font-size:14px;color:var(--tx);line-height:1.75;white-space:pre-wrap;}
+.drawer-sub{font-size:13px;color:var(--tx2);background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:1rem;line-height:1.65;}
+.drawer-sub-label{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-answer{font-size:13px;color:var(--tx);background:var(--accent-l);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:.75rem;line-height:1.65;display:none;}
+.drawer-answer.show{display:block;}
+.drawer-answer-label{font-size:11px;font-weight:500;color:var(--accent-d);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-footer{padding:.85rem 1.25rem;border-top:0.5px solid var(--bd);display:flex;gap:8px;flex-shrink:0;}
+.drawer-btn{flex:1;padding:8px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.drawer-btn:hover{background:var(--bg2);}
+.drawer-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+.drawer-btn.primary:hover{background:var(--accent-d);}
+
+/* ── Mobile ── */
+@media(max-width:600px){
+  .site-header{padding:1rem 1rem 0;}
+  .page{padding:1rem;}
+  .header-title{font-size:15px;}
+  .mode-grid{grid-template-columns:1fr 1fr;}
+  .ladder-row{grid-template-columns:52px 1fr;gap:8px;}
+  .action-row{flex-direction:column;}
+  .action-btn{width:100%;text-align:center;}
+  .drawer{width:100vw;}
+  audio{width:160px;}
+}
+@media(max-width:380px){
+  .mode-grid,.signal-grid{grid-template-columns:1fr;}
+}
+
+.back-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;font-size:12px;color:var(--tx2);background:var(--bg2);border:0.5px solid var(--bd2);border-radius:var(--r-md);text-decoration:none;font-family:var(--font);transition:background .15s,color .15s;white-space:nowrap;flex-shrink:0;}
+.back-btn:hover{background:var(--bg3);color:var(--tx);}
+.back-btn i{font-size:14px;}
+.memory-video{width:100%;max-height:220px;display:block;border-radius:var(--r-md);background:#000;margin-top:8px;}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- Header -->
+<header class="site-header">
+  <div class="header-top">
+    <div class="header-icon"><i class="ti ti-hierarchy" aria-hidden="true"></i></div>
+    <div>
+      <div class="header-meta">04 生理调节 · M2 轴系分级</div>
+      <div class="header-title">内分泌分级调节</div>
+    </div>
+    <a class="back-btn" href="index.html" aria-label="返回首页"><i class="ti ti-arrow-left"></i> 首页</a>
+    <div class="header-id">T04_M2</div>
+  </div>
+  <nav class="nav-tabs" role="tablist">
+    <button class="nav-tab active" role="tab" onclick="switchTab('overview',this)">概览</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('mothers',this)">母题精讲</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('ladder',this)">变式阶梯</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('self',this)">自查清单</button>
+  </nav>
+</header>
+
+<!-- ══ TAB: OVERVIEW ══ -->
+<div id="tab-overview" class="page active" role="tabpanel">
+
+  <!-- Memory Card -->
+  <div class="memory-section">
+    <div class="memory-card">
+      <img class="memory-img" src="记忆卡/T04_M2_memory.png" alt="内分泌分级调节 · 三级轴系与负反馈记忆卡" onclick="openLightbox(this.src,this.alt)" onerror="this.style.display='none'">
+      <div class="memory-footer">
+        <div>
+          <div class="memory-label">记忆卡 · 三级轴系与负反馈回路</div>
+          <div style="font-size:12px;color:var(--tx3);">点击图片可放大</div>
+        </div>
+        <div class="audio-player">
+          <video class="memory-video" controls controlsList="nodownload" preload="metadata" style="display:none">
+            <source src="audio/T04_M2.mp4" type="video/mp4">
+          </video>
+          <div class="audio-placeholder" style="display:flex"><i class="ti ti-video-off"></i>视频待放入</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title"><i class="ti ti-scan" aria-hidden="true"></i> 触发信号速查</div>
+  <div class="signal-grid">
+    <div class="signal-card">
+      <div class="signal-label">图像信号</div>
+      <div class="signal-tag">下丘脑—垂体—靶腺轴示意图</div>
+      <div class="signal-tag">激素分级箭头 / 反馈回路</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">文字信号</div>
+      <div class="signal-tag">促激素 / 促激素释放激素</div>
+      <div class="signal-tag">负反馈 / 甲状腺激素浓度</div>
+      <div class="signal-tag">切除垂体 / 注射某激素后</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">任务关键词</div>
+      <div class="signal-tag">分析激素浓度变化</div>
+      <div class="signal-tag">判断调节关系</div>
+      <div class="signal-tag">预测切除/注射实验结果</div>
+    </div>
+  </div>
+
+  <div class="section-title"><i class="ti ti-arrow-fork" aria-hidden="true"></i> 三级轴系 · 核心调节逻辑</div>
+  <div class="mode-grid">
+    <div class="mode-card" style="border-left-color:var(--accent);">
+      <div class="mode-card-label" style="color:var(--accent-d);">下丘脑（第一级）</div>
+      <div class="mode-card-text">分泌促激素释放激素（如 TRH），作用于垂体，启动轴系</div>
+    </div>
+    <div class="mode-card" style="border-left-color:var(--amber);">
+      <div class="mode-card-label" style="color:var(--amber-d);">垂体（第二级）</div>
+      <div class="mode-card-text">分泌促激素（如 TSH），作用于靶腺，放大信号</div>
+    </div>
+    <div class="mode-card" style="border-left-color:var(--teal);">
+      <div class="mode-card-label" style="color:var(--teal-d);">靶腺（第三级）</div>
+      <div class="mode-card-text">分泌靶激素（如 T₃/T₄），作用于全身靶细胞，执行效应</div>
+    </div>
+    <div class="mode-card" style="border-left-color:var(--blue);">
+      <div class="mode-card-label" style="color:var(--blue-d);">负反馈（调控核心）</div>
+      <div class="mode-card-text">靶激素升高 → 抑制下丘脑和垂体 → 减少促激素分泌 → 靶激素回落，维持稳态</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-alert-triangle" aria-hidden="true"></i> 高频陷阱（5 个）</div>
+  <div class="trap-list">
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon" aria-hidden="true"></i><div>切除靶腺后：靶激素↓ → 负反馈解除 → 下丘脑和垂体分泌增加，<strong>不是减少</strong></div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon" aria-hidden="true"></i><div>注射大量靶激素后：负反馈增强 → 下丘脑和垂体受抑，促激素↓，<strong>靶腺萎缩</strong></div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon" aria-hidden="true"></i><div>切除垂体后：靶激素↓（垂体促激素消失），下丘脑的促释放激素↑（失去垂体负反馈），<strong>两者方向相反</strong></div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon" aria-hidden="true"></i><div>激素具有微量高效性——甲亢时 T₃/T₄ 升高幅度不大，但可造成明显临床症状</div></div>
+    <div class="trap-item"><i class="ti ti-alert-circle trap-icon" aria-hidden="true"></i><div>促激素 vs 促激素释放激素——两者靶器官不同，混淆后整条推理链错误</div></div>
+  </div>
+</div>
+
+<!-- ══ TAB: MOTHER QUESTIONS ══ -->
+<div id="tab-mothers" class="page" role="tabpanel">
+  <div class="filter-tabs" role="group">
+    <button class="filter-btn active" onclick="filterMode('all',this)">全部（4 类）</button>
+    <button class="filter-btn" onclick="filterMode('hpa',this)">轴系结构分析</button>
+    <button class="filter-btn" onclick="filterMode('thyroid',this)">甲状腺轴</button>
+    <button class="filter-btn" onclick="filterMode('feedback',this)">负反馈推理</button>
+    <button class="filter-btn" onclick="filterMode('stress',this)">切除 / 注射实验</button>
+  </div>
+
+  <!-- MQ1 -->
+  <div class="mq-card" data-mode="thyroid">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge thyroid">甲状腺轴</span>
+      <span class="mq-name">甲亢患者的激素浓度变化分析</span>
+      <span class="mq-purity">9/10</span>
+      <i class="ti ti-chevron-down mq-chevron" aria-hidden="true"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-201 · 子问题 (2)(3)</div>
+      <div class="rule-box">核心信号：甲亢患者甲状腺激素（T₃/T₄）持续偏高 → 负反馈持续增强 → 垂体 TSH 分泌受抑→ TSH 浓度降低；下丘脑 TRH 同样受抑，浓度也降低。三级轴系的负反馈推理范本。</div>
+      <div class="chain-label">推理信号链</div>
+      <div class="signal-chain">
+        <span class="sc-node">甲状腺激素↑↑</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node">负反馈增强</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node">垂体 TSH↓</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node">甲状腺激素↑↑</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node">抑制下丘脑</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node">TRH↓</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node thyroid">轴系整体被抑制 ✓</span>
+      </div>
+      <p class="mq-note">选题理由：甲亢是三级轴系负反馈的最高频考点，正反方向均需掌握（甲减时方向完全相反）。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec201')">
+        <i class="ti ti-file-text" aria-hidden="true"></i> 查看完整题干
+      </button>
+    </div>
+  </div>
+
+  <!-- MQ2 -->
+  <div class="mq-card" data-mode="hpa">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge hpa">轴系结构分析</span>
+      <span class="mq-name">下丘脑—垂体—肾上腺皮质轴识别</span>
+      <span class="mq-purity">10/10</span>
+      <i class="ti ti-chevron-down mq-chevron" aria-hidden="true"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-178 · 子问题 (1)(2)</div>
+      <div class="rule-box">核心信号：题目给出下丘脑—垂体—肾上腺皮质轴图示，要求识别各级分泌的激素及作用靶器官，同时判断糖皮质激素升高时各级的变化方向。是三级轴系结构识别的标准母题。</div>
+      <div class="chain-label">三级轴系结构</div>
+      <div class="signal-chain">
+        <span class="sc-node">下丘脑 → CRH</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node">垂体 → ACTH</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node">肾上腺皮质 → 糖皮质激素</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node">糖皮质激素↑</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node">负反馈至下丘脑 + 垂体</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node hpa">CRH↓，ACTH↓ ✓</span>
+      </div>
+      <p class="mq-note">与甲状腺轴结构完全平行——掌握一套轴系逻辑即可迁移到任意一条轴。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec178')">
+        <i class="ti ti-file-text" aria-hidden="true"></i> 查看完整题干
+      </button>
+    </div>
+  </div>
+
+  <!-- MQ3 -->
+  <div class="mq-card" data-mode="feedback">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge feedback">负反馈推理</span>
+      <span class="mq-name">甲减患者长期服用甲状腺激素后的激素变化</span>
+      <span class="mq-purity">9/10</span>
+      <i class="ti ti-chevron-down mq-chevron" aria-hidden="true"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-204 · 子问题 (3)</div>
+      <div class="rule-box">核心信号：外源注射甲状腺激素 → 血液中甲状腺激素↑ → 负反馈增强 → 垂体 TSH 分泌受抑↓ → 靶腺（甲状腺）刺激减少 → 甲状腺萎缩（长期）。注意：外源激素替代的效果等同于靶腺功能亢进，方向与甲亢一致。</div>
+      <div class="chain-label">推理信号链</div>
+      <div class="signal-chain">
+        <span class="sc-node">外源 T₃/T₄↑</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node">负反馈↑</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node">TSH↓，TRH↓</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node">TSH↓（长期）</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node">甲状腺刺激减少</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node feedback">甲状腺萎缩 ✓</span>
+      </div>
+      <p class="mq-note">⚠️ 与"甲减（内源性 T₄↓）时 TSH↑"方向完全相反——判断方向前先确认是内源还是外源变化。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec204')">
+        <i class="ti ti-file-text" aria-hidden="true"></i> 查看完整题干
+      </button>
+    </div>
+  </div>
+
+  <!-- MQ4 -->
+  <div class="mq-card" data-mode="stress">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge stress">切除 / 注射实验</span>
+      <span class="mq-name">切除垂体后各激素浓度的预测</span>
+      <span class="mq-purity">10/10</span>
+      <i class="ti ti-chevron-down mq-chevron" aria-hidden="true"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-183 · 子问题 (4)(5)</div>
+      <div class="rule-box">核心信号：切除垂体 → 垂体促激素（TSH/ACTH 等）归零 → 靶腺失去促激素刺激 → 靶激素↓↓；同时垂体对下丘脑的负反馈消失 → 下丘脑促释放激素↑↑。两个方向相反，是本模型最高难度陷阱。</div>
+      <div class="chain-label">切除垂体后的双向变化</div>
+      <div class="signal-chain">
+        <span class="sc-node">垂体切除</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node">TSH = 0</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node">靶激素↓↓</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node">垂体切除</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node">垂体对下丘脑负反馈消失</span>
+        <span class="sc-arrow">→</span>
+        <span class="sc-node stress">下丘脑 TRH↑↑ ✓</span>
+      </div>
+      <p class="mq-note">选题理由：同一切除操作导致两个方向相反的激素变化，是分级调节的经典高难度题型。</p>
+      <button class="q-trigger" onclick="openDrawer('mq-ec183')">
+        <i class="ti ti-file-text" aria-hidden="true"></i> 查看完整题干
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TAB: LADDER ══ -->
+<div id="tab-ladder" class="page" role="tabpanel">
+  <div class="ladder-note">按 L1 基础 → L2 进阶 → L3 综合三级递进。每级掌握后再进入下一级。点击卡片可查看完整题干。</div>
+
+  <div class="ladder-section-label"><span class="ladder-level l1" style="width:auto;padding:3px 8px;">L1 基础</span> 单一轴系，判断各级激素升降方向</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1-1<br>甲状腺轴</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec201-1')" style="cursor:pointer;">
+        <div class="ladder-card-name">甲减患者甲状腺激素与 TSH 方向判断</div>
+        <div class="ladder-card-sub">EC-201 (1) · 甲状腺激素↓，TSH↑——最基础的轴系方向题 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1-2<br>肾上腺轴</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec178-1')" style="cursor:pointer;">
+        <div class="ladder-card-name">糖皮质激素升高时的轴系各级变化</div>
+        <div class="ladder-card-sub">EC-178 (2) · 迁移甲状腺轴逻辑到 HPA 轴，练习轴系通用框架 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">L1-3<br>促性腺轴</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec196-2')" style="cursor:pointer;">
+        <div class="ladder-card-name">排卵期 LH 峰与正反馈识别</div>
+        <div class="ladder-card-sub">EC-196 (2) · 雌激素高峰时的正反馈（例外情况）——与负反馈形成对比 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="ladder-section-label"><span class="ladder-level l2" style="width:auto;padding:3px 8px;">L2 进阶</span> 实验操作（切除 / 注射）+ 多激素联动</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2-1<br>切除实验</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec183-45')" style="cursor:pointer;">
+        <div class="ladder-card-name">切除垂体后三级激素的完整预测</div>
+        <div class="ladder-card-sub">EC-183 (4)+(5) · 双向变化：靶激素↓ + 促释放激素↑，同步分析 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2-2<br>注射实验</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec204-3')" style="cursor:pointer;">
+        <div class="ladder-card-name">长期服用甲状腺激素 → 甲状腺萎缩机制</div>
+        <div class="ladder-card-sub">EC-204 (3) · 外源激素 → 负反馈↑ → 促激素↓ → 靶腺萎缩，完整推导 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l2">L2-3<br>碘缺乏</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec207-2')" style="cursor:pointer;">
+        <div class="ladder-card-name">缺碘地区甲状腺肿大的轴系解释</div>
+        <div class="ladder-card-sub">EC-207 (2) · 缺碘 → T₄合成↓ → TSH↑（持续刺激）→ 甲状腺代偿性增大 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="ladder-section-label"><span class="ladder-level l3" style="width:auto;padding:3px 8px;">L3 综合</span> 多轴联动 + 神经—体液协调</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l3">L3-1</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec190-135')" style="cursor:pointer;">
+        <div class="ladder-card-name">应激反应：神经信号触发 HPA 轴（寒冷刺激模型）</div>
+        <div class="ladder-card-sub">EC-190 (1)+(3)+(5) · 寒冷→下丘脑→甲状腺轴+肾上腺轴双轴同步激活，加入神经调节 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l3">L3-2</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec215-24')" style="cursor:pointer;">
+        <div class="ladder-card-name">糖皮质激素治疗后的反跳现象（长期用药停药分析）</div>
+        <div class="ladder-card-sub">EC-215 (2)+(4) · 长期外源糖皮质激素 → 垂体 ACTH 受抑 → 突然停药后肾上腺皮质萎缩无法应答 <i class="ti ti-chevron-right" style="font-size:12px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TAB: SELF-CHECK ══ -->
+<div id="tab-self" class="page" role="tabpanel">
+  <div class="progress-row">
+    <span style="font-size:13px;color:var(--tx2);">学习自查清单</span>
+    <span style="font-size:13px;color:var(--tx2);" id="progress-text">0 / 7 完成</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="pbar"></div></div>
+  <div class="checklist" id="checklist">
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能默写三级轴系（下丘脑—垂体—靶腺）各级分泌的激素名称及作用靶器官</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能判断靶激素升高时，促激素和促释放激素的变化方向（负反馈方向）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能分析切除垂体后的双向变化：靶激素↓ 且 促释放激素↑（方向相反）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能区分"外源注射靶激素"与"靶腺功能亢进"两者对轴系的相同效果</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">能解释缺碘导致甲状腺肿大的完整轴系推导（缺碘→T₄↓→TSH↑→甲状腺代偿增大）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">完成 L1 全部 3 道基础变式（各轴系方向判断各 1 道）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div>
+      <div class="check-text">完成至少 2 道 L2 进阶变式，并能说出与母题的推理差异（切除 vs 注射的不同方向）</div>
+    </div>
+  </div>
+  <div class="action-row">
+    <button class="action-btn" onclick="window.scrollTo(0,0);switchTab('mothers',document.querySelectorAll('.nav-tab')[1])">返回母题精讲 →</button>
+    <button class="action-btn" onclick="window.scrollTo(0,0);switchTab('ladder',document.querySelectorAll('.nav-tab')[2])">进入变式阶梯 →</button>
+  </div>
+</div>
+
+</div><!-- .app -->
+
+<!-- ══ LIGHTBOX ══ -->
+<div class="lb-overlay" id="lb-overlay" onclick="closeLightbox()">
+  <button class="lb-close" onclick="closeLightbox()" aria-label="关闭">×</button>
+  <img class="lb-img" id="lb-img" src="" alt="">
+</div>
+
+<!-- ══ DRAWER ══ -->
+<div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
+  <div class="drawer-header">
+    <span class="drawer-badge" id="drawer-badge"></span>
+    <span class="drawer-title" id="drawer-title"></span>
+    <button class="drawer-close" onclick="closeDrawer()" aria-label="关闭题干面板">
+      <i class="ti ti-x" style="font-size:18px;" aria-hidden="true"></i>
+    </button>
+  </div>
+  <div class="drawer-body">
+    <div class="drawer-ec-ref" id="drawer-ref"></div>
+    <div class="drawer-stem" id="drawer-stem"></div>
+    <div class="drawer-sub" id="drawer-sub" style="display:none;">
+      <div class="drawer-sub-label">本题考查重点</div>
+      <div id="drawer-sub-text"></div>
+    </div>
+    <div class="drawer-answer" id="drawer-answer">
+      <div class="drawer-answer-label">参考答案</div>
+      <div id="drawer-answer-text"></div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="drawer-btn" id="drawer-ans-btn" onclick="toggleAnswer()">显示答案</button>
+    <button class="drawer-btn primary" onclick="closeDrawer()">完成阅读</button>
+  </div>
+</div>
+
+<script>
+/* ── Tab navigation ── */
+function switchTab(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+function toggleMQ(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.mq-chevron');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chevron.classList.toggle('open', !isOpen);
+}
+function filterMode(mode, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.mq-card').forEach(card => {
+    card.style.display = (mode === 'all' || card.dataset.mode === mode) ? '' : 'none';
+  });
+}
+
+/* ── Checklist ── */
+function toggleCheck(item) {
+  item.classList.toggle('done');
+  updateProgress();
+  saveChecklist();
+}
+function updateProgress() {
+  const total = document.querySelectorAll('.check-item').length;
+  const done = document.querySelectorAll('.check-item.done').length;
+  document.getElementById('pbar').style.width = (done / total * 100) + '%';
+  document.getElementById('progress-text').textContent = done + ' / ' + total + ' 完成';
+}
+function saveChecklist() {
+  try {
+    const states = Array.from(document.querySelectorAll('.check-item')).map(el => el.classList.contains('done'));
+    localStorage.setItem('T04_M2_checklist', JSON.stringify(states));
+  } catch(e) {}
+}
+(function() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('T04_M2_checklist') || '[]');
+    document.querySelectorAll('.check-item').forEach((item, i) => { if (saved[i]) item.classList.add('done'); });
+    updateProgress();
+  } catch(e) {}
+})();
+
+/* ══ QUESTION DATA ══ */
+const QUESTIONS = {
+  'mq-ec201': {
+    badge: '甲状腺轴 · 母题', badgeClass: 'thyroid',
+    title: '甲亢患者的激素浓度变化分析',
+    ref: 'EC-20260522-201 · 子问题 (2)(3)',
+    stem: `甲状腺激素（T₃/T₄）由甲状腺分泌，受垂体分泌的促甲状腺激素（TSH）调控，垂体受下丘脑分泌的促甲状腺激素释放激素（TRH）调控。甲状腺功能亢进（甲亢）患者甲状腺激素持续分泌过多。
+
+(2) 与正常人相比，甲亢患者血液中 TSH 浓度___（升高/降低/不变），原因是___。
+
+(3) 甲亢患者血液中 TRH 浓度___（升高/降低/不变），并说明你的判断依据。`,
+    focus: '判断要点：甲亢 → T₃/T₄ 持续升高 → 负反馈增强 → 垂体受抑 → TSH↓；同时下丘脑也受负反馈抑制 → TRH↓。两者方向一致，均为降低。关键：负反馈同时作用于下丘脑和垂体两个靶器官。',
+    answer: '(2) 降低。原因：甲状腺激素增多，通过负反馈抑制垂体分泌 TSH，导致 TSH 浓度降低。\n(3) 降低。依据：甲状腺激素增多，同时通过负反馈抑制下丘脑分泌 TRH，导致 TRH 浓度降低。'
+  },
+  'mq-ec178': {
+    badge: '轴系结构分析 · 母题', badgeClass: 'hpa',
+    title: '下丘脑—垂体—肾上腺皮质轴识别',
+    ref: 'EC-20260521-178 · 子问题 (1)(2)',
+    stem: `图示为下丘脑—垂体—肾上腺皮质调节轴。下丘脑分泌促肾上腺皮质激素释放激素（CRH），垂体分泌促肾上腺皮质激素（ACTH），肾上腺皮质分泌糖皮质激素（如皮质醇）。
+
+(1) 图中 A、B、C 分别对应哪种激素？它们的靶器官分别是什么？
+    A：___，靶器官：___
+    B：___，靶器官：___
+    C：___，靶器官：___
+
+(2) 当糖皮质激素浓度升高时，A 和 B 的浓度变化方向分别是___，请用"负反馈"概念解释原因。`,
+    focus: '结构识别要点：A=CRH（下丘脑→垂体），B=ACTH（垂体→肾上腺皮质），C=糖皮质激素（肾上腺皮质→全身靶细胞）。浓度变化：糖皮质激素↑→负反馈→A(CRH)↓，B(ACTH)↓，方向相同。与甲状腺轴完全平行。',
+    answer: '(1) A：CRH（促肾上腺皮质激素释放激素），靶器官：垂体\n    B：ACTH（促肾上腺皮质激素），靶器官：肾上腺皮质\n    C：糖皮质激素（皮质醇），靶器官：全身靶细胞\n(2) A（CRH）降低，B（ACTH）降低。\n原因：糖皮质激素浓度升高，通过负反馈分别抑制下丘脑（CRH↓）和垂体（ACTH↓）的分泌，从而维持激素浓度的相对稳定。'
+  },
+  'mq-ec204': {
+    badge: '负反馈推理 · 母题', badgeClass: 'feedback',
+    title: '甲减患者长期服用甲状腺激素后的激素变化',
+    ref: 'EC-20260522-204 · 子问题 (3)',
+    stem: `某甲减患者（甲状腺激素分泌不足）遵医嘱长期口服甲状腺激素片。服药一段时间后进行体检。
+
+(3) 与未服药的甲减患者相比，该患者长期服药后：
+    ① 血液中 TSH 浓度___（升高/降低），原因是___；
+    ② 甲状腺的体积会___（增大/缩小/不变），原因是___。`,
+    focus: '关键辨析：外源摄入甲状腺激素 → 血中 T₃/T₄↑ → 负反馈增强 → TSH↓（与未服药甲减相比，未服药时 TSH↑，服药后 TSH↓，两者相反）。TSH 长期减少 → 对甲状腺的刺激减弱 → 甲状腺因缺乏营养性刺激而萎缩（体积缩小）。⚠️ 易错：误认为甲减就一定 TSH↑，忽视了外源激素改变了轴系状态。',
+    answer: '(3)① 降低。原因：外源摄入的甲状腺激素使血中甲状腺激素浓度升高，通过负反馈抑制垂体分泌 TSH，导致 TSH 浓度降低。\n② 缩小（萎缩）。原因：TSH 长期降低，对甲状腺的促进作用减弱，甲状腺长期得不到充分刺激，体积逐渐缩小。'
+  },
+  'mq-ec183': {
+    badge: '切除/注射实验 · 母题', badgeClass: 'stress',
+    title: '切除垂体后各激素浓度的预测',
+    ref: 'EC-20260521-183 · 子问题 (4)(5)',
+    stem: `实验动物模型：手术切除大鼠垂体后，分别测定血液中各激素浓度的变化。
+
+(4) 切除垂体后，血液中甲状腺激素浓度如何变化？原因是___。
+
+(5) 切除垂体后，血液中 TRH（促甲状腺激素释放激素）浓度如何变化？与(4)中甲状腺激素的变化方向是否相同？请解释原因。`,
+    focus: '双向分析（本题核心难点）：\n切除垂体 → 甲状腺激素：垂体 TSH=0 → 甲状腺失去促激素刺激 → T₃/T₄↓↓（降低）\n切除垂体 → TRH：垂体对下丘脑的负反馈消失 → 下丘脑不再被抑制 → TRH↑↑（升高）\n两者方向相反！这是最高频陷阱：误以为"激素整体都降低"而忽视负反馈失去后的解放效应。',
+    answer: '(4) 甲状腺激素浓度降低。原因：垂体被切除后，TSH 分泌归零，甲状腺失去促激素的刺激，甲状腺激素（T₃/T₄）分泌减少，血液中浓度降低。\n(5) TRH 浓度升高，与甲状腺激素变化方向相反。\n原因：垂体切除后，下丘脑失去了来自垂体（通过甲状腺激素传导）的负反馈抑制，下丘脑不再受到抑制，TRH 分泌增加，血液中 TRH 浓度升高。'
+  },
+
+  /* ── L1 变式 ── */
+  'v-ec201-1': {
+    badge: 'L1 基础变式 · 甲状腺轴', badgeClass: 'thyroid',
+    title: '甲减患者 TSH 与甲状腺激素方向判断',
+    ref: 'EC-20260522-201 · 子问题 (1)',
+    stem: `甲状腺功能减退（甲减）患者甲状腺激素分泌不足，长期处于低甲状腺激素状态。
+
+(1) 与正常人相比，甲减患者血液中：
+    ① TSH 浓度___（升高/降低）；
+    ② TRH 浓度___（升高/降低）；
+    请用负反馈调节原理解释上述变化。`,
+    focus: '基础方向判断：甲减 → T₃/T₄↓ → 负反馈减弱 → 下丘脑和垂体的抑制解除 → TRH↑、TSH↑。与甲亢时方向完全相反。关键：理解"抑制减弱 = 分泌增加"这个逻辑。',
+    answer: '① TSH 升高。② TRH 升高。\n原因：甲状腺激素减少，对下丘脑和垂体的负反馈抑制减弱，下丘脑 TRH 和垂体 TSH 分泌均增加，以促进甲状腺多分泌甲状腺激素，恢复稳态。'
+  },
+  'v-ec178-1': {
+    badge: 'L1 基础变式 · 肾上腺轴', badgeClass: 'hpa',
+    title: '糖皮质激素降低时 CRH 和 ACTH 的变化',
+    ref: 'EC-20260521-178 · 子问题 (3)',
+    stem: `（接上题，下丘脑—垂体—肾上腺皮质轴）
+
+(3) 若某患者肾上腺皮质受损，糖皮质激素分泌不足，此时：
+    ① 垂体分泌的 ACTH 浓度___；
+    ② 下丘脑分泌的 CRH 浓度___；
+    请说明理由。`,
+    focus: '迁移练习：与甲减逻辑完全平行。糖皮质激素↓ → 负反馈减弱 → 下丘脑和垂体抑制解除 → CRH↑，ACTH↑。训练学生在不同轴系（甲状腺轴 vs HPA 轴）之间迁移同一框架。',
+    answer: '① ACTH 浓度升高。② CRH 浓度升高。\n理由：糖皮质激素减少，对下丘脑（CRH 分泌）和垂体（ACTH 分泌）的负反馈抑制减弱，两者分泌均增加。（与甲状腺轴的逻辑完全平行）'
+  },
+  'v-ec196-2': {
+    badge: 'L1 基础变式 · 促性腺轴（正反馈例外）', badgeClass: 'stress',
+    title: '排卵期雌激素高峰与 LH 峰——正反馈识别',
+    ref: 'EC-20260522-196 · 子问题 (2)',
+    stem: `女性月经周期中，排卵前出现雌激素高峰，随后垂体 LH（促黄体生成素）急剧升高，形成"LH 峰"，触发排卵。
+
+(2) 排卵前，雌激素浓度升高为何没有抑制垂体分泌 LH，反而促进 LH 大量分泌？这是什么类型的调节？与甲状腺轴有何不同？`,
+    focus: '例外情况（正反馈）：排卵前雌激素高峰 → 正反馈刺激垂体大量分泌 LH → LH 峰 → 触发排卵。这是内分泌调节中少见的正反馈实例，与负反馈（甲状腺轴）方向相反。理解"正反馈是短暂的、一次性的，完成特定事件后终止"。',
+    answer: '这是正反馈调节（而非负反馈）。\n不同：甲状腺轴中靶激素升高 → 负反馈抑制上级激素（方向相反）；排卵前雌激素高峰 → 正反馈促进 LH 大量分泌（方向相同）。\n意义：正反馈是短暂、一次性的，目的是快速达到阈值触发排卵这一特定生理事件，排卵后正反馈终止，恢复负反馈调节。'
+  },
+  'v-ec183-45': {
+    badge: 'L2 进阶变式 · 切除实验', badgeClass: 'stress',
+    title: '切除垂体后三级激素的完整预测',
+    ref: 'EC-20260521-183 · 子问题 (4)+(5)',
+    stem: `（接母题，切除大鼠垂体模型）
+
+(4) 切除垂体后，甲状腺激素浓度变化及原因___。
+(5) 切除垂体后，TRH 浓度变化及原因___，与(4)的变化方向___（相同/相反）。`,
+    focus: '同母题，参见 mq-ec183 分析。重点练习双向变化的表达：甲状腺激素↓（垂体 TSH 消失）vs TRH↑（负反馈解除）。',
+    answer: '(4) 甲状腺激素降低。原因：垂体 TSH=0，甲状腺失去促激素刺激，T₃/T₄↓。\n(5) TRH 升高，与(4)方向相反。原因：垂体切除后，对下丘脑的负反馈（通过靶激素传导）消失，下丘脑不受抑制，TRH↑。'
+  },
+  'v-ec204-3': {
+    badge: 'L2 进阶变式 · 注射实验', badgeClass: 'feedback',
+    title: '长期服用甲状腺激素 → 甲状腺萎缩机制',
+    ref: 'EC-20260522-204 · 子问题 (3)',
+    stem: `（同母题 mq-ec204）`,
+    focus: '同母题分析。',
+    answer: '见母题 EC-204 答案。'
+  },
+  'v-ec207-2': {
+    badge: 'L2 进阶变式 · 缺碘', badgeClass: 'thyroid',
+    title: '缺碘地区甲状腺肿大的轴系解释',
+    ref: 'EC-20260522-207 · 子问题 (2)',
+    stem: `缺碘地区居民因饮食中碘元素不足，甲状腺激素合成原料缺乏，导致甲状腺激素分泌减少。
+
+(2) 请用三级轴系调节原理，解释缺碘地区居民甲状腺肿大（地方性甲状腺肿）的形成原因。`,
+    focus: '推理链：缺碘 → 甲状腺激素合成减少 → T₃/T₄↓ → 负反馈减弱 → 垂体 TSH↑↑（大量分泌）→ TSH 长期过度刺激甲状腺 → 甲状腺代偿性增生肥大（地方性甲状腺肿）。关键：TSH 对甲状腺有"营养性"促进作用，长期高 TSH 导致甲状腺细胞增殖增大。',
+    answer: '形成原因：缺碘 → 甲状腺激素（T₃/T₄）合成减少 → 血中甲状腺激素浓度降低 → 对垂体和下丘脑的负反馈抑制减弱 → 垂体大量分泌 TSH → TSH 长期过度刺激甲状腺 → 甲状腺细胞代偿性增殖 → 甲状腺体积增大（地方性甲状腺肿）。'
+  },
+  'v-ec190-135': {
+    badge: 'L3 综合变式 · 神经—体液', badgeClass: 'hpa',
+    title: '应激反应：寒冷刺激触发双轴激活',
+    ref: 'EC-20260522-190 · 子问题 (1)+(3)+(5)',
+    stem: `寒冷刺激下，机体通过神经—体液协调维持体温。
+
+(1) 寒冷时，皮肤冷觉感受器将信息传入___，该结构整合后，既可通过___ 系统传出指令（如血管收缩、肌肉颤抖），也可通过分泌___（激素名称）启动内分泌调节。
+
+(3) 甲状腺轴被激活后，甲状腺激素↑，其通过___途径促进细胞产热；同时肾上腺髓质被交感神经激活分泌___（激素名称），该激素加速心跳以加快产热。
+
+(5) 寒冷持续时，甲状腺激素维持高水平，此时 TSH 浓度___，说明持续寒冷时神经调节对负反馈机制的___（增强/克服）。`,
+    focus: '综合难点：神经调节（寒冷→皮肤感受器→下丘脑→交感神经→肾上腺髓质分泌肾上腺素）与体液调节（下丘脑→TRH→TSH→T₃/T₄）同步激活。关键：持续寒冷时，尽管 T₃/T₄↑，TSH 并不大幅下降，说明神经调节通过下丘脑持续驱动 TRH，一定程度上克服了负反馈的抑制效应。',
+    answer: '(1) 下丘脑；神经（传出神经/交感神经）；TRH（促甲状腺激素释放激素）\n(3) 促进细胞氧化分解（有机物氧化供能）途径；肾上腺素\n(5) TSH 仍维持较高水平（未大幅下降）。说明：神经调节通过持续激活下丘脑分泌 TRH，一定程度上克服（对抗）了甲状腺激素升高引起的负反馈抑制，保证产热需求。'
+  },
+  'v-ec215-24': {
+    badge: 'L3 综合变式 · 临床应用', badgeClass: 'stress',
+    title: '糖皮质激素治疗后的反跳现象',
+    ref: 'EC-20260522-215 · 子问题 (2)+(4)',
+    stem: `某患者因自身免疫病长期使用大剂量糖皮质激素（外源性）治疗，疗程结束后立即停药。
+
+(2) 长期使用外源糖皮质激素期间，患者自身肾上腺皮质的变化是___，原因是___。
+
+(4) 突然停药后，患者出现"肾上腺皮质危象"（糖皮质激素急剧不足），请用轴系调节原理解释其机制。`,
+    focus: '临床应用（综合最高难度）：\n(2) 外源糖皮质激素↑ → 负反馈 → ACTH↓ → 肾上腺皮质长期缺乏刺激 → 萎缩；\n(4) 突然停药 → 外源糖皮质激素消失 → 机体自身肾上腺皮质已萎缩，短期内无法恢复分泌 → 糖皮质激素急剧不足 → 危象。\n这是"外源激素抑制内源轴系 → 停药反跳"的经典临床机制。',
+    answer: '(2) 肾上腺皮质萎缩（功能减退）。原因：外源糖皮质激素持续升高 → 负反馈抑制垂体 ACTH 分泌 → ACTH 长期低水平 → 肾上腺皮质缺乏促激素营养性刺激 → 逐渐萎缩。\n(4) 机制：停药后外源糖皮质激素消失，但自身肾上腺皮质已萎缩，短时间内无法恢复正常分泌功能；此时虽 ACTH 可迅速升高，但萎缩的靶腺不能及时应答 → 糖皮质激素急剧不足 → 危象。（临床上需缓慢减药，给靶腺恢复时间）'
+  }
+};
+
+/* ══ DRAWER LOGIC ══ */
+let answerShown = false;
+
+function openDrawer(key) {
+  const q = QUESTIONS[key];
+  if (!q) return;
+  const badge = document.getElementById('drawer-badge');
+  badge.textContent = q.badge;
+  badge.className = 'drawer-badge mq-badge ' + (q.badgeClass || '');
+  document.getElementById('drawer-title').textContent = q.title;
+  const ref = document.getElementById('drawer-ref');
+  ref.innerHTML = '<i class="ti ti-source-code" style="font-size:13px;" aria-hidden="true"></i> ' + q.ref;
+  document.getElementById('drawer-stem').textContent = q.stem;
+  const subEl = document.getElementById('drawer-sub');
+  const subText = document.getElementById('drawer-sub-text');
+  if (q.focus) { subText.textContent = q.focus; subEl.style.display = ''; }
+  else { subEl.style.display = 'none'; }
+  answerShown = false;
+  const ans = document.getElementById('drawer-answer');
+  ans.classList.remove('show');
+  document.getElementById('drawer-answer-text').textContent = q.answer || '';
+  const btn = document.getElementById('drawer-ans-btn');
+  btn.textContent = '显示答案';
+  btn.style.display = q.answer ? '' : 'none';
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('drawer').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDrawer() {
+  document.getElementById('overlay').classList.remove('open');
+  document.getElementById('drawer').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function toggleAnswer() {
+  answerShown = !answerShown;
+  document.getElementById('drawer-answer').classList.toggle('show', answerShown);
+  document.getElementById('drawer-ans-btn').textContent = answerShown ? '隐藏答案' : '显示答案';
+}
+
+/* ── Lightbox ── */
+function openLightbox(src, alt) {
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lb-img').alt = alt;
+  document.getElementById('lb-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lb-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (document.getElementById('lb-overlay').classList.contains('open')) closeLightbox();
+    else closeDrawer();
+  }
+});
+</script>
+</body>
+</html>

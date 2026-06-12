@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T02_M3 · 跨膜运输方式判定</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent:#0F6E56; --accent-l:#E1F5EE; --accent-m:#7DCFBB; --accent-d:#085041;
+  --purple:#534AB7; --purple-l:#EEEDFE; --purple-d:#3C3489;
+  --amber:#BA7517; --amber-l:#FAEEDA; --amber-d:#633806;
+  --coral:#993C1D; --coral-l:#FAECE7; --coral-d:#712B13;
+  --bg:#ffffff; --bg2:#f7f7f5; --bg3:#f1efe8;
+  --tx:#1a1a18; --tx2:#5f5e5a; --tx3:#888780;
+  --bd:rgba(0,0,0,0.10); --bd2:rgba(0,0,0,0.18);
+  --r-sm:6px; --r-md:8px; --r-lg:12px; --r-xl:16px;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#1c1c1a;--bg2:#252523;--bg3:#2c2c2a;
+    --tx:#f0efea;--tx2:#b4b2a9;--tx3:#888780;
+    --bd:rgba(255,255,255,0.09);--bd2:rgba(255,255,255,0.16);
+    --accent-l:#04342C;--accent-d:#9FE1CB;
+    --purple-l:#26215C;--purple-d:#CECBF6;
+    --amber-l:#412402;--amber-d:#FAC775;
+    --coral-l:#4A1B0C;--coral-d:#F5C4B3;
+  }
+}
+body{font-family:var(--font);font-size:15px;line-height:1.6;color:var(--tx);background:var(--bg3);min-height:100vh;}
+.app{max-width:800px;margin:0 auto;background:var(--bg);min-height:100vh;}
+.site-header{padding:1.25rem 1.5rem 0;background:var(--bg);border-bottom:0.5px solid var(--bd);position:sticky;top:0;z-index:20;}
+.header-top{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.header-icon{background:var(--accent-l);border-radius:var(--r-md);padding:6px 8px;display:flex;align-items:center;justify-content:center;}
+.header-icon i{font-size:20px;color:var(--accent);}
+.header-meta{font-size:12px;color:var(--tx3);}
+.header-title{font-size:17px;font-weight:500;color:var(--tx);}
+.header-id{margin-left:auto;font-size:11px;color:var(--tx3);background:var(--bg2);padding:3px 9px;border-radius:var(--r-sm);}
+.nav-tabs{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.nav-tab{padding:.6rem 1.1rem;font-size:13px;color:var(--tx2);cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;font-family:var(--font);white-space:nowrap;transition:color .15s,border-color .15s;}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500;}
+.nav-tab:hover:not(.active){color:var(--tx);}
+.page{display:none;padding:1.5rem;}
+.page.active{display:block;}
+.memory-section{margin-bottom:1.5rem;}
+.memory-card{border:0.5px solid var(--bd);border-radius:var(--r-xl);overflow:hidden;background:var(--bg);}
+.memory-placeholder{min-height:200px;background:var(--bg2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--tx3);padding:2rem;}
+.memory-placeholder i{font-size:32px;color:var(--bd2);}
+.memory-placeholder-text{font-size:13px;text-align:center;line-height:1.6;}
+.memory-placeholder-filename{font-size:11px;background:var(--bg3);border:0.5px solid var(--bd);border-radius:var(--r-sm);padding:4px 10px;font-family:monospace;color:var(--tx2);}
+.memory-img{width:100%;display:block;max-height:320px;object-fit:contain;background:var(--bg3);cursor:zoom-in;transition:opacity .15s;}
+.memory-img:hover{opacity:.9;}
+.memory-footer{padding:.85rem 1rem;display:flex;align-items:center;gap:10px;border-top:0.5px solid var(--bd);}
+.memory-label{font-size:13px;font-weight:500;color:var(--tx);flex:1;}
+audio{height:32px;width:220px;}
+.audio-placeholder{font-size:12px;color:var(--tx3);display:flex;align-items:center;gap:5px;background:var(--bg2);padding:6px 10px;border-radius:var(--r-sm);}
+.section-title{font-size:13px;font-weight:500;color:var(--tx2);display:flex;align-items:center;gap:7px;margin-bottom:1rem;text-transform:uppercase;letter-spacing:.04em;}
+.section-divider{height:0.5px;background:var(--bd);margin:1.5rem 0;}
+.signal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:1.5rem;}
+.signal-card{background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;}
+.signal-label{font-size:11px;color:var(--tx3);letter-spacing:.04em;margin-bottom:.4rem;text-transform:uppercase;}
+.signal-tag{font-size:13px;color:var(--tx);margin-bottom:2px;}
+.subtopic-list{display:flex;flex-direction:column;gap:10px;margin-bottom:1.5rem;}
+.subtopic-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.9rem 1.1rem;border-left:3px solid var(--accent);}
+.subtopic-card.s2{border-left-color:var(--purple);}
+.subtopic-num{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.3rem;}
+.subtopic-name{font-size:14px;font-weight:500;color:var(--tx);margin-bottom:.3rem;}
+.subtopic-signal{font-size:13px;color:var(--tx2);line-height:1.6;}
+.trap-list{display:flex;flex-direction:column;gap:7px;}
+.trap-item{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.55;}
+.trap-icon{color:#E24B4A;font-size:15px;flex-shrink:0;margin-top:1px;}
+.filter-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem;}
+.filter-btn{padding:5px 13px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx2);font-family:var(--font);transition:all .15s;}
+.filter-btn.active{background:var(--accent-l);color:var(--accent-d);border-color:var(--accent);font-weight:500;}
+.mq-card{border:0.5px solid var(--bd);border-radius:var(--r-lg);background:var(--bg);margin-bottom:.85rem;overflow:hidden;}
+.mq-header{padding:.9rem 1.1rem;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;transition:background .15s;}
+.mq-header:hover{background:var(--bg2);}
+.mq-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);white-space:nowrap;}
+.mq-badge.s1{background:var(--accent-l);color:var(--accent-d);}
+.mq-badge.s2{background:var(--purple-l);color:var(--purple-d);}
+.mq-badge.l1{background:var(--amber-l);color:var(--amber-d);}
+.mq-name{font-size:14px;font-weight:500;color:var(--tx);flex:1;}
+.mq-purity{font-size:12px;color:var(--tx3);flex-shrink:0;}
+.mq-chevron{color:var(--tx3);font-size:16px;transition:transform .2s;flex-shrink:0;}
+.mq-chevron.open{transform:rotate(180deg);}
+.mq-body{display:none;padding:.75rem 1.1rem 1.1rem;border-top:0.5px solid var(--bd);}
+.mq-body.open{display:block;}
+.mq-source{font-size:12px;color:var(--tx3);margin-bottom:.65rem;}
+.rule-box{background:var(--accent-l);border-left:3px solid var(--accent);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:.65rem .9rem;font-size:13px;color:var(--accent-d);margin:.75rem 0;line-height:1.65;}
+.rule-box.s2{background:var(--purple-l);border-left-color:var(--purple);color:var(--purple-d);}
+.chain-label{font-size:12px;font-weight:500;color:var(--tx2);margin:.75rem 0 .4rem;text-transform:uppercase;letter-spacing:.04em;}
+.signal-chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:6px;}
+.sc-node{background:var(--bg2);border-radius:var(--r-sm);padding:3px 9px;font-size:13px;color:var(--tx);}
+.sc-node.s1{background:var(--accent-l);color:var(--accent-d);}
+.sc-node.s2{background:var(--purple-l);color:var(--purple-d);}
+.sc-arrow{color:var(--tx3);font-size:13px;}
+.mq-note{font-size:13px;color:var(--tx2);margin-top:.75rem;line-height:1.6;}
+.q-trigger{display:inline-flex;align-items:center;gap:5px;margin-top:.75rem;padding:6px 12px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;color:var(--tx2);cursor:pointer;font-family:var(--font);transition:all .15s;}
+.q-trigger:hover{background:var(--bg2);color:var(--tx);}
+.q-trigger i{font-size:14px;}
+.ladder-section-label{font-size:13px;font-weight:500;color:var(--tx2);margin-bottom:.85rem;display:flex;align-items:center;gap:7px;}
+.ladder-rows{display:flex;flex-direction:column;gap:8px;margin-bottom:1rem;}
+.ladder-row{display:grid;grid-template-columns:64px 1fr;gap:10px;align-items:start;}
+.ladder-level{font-size:11px;font-weight:500;padding:6px 4px;border-radius:var(--r-sm);text-align:center;line-height:1.4;}
+.l0{background:var(--accent-l);color:var(--accent-d);}
+.l1{background:var(--amber-l);color:var(--amber-d);}
+.ladder-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.65rem .9rem;background:var(--bg);cursor:pointer;transition:background .15s;}
+.ladder-card:hover{background:var(--bg2);}
+.ladder-card-name{font-size:13px;font-weight:500;color:var(--tx);}
+.ladder-card-sub{font-size:12px;color:var(--tx3);margin-top:3px;line-height:1.5;}
+.ladder-note{background:var(--bg2);border-radius:var(--r-md);padding:.65rem .9rem;font-size:12px;color:var(--tx2);margin-bottom:1rem;line-height:1.55;}
+.progress-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem;}
+.progress-bar{height:5px;border-radius:3px;background:var(--bg2);margin-bottom:1.25rem;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;background:var(--accent);width:0%;transition:width .3s;}
+.checklist{display:flex;flex-direction:column;gap:7px;}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:.7rem .9rem;border:0.5px solid var(--bd);border-radius:var(--r-md);background:var(--bg);cursor:pointer;transition:background .15s;}
+.check-item.done{background:var(--bg2);}
+.check-box{width:18px;height:18px;border:1.5px solid var(--bd2);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .15s;}
+.check-item.done .check-box{background:var(--accent);border-color:var(--accent);}
+.check-box i{font-size:11px;color:#fff;display:none;}
+.check-item.done .check-box i{display:block;}
+.check-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.check-item.done .check-text{color:var(--tx3);text-decoration:line-through;}
+.action-row{margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:8px;}
+.action-btn{padding:7px 14px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.action-btn:hover{background:var(--bg2);}
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s;}
+.drawer-overlay.open{opacity:1;pointer-events:all;}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100vw);background:var(--bg);z-index:101;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden;}
+.drawer.open{transform:translateX(0);}
+.drawer-header{padding:1rem 1.25rem;border-bottom:0.5px solid var(--bd);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.drawer-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);}
+.drawer-title{font-size:14px;font-weight:500;color:var(--tx);flex:1;line-height:1.4;}
+.drawer-close{background:none;border:none;cursor:pointer;color:var(--tx2);padding:4px;border-radius:var(--r-sm);display:flex;align-items:center;transition:background .15s;}
+.drawer-close:hover{background:var(--bg2);}
+.drawer-body{flex:1;overflow-y:auto;padding:1.25rem;}
+.drawer-ec-ref{font-size:12px;color:var(--tx3);margin-bottom:1rem;display:flex;align-items:center;gap:6px;}
+.drawer-stem{font-size:14px;color:var(--tx);line-height:1.75;white-space:pre-wrap;}
+.drawer-sub{font-size:13px;color:var(--tx2);background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:1rem;line-height:1.65;}
+.drawer-sub-label{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-answer{font-size:13px;color:var(--tx);background:var(--accent-l);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:.75rem;line-height:1.65;display:none;}
+.drawer-answer.show{display:block;}
+.drawer-answer-label{font-size:11px;font-weight:500;color:var(--accent-d);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-footer{padding:.85rem 1.25rem;border-top:0.5px solid var(--bd);display:flex;gap:8px;flex-shrink:0;}
+.drawer-btn{flex:1;padding:8px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.drawer-btn:hover{background:var(--bg2);}
+.drawer-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+.drawer-btn.primary:hover{background:var(--accent-d);}
+.lb-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:200;display:none;align-items:center;justify-content:center;cursor:zoom-out;}
+.lb-overlay.open{display:flex;}
+.lb-img{max-width:92vw;max-height:92vh;object-fit:contain;border-radius:var(--r-md);box-shadow:0 8px 40px rgba(0,0,0,.5);}
+.lb-close{position:fixed;top:16px;right:20px;background:none;border:none;color:#fff;font-size:28px;cursor:pointer;line-height:1;opacity:.7;transition:opacity .15s;}
+.lb-close:hover{opacity:1;}
+@media(max-width:600px){
+  .site-header{padding:1rem 1rem 0;}.page{padding:1rem;}.header-title{font-size:15px;}
+  .signal-grid{grid-template-columns:1fr 1fr;}.ladder-row{grid-template-columns:52px 1fr;gap:8px;}
+  .action-row{flex-direction:column;}.action-btn{width:100%;text-align:center;}
+  .drawer{width:100vw;}audio{width:160px;}
+}
+@media(max-width:380px){.signal-grid{grid-template-columns:1fr;}}
+
+.back-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;font-size:12px;color:var(--tx2);background:var(--bg2);border:0.5px solid var(--bd2);border-radius:var(--r-md);text-decoration:none;font-family:var(--font);transition:background .15s,color .15s;white-space:nowrap;flex-shrink:0;}
+.back-btn:hover{background:var(--bg3);color:var(--tx);}
+.back-btn i{font-size:14px;}
+.memory-video{width:100%;max-height:220px;display:block;border-radius:var(--r-md);background:#000;margin-top:8px;}
+</style>
+</head>
+<body>
+<div class="app">
+
+<header class="site-header">
+  <div class="header-top">
+    <div class="header-icon"><i class="ti ti-arrows-exchange" aria-hidden="true"></i></div>
+    <div>
+      <div class="header-meta">02 细胞结构 · M3 生物膜结构与特性</div>
+      <div class="header-title">跨膜运输方式判定</div>
+    </div>
+    <a class="back-btn" href="index.html" aria-label="返回首页"><i class="ti ti-arrow-left"></i> 首页</a>
+    <div class="header-id">T02_M3</div>
+  </div>
+  <nav class="nav-tabs" role="tablist">
+    <button class="nav-tab active" role="tab" onclick="switchTab('overview',this)">概览</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('mothers',this)">母题精讲</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('ladder',this)">变式阶梯</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('check',this)">自查清单</button>
+  </nav>
+</header>
+
+<!-- ══ 概览 ══ -->
+<div id="page-overview" class="page active">
+  <div class="memory-section">
+    <div class="memory-card">
+      <img class="memory-img" src="记忆卡/T02_M3_memory.png" alt="T02_M3 跨膜运输方式判定 记忆卡"
+           onclick="openLightbox(this.src,this.alt)"
+           onerror="this.style.display='none';document.getElementById('mem-placeholder').style.display='flex'">
+      <div id="mem-placeholder" class="memory-placeholder" style="display:none;">
+        <i class="ti ti-photo-up"></i>
+        <div class="memory-placeholder-text">记忆卡图片放置于此</div>
+        <div class="memory-placeholder-filename">记忆卡/T02_M3_memory.png</div>
+      </div>
+      <div class="memory-footer">
+        <span class="memory-label"><i class="ti ti-brain" style="margin-right:5px;color:var(--accent);"></i>记忆卡 · 三步判断法速记</span>
+        <video class="memory-video" controls controlsList="nodownload" preload="metadata" style="display:none">
+        <source src="audio/T02_M3.mp4" type="video/mp4">
+      </video>
+      <div class="audio-placeholder" style="display:flex"><i class="ti ti-video-off"></i>视频待放入</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title"><i class="ti ti-radar"></i>核心识别信号</div>
+  <div class="signal-grid">
+    <div class="signal-card">
+      <div class="signal-label">视觉信号</div>
+      <div class="signal-tag">细胞膜结构示意图</div>
+      <div class="signal-tag">（标注磷脂/载体/通道）</div>
+      <div class="signal-tag">浓度梯度图（高→低/低→高）</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">运输方式关键词</div>
+      <div class="signal-tag">自由扩散 / 协助扩散</div>
+      <div class="signal-tag">主动运输 / 载体蛋白</div>
+      <div class="signal-tag">通道蛋白 / 流动镶嵌模型</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">特殊陷阱关键词</div>
+      <div class="signal-tag">Na⁺-K⁺泵 / Na⁺梯度驱动</div>
+      <div class="signal-tag">次级主动运输 / 协同运输</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">膜特性关键词</div>
+      <div class="signal-tag">流动镶嵌模型</div>
+      <div class="signal-tag">人-鼠细胞融合实验</div>
+      <div class="signal-tag">选择透过性</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-alert-triangle"></i>一票否决信号</div>
+  <div class="subtopic-list">
+    <div class="subtopic-card">
+      <div class="subtopic-num">否决信号 1</div>
+      <div class="subtopic-name">逆浓度梯度 → 一定是主动运输</div>
+      <div class="subtopic-signal">物质从低浓度到高浓度（逆梯度）运输，必须消耗能量（ATP），一定是主动运输。不可能是任何被动运输方式。</div>
+    </div>
+    <div class="subtopic-card s2">
+      <div class="subtopic-num">否决信号 2</div>
+      <div class="subtopic-name">载体蛋白 ≠ 主动运输</div>
+      <div class="subtopic-signal">协助扩散也有载体蛋白（如GLUT葡萄糖转运蛋白）！关键看浓度梯度方向和是否耗能，不是看有无载体蛋白。载体+顺梯度+不耗能 = 协助扩散。</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-sitemap"></i>三步判断法</div>
+  <div class="subtopic-list">
+    <div class="subtopic-card">
+      <div class="subtopic-num">步骤 1 · 看物质性质</div>
+      <div class="subtopic-name">脂溶性小分子 → 自由扩散</div>
+      <div class="subtopic-signal">O₂、CO₂、乙醇、甘油、脂肪酸等脂溶性小分子可直接穿越磷脂双分子层，无需载体，不耗能。→ 自由扩散，无需继续判断。</div>
+    </div>
+    <div class="subtopic-card">
+      <div class="subtopic-num">步骤 2 · 看浓度梯度方向</div>
+      <div class="subtopic-name">逆梯度（低→高）→ 主动运输</div>
+      <div class="subtopic-signal">极性/大分子物质：先判断浓度方向。逆浓度梯度（从低浓度到高浓度）→ 一定是主动运输（必须消耗ATP）。顺浓度梯度则进入步骤3。</div>
+    </div>
+    <div class="subtopic-card s2">
+      <div class="subtopic-num">步骤 3 · 看是否需要膜蛋白</div>
+      <div class="subtopic-name">需要载体/通道 → 协助扩散；不需要 → 自由扩散</div>
+      <div class="subtopic-signal">顺浓度梯度的极性/大分子：需要载体蛋白或通道蛋白协助 → 协助扩散（不耗能）；不需要膜蛋白可自由穿膜 → 自由扩散。特殊：Na⁺梯度驱动 = 次级主动运输（间接耗能）。</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-alert-triangle"></i>高频易错</div>
+  <div class="trap-list">
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span><strong>载体蛋白=主动运输：</strong>GLUT是载体蛋白但介导的是协助扩散（葡萄糖顺浓度梯度）。载体≠主动，关键看梯度方向和是否耗能。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span><strong>Na⁺梯度驱动的运输是被动运输：</strong>Na⁺梯度由Na⁺-K⁺泵消耗ATP维持——虽然葡萄糖本身顺梯度，但整个系统的能量来自ATP，属于次级主动运输。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span><strong>把人-鼠融合实验的结论搞错：</strong>该实验证明的是膜的流动性（膜蛋白可移动），不是选择透过性。选择透过性是由载体/通道的特异性决定的。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span><strong>半透膜与选择透过性混淆：</strong>半透膜（透析袋）只允许小分子自由通过，是物理性质；选择透过性是活细胞膜的功能特性，依赖载体蛋白，细胞死亡后丧失选择透过性。</span></div>
+  </div>
+</div>
+
+<!-- ══ 母题精讲 ══ -->
+<div id="page-mothers" class="page">
+  <div class="filter-tabs">
+    <button class="filter-btn active" onclick="filterMQ('all',this)">全部 (2母题)</button>
+    <button class="filter-btn" onclick="filterMQ('s1',this)">子专题1·运输方式判断</button>
+    <button class="filter-btn" onclick="filterMQ('s2',this)">子专题2·膜特性</button>
+  </div>
+
+  <div class="mq-card" data-topic="s1">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge s1">子专题1 母题</span>
+      <span class="mq-name">膜结构图识别+三步判断法全覆盖·Na⁺梯度次级主动运输</span>
+      <span class="mq-purity">★ 10/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-074 · (1)(2) · 细胞膜结构示意图与物质出入细胞方式综合分析</div>
+      <div class="rule-box">核心考查：①细胞膜结构图识别（三种运输方式的结构对应）②三步判断法完整逻辑 ③Na⁺梯度驱动的葡萄糖运输=次级主动运输</div>
+      <div class="chain-label">三步判断法</div>
+      <div class="signal-chain">
+        <span class="sc-node s1">步骤1：物质性质</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">脂溶性小分子→自由扩散</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node s1">步骤2：浓度方向</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">逆梯度→主动运输</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node s1">步骤3：膜蛋白</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">有载体/通道→协助扩散；无→自由扩散</span>
+      </div>
+      <div class="mq-note">
+        <strong>Na⁺梯度驱动陷阱：</strong>小肠上皮肠腔侧，Na⁺从肠腔（高）→细胞内（低）顺梯度进入，葡萄糖借助Na⁺势能"搭便车"从肠腔进入细胞（葡萄糖本身可以是顺梯度，但依赖Na⁺梯度）。Na⁺梯度由Na⁺-K⁺泵消耗ATP维持 → 整体耗能 → 次级主动运输。<br><br>
+        <strong>图中识别：</strong>①直接穿膜无蛋白→自由扩散；②经过通道蛋白→协助扩散（通道型）；③经过载体蛋白+可能耗能→判断是否逆梯度→协助扩散或主动运输。
+      </div>
+      <button class="q-trigger" onclick="openDrawer('mq-074')"><i class="ti ti-eye"></i>查看完整题干与答案</button>
+    </div>
+  </div>
+
+  <div class="mq-card" data-topic="s2">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge s2">子专题2 母题</span>
+      <span class="mq-name">流动镶嵌模型要点·人-鼠融合实验证明膜流动性·选择透过性结构基础</span>
+      <span class="mq-purity">★ 9/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-044 · (1)(2)(3) · 细胞膜结构模型与蓝藻黑藻细胞结构对比</div>
+      <div class="rule-box s2">核心考查：①流动镶嵌模型要点（磷脂双分子层+蛋白质+糖蛋白）②人-鼠融合实验证明膜蛋白可移动（膜流动性）③选择透过性的结构基础=载体/通道的特异性识别</div>
+      <div class="chain-label">人-鼠细胞融合实验逻辑</div>
+      <div class="signal-chain">
+        <span class="sc-node s2">人细胞（红色荧光标记膜蛋白）</span><span class="sc-arrow">+</span>
+        <span class="sc-node s2">小鼠细胞（绿色荧光标记膜蛋白）</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node">细胞融合</span><span class="sc-arrow">→</span>
+        <span class="sc-node s2">37°C孵育</span><span class="sc-arrow">→</span>
+        <span class="sc-node s2">荧光均匀分布</span><span class="sc-arrow">→</span>
+        <span class="sc-node s2">证明：膜蛋白可移动</span>
+      </div>
+      <div class="mq-note">
+        <strong>流动镶嵌模型要点：</strong>磷脂双分子层为骨架（头亲水/尾疏水）；蛋白质镶嵌/贯穿/附着（具有流动性）；糖蛋白只在膜外侧（细胞识别/信息传递）。<br><br>
+        <strong>两大特性统一：</strong>流动性是结构基础（磷脂分子/蛋白质可移动）；选择透过性是功能体现（载体/通道的特异性决定什么能过）。
+      </div>
+      <button class="q-trigger" onclick="openDrawer('mq-044')"><i class="ti ti-eye"></i>查看完整题干与答案</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 变式阶梯 ══ -->
+<div id="page-ladder" class="page">
+  <div class="ladder-note">从"三步判断法完整覆盖"到"同一物质不同位置不同方式"到"半透膜vs选择透过性"，逐步提升跨膜运输的综合分析能力。</div>
+
+  <div class="ladder-section-label"><i class="ti ti-stairs"></i>子专题1 · 运输方式判断 变式阶梯</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l0">母题<br>10/10</div>
+      <div class="ladder-card" onclick="openDrawer('mq-074')">
+        <div class="ladder-card-name">EC-074 膜结构图+三步判断法全覆盖</div>
+        <div class="ladder-card-sub">识别三种运输方式 + Na⁺梯度驱动=次级主动运输陷阱</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">基础变式<br>9/10</div>
+      <div class="ladder-card" onclick="openDrawer('v-032')">
+        <div class="ladder-card-name">EC-032 小肠上皮细胞葡萄糖转运</div>
+        <div class="ladder-card-sub">同一物质不同位置不同方式：肠腔侧Na⁺梯度驱动（次级主动）vs 基底侧协助扩散（GLUT）</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ladder-section-label"><i class="ti ti-stairs"></i>子专题2 · 膜特性 变式阶梯</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l0">母题<br>9/10</div>
+      <div class="ladder-card" onclick="openDrawer('mq-044')">
+        <div class="ladder-card-name">EC-044 流动镶嵌模型与人-鼠融合实验</div>
+        <div class="ladder-card-sub">流动镶嵌模型要点 + 人-鼠融合实验证明膜流动性 + 选择透过性结构基础</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">基础变式<br>8/10</div>
+      <div class="ladder-card" onclick="openDrawer('v-070')">
+        <div class="ladder-card-name">EC-070 透析袋模拟质膜选择透过性</div>
+        <div class="ladder-card-sub">透析袋（半透膜）vs 活细胞质膜（选择透过性）——概念辨析与实验分析</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 自查清单 ══ -->
+<div id="page-check" class="page">
+  <div class="progress-row">
+    <span style="font-size:13px;color:var(--tx2);">掌握进度</span>
+    <span id="check-count" style="font-size:13px;color:var(--tx2);">0 / 6</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="check-bar"></div></div>
+
+  <div class="checklist" id="checklist">
+    <div class="check-item" onclick="toggleCheck(this,0)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能用三步判断法判定任意物质的运输方式：①看物质性质（脂溶性→自由扩散）②看浓度方向（逆梯度→主动运输）③看膜蛋白（有→协助扩散）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,1)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我不把载体蛋白等同于主动运输：GLUT是载体蛋白，但介导的是协助扩散（葡萄糖顺浓度梯度进入细胞）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,2)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我知道小肠肠腔侧葡萄糖吸收是次级主动运输：Na⁺梯度驱动（间接耗能），Na⁺梯度由Na⁺-K⁺泵消耗ATP维持</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,3)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我知道人-鼠细胞融合实验证明的是膜流动性（膜蛋白可移动），不是选择透过性</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,4)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能区分半透膜与选择透过性：半透膜（透析袋）靠物理孔径；选择透过性是活细胞膜的功能特性，依赖载体/通道蛋白，细胞死亡后丧失</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,5)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我知道同一物质在不同位置可采用不同运输方式：小肠上皮肠腔侧（次级主动）vs 基底侧（协助扩散），取决于该位置的浓度梯度</div>
+    </div>
+  </div>
+
+  <div class="action-row">
+    <button class="action-btn" onclick="checkAll()">全部勾选</button>
+    <button class="action-btn" onclick="clearAll()">清空重来</button>
+  </div>
+</div>
+
+</div><!-- .app -->
+
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <span class="drawer-badge" id="drawer-badge"></span>
+    <span class="drawer-title" id="drawer-title"></span>
+    <button class="drawer-close" onclick="closeDrawer()"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="drawer-ec-ref"><i class="ti ti-database"></i><span id="drawer-ref"></span></div>
+    <div class="drawer-stem" id="drawer-stem"></div>
+    <div class="drawer-sub" id="drawer-focus">
+      <div class="drawer-sub-label">解题关注点</div>
+      <div id="drawer-focus-text"></div>
+    </div>
+    <div class="drawer-answer" id="drawer-answer">
+      <div class="drawer-answer-label">参考答案</div>
+      <div id="drawer-answer-text"></div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="drawer-btn" onclick="toggleAnswer()">显示 / 隐藏答案</button>
+    <button class="drawer-btn primary" onclick="closeDrawer()">关闭</button>
+  </div>
+</div>
+
+<div class="lb-overlay" id="lb-overlay" onclick="closeLightbox()">
+  <button class="lb-close" onclick="closeLightbox()" aria-label="关闭">&#x2715;</button>
+  <img class="lb-img" id="lb-img" src="" alt="">
+</div>
+
+<script>
+const QUESTIONS = {
+  'mq-074': {
+    badge: '子专题1 母题',
+    badgeStyle: 'background:var(--accent-l);color:var(--accent-d);',
+    name: 'EC-074 细胞膜结构图与物质出入方式综合分析',
+    ref: 'EC-20260518-074 · 细胞膜结构示意图与物质出入细胞方式综合分析',
+    stem: `图示细胞膜结构模式图，标注了①②③三种运输方式：①直接穿过磷脂双分子层（无蛋白）；②经通道蛋白；③经载体蛋白（可能消耗能量）。
+
+(1) 请分别判断①②③各对应哪种跨膜运输方式，并说明判断依据。
+
+(2) 小肠上皮细胞肠腔侧吸收葡萄糖时，Na⁺与葡萄糖通过同一载体蛋白协同转运。请判断葡萄糖在此处的运输方式，并解释Na⁺梯度如何为葡萄糖提供动力。`,
+    focus: `关键①：直接穿膜无蛋白→自由扩散（代表：O₂/CO₂/乙醇）
+关键②：通道蛋白→协助扩散（通道型）→顺梯度+不耗能（代表：水通过水通道蛋白）
+关键③：载体蛋白→判断是否逆梯度+是否耗能→顺梯度不耗能=协助扩散；逆梯度耗能=主动运输
+关键④：Na⁺梯度驱动：Na⁺从肠腔（高Na⁺）→细胞内（低Na⁺）顺梯度，释放势能驱动葡萄糖一起进入；Na⁺梯度由Na⁺-K⁺泵消耗ATP来维持→整体需要ATP→次级主动运输`,
+    answer: `(1) ①自由扩散（脂溶性小分子直接穿膜，无需蛋白协助，顺梯度不耗能）；②协助扩散（经通道蛋白，顺梯度，不耗能）；③载体蛋白：顺梯度+不耗能=协助扩散；逆梯度+耗能=主动运输（具体取决于浓度梯度方向）
+(2) 葡萄糖在此处的运输方式=次级主动运输。Na⁺从肠腔顺浓度梯度进入细胞时释放势能，这一势能驱动葡萄糖逆浓度梯度（或顺梯度）一起转运进入细胞。Na⁺梯度由Na⁺-K⁺泵消耗ATP维持，因此葡萄糖运输间接依赖ATP，属于次级主动运输`
+  },
+  'mq-044': {
+    badge: '子专题2 母题',
+    badgeStyle: 'background:var(--purple-l);color:var(--purple-d);',
+    name: 'EC-044 流动镶嵌模型与人-鼠细胞融合实验',
+    ref: 'EC-20260518-044 · 细胞膜结构模型与蓝藻黑藻细胞结构对比',
+    stem: `(1) 请描述生物膜流动镶嵌模型的主要内容（至少说明3个要点）。
+
+(2) 人-鼠细胞融合实验：将人细胞（红色荧光标记膜蛋白）与小鼠细胞（绿色荧光标记膜蛋白）融合，37°C孵育40分钟后，两种荧光均匀分布在融合细胞表面。该实验证明了什么？能否证明选择透过性？
+
+(3) 细胞膜的选择透过性的结构基础是什么？与膜的流动性有什么关系？`,
+    focus: `关键①：流动镶嵌模型要点：磷脂双分子层为骨架（头亲水/尾疏水）；蛋白质镶嵌/贯穿/附着在磷脂分子中（具有流动性）；糖蛋白（糖脂）只分布在膜外侧；整体模型中磷脂分子和蛋白质都可以运动（流动性）
+关键②：人-鼠融合实验→荧光均匀分布→证明膜蛋白可以移动→证明膜的流动性。不能证明选择透过性（选择透过性需要看哪些物质能过，不是看蛋白质是否移动）
+关键③：选择透过性结构基础=载体蛋白和通道蛋白的种类和数量（特异性识别）。流动性是结构基础，选择透过性是功能体现，两者相辅相成`,
+    answer: `(1) ①磷脂双分子层构成膜的基本骨架（头部亲水朝外，尾部疏水向内）；②蛋白质分子镶嵌在磷脂双分子层中，有的贯穿整个膜，有的仅附着在一侧；③糖蛋白（和糖脂）只分布在膜的外侧，参与细胞识别；④磷脂分子和蛋白质分子都具有流动性（可侧向运动）
+(2) 证明了细胞膜具有流动性（膜蛋白可以自由移动）。不能证明选择透过性——选择透过性是关于哪些物质能过膜，与膜蛋白是否能移动无关
+(3) 选择透过性的结构基础=载体蛋白和通道蛋白的种类和数量（对特定物质有特异性识别）。流动性是膜的结构特性（磷脂/蛋白可移动），选择透过性是功能特性；流动性是实现选择透过性的基础，但选择透过性由特异性蛋白决定`
+  },
+  'v-032': {
+    badge: '子专题1 基础变式',
+    badgeStyle: 'background:var(--amber-l);color:var(--amber-d);',
+    name: 'EC-032 小肠上皮细胞葡萄糖转运机制',
+    ref: 'EC-20260518-032 · 小肠上皮细胞结构与物质转运机制',
+    stem: `小肠上皮细胞两侧（肠腔侧和基底侧）对葡萄糖的转运方式不同。
+
+(1) 肠腔侧：葡萄糖通过SGLT1（Na⁺-葡萄糖协同转运蛋白）进入细胞，该过程属于什么运输方式？为什么？
+
+(2) 基底侧：葡萄糖通过GLUT2（葡萄糖转运蛋白）离开细胞进入血液，该过程属于什么运输方式？为什么两侧的运输方式不同？`,
+    focus: `关键①：肠腔侧SGLT1：Na⁺顺梯度进入驱动葡萄糖转运→Na⁺梯度由Na⁺-K⁺泵消耗ATP维持→间接耗能→次级主动运输。即使葡萄糖本身顺梯度，但依赖Na⁺梯度（Na⁺梯度靠ATP维持），仍算主动运输
+关键②：基底侧GLUT2：葡萄糖从细胞内（高浓度）→血液（低浓度）顺梯度→有载体蛋白→协助扩散→不耗能
+关键③：两侧不同的原因：两侧载体蛋白种类不同（SGLT1 vs GLUT2），两侧浓度梯度方向和转运机制不同`,
+    answer: `(1) 次级主动运输。SGLT1利用Na⁺从肠腔（高浓度）进入细胞（低浓度）的势能，驱动葡萄糖同向转运进入细胞。Na⁺浓度梯度由细胞基底侧的Na⁺-K⁺泵消耗ATP维持，因此葡萄糖转运间接依赖ATP，属于次级主动运输
+(2) 协助扩散。细胞内葡萄糖浓度高于血液，葡萄糖顺浓度梯度通过GLUT2转运到血液，不需要消耗能量。两侧方式不同的原因：两侧载体蛋白种类不同（SGLT1需要Na⁺协同/GLUT2只需顺梯度），且两侧浓度梯度方向不同`
+  },
+  'v-070': {
+    badge: '子专题2 基础变式',
+    badgeStyle: 'background:var(--amber-l);color:var(--amber-d);',
+    name: 'EC-070 透析袋模拟质膜选择透过性',
+    ref: 'EC-20260518-070 · 透析袋模拟质膜选择透过性与质壁分离综合分析',
+    stem: `用透析袋（半透膜）模拟细胞膜，将含有葡萄糖、Na⁺和蛋白质的溶液装入透析袋，置于蒸馏水中。
+
+(1) 透析袋能否模拟活细胞质膜的选择透过性？两者有何本质区别？
+
+(2) 若将该透析袋放入死细胞中，死细胞的质膜是否还具有选择透过性？为什么？`,
+    focus: `关键①：透析袋（半透膜）是物理性孔径——小分子可通过（葡萄糖/Na⁺），大分子不能通过（蛋白质）。这是物理性质，不依赖载体蛋白，不消耗能量
+关键②：活细胞质膜的选择透过性：依赖载体蛋白/通道蛋白的特异性识别，可以主动调控（如主动运输）；透析袋只靠物理孔径——两者本质不同
+关键③：死细胞的质膜：细胞死亡→载体蛋白/通道蛋白失活→无法主动调控物质进出→失去选择透过性。可能退化为类似半透膜（只靠磷脂层的物理性质）`,
+    answer: `(1) 不能完全模拟。透析袋（半透膜）通过物理孔径大小控制通过，小分子（葡萄糖/Na⁺）能通过，大分子（蛋白质）不能通过，不消耗能量，不依赖蛋白质活性。活细胞质膜的选择透过性依赖于载体蛋白和通道蛋白的特异性识别，可以主动运输物质（消耗ATP），且受细胞调控——本质区别是：一个是物理孔径，一个是生物活性功能
+(2) 不具有选择透过性。细胞死亡后，载体蛋白和通道蛋白等功能蛋白失活，无法特异性识别和转运物质，失去主动调控能力，选择透过性丧失`
+  }
+};
+
+function switchTab(tab, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + tab).classList.add('active');
+  btn.classList.add('active');
+}
+function toggleMQ(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.mq-chevron');
+  body.classList.toggle('open');
+  chevron.classList.toggle('open');
+}
+function filterMQ(topic, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.mq-card').forEach(card => {
+    card.style.display = (topic === 'all' || card.dataset.topic === topic) ? '' : 'none';
+  });
+}
+function openDrawer(id) {
+  const q = QUESTIONS[id];
+  if (!q) return;
+  document.getElementById('drawer-badge').textContent = q.badge;
+  document.getElementById('drawer-badge').style.cssText = q.badgeStyle;
+  document.getElementById('drawer-title').textContent = q.name;
+  document.getElementById('drawer-ref').textContent = q.ref;
+  document.getElementById('drawer-stem').textContent = q.stem;
+  document.getElementById('drawer-focus-text').textContent = q.focus;
+  document.getElementById('drawer-answer-text').textContent = q.answer;
+  document.getElementById('drawer-answer').classList.remove('show');
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawer-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeDrawer() {
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('drawer-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function toggleAnswer() { document.getElementById('drawer-answer').classList.toggle('show'); }
+function openLightbox(src, alt) {
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lb-img').alt = alt || '';
+  document.getElementById('lb-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lb-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('lb-img').addEventListener('click', e => e.stopPropagation());
+
+const STORAGE_KEY = 'T02_M3_checks';
+const TOTAL = 6;
+function loadChecks() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch(e) { return []; } }
+function saveChecks(arr) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)); } catch(e) {} }
+function updateProgress() {
+  const done = document.querySelectorAll('.check-item.done').length;
+  document.getElementById('check-count').textContent = done + ' / ' + TOTAL;
+  document.getElementById('check-bar').style.width = (done / TOTAL * 100) + '%';
+}
+function toggleCheck(item, idx) {
+  item.classList.toggle('done');
+  const arr = loadChecks(); arr[idx] = item.classList.contains('done'); saveChecks(arr); updateProgress();
+}
+function checkAll() {
+  const arr = [];
+  document.querySelectorAll('.check-item').forEach((item, i) => { item.classList.add('done'); arr[i] = true; });
+  saveChecks(arr); updateProgress();
+}
+function clearAll() {
+  const arr = [];
+  document.querySelectorAll('.check-item').forEach((item, i) => { item.classList.remove('done'); arr[i] = false; });
+  saveChecks(arr); updateProgress();
+}
+(function() {
+  const arr = loadChecks();
+  document.querySelectorAll('.check-item').forEach((item, i) => { if (arr[i]) item.classList.add('done'); });
+  updateProgress();
+})();
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (document.getElementById('lb-overlay').classList.contains('open')) closeLightbox();
+    else if (document.getElementById('drawer').classList.contains('open')) closeDrawer();
+  }
+});
+</script>
+</body>
+</html>

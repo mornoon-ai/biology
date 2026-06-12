@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T04_M1 · 神经体液稳态调节</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent:#0F6E56; --accent-l:#E1F5EE; --accent-m:#7DCFBB; --accent-d:#085041;
+  --purple:#534AB7; --purple-l:#EEEDFE; --purple-d:#3C3489;
+  --amber:#BA7517; --amber-l:#FAEEDA; --amber-d:#633806;
+  --coral:#993C1D; --coral-l:#FAECE7; --coral-d:#712B13;
+  --bg:#ffffff; --bg2:#f7f7f5; --bg3:#f1efe8;
+  --tx:#1a1a18; --tx2:#5f5e5a; --tx3:#888780;
+  --bd:rgba(0,0,0,0.10); --bd2:rgba(0,0,0,0.18);
+  --r-sm:6px; --r-md:8px; --r-lg:12px; --r-xl:16px;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+}
+@media(prefers-color-scheme:dark){
+  :root{ --bg:#1c1c1a;--bg2:#252523;--bg3:#2c2c2a;--tx:#f0efea;--tx2:#b4b2a9;--tx3:#888780;
+    --bd:rgba(255,255,255,0.09);--bd2:rgba(255,255,255,0.16);
+    --accent-l:#04342C;--accent-d:#9FE1CB;--purple-l:#26215C;--purple-d:#CECBF6;
+    --amber-l:#412402;--amber-d:#FAC775;--coral-l:#4A1B0C;--coral-d:#F5C4B3; }
+}
+body{font-family:var(--font);font-size:15px;line-height:1.6;color:var(--tx);background:var(--bg3);min-height:100vh;}
+.app{max-width:800px;margin:0 auto;background:var(--bg);min-height:100vh;}
+.site-header{padding:1.25rem 1.5rem 0;background:var(--bg);border-bottom:0.5px solid var(--bd);position:sticky;top:0;z-index:20;}
+.header-top{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.header-icon{background:var(--accent-l);border-radius:var(--r-md);padding:6px 8px;display:flex;align-items:center;justify-content:center;}
+.header-icon i{font-size:20px;color:var(--accent);}
+.header-meta{font-size:12px;color:var(--tx3);}
+.header-title{font-size:17px;font-weight:500;color:var(--tx);}
+.header-id{margin-left:auto;font-size:11px;color:var(--tx3);background:var(--bg2);padding:3px 9px;border-radius:var(--r-sm);}
+.nav-tabs{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.nav-tab{padding:.6rem 1.1rem;font-size:13px;color:var(--tx2);cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;font-family:var(--font);white-space:nowrap;transition:color .15s,border-color .15s;}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500;}
+.nav-tab:hover:not(.active){color:var(--tx);}
+.page{display:none;padding:1.5rem;} .page.active{display:block;}
+.memory-section{margin-bottom:1.5rem;}
+.memory-card{border:0.5px solid var(--bd);border-radius:var(--r-xl);overflow:hidden;background:var(--bg);}
+.memory-placeholder{min-height:200px;background:var(--bg2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--tx3);padding:2rem;}
+.memory-placeholder i{font-size:32px;color:var(--bd2);}
+.memory-placeholder-text{font-size:13px;text-align:center;line-height:1.6;}
+.memory-placeholder-filename{font-size:11px;background:var(--bg3);border:0.5px solid var(--bd);border-radius:var(--r-sm);padding:4px 10px;font-family:monospace;color:var(--tx2);}
+.memory-img{width:100%;display:block;max-height:320px;object-fit:contain;background:var(--bg3);cursor:zoom-in;transition:opacity .15s;}
+.memory-img:hover{opacity:.9;}
+.memory-footer{padding:.85rem 1rem;display:flex;align-items:center;gap:10px;border-top:0.5px solid var(--bd);}
+.memory-label{font-size:13px;font-weight:500;color:var(--tx);flex:1;}
+audio{height:32px;width:220px;}
+.audio-placeholder{font-size:12px;color:var(--tx3);display:flex;align-items:center;gap:5px;background:var(--bg2);padding:6px 10px;border-radius:var(--r-sm);}
+.section-title{font-size:13px;font-weight:500;color:var(--tx2);display:flex;align-items:center;gap:7px;margin-bottom:1rem;text-transform:uppercase;letter-spacing:.04em;}
+.section-divider{height:0.5px;background:var(--bd);margin:1.5rem 0;}
+.signal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:1.5rem;}
+.signal-card{background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;}
+.signal-label{font-size:11px;color:var(--tx3);letter-spacing:.04em;margin-bottom:.4rem;text-transform:uppercase;}
+.signal-tag{font-size:13px;color:var(--tx);margin-bottom:2px;}
+.subtopic-list{display:flex;flex-direction:column;gap:10px;margin-bottom:1.5rem;}
+.subtopic-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.9rem 1.1rem;border-left:3px solid var(--accent);}
+.subtopic-card.s2{border-left-color:var(--purple);} .subtopic-card.s3{border-left-color:var(--amber);}
+.subtopic-num{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.3rem;}
+.subtopic-name{font-size:14px;font-weight:500;color:var(--tx);margin-bottom:.3rem;}
+.subtopic-signal{font-size:13px;color:var(--tx2);line-height:1.6;}
+.trap-list{display:flex;flex-direction:column;gap:7px;}
+.trap-item{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.55;}
+.trap-icon{color:#E24B4A;font-size:15px;flex-shrink:0;margin-top:1px;}
+.filter-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem;}
+.filter-btn{padding:5px 13px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx2);font-family:var(--font);transition:all .15s;}
+.filter-btn.active{background:var(--accent-l);color:var(--accent-d);border-color:var(--accent);font-weight:500;}
+.mq-card{border:0.5px solid var(--bd);border-radius:var(--r-lg);background:var(--bg);margin-bottom:.85rem;overflow:hidden;}
+.mq-header{padding:.9rem 1.1rem;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;transition:background .15s;}
+.mq-header:hover{background:var(--bg2);}
+.mq-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);white-space:nowrap;}
+.mq-badge.s1{background:var(--accent-l);color:var(--accent-d);} .mq-badge.s2{background:var(--purple-l);color:var(--purple-d);} .mq-badge.s3{background:var(--amber-l);color:var(--amber-d);}
+.mq-name{font-size:14px;font-weight:500;color:var(--tx);flex:1;}
+.mq-purity{font-size:12px;color:var(--tx3);flex-shrink:0;}
+.mq-chevron{color:var(--tx3);font-size:16px;transition:transform .2s;flex-shrink:0;}
+.mq-chevron.open{transform:rotate(180deg);}
+.mq-body{display:none;padding:.75rem 1.1rem 1.1rem;border-top:0.5px solid var(--bd);}
+.mq-body.open{display:block;}
+.mq-source{font-size:12px;color:var(--tx3);margin-bottom:.65rem;}
+.rule-box{background:var(--accent-l);border-left:3px solid var(--accent);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:.65rem .9rem;font-size:13px;color:var(--accent-d);margin:.75rem 0;line-height:1.65;}
+.rule-box.s2{background:var(--purple-l);border-left-color:var(--purple);color:var(--purple-d);}
+.rule-box.s3{background:var(--amber-l);border-left-color:var(--amber);color:var(--amber-d);}
+.chain-label{font-size:12px;font-weight:500;color:var(--tx2);margin:.75rem 0 .4rem;text-transform:uppercase;letter-spacing:.04em;}
+.signal-chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:6px;}
+.sc-node{background:var(--bg2);border-radius:var(--r-sm);padding:3px 9px;font-size:13px;color:var(--tx);}
+.sc-node.s1{background:var(--accent-l);color:var(--accent-d);} .sc-node.s2{background:var(--purple-l);color:var(--purple-d);} .sc-node.s3{background:var(--amber-l);color:var(--amber-d);}
+.sc-arrow{color:var(--tx3);font-size:13px;}
+.mq-note{font-size:13px;color:var(--tx2);margin-top:.75rem;line-height:1.6;}
+.q-trigger{display:inline-flex;align-items:center;gap:5px;margin-top:.75rem;padding:6px 12px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;color:var(--tx2);cursor:pointer;font-family:var(--font);transition:all .15s;}
+.q-trigger:hover{background:var(--bg2);color:var(--tx);} .q-trigger i{font-size:14px;}
+.ladder-section-label{font-size:13px;font-weight:500;color:var(--tx2);margin-bottom:.85rem;display:flex;align-items:center;gap:7px;}
+.ladder-rows{display:flex;flex-direction:column;gap:8px;margin-bottom:1rem;}
+.ladder-row{display:grid;grid-template-columns:64px 1fr;gap:10px;align-items:start;}
+.ladder-level{font-size:11px;font-weight:500;padding:6px 4px;border-radius:var(--r-sm);text-align:center;line-height:1.4;}
+.l0{background:var(--accent-l);color:var(--accent-d);} .l1{background:var(--purple-l);color:var(--purple-d);} .l2{background:var(--amber-l);color:var(--amber-d);} .l3{background:var(--coral-l);color:var(--coral-d);}
+.ladder-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.65rem .9rem;background:var(--bg);cursor:pointer;transition:background .15s;}
+.ladder-card:hover{background:var(--bg2);}
+.ladder-card-name{font-size:13px;font-weight:500;color:var(--tx);}
+.ladder-card-sub{font-size:12px;color:var(--tx3);margin-top:3px;line-height:1.5;}
+.ladder-note{background:var(--bg2);border-radius:var(--r-md);padding:.65rem .9rem;font-size:12px;color:var(--tx2);margin-bottom:1rem;line-height:1.55;}
+.progress-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem;}
+.progress-bar{height:5px;border-radius:3px;background:var(--bg2);margin-bottom:1.25rem;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;background:var(--accent);width:0%;transition:width .3s;}
+.checklist{display:flex;flex-direction:column;gap:7px;}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:.7rem .9rem;border:0.5px solid var(--bd);border-radius:var(--r-md);background:var(--bg);cursor:pointer;transition:background .15s;}
+.check-item.done{background:var(--bg2);}
+.check-box{width:18px;height:18px;border:1.5px solid var(--bd2);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .15s;}
+.check-item.done .check-box{background:var(--accent);border-color:var(--accent);}
+.check-box i{font-size:11px;color:#fff;display:none;} .check-item.done .check-box i{display:block;}
+.check-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.check-item.done .check-text{color:var(--tx3);text-decoration:line-through;}
+.action-row{margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:8px;}
+.action-btn{padding:7px 14px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.action-btn:hover{background:var(--bg2);}
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s;}
+.drawer-overlay.open{opacity:1;pointer-events:all;}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100vw);background:var(--bg);z-index:101;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden;}
+.drawer.open{transform:translateX(0);}
+.drawer-header{padding:1rem 1.25rem;border-bottom:0.5px solid var(--bd);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.drawer-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);}
+.drawer-title{font-size:14px;font-weight:500;color:var(--tx);flex:1;line-height:1.4;}
+.drawer-close{background:none;border:none;cursor:pointer;color:var(--tx2);padding:4px;border-radius:var(--r-sm);display:flex;align-items:center;transition:background .15s;}
+.drawer-close:hover{background:var(--bg2);}
+.drawer-body{flex:1;overflow-y:auto;padding:1.25rem;}
+.drawer-ec-ref{font-size:12px;color:var(--tx3);margin-bottom:1rem;display:flex;align-items:center;gap:6px;}
+.drawer-stem{font-size:14px;color:var(--tx);line-height:1.75;white-space:pre-wrap;}
+.drawer-sub{font-size:13px;color:var(--tx2);background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:1rem;line-height:1.65;}
+.drawer-sub-label{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-answer{font-size:13px;color:var(--tx);background:var(--accent-l);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:.75rem;line-height:1.65;display:none;}
+.drawer-answer.show{display:block;}
+.drawer-answer-label{font-size:11px;font-weight:500;color:var(--accent-d);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-footer{padding:.85rem 1.25rem;border-top:0.5px solid var(--bd);display:flex;gap:8px;flex-shrink:0;}
+.drawer-btn{flex:1;padding:8px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.drawer-btn:hover{background:var(--bg2);}
+.drawer-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+.drawer-btn.primary:hover{background:var(--accent-d);}
+.lb-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:200;display:none;align-items:center;justify-content:center;cursor:zoom-out;}
+.lb-overlay.open{display:flex;}
+.lb-img{max-width:92vw;max-height:92vh;object-fit:contain;border-radius:var(--r-md);box-shadow:0 8px 40px rgba(0,0,0,.5);}
+.lb-close{position:fixed;top:16px;right:20px;background:none;border:none;color:#fff;font-size:28px;cursor:pointer;line-height:1;opacity:.7;transition:opacity .15s;}
+.lb-close:hover{opacity:1;}
+@media(max-width:600px){
+  .site-header{padding:1rem 1rem 0;}.page{padding:1rem;}.header-title{font-size:15px;}
+  .signal-grid{grid-template-columns:1fr 1fr;}.ladder-row{grid-template-columns:52px 1fr;gap:8px;}
+  .action-row{flex-direction:column;}.action-btn{width:100%;text-align:center;}.drawer{width:100vw;}audio{width:160px;}
+}
+@media(max-width:380px){.signal-grid{grid-template-columns:1fr;}}
+
+.back-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;font-size:12px;color:var(--tx2);background:var(--bg2);border:0.5px solid var(--bd2);border-radius:var(--r-md);text-decoration:none;font-family:var(--font);transition:background .15s,color .15s;white-space:nowrap;flex-shrink:0;}
+.back-btn:hover{background:var(--bg3);color:var(--tx);}
+.back-btn i{font-size:14px;}
+.memory-video{width:100%;max-height:220px;display:block;border-radius:var(--r-md);background:#000;margin-top:8px;}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="site-header">
+  <div class="header-top">
+    <div class="header-icon"><i class="ti ti-activity" aria-hidden="true"></i></div>
+    <div>
+      <div class="header-meta">04 生理调节 · M1 神经体液稳态</div>
+      <div class="header-title">神经体液稳态调节</div>
+    </div>
+    <a class="back-btn" href="index.html" aria-label="返回首页"><i class="ti ti-arrow-left"></i> 首页</a>
+    <div class="header-id">T04_M1</div>
+  </div>
+  <nav class="nav-tabs" role="tablist">
+    <button class="nav-tab active" role="tab" onclick="switchTab('overview',this)">概览</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('mothers',this)">母题精讲</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('ladder',this)">变式阶梯</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('check',this)">自查清单</button>
+  </nav>
+</header>
+
+<!-- 概览 -->
+<div id="page-overview" class="page active">
+  <div class="memory-section">
+    <div class="memory-card">
+      <img class="memory-img" src="记忆卡/T04_M1_memory.png" alt="T04_M1 记忆卡"
+           onclick="openLightbox(this.src,this.alt)"
+           onerror="this.style.display='none';document.getElementById('mem-placeholder').style.display='flex'">
+      <div id="mem-placeholder" class="memory-placeholder" style="display:none;">
+        <i class="ti ti-photo-up"></i>
+        <div class="memory-placeholder-text">记忆卡图片放置于此</div>
+        <div class="memory-placeholder-filename">记忆卡/T04_M1_memory.png</div>
+      </div>
+      <div class="memory-footer">
+        <span class="memory-label"><i class="ti ti-brain" style="margin-right:5px;color:var(--accent);"></i>记忆卡 · 三大稳态调节系统</span>
+        <video class="memory-video" controls controlsList="nodownload" preload="metadata" style="display:none">
+        <source src="audio/T04_M1.mp4" type="video/mp4">
+      </video>
+      <div class="audio-placeholder" style="display:flex"><i class="ti ti-video-off"></i>视频待放入</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title"><i class="ti ti-radar"></i>核心触发信号</div>
+  <div class="signal-grid">
+    <div class="signal-card">
+      <div class="signal-label">视觉信号</div>
+      <div class="signal-tag">血糖浓度变化曲线</div>
+      <div class="signal-tag">体温调节示意图</div>
+      <div class="signal-tag">渗透压调节流程图</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">关键词</div>
+      <div class="signal-tag">胰岛素 / 胰高血糖素 / 血糖</div>
+      <div class="signal-tag">ADH / 抗利尿激素 / 渗透压</div>
+      <div class="signal-tag">体温调定点 / 产热 / 散热</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">任务关键词</div>
+      <div class="signal-tag">分析激素变化趋势</div>
+      <div class="signal-tag">解释调节机制</div>
+      <div class="signal-tag">判断反馈调节类型</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">共同框架</div>
+      <div class="signal-tag">感受器→传入神经→下丘脑</div>
+      <div class="signal-tag">→传出(神经/体液)→效应器</div>
+      <div class="signal-tag">→负反馈调节</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-sitemap"></i>三条调节路线</div>
+  <div class="subtopic-list">
+    <div class="subtopic-card">
+      <div class="subtopic-num">路径 1 · 血糖调节</div>
+      <div class="subtopic-name">胰岛素⇌胰高血糖素·双激素拮抗</div>
+      <div class="subtopic-signal">血糖↑→胰岛B细胞→胰岛素↑→靶细胞(肝/肌/脂肪)摄取葡萄糖→血糖↓。血糖↓→胰岛A细胞→胰高血糖素↑→肝糖原分解+非糖物质转化→血糖↑。肾上腺素也参与升血糖。神经→体液联动（蓝光→交感→BAT产热→血糖变化）</div>
+    </div>
+    <div class="subtopic-card s2">
+      <div class="subtopic-num">路径 2 · 水盐平衡</div>
+      <div class="subtopic-name">渗透压↑→ADH↑→水重吸收↑→尿↓</div>
+      <div class="subtopic-signal">细胞外液渗透压升高→下丘脑渗透压感受器→垂体后叶释放ADH↑→肾集合管/远曲小管增加水通道蛋白(AQP2)→水重吸收↑→尿量↓→渗透压恢复。中枢性尿崩症=ADH合成/释放障碍；肾性尿崩症=ADH受体功能缺陷</div>
+    </div>
+    <div class="subtopic-card s3">
+      <div class="subtopic-num">路径 3 · 体温调节</div>
+      <div class="subtopic-name">寒冷→三路并行：散热↓+产热↑</div>
+      <div class="subtopic-signal">寒冷→皮肤血管收缩(散热↓)+骨骼肌战栗(产热↑)+甲状腺激素/肾上腺素分泌↑(代谢产热↑)。三条产热线并行，下丘脑体温调节中枢统筹。炎症时PG(前列腺素)→调定点↑→发热，解热药靶向合成PG的酶</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-alert-triangle"></i>高频易错</div>
+  <div class="trap-list">
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span><strong>胰岛素=唯一降血糖激素</strong>——血糖调节是多激素合力：胰岛素(降)、胰高血糖素(升)、肾上腺素(升)共同参与，血糖是净平衡结果，不是单一激素控制。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span><strong>ADH在肾小管合成</strong>——ADH由<strong>下丘脑</strong>合成，经垂体后叶储存和释放，作用于肾集合管和远曲小管，不是肾本地产生。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span><strong>发热=体温调节失常</strong>——发热是调定点<strong>主动上移</strong>，属于正常的免疫防御机制（PG介导），调节机制本身完好，只是设定值改变。</span></div>
+  </div>
+</div>
+
+<!-- 母题精讲 -->
+<div id="page-mothers" class="page">
+  <div class="filter-tabs">
+    <button class="filter-btn active" onclick="filterMQ('all',this)">全部 (3母题)</button>
+    <button class="filter-btn" onclick="filterMQ('s1',this)">路径1·血糖调节</button>
+    <button class="filter-btn" onclick="filterMQ('s2',this)">路径2·水盐平衡</button>
+    <button class="filter-btn" onclick="filterMQ('s3',this)">路径3·体温调节</button>
+  </div>
+
+  <div class="mq-card" data-topic="s1">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge s1">路径1 母题</span>
+      <span class="mq-name">血糖调节·蓝光→交感→BAT·双激素拮抗</span>
+      <span class="mq-purity">★ 8/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-259 · 光照影响血糖调节蓝光ipRGC感光细胞交感神经BAT棕色脂肪细胞产热胰岛素胰高血糖素综合 · (3)(4)</div>
+      <div class="rule-box">核心考查：血糖升→胰岛B细胞→胰岛素↑；血糖降→胰岛A细胞→胰高血糖素↑。蓝光→ipRGC视网膜细胞→交感神经→棕色脂肪(BAT)产热→血糖下降，神经体液跨系统联动</div>
+      <div class="chain-label">血糖升高调节链</div>
+      <div class="signal-chain">
+        <span class="sc-node s1">血糖↑</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">胰岛B细胞感受</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">胰岛素分泌↑</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">靶细胞摄取葡萄糖↑</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">血糖恢复</span>
+      </div>
+      <div class="chain-label">蓝光→神经体液联动链</div>
+      <div class="signal-chain">
+        <span class="sc-node s1">蓝光刺激ipRGC</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">交感神经激活</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">BAT产热↑</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">葡萄糖消耗↑</span><span class="sc-arrow">→</span>
+        <span class="sc-node s1">血糖↓</span>
+      </div>
+      <div class="mq-note">
+        <strong>关键认知：</strong>胰岛素作用于全身大多数细胞（促进葡萄糖摄取利用/糖原合成/抑制糖原分解），而胰高血糖素主要作用于肝细胞（促进肝糖原分解+非糖物质转化为葡萄糖）。<br>
+        <strong>拮抗关系：</strong>两种激素作用相反，共同精确调控血糖稳态。
+      </div>
+      <button class="q-trigger" onclick="openDrawer('mq-259')"><i class="ti ti-eye"></i>查看完整题干与答案</button>
+    </div>
+  </div>
+
+  <div class="mq-card" data-topic="s2">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge s2">路径2 母题</span>
+      <span class="mq-name">ADH·尿崩症·中枢性vs肾性区分</span>
+      <span class="mq-purity">★ 9/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-333 · 遗传性尿崩症烦渴多饮多尿中枢性(CDI)和肾性(NDI) · (1)(4)(5)</div>
+      <div class="rule-box s2">核心考查：渗透压升高→下丘脑感受器→垂体后叶释放ADH→肾集合管水重吸收↑→尿量↓。尿崩症=ADH功能通路断裂——中枢性=ADH合成/释放缺陷，肾性=ADH受体或水通道缺陷</div>
+      <div class="chain-label">正常水盐平衡调节链</div>
+      <div class="signal-chain">
+        <span class="sc-node s2">细胞外液渗透压↑</span><span class="sc-arrow">→</span>
+        <span class="sc-node s2">下丘脑渗透压感受器</span><span class="sc-arrow">→</span>
+        <span class="sc-node s2">垂体后叶释放ADH↑</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node s2">肾集合管AQP2↑</span><span class="sc-arrow">→</span>
+        <span class="sc-node s2">水重吸收↑</span><span class="sc-arrow">→</span>
+        <span class="sc-node s2">尿量↓/渗透压恢复</span>
+      </div>
+      <div class="chain-label">尿崩症断裂位置</div>
+      <div class="signal-chain">
+        <span class="sc-node s2">CDI：合成/释放环节</span><span class="sc-arrow">→</span>
+        <span class="sc-node s2">ADH↓→肾无法响应</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node s2">NDI：受体/水通道缺陷</span><span class="sc-arrow">→</span>
+        <span class="sc-node s2">ADH正常↑但肾不响应</span>
+      </div>
+      <div class="mq-note">
+        <strong>诊断关键：</strong>给外源ADH后尿量减少→CDI（肾还能响应）；给ADH后无效→NDI（肾本身缺陷）。<br>
+        <strong>症状共同点：</strong>多尿→血浆渗透压↑→烦渴多饮→多尿循环。
+      </div>
+      <button class="q-trigger" onclick="openDrawer('mq-333')"><i class="ti ti-eye"></i>查看完整题干与答案</button>
+    </div>
+  </div>
+
+  <div class="mq-card" data-topic="s3">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge s3">路径3 母题</span>
+      <span class="mq-name">体温调节·寒冷应激·三路产热散热</span>
+      <span class="mq-purity">★ 8/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-277 · 体温调节白露节气寒冷应激甲状腺激素肾上腺素产热散热血管收缩代谢 · (1)</div>
+      <div class="rule-box s3">核心考查：寒冷刺激→三路并行：①皮肤血管收缩(散热↓)、②骨骼肌战栗(产热↑)、③甲状腺激素+肾上腺素分泌↑(代谢产热↑)。下丘脑是体温调节中枢</div>
+      <div class="chain-label">寒冷应激三条响应路线</div>
+      <div class="signal-chain">
+        <span class="sc-node s3">寒冷刺激皮肤感受器</span><span class="sc-arrow">→</span>
+        <span class="sc-node s3">下丘脑体温中枢</span><span class="sc-arrow">→</span>
+        <span class="sc-node s3">路线①②③并行</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node s3">①皮肤血管收缩→散热↓</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node s3">②骨骼肌战栗→产热↑</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node s3">③甲状腺激素+肾上腺素↑→代谢产热↑</span>
+      </div>
+      <div class="mq-note">
+        <strong>层次区分：</strong>①②为即时神经调节（快速），③为激素调节（较慢但持久）。<br>
+        <strong>甲状腺激素与肾上腺素协同：</strong>肾上腺素促进甲状腺激素的产热效应（允许作用），两者协同提高全身代谢率。
+      </div>
+      <button class="q-trigger" onclick="openDrawer('mq-277')"><i class="ti ti-eye"></i>查看完整题干与答案</button>
+    </div>
+  </div>
+</div>
+
+<!-- 变式阶梯 -->
+<div id="page-ladder" class="page">
+  <div class="ladder-note">从"单系统激素变化判断"到"双系统联动分析"到"机制异常（尿崩/发热）的靶点推断"，逐步强化稳态调节综合分析能力。</div>
+
+  <div class="ladder-section-label"><i class="ti ti-stairs"></i>路径1 · 血糖调节 变式阶梯</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l0">母题<br>8/10</div>
+      <div class="ladder-card" onclick="openDrawer('mq-259')">
+        <div class="ladder-card-name">EC-259 蓝光→交感→BAT·双激素血糖综合</div>
+        <div class="ladder-card-sub">子问题(3)(4)·神经体液跨系统联动+胰岛素/胰高血糖素拮抗</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">基础变式<br>8/10</div>
+      <div class="ladder-card" onclick="openDrawer('v-322')">
+        <div class="ladder-card-name">EC-322 胰岛素受体化学组成+血糖定量方法</div>
+        <div class="ladder-card-sub">子问题(1)(4)·受体的化学本质(糖蛋白)+信号转导起点+血糖检测方法区分</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ladder-section-label"><i class="ti ti-stairs"></i>路径2 · 水盐平衡 变式阶梯</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l0">母题<br>9/10</div>
+      <div class="ladder-card" onclick="openDrawer('mq-333')">
+        <div class="ladder-card-name">EC-333 遗传性尿崩症·中枢性vs肾性诊断</div>
+        <div class="ladder-card-sub">子问题(1)(4)(5)·ADH通路完整+两型尿崩症机制区分+基因治疗方向</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ladder-section-label"><i class="ti ti-stairs"></i>路径3 · 体温调节 变式阶梯</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l0">母题<br>8/10</div>
+      <div class="ladder-card" onclick="openDrawer('mq-277')">
+        <div class="ladder-card-name">EC-277 白露寒冷·产热散热三条路线</div>
+        <div class="ladder-card-sub">子问题(1)·血管收缩+战栗+甲状腺激素/肾上腺素协同</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">基础变式<br>8/10</div>
+      <div class="ladder-card" onclick="openDrawer('v-327')">
+        <div class="ladder-card-name">EC-327 散利痛·PG→调定点↑→发热机制</div>
+        <div class="ladder-card-sub">子问题(3)·前列腺素(PG)介导调定点上移→发热；解热药靶向COX酶抑制PG合成</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 自查清单 -->
+<div id="page-check" class="page">
+  <div class="progress-row">
+    <span style="font-size:13px;color:var(--tx2);">掌握进度</span>
+    <span id="check-count" style="font-size:13px;color:var(--tx2);">0 / 3</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="check-bar"></div></div>
+  <div class="checklist" id="checklist">
+    <div class="check-item" onclick="toggleCheck(this,0)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能写出血糖升/降时的完整激素响应链，并说明胰岛素与胰高血糖素的拮抗关系（→ 母题精讲·路径1）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,1)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能描述ADH的合成→释放→靶点路径，并区分中枢性尿崩症与肾性尿崩症的断裂位置（→ 母题精讲·路径2）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,2)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能列举寒冷时的3种应答（血管收缩·战栗·激素分泌↑），并理解发热是调定点主动上移而非失调（→ 母题精讲·路径3）</div>
+    </div>
+  </div>
+  <div class="action-row">
+    <button class="action-btn" onclick="checkAll()">全部勾选</button>
+    <button class="action-btn" onclick="clearAll()">清空重来</button>
+  </div>
+</div>
+</div>
+
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <span class="drawer-badge" id="drawer-badge"></span>
+    <span class="drawer-title" id="drawer-title"></span>
+    <button class="drawer-close" onclick="closeDrawer()"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="drawer-ec-ref" id="drawer-ref"><i class="ti ti-file-description"></i><span></span></div>
+    <div class="drawer-stem" id="drawer-stem"></div>
+    <div class="drawer-sub" id="drawer-focus">
+      <div class="drawer-sub-label">考查重点</div>
+      <div id="drawer-focus-text"></div>
+    </div>
+    <div class="drawer-answer" id="drawer-answer">
+      <div class="drawer-answer-label">核心答案</div>
+      <div id="drawer-answer-text"></div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="drawer-btn" onclick="toggleAnswer()">显示 / 隐藏答案</button>
+    <button class="drawer-btn primary" onclick="closeDrawer()">关闭</button>
+  </div>
+</div>
+
+<div class="lb-overlay" id="lb-overlay" onclick="closeLightbox()">
+  <button class="lb-close" onclick="closeLightbox()">×</button>
+  <img class="lb-img" id="lb-img" src="" alt="">
+</div>
+
+<script>
+const QUESTIONS = {
+  'mq-259':{badge:'路径1 母题',badgeStyle:'background:var(--accent-l);color:var(--accent-d);',name:'EC-259 蓝光→交感→BAT·双激素血糖综合',ref:'EC-20260522-259 · 光照影响血糖调节蓝光ipRGC感光细胞交感神经BAT棕色脂肪细胞产热胰岛素胰高血糖素综合 · (3)(4)',stem:`某研究发现，蓝光照射可通过视网膜ipRGC感光细胞激活交感神经，进而调控棕色脂肪细胞(BAT)的产热功能，影响血糖水平。\n\n(3) 分析蓝光照射后血糖浓度下降的完整神经体液调节路径。\n\n(4) 若给实验小鼠注射胰岛素拮抗剂（阻断胰岛素受体），在相同蓝光照射条件下，BAT产热量如何变化？对血糖的影响是什么？请分析原因。`,focus:`① 神经→体液跨系统联动：蓝光(物理信号)→神经信号→激素效应\n② 双激素拮抗：胰岛素(降血糖)与胰高血糖素(升血糖)相互拮抗，血糖是两者平衡的净结果\n③ BAT(棕色脂肪)：富含线粒体，专门产热（消耗大量葡萄糖）\n④ 阻断胰岛素受体后：葡萄糖进入细胞减少，但BAT产热是神经控制，受蓝光→交感通路支配，分析两条通路各自贡献`,answer:`(3) 完整路径：\n蓝光→视网膜ipRGC感光细胞接受刺激→产生神经冲动→传入中枢→交感神经激活→支配BAT的交感神经末梢释放去甲肾上腺素→BAT线粒体解偶联蛋白(UCP1)激活→产热↑→BAT大量消耗葡萄糖氧化供能→血糖↓→胰岛A细胞感受血糖下降→胰高血糖素分泌↑（体液调节负反馈）。\n\n整合：蓝光通过神经途径（交感→BAT耗糖）与体液途径（胰高血糖素负反馈）双重调控血糖。\n\n(4) BAT产热量：不变（BAT产热受交感神经直接控制，蓝光→交感→BAT通路不依赖胰岛素受体，故产热量与对照相同）。\n\n血糖影响：血糖下降幅度减小（胰岛素受体被阻断→葡萄糖进入肌肉/肝脏/脂肪减少→血糖去路减少），但BAT产热仍消耗葡萄糖→血糖仍有所下降，只是下降量少于正常组。`},
+  'mq-333':{badge:'路径2 母题',badgeStyle:'background:var(--purple-l);color:var(--purple-d);',name:'EC-333 ADH·尿崩症·中枢性vs肾性',ref:'EC-20260522-333 · 遗传性尿崩症的主要症状为烦渴多饮多尿可分为中枢性(CDI)和肾性(NDI) · (1)(4)(5)',stem:`遗传性尿崩症分为两型：\n- 中枢性尿崩症(CDI)：下丘脑或垂体病变导致ADH合成/释放不足\n- 肾性尿崩症(NDI)：肾集合管/远曲小管对ADH无法正常响应\n\n两型患者均表现为多尿（每日尿量>3L）、烦渴多饮。\n\n(1) 正常人血浆渗透压升高时，体内ADH的合成和释放有何变化？ADH作用于肾脏的哪些结构？\n\n(4) CDI患者注射外源ADH后，尿量有何变化？NDI患者呢？请解释原因。\n\n(5) 若要用基因治疗的方法根治NDI，目的基因应是什么？靶细胞是哪里？`,focus:`① ADH合成部位=下丘脑，释放部位=垂体后叶（重要：不是垂体合成）\n② ADH靶器官=肾集合管+远曲小管（增加水通道蛋白AQP2表达→水重吸收↑）\n③ CDI vs NDI的断裂位置：CDI在"发送端"（ADH不足），NDI在"接收端"（受体/水通道缺陷）\n④ 外源ADH注射实验是诊断两型的关键手段`,answer:`(1) 血浆渗透压升高→下丘脑渗透压感受器兴奋→下丘脑细胞合成ADH↑→垂体后叶释放ADH↑。\nADH作用结构：肾集合管和远曲小管（促进水通道蛋白AQP2合成/转位到管腔膜→水重吸收↑→尿量↓）。\n\n(4) CDI注射外源ADH后：\n肾本身功能正常（受体和水通道均完好），给予外源ADH→肾集合管正常响应→水重吸收↑→尿量显著减少。\n\nNDI注射外源ADH后：\n肾集合管/远曲小管对ADH不响应（受体缺陷或AQP2缺陷），外源ADH仍无效→尿量无明显变化。\n\n(5) 基因治疗NDI：\n若NDI病因是AQP2（水通道蛋白2）基因突变→目的基因=正常AQP2基因。\n靶细胞=肾集合管主细胞（collecting duct principal cells）——这些细胞是ADH信号的效应细胞，需要正常AQP2才能响应ADH。`},
+  'mq-277':{badge:'路径3 母题',badgeStyle:'background:var(--amber-l);color:var(--amber-d);',name:'EC-277 体温调节·白露寒冷·三路产热散热',ref:'EC-20260522-277 · 体温调节白露节气寒冷应激甲状腺激素肾上腺素产热散热血管收缩代谢 · (1)',stem:`白露节气气温骤降，人体进入寒冷应激状态。\n\n(1) 请分析寒冷环境下人体体温维持相对恒定的调节机制，从散热减少和产热增加两个角度分别说明，并列出具体的神经调节和体液调节手段。`,focus:`① 散热减少途径：皮肤血管收缩（减少皮肤散热），汗腺分泌减少\n② 产热增加途径：①骨骼肌战栗（快速神经调节），②甲状腺激素分泌↑（慢速体液，提高全身代谢），③肾上腺素分泌↑（快-中速体液，协同甲状腺激素提高代谢）\n③ 下丘脑是体温调节中枢，整合神经和体液两类信号`,answer:`寒冷环境下体温维持机制：\n\n【散热减少】（神经调节为主）\n- 皮肤血管收缩：寒冷→皮肤冷感受器→传入神经→下丘脑→传出交感神经→皮肤血管平滑肌收缩→皮肤血流量↓→皮肤散热↓\n- 汗腺分泌减少：交感神经支配汗腺，寒冷时汗液分泌减少，蒸发散热↓\n\n【产热增加】\n① 神经调节（快速）：下丘脑→运动神经→骨骼肌不随意收缩（战栗/寒颤）→肌肉产热↑\n② 体液调节（中速）：下丘脑→下丘脑-垂体-甲状腺轴→TSH→甲状腺激素分泌↑→全身细胞代谢率↑→产热↑（需数小时至天）\n③ 体液调节（快速）：交感神经→肾上腺髓质→肾上腺素分泌↑→心跳加速+代谢↑→产热↑；与甲状腺激素协同（允许作用）\n\n三条路线并行，确保体温维持在37°C左右。`},
+  'v-322':{badge:'L1 基础变式',badgeStyle:'background:var(--purple-l);color:var(--purple-d);',name:'EC-322 胰岛素受体化学组成+血糖检测',ref:'EC-20260522-322 · 胰岛素与其受体结合引发细胞内信号转导是胰岛素调节血糖的关键 · (1)(4)',stem:`胰岛素与靶细胞膜上的受体结合，引发一系列细胞内信号转导，最终促进葡萄糖转运体(GLUT4)向细胞膜转移，增加葡萄糖摄取。\n\n(1) 胰岛素受体的化学本质是什么？它由哪些单体组成？受体与胰岛素结合属于哪种分子间作用方式？\n\n(4) 临床上检测血糖常用的方法有哪些？血糖仪（家庭检测）与医院检测血清葡萄糖的方法有何不同？`,focus:`① 胰岛素受体=糖蛋白（蛋白质+多糖），具有受体功能，位于靶细胞膜上\n② 受体+激素结合属于蛋白质与配体的特异性结合（非共价键，可逆）\n③ 血糖检测方法区分：血糖仪=酶电极法（指尖血，全血），医院=葡萄糖氧化酶法/己糖激酶法（血清）\n④ 信号转导：胰岛素→受体→酪氨酸激酶激活→PI3K/Akt通路→GLUT4转位`,answer:`(1) 胰岛素受体的化学本质：\n糖蛋白（蛋白质+多糖）。\n由4条多肽链组成：2条α亚基（胞外，与胰岛素结合）+ 2条β亚基（跨膜，含胞内酪氨酸激酶结构域），通过二硫键连接形成四聚体。\n\n结合方式：胰岛素（配体）与受体α亚基之间的特异性非共价结合（氢键、疏水作用、静电作用等），具有高亲和力和专一性，可逆。\n\n(4) 血糖检测方法：\n① 血糖仪（家庭自测）：葡萄糖氧化酶电极法，取指尖全血，即时检测，反映当前血糖浓度，不区分血浆/全血但有换算系数。\n② 医院血糖（空腹/餐后）：葡萄糖氧化酶比色法或己糖激酶法，取静脉血分离血清，准确度更高，可同时测多项生化指标。\n③ 糖化血红蛋白（HbA1c）：反映过去2-3个月平均血糖，不受当时进食影响，用于糖尿病长期管理评价。`},
+  'v-327':{badge:'L1 基础变式',badgeStyle:'background:var(--purple-l);color:var(--purple-d);',name:'EC-327 散利痛·PG→体温调定点↑→发热',ref:'EC-20260522-327 · 散利痛是一种复方解热镇痛药 · (3)',stem:`散利痛是含对乙酰氨基酚的复方解热镇痛药。感染时细菌/病毒产生的内毒素等物质→巨噬细胞释放白介素-1等→下丘脑合成前列腺素(PG)↑→体温调定点升高→发热。\n\n(3) 发热时体温高于正常调定点，机体会通过体温调节机制维持新的较高体温（如39°C）。请分析：\n① 发热状态下散热与产热的关系；\n② 解热药（如对乙酰氨基酚）的作用靶点是什么？为什么服药退热后需要一定时间？`,focus:`① 发热≠体温调节失常：调定点主动上移（38-40°C），机体按新调定点调节，产热=散热（处于新平衡）\n② 发热初期（寒战）：调定点↑但体温未到→产热>散热（出现寒颤/血管收缩），逐步升至新调定点\n③ 解热药靶点：COX酶（环氧酶）→抑制前列腺素合成→调定点恢复正常→机体散热>产热→退热\n④ 退热需时间：药物发挥作用、调定点恢复、散热过程均需时间`,answer:`① 发热状态下（体温已稳定在39°C）：\n机体已达到新调定点（39°C），此时产热=散热，体温维持在39°C。这与正常人37°C时产热=散热同理——只是调定点设定值升高了。发热本身是有益的免疫防御（高温不利于病原体复制）。\n\n② 解热药作用靶点和退热时间：\n对乙酰氨基酚靶点：抑制环氧酶(COX-2)→阻断花生四烯酸→前列腺素(PG)合成↓→下丘脑PG浓度↓→调定点从39°C恢复至37°C。\n\n调定点恢复后→新设定值37°C < 当前体温39°C→机体感受"体温偏高"→启动散热机制（血管扩张、大量出汗）→体温从39°C逐步降至37°C。\n\n需要时间原因：①药物吸收需时间，②COX酶活性下降需时间，③PG降解需时间，④散热（出汗/血管扩张）降温是物理过程，带走热量需时间。整个过程通常30分钟至1小时。`}
+};
+function switchTab(tab,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));document.getElementById('page-'+tab).classList.add('active');btn.classList.add('active');}
+function toggleMQ(header){const body=header.nextElementSibling;const chevron=header.querySelector('.mq-chevron');body.classList.toggle('open');chevron.classList.toggle('open');}
+function filterMQ(topic,btn){document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.mq-card').forEach(card=>{card.style.display=(topic==='all'||card.dataset.topic===topic)?'':'none';});}
+function openDrawer(key){const q=QUESTIONS[key];if(!q)return;document.getElementById('drawer-badge').textContent=q.badge;document.getElementById('drawer-badge').style.cssText=q.badgeStyle;document.getElementById('drawer-title').textContent=q.name;document.getElementById('drawer-ref').querySelector('span').textContent=q.ref;document.getElementById('drawer-stem').textContent=q.stem;document.getElementById('drawer-focus-text').textContent=q.focus;document.getElementById('drawer-answer-text').textContent=q.answer;document.getElementById('drawer-answer').classList.remove('show');document.getElementById('drawer').classList.add('open');document.getElementById('drawer-overlay').classList.add('open');document.body.style.overflow='hidden';}
+function closeDrawer(){document.getElementById('drawer').classList.remove('open');document.getElementById('drawer-overlay').classList.remove('open');document.body.style.overflow='';}
+function toggleAnswer(){document.getElementById('drawer-answer').classList.toggle('show');}
+function openLightbox(src,alt){document.getElementById('lb-img').src=src;document.getElementById('lb-img').alt=alt;document.getElementById('lb-overlay').classList.add('open');document.body.style.overflow='hidden';}
+function closeLightbox(){document.getElementById('lb-overlay').classList.remove('open');document.body.style.overflow='';}
+const STORAGE_KEY='T04_M1_checks';const TOTAL=3;
+function loadChecks(){try{const d=JSON.parse(localStorage.getItem(STORAGE_KEY));return Array.isArray(d)?d:Array(TOTAL).fill(false);}catch{return Array(TOTAL).fill(false);}}
+function saveChecks(arr){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(arr));}catch{}}
+function updateProgress(){const items=document.querySelectorAll('.check-item');const done=Array.from(items).filter(i=>i.classList.contains('done')).length;document.getElementById('check-count').textContent=done+' / '+TOTAL;document.getElementById('check-bar').style.width=(done/TOTAL*100)+'%';}
+function toggleCheck(item,idx){item.classList.toggle('done');const arr=loadChecks();arr[idx]=item.classList.contains('done');saveChecks(arr);updateProgress();}
+function checkAll(){document.querySelectorAll('.check-item').forEach(item=>item.classList.add('done'));saveChecks(Array(TOTAL).fill(true));updateProgress();}
+function clearAll(){document.querySelectorAll('.check-item').forEach(item=>item.classList.remove('done'));saveChecks(Array(TOTAL).fill(false));updateProgress();}
+(function(){const arr=loadChecks();document.querySelectorAll('.check-item').forEach((item,i)=>{if(arr[i])item.classList.add('done');});updateProgress();})();
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(document.getElementById('lb-overlay').classList.contains('open'))closeLightbox();else if(document.getElementById('drawer').classList.contains('open'))closeDrawer();}});
+</script>
+</body>
+</html>

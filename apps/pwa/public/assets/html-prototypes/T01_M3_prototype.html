@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T01_M3 · 表观遗传与表达调控型</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent:#BA7517; --accent-l:#FAEEDA; --accent-m:#E8C070; --accent-d:#633806;
+  --teal:#0F6E56; --teal-l:#E1F5EE; --teal-d:#085041;
+  --purple:#534AB7; --purple-l:#EEEDFE; --purple-d:#3C3489;
+  --coral:#993C1D; --coral-l:#FAECE7; --coral-d:#712B13;
+  --rose:#9E1D5A; --rose-l:#FAEDF4; --rose-d:#6B1040;
+  --bg:#ffffff; --bg2:#f7f7f5; --bg3:#f1efe8;
+  --tx:#1a1a18; --tx2:#5f5e5a; --tx3:#888780;
+  --bd:rgba(0,0,0,0.10); --bd2:rgba(0,0,0,0.18);
+  --r-sm:6px; --r-md:8px; --r-lg:12px; --r-xl:16px;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#1c1c1a;--bg2:#252523;--bg3:#2c2c2a;
+    --tx:#f0efea;--tx2:#b4b2a9;--tx3:#888780;
+    --bd:rgba(255,255,255,0.09);--bd2:rgba(255,255,255,0.16);
+    --accent-l:#412402;--accent-d:#FAC775;
+    --teal-l:#04342C;--teal-d:#9FE1CB;
+    --purple-l:#26215C;--purple-d:#CECBF6;
+    --coral-l:#4A1B0C;--coral-d:#F5C4B3;
+    --rose-l:#3A0A25;--rose-d:#F0A8CF;
+  }
+}
+body{font-family:var(--font);font-size:15px;line-height:1.6;color:var(--tx);background:var(--bg3);min-height:100vh;}
+.app{max-width:800px;margin:0 auto;background:var(--bg);min-height:100vh;}
+
+.site-header{padding:1.25rem 1.5rem 0;background:var(--bg);border-bottom:0.5px solid var(--bd);position:sticky;top:0;z-index:20;}
+.header-top{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.header-icon{background:var(--accent-l);border-radius:var(--r-md);padding:6px 8px;display:flex;align-items:center;justify-content:center;}
+.header-icon i{font-size:20px;color:var(--accent);}
+.header-meta{font-size:12px;color:var(--tx3);}
+.header-title{font-size:17px;font-weight:500;color:var(--tx);}
+.header-id{margin-left:auto;font-size:11px;color:var(--tx3);background:var(--bg2);padding:3px 9px;border-radius:var(--r-sm);}
+.nav-tabs{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.nav-tab{padding:.6rem 1.1rem;font-size:13px;color:var(--tx2);cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;font-family:var(--font);white-space:nowrap;transition:color .15s,border-color .15s;}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500;}
+.nav-tab:hover:not(.active){color:var(--tx);}
+
+.page{display:none;padding:1.5rem;}
+.page.active{display:block;}
+
+.memory-section{margin-bottom:1.5rem;}
+.memory-card{border:0.5px solid var(--bd);border-radius:var(--r-xl);overflow:hidden;background:var(--bg);}
+.memory-placeholder{min-height:200px;background:var(--bg2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--tx3);padding:2rem;}
+.memory-placeholder i{font-size:32px;color:var(--bd2);}
+.memory-placeholder-text{font-size:13px;text-align:center;line-height:1.6;}
+.memory-placeholder-filename{font-size:11px;background:var(--bg3);border:0.5px solid var(--bd);border-radius:var(--r-sm);padding:4px 10px;font-family:monospace;color:var(--tx2);}
+.memory-img{width:100%;display:block;max-height:320px;object-fit:contain;background:var(--bg3);cursor:zoom-in;transition:opacity .15s;}
+.memory-img:hover{opacity:.9;}
+.memory-footer{padding:.85rem 1rem;display:flex;align-items:center;gap:10px;border-top:0.5px solid var(--bd);}
+.memory-label{font-size:13px;font-weight:500;color:var(--tx);flex:1;}
+audio{height:32px;width:220px;}
+.audio-placeholder{font-size:12px;color:var(--tx3);display:flex;align-items:center;gap:5px;background:var(--bg2);padding:6px 10px;border-radius:var(--r-sm);}
+
+.section-title{font-size:13px;font-weight:500;color:var(--tx2);display:flex;align-items:center;gap:7px;margin-bottom:1rem;text-transform:uppercase;letter-spacing:.04em;}
+.section-divider{height:0.5px;background:var(--bd);margin:1.5rem 0;}
+.signal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:1.5rem;}
+.signal-card{background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;}
+.signal-label{font-size:11px;color:var(--tx3);letter-spacing:.04em;margin-bottom:.4rem;text-transform:uppercase;}
+.signal-tag{font-size:13px;color:var(--tx);margin-bottom:2px;}
+
+.subtopic-list{display:flex;flex-direction:column;gap:10px;margin-bottom:1.5rem;}
+.subtopic-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.9rem 1.1rem;border-left:3px solid var(--accent);}
+.subtopic-card.s2{border-left-color:var(--teal);}
+.subtopic-num{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.3rem;}
+.subtopic-name{font-size:14px;font-weight:500;color:var(--tx);margin-bottom:.3rem;}
+.subtopic-signal{font-size:13px;color:var(--tx2);line-height:1.6;}
+
+.trap-list{display:flex;flex-direction:column;gap:7px;}
+.trap-item{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.55;}
+.trap-icon{color:#E24B4A;font-size:15px;flex-shrink:0;margin-top:1px;}
+
+.filter-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem;}
+.filter-btn{padding:5px 13px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx2);font-family:var(--font);transition:all .15s;}
+.filter-btn.active{background:var(--accent-l);color:var(--accent-d);border-color:var(--accent);font-weight:500;}
+
+.mq-card{border:0.5px solid var(--bd);border-radius:var(--r-lg);background:var(--bg);margin-bottom:.85rem;overflow:hidden;}
+.mq-header{padding:.9rem 1.1rem;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;transition:background .15s;}
+.mq-header:hover{background:var(--bg2);}
+.mq-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);white-space:nowrap;}
+.mq-badge.s1{background:var(--accent-l);color:var(--accent-d);}
+.mq-badge.s2{background:var(--teal-l);color:var(--teal-d);}
+.mq-badge.v{background:var(--bg3);color:var(--tx2);}
+.mq-name{font-size:14px;font-weight:500;color:var(--tx);flex:1;}
+.mq-purity{font-size:12px;color:var(--tx3);flex-shrink:0;}
+.mq-chevron{color:var(--tx3);font-size:16px;transition:transform .2s;flex-shrink:0;}
+.mq-chevron.open{transform:rotate(180deg);}
+.mq-body{display:none;padding:.75rem 1.1rem 1.1rem;border-top:0.5px solid var(--bd);}
+.mq-body.open{display:block;}
+.mq-source{font-size:12px;color:var(--tx3);margin-bottom:.65rem;}
+.rule-box{background:var(--accent-l);border-left:3px solid var(--accent);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:.65rem .9rem;font-size:13px;color:var(--accent-d);margin:.75rem 0;line-height:1.65;}
+.rule-box.s2{background:var(--teal-l);border-left-color:var(--teal);color:var(--teal-d);}
+.chain-label{font-size:12px;font-weight:500;color:var(--tx2);margin:.75rem 0 .4rem;text-transform:uppercase;letter-spacing:.04em;}
+.signal-chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:6px;}
+.sc-node{background:var(--bg2);border-radius:var(--r-sm);padding:3px 9px;font-size:13px;color:var(--tx);}
+.sc-node.s1{background:var(--accent-l);color:var(--accent-d);}
+.sc-node.s2{background:var(--teal-l);color:var(--teal-d);}
+.sc-arrow{color:var(--tx3);font-size:13px;}
+.mq-note{font-size:13px;color:var(--tx2);margin-top:.75rem;line-height:1.6;}
+.q-trigger{display:inline-flex;align-items:center;gap:5px;margin-top:.75rem;padding:6px 12px;font-size:12px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;color:var(--tx2);cursor:pointer;font-family:var(--font);transition:all .15s;}
+.q-trigger:hover{background:var(--bg2);color:var(--tx);}
+.q-trigger i{font-size:14px;}
+
+.ladder-section-label{font-size:13px;font-weight:500;color:var(--tx2);margin-bottom:.85rem;display:flex;align-items:center;gap:7px;}
+.ladder-rows{display:flex;flex-direction:column;gap:8px;margin-bottom:1rem;}
+.ladder-row{display:grid;grid-template-columns:64px 1fr;gap:10px;align-items:start;}
+.ladder-level{font-size:11px;font-weight:500;padding:6px 4px;border-radius:var(--r-sm);text-align:center;line-height:1.4;}
+.l0{background:var(--accent-l);color:var(--accent-d);}
+.l1{background:var(--teal-l);color:var(--teal-d);}
+.l2{background:var(--purple-l);color:var(--purple-d);}
+.ladder-card{border:0.5px solid var(--bd);border-radius:var(--r-md);padding:.65rem .9rem;background:var(--bg);cursor:pointer;transition:background .15s;}
+.ladder-card:hover{background:var(--bg2);}
+.ladder-card-name{font-size:13px;font-weight:500;color:var(--tx);}
+.ladder-card-sub{font-size:12px;color:var(--tx3);margin-top:3px;line-height:1.5;}
+.ladder-note{background:var(--bg2);border-radius:var(--r-md);padding:.65rem .9rem;font-size:12px;color:var(--tx2);margin-bottom:1rem;line-height:1.55;}
+
+.progress-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem;}
+.progress-bar{height:5px;border-radius:3px;background:var(--bg2);margin-bottom:1.25rem;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;background:var(--accent);width:0%;transition:width .3s;}
+.checklist{display:flex;flex-direction:column;gap:7px;}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:.7rem .9rem;border:0.5px solid var(--bd);border-radius:var(--r-md);background:var(--bg);cursor:pointer;transition:background .15s;}
+.check-item.done{background:var(--bg2);}
+.check-box{width:18px;height:18px;border:1.5px solid var(--bd2);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .15s;}
+.check-item.done .check-box{background:var(--accent);border-color:var(--accent);}
+.check-box i{font-size:11px;color:#fff;display:none;}
+.check-item.done .check-box i{display:block;}
+.check-text{font-size:13px;color:var(--tx);line-height:1.55;}
+.check-item.done .check-text{color:var(--tx3);text-decoration:line-through;}
+.action-row{margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:8px;}
+.action-btn{padding:7px 14px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.action-btn:hover{background:var(--bg2);}
+
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s;}
+.drawer-overlay.open{opacity:1;pointer-events:all;}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100vw);background:var(--bg);z-index:101;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden;}
+.drawer.open{transform:translateX(0);}
+.drawer-header{padding:1rem 1.25rem;border-bottom:0.5px solid var(--bd);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.drawer-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:var(--r-sm);}
+.drawer-title{font-size:14px;font-weight:500;color:var(--tx);flex:1;line-height:1.4;}
+.drawer-close{background:none;border:none;cursor:pointer;color:var(--tx2);padding:4px;border-radius:var(--r-sm);display:flex;align-items:center;transition:background .15s;}
+.drawer-close:hover{background:var(--bg2);}
+.drawer-body{flex:1;overflow-y:auto;padding:1.25rem;}
+.drawer-ec-ref{font-size:12px;color:var(--tx3);margin-bottom:1rem;display:flex;align-items:center;gap:6px;}
+.drawer-stem{font-size:14px;color:var(--tx);line-height:1.75;white-space:pre-wrap;}
+.drawer-sub{font-size:13px;color:var(--tx2);background:var(--bg2);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:1rem;line-height:1.65;}
+.drawer-sub-label{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-answer{font-size:13px;color:var(--tx);background:var(--accent-l);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:.75rem;line-height:1.65;display:none;}
+.drawer-answer.show{display:block;}
+.drawer-answer-label{font-size:11px;font-weight:500;color:var(--accent-d);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;}
+.drawer-footer{padding:.85rem 1.25rem;border-top:0.5px solid var(--bd);display:flex;gap:8px;flex-shrink:0;}
+.drawer-btn{flex:1;padding:8px;font-size:13px;border-radius:var(--r-md);border:0.5px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);font-family:var(--font);transition:background .15s;}
+.drawer-btn:hover{background:var(--bg2);}
+.drawer-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+.drawer-btn.primary:hover{background:var(--accent-d);}
+
+.lb-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:200;display:none;align-items:center;justify-content:center;cursor:zoom-out;}
+.lb-overlay.open{display:flex;}
+.lb-img{max-width:92vw;max-height:92vh;object-fit:contain;border-radius:var(--r-md);box-shadow:0 8px 40px rgba(0,0,0,.5);}
+.lb-close{position:fixed;top:16px;right:20px;background:none;border:none;color:#fff;font-size:28px;cursor:pointer;line-height:1;opacity:.7;transition:opacity .15s;}
+.lb-close:hover{opacity:1;}
+
+@media(max-width:600px){
+  .site-header{padding:1rem 1rem 0;}
+  .page{padding:1rem;}
+  .header-title{font-size:15px;}
+  .signal-grid{grid-template-columns:1fr 1fr;}
+  .ladder-row{grid-template-columns:52px 1fr;gap:8px;}
+  .action-row{flex-direction:column;}
+  .action-btn{width:100%;text-align:center;}
+  .drawer{width:100vw;}
+  audio{width:160px;}
+}
+@media(max-width:380px){.signal-grid{grid-template-columns:1fr;}}
+
+.back-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;font-size:12px;color:var(--tx2);background:var(--bg2);border:0.5px solid var(--bd2);border-radius:var(--r-md);text-decoration:none;font-family:var(--font);transition:background .15s,color .15s;white-space:nowrap;flex-shrink:0;}
+.back-btn:hover{background:var(--bg3);color:var(--tx);}
+.back-btn i{font-size:14px;}
+.memory-video{width:100%;max-height:220px;display:block;border-radius:var(--r-md);background:#000;margin-top:8px;}
+</style>
+</head>
+<body>
+<div class="app">
+
+<header class="site-header">
+  <div class="header-top">
+    <div class="header-icon"><i class="ti ti-dna" aria-hidden="true"></i></div>
+    <div>
+      <div class="header-meta">01 分子病理 · M3 表观遗传与表达调控型</div>
+      <div class="header-title">表观遗传与表达调控型疾病</div>
+    </div>
+    <a class="back-btn" href="index.html" aria-label="返回首页"><i class="ti ti-arrow-left"></i> 首页</a>
+    <div class="header-id">T01_M3</div>
+  </div>
+  <nav class="nav-tabs" role="tablist">
+    <button class="nav-tab active" role="tab" onclick="switchTab('overview',this)">概览</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('mothers',this)">母题精讲</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('ladder',this)">变式阶梯</button>
+    <button class="nav-tab" role="tab" onclick="switchTab('check',this)">自查清单</button>
+  </nav>
+</header>
+
+<!-- ══ 概览 ══ -->
+<div id="page-overview" class="page active">
+  <div class="memory-section">
+    <div class="memory-card">
+      <img class="memory-img" src="记忆卡/T01_M3_memory.png" alt="T01_M3 表观遗传与表达调控型 记忆卡"
+           onclick="openLightbox(this.src,this.alt)"
+           onerror="this.style.display='none';document.getElementById('mem-placeholder').style.display='flex'">
+      <div id="mem-placeholder" class="memory-placeholder" style="display:none;">
+        <i class="ti ti-photo-up"></i>
+        <div class="memory-placeholder-text">记忆卡图片放置于此</div>
+        <div class="memory-placeholder-filename">记忆卡/T01_M3_memory.png</div>
+      </div>
+      <div class="memory-footer">
+        <span class="memory-label"><i class="ti ti-brain" style="margin-right:5px;color:var(--accent);"></i>记忆卡 · 两种表观机制</span>
+        <video class="memory-video" controls controlsList="nodownload" preload="metadata" style="display:none">
+        <source src="audio/T01_M3.mp4" type="video/mp4">
+      </video>
+      <div class="audio-placeholder" style="display:flex"><i class="ti ti-video-off"></i>视频待放入</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title"><i class="ti ti-radar"></i>核心识别信号</div>
+  <div class="signal-grid">
+    <div class="signal-card">
+      <div class="signal-label">题型触发词</div>
+      <div class="signal-tag">DNA甲基化 / 基因印记</div>
+      <div class="signal-tag">表观遗传 / 碱基序列不变</div>
+      <div class="signal-tag">亲源依赖表达 / 印记重建</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">典型疾病</div>
+      <div class="signal-tag">Igf-2基因印记（小鼠模型）</div>
+      <div class="signal-tag">天使综合征（UBE3A）</div>
+      <div class="signal-tag">雷特综合征（MECP2/BDNF）</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">核心特征</div>
+      <div class="signal-tag">编码区正常→但不表达（沉默）</div>
+      <div class="signal-tag">可遗传但不改变碱基序列</div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-label">调控层级</div>
+      <div class="signal-tag">转录水平（甲基化影响RNA聚合酶结合）</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-sitemap"></i>两条子专题</div>
+  <div class="subtopic-list">
+    <div class="subtopic-card">
+      <div class="subtopic-num">子专题 1</div>
+      <div class="subtopic-name">基因组印记 — DNA甲基化致单等位基因表达</div>
+      <div class="subtopic-signal">亲源印记→一方等位基因启动子CpG岛甲基化→转录沉默→只有非甲基化等位基因表达（Igf-2：父源表达，母源沉默）。配子形成时印记擦除重建。印记异常或突变双重打击→疾病（天使综合征）</div>
+    </div>
+    <div class="subtopic-card s2">
+      <div class="subtopic-num">子专题 2</div>
+      <div class="subtopic-name">甲基化结合蛋白异常 → 转录调控丧失</div>
+      <div class="subtopic-signal">MeCP2蛋白→结合甲基化CpG→招募HDAC→染色质压缩→转录抑制。MECP2突变→无法结合→靶基因（BDNF）异常高表达→神经突触异常→雷特综合征</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-title"><i class="ti ti-alert-triangle"></i>高频易错</div>
+  <div class="trap-list">
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>表观遗传≠基因突变。甲基化修饰不改变碱基序列（DNA序列不变），但可影响基因表达。考试中"碱基序列改变/未改变"是判断依据。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>Igf-2印记规律：只表达来自父本的等位基因（父源非甲基化→表达；母源甲基化→沉默）。杂合子Aa中，表达父源基因——若父源为A则正常，若父源为a则矮小。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>印记重建：配子形成过程中印记擦除并按性别重建。雌性配子重建为甲基化（沉默），雄性配子重建为去甲基化（表达）。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>天使综合征双重打击：父本UBE3A甲基化沉默（正常印记）+ 母本UBE3A基因突变 → 两个等位基因均无功能 → 患病。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>MECP2突变：MECP2蛋白失功能→无法抑制BDNF表达→BDNF过高（不是过低）→神经发育异常。注意方向：抑制因子失活→靶基因上调。</span></div>
+    <div class="trap-item"><i class="ti ti-x trap-icon"></i><span>组蛋白甲基化（H3K4met）修饰不改变DNA碱基序列，但属于表观遗传修饰，影响基因转录（转录水平调控）。</span></div>
+  </div>
+</div>
+
+<!-- ══ 母题精讲 ══ -->
+<div id="page-mothers" class="page">
+  <div class="filter-tabs">
+    <button class="filter-btn active" onclick="filterMQ('all',this)">全部 (2母题)</button>
+    <button class="filter-btn" onclick="filterMQ('s1',this)">子专题1·基因组印记</button>
+    <button class="filter-btn" onclick="filterMQ('s2',this)">子专题2·MECP2通路</button>
+  </div>
+
+  <!-- MQ1: EC-144 -->
+  <div class="mq-card" data-topic="s1">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge s1">子专题1 母题</span>
+      <span class="mq-name">Igf-2基因印记·DNA甲基化·印记重建·单亲胚胎异常</span>
+      <span class="mq-purity">★ 10/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-144 · (1)(2)(3)(4)(5)(6)(7) · 2026-05-19</div>
+      <div class="rule-box">核心因果链：Igf-2基因→母源等位基因启动子甲基化→转录沉默→只有来自父本的Igf-2等位基因表达。配子形成时印记按性别重建：雌配子→甲基化（沉默），雄配子→去甲基化（表达）。单亲胚胎→两等位基因同时沉默或同时表达→发育异常</div>
+      <div class="chain-label">印记规律与表型推断</div>
+      <div class="signal-chain">
+        <span class="sc-node s1">AA</span><span class="sc-arrow">父源A表达→</span>
+        <span class="sc-node s1">正常</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node s1">Aa</span><span class="sc-arrow">只表达父源→</span>
+        <span class="sc-node">父源A→正常 / 父源a→矮小</span>
+      </div>
+      <div class="signal-chain">
+        <span class="sc-node s1">aa</span><span class="sc-arrow">只表达父源a→</span>
+        <span class="sc-node s1">矮小</span>
+      </div>
+      <div class="mq-note">
+        <strong>考点(1)：</strong>AA→父源A→正常；Aa→只表达父源（若父→A则正常）；aa→矮小。答案：正常 正常 矮小（选A）。<br><br>
+        <strong>考点(2)印记交叉：</strong>甲组F1雄鼠Aa → 精子A:a=1:1（精子形成时去甲基化，均可表达） → F2中来自父本精子A→正常，来自父本精子a→矮小 → 正常:矮小=1:1。<br><br>
+        <strong>考点(3)甲基化特点：</strong>A可遗传（代间传递）、C与细胞质有关（雌雄配子环境不同导致重建方向不同）、D影响基因表达。B错（不改变碱基序列，非基因突变）。选ACD。<br><br>
+        <strong>考点(4)：</strong>碱基序列未改变；调控在转录水平（甲基化阻止RNA聚合酶结合启动子）。<br><br>
+        <strong>考点(6)实验设计：</strong>验证雌配子A基因印记重建→选①正常纯合雌鼠(AA)×⑤矮小纯合雄鼠(aa)→子代Aa；若雌配子A甲基化沉默→只表达来自父本的a→全部矮小（验证雌方A被甲基化沉默）。<br><br>
+        <strong>考点(7)单亲胚胎：</strong>全父本→两个等位基因均去甲基化→均表达Igf-2→过量→发育异常；全母本→均甲基化→均沉默→无Igf-2→发育异常。
+      </div>
+      <button class="q-trigger" onclick="openDrawer('mq-ec144')"><i class="ti ti-eye"></i>查看完整题干与答案</button>
+    </div>
+  </div>
+
+  <!-- MQ2: EC-094 -->
+  <div class="mq-card" data-topic="s2">
+    <div class="mq-header" onclick="toggleMQ(this)">
+      <span class="mq-badge s2">子专题2 母题</span>
+      <span class="mq-name">雷特综合征MECP2·BDNF转录调控·组蛋白甲基化</span>
+      <span class="mq-purity">★ 9/10</span>
+      <i class="ti ti-chevron-down mq-chevron"></i>
+    </div>
+    <div class="mq-body">
+      <div class="mq-source">EC-094 · (1)(2)(3)(4)(5)(6)(7) · 2026-05-18</div>
+      <div class="rule-box s2">核心因果链：正常MECP2→结合甲基化CpG→招募HDAC→染色质压缩→BDNF转录抑制。MECP2突变→无法结合→HDAC不招募→BDNF过度转录→神经突触异常→RTT。治疗思路：恢复MECP2功能 / 提高BDNF到适当水平（BHBA→H3K4met上升→BDNF表达促进）</div>
+      <div class="chain-label">BHBA提高BDNF的分子通路</div>
+      <div class="signal-chain">
+        <span class="sc-node s2">BHBA</span><span class="sc-arrow">→</span>
+        <span class="sc-node s2">Ca²⁺通道开放↑</span><span class="sc-arrow">→</span>
+        <span class="sc-node s2">CaMKⅡ磷酸化↑</span><span class="sc-arrow">→</span>
+        <span class="sc-node s2">H3K4met↑</span><span class="sc-arrow">→</span>
+        <span class="sc-node s2">BDNF转录↑</span>
+      </div>
+      <div class="mq-note">
+        <strong>考点(1)精子形成中含致病基因细胞：</strong>该患者只有一条染色体上MECP2突变（杂合子）。减数分裂前S期→两条染色体均复制。初级精母细胞②含致病基因（复制后每个细胞含）；次级精母细胞③可能含2个致病基因（同源染色体不分离/互换）。精原细胞①一定含（有丝分裂保留）；②初级精母细胞一定含。可能含两个致病基因的有②⑤（减一不分离）。<br><br>
+        <strong>考点(2)H3K4met：</strong>组蛋白修饰影响DNA缠绕状态→影响转录（C对）；不改变DNA碱基序列（A/B错）；不在翻译水平（D错）。选C。<br><br>
+        <strong>考点(3)RTT患者BDNF含量：</strong>MECP2突变→无法抑制BDNF→BDNF含量减少（注意：题干说MECP2正常时抑制BDNF，但RTT中神经细胞BDNF下调是另一机制——需结合题目具体图3）。按题意MECP2突变→BDNF减少→神经细胞程序性死亡增加。<br><br>
+        <strong>考点(5)错误叙述：</strong>MECP2基因≠蛋白质（不与双缩脲反应，A错）；BDNF合成→mRNA种类/数量变化但DNA种类不变（B错）；BDNF 119个氨基酸→最少357个碱基（D错：357个碱基=119×3密码子，但基因还有非编码区，"至少"应是119×3×2=714个碱基对）。选ABD。
+      </div>
+      <button class="q-trigger" onclick="openDrawer('mq-ec094')"><i class="ti ti-eye"></i>查看完整题干与答案</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 变式阶梯 ══ -->
+<div id="page-ladder" class="page">
+  <div class="ladder-note">从"单一基因印记机制"到"印记+突变双重打击"到"甲基化结合蛋白调控通路"，逐步深化表观遗传的分子理解。</div>
+
+  <div class="ladder-section-label"><i class="ti ti-stairs"></i>子专题1 · 基因组印记 变式阶梯</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l0">母题<br>10/10</div>
+      <div class="ladder-card" onclick="openDrawer('mq-ec144')">
+        <div class="ladder-card-name">EC-144 Igf-2基因印记与单亲胚胎</div>
+        <div class="ladder-card-sub">父源表达/母源甲基化沉默→印记重建→单亲胚胎发育异常；完整印记遗传规律推断</div>
+      </div>
+    </div>
+    <div class="ladder-row">
+      <div class="ladder-level l1">基础变式<br>9/10</div>
+      <div class="ladder-card" onclick="openDrawer('v-ec102')">
+        <div class="ladder-card-name">EC-102 天使综合征UBE3A双重打击</div>
+        <div class="ladder-card-sub">父源甲基化沉默（印记）+ 母源基因突变 → 双等位基因均无功能 → AS；三体自救与印记整合分析</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ladder-section-label"><i class="ti ti-stairs"></i>子专题2 · MECP2调控通路 变式阶梯</div>
+  <div class="ladder-rows">
+    <div class="ladder-row">
+      <div class="ladder-level l0">母题<br>9/10</div>
+      <div class="ladder-card" onclick="openDrawer('mq-ec094')">
+        <div class="ladder-card-name">EC-094 雷特综合征MECP2-BDNF通路</div>
+        <div class="ladder-card-sub">MECP2突变→BDNF转录调控丧失→神经发育障碍；BHBA治疗机制；组蛋白甲基化H3K4met</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 自查清单 ══ -->
+<div id="page-check" class="page">
+  <div class="progress-row">
+    <span style="font-size:13px;color:var(--tx2);">掌握进度</span>
+    <span id="check-count" style="font-size:13px;color:var(--tx2);">0 / 10</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="check-bar"></div></div>
+
+  <div class="checklist" id="checklist">
+    <div class="check-item" onclick="toggleCheck(this,0)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能说明表观遗传的核心特征：碱基序列不变，但基因表达状态（是否转录）改变，且可遗传给后代</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,1)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能说出Igf-2印记规律：只表达来自父本的等位基因，母源等位基因被甲基化沉默</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,2)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能推断Igf-2杂合子Aa的表型：取决于父源是A（正常）还是a（矮小）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,3)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能解释印记重建：雌配子形成→重建为甲基化（沉默），雄配子形成→重建为去甲基化（表达）</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,4)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能解释单亲胚胎发育异常的原因：全父本→Igf-2两份均表达→过量；全母本→两份均沉默→缺乏</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,5)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能分析天使综合征的双重打击：父源UBE3A甲基化沉默（正常印记）+ 母源UBE3A基因突变→双等位基因均无功能</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,6)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能说明MeCP2的正常功能：结合甲基化CpG→招募HDAC→染色质压缩→转录抑制</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,7)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能解释MECP2突变导致RTT的机制：MeCP2失功能→无法抑制BDNF→BDNF表达异常→神经突触障碍</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,8)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能说明组蛋白甲基化（H3K4met）是表观遗传修饰，影响转录（转录水平），不改变DNA碱基序列</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this,9)">
+      <div class="check-box"><i class="ti ti-check"></i></div>
+      <div class="check-text">我能区分"表观遗传调控（转录水平）"与"基因突变（碱基序列改变）"在遗传类型判断中的应用</div>
+    </div>
+  </div>
+
+  <div class="action-row">
+    <button class="action-btn" onclick="checkAll()">全部勾选</button>
+    <button class="action-btn" onclick="clearAll()">清空重来</button>
+  </div>
+</div>
+
+</div><!-- .app -->
+
+<!-- 抽屉 -->
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <span class="drawer-badge" id="drawer-badge" style="background:var(--accent-l);color:var(--accent-d);"></span>
+    <span class="drawer-title" id="drawer-title"></span>
+    <button class="drawer-close" onclick="closeDrawer()"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="drawer-ec-ref"><i class="ti ti-database"></i><span id="drawer-ref"></span></div>
+    <div class="drawer-stem" id="drawer-stem"></div>
+    <div class="drawer-sub" id="drawer-focus">
+      <div class="drawer-sub-label">解题关注点</div>
+      <div id="drawer-focus-text"></div>
+    </div>
+    <div class="drawer-answer" id="drawer-answer">
+      <div class="drawer-answer-label">参考答案</div>
+      <div id="drawer-answer-text"></div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="drawer-btn" onclick="toggleAnswer()">显示 / 隐藏答案</button>
+    <button class="drawer-btn primary" onclick="closeDrawer()">关闭</button>
+  </div>
+</div>
+
+<!-- 灯箱 -->
+<div class="lb-overlay" id="lb-overlay" onclick="closeLightbox()">
+  <button class="lb-close" onclick="closeLightbox()" aria-label="关闭">&#x2715;</button>
+  <img class="lb-img" id="lb-img" src="" alt="">
+</div>
+
+<script>
+const QUESTIONS = {
+  'mq-ec144': {
+    badge: '子专题1 母题',
+    badgeStyle: 'background:var(--accent-l);color:var(--accent-d);',
+    name: 'EC-144 Igf-2基因印记·DNA甲基化·印记重建',
+    ref: 'EC-20260519-144 · 遗传与进化·生物的变异与育种',
+    stem: `胰岛素样生长因子2是小鼠细胞Igf-2基因控制合成的多肽，对个体生长发育具有重要作用。Igf-2基因存在A、a两种等位基因形式，A基因突变为a后失去原有功能，可能产生矮小型小鼠。资料显示，该对等位基因位于常染色体上，它们遗传时会出现"基因印记"现象，即子代中来自双亲的两个等位基因中只有一方能表达，另一方被印迹而不表达。
+
+(1) 推断基因型为AA、Aa、aa的小鼠表型可能是____
+A．正常 正常 矮小  B．正常 矮小 正常  C．正常 矮小 矮小  D．矮小 正常 矮小
+
+(2) 科学家设计了两组交叉实验（甲组：正常雌×矮小雄F1，乙组：矮小雌×正常雄F1），将甲组F1中的雌雄小鼠交配产生的F2表型及比例为____。
+
+研究发现，DNA甲基化是基因印记的重要原因之一。印记是在配子发生过程中获得的，在下一代配子形成时印记重建。A基因在雌鼠形成配子时印记重建为甲基化，在雄鼠形成配子时印记重建为去甲基化。
+
+(3) DNA甲基化修饰的特点有____
+A．可以遗传给后代  B．是引起基因突变的常见方式  C．与细胞质环境有关  D．可改变基因表达
+
+(4) 雌配子中遗传印记重建后，A基因碱基序列____（"改变"或"未改变"），DNA甲基化对基因表达的调控属于____（复制水平/转录水平/翻译水平）
+
+(5) 由图2配子形成过程中印记发生的机制，推测亲代雌鼠a基因来自它的____（填"父方"、"母方"或"不确定"），理由是____。
+
+(6) 某研究小组要验证雌配子形成过程中A基因的印记重建。现有小鼠：①纯合正常雌鼠 ②杂合正常雌鼠 ③纯合矮小雌鼠 ④纯合正常雄鼠 ⑤纯合矮小雄鼠。
+请选择一个杂交组合并预期实验结果：
+杂交组合：____  预期实验结果：____
+
+(7) 以Igf-2基因为例，解释"单亲"胚胎（全父本/全母本细胞核）均不能正常发育的可能原因____。`,
+    focus: `关键①：印记规律——只表达父源基因。AA/Aa均父源A→正常；aa父源a→矮小。答案A
+关键②：F2推断——甲组F1雄鼠Aa→精子A:a各半（雄配子去甲基化均表达）→后代F2按父精子类型：父精子A→正常，父精子a→矮小→1:1
+关键③：甲基化特点ACD正确：A可遗传，C与细胞质（雌/雄配子形成环境）有关，D影响表达；B错（不改变碱基序列）
+关键④：碱基序列未改变；转录水平（甲基化阻断启动子→RNA聚合酶无法结合）
+关键⑤：亲代雌鼠a基因有甲基化→来自母方（雌性配子形成时才重建为甲基化）
+关键⑥：①(AA)×⑤(aa)→子代Aa；雌配子A甲基化沉默→后代只表达来自父本(a)→全部矮小
+关键⑦：全父本→两份Igf-2均去甲基化→均表达→过量；全母本→均甲基化→均沉默→无Igf-2→发育异常`,
+    answer: `(1) A（正常 正常 矮小）
+(2) 正常:矮小=1:1
+(3) ACD
+(4) 未改变；转录水平
+(5) 母方；亲代雌鼠a基因存在甲基化，而雌配子形成过程中才甲基化，雄配子形成时去甲基化，说明a来自母方
+(6) 杂交组合：①×⑤（纯合正常雌×纯合矮小雄）；预期：后代表型均为矮小型（因来自雌方卵细胞的A基因甲基化沉默，只表达来自父本的a基因→矮小）
+(7) "单亲"全父本胚胎：两个等位基因均来自父本，均去甲基化，均表达Igf-2→Igf-2过量→发育异常；全母本胚胎：两个等位基因均来自母本，均甲基化沉默→无Igf-2表达→发育异常`
+  },
+  'v-ec102': {
+    badge: '子专题1 基础变式',
+    badgeStyle: 'background:var(--accent-l);color:var(--accent-d);',
+    name: 'EC-102 天使综合征UBE3A双重打击·三体自救',
+    ref: 'EC-20260519-102 · 遗传与进化·分子基础',
+    stem: `天使综合征（AS）：人类15号染色体上UBE3A基因参与控制神经细胞的正常生理活动。在一般体细胞中，来自父本和母本的UBE3A基因都可表达；但在神经细胞内，只有来自母本15号染色体上的UBE3A基因表达，来自父本的不表达。若来自母本15号染色体上的UBE3A基因有缺陷，使神经细胞中UBE3A蛋白含量或活性低，可导致发育迟缓、智力低下而患天使综合征（AS）。
+
+(1) 关于UBE3A蛋白的叙述不正确的是____（多选）
+A．主要由C、H、O、N、P、S等元素构成
+B．其基本组成单位是脱氧核苷酸
+C．其合成需要内质网、高尔基体等参与
+D．双缩脲试剂检测该蛋白质呈现蓝色现象
+
+(2) 神经细胞和一般体细胞中UBE3A基因的表达情况有差异，体现了____
+A．细胞的衰老  B．细胞的分化  C．细胞的分裂  D．细胞的生长
+
+(3) 某个体患病原因是来自母本染色体上的UBE3A基因第2487号碱基T缺失，而来自父本染色体上的UBE3A基因在神经细胞中高度甲基化导致不表达。母本和父本染色体上相关基因发生的改变分别为____、____
+①染色体结构变异 ②基因突变 ③基因重组 ④表观遗传现象
+
+(4) 根据家系图谱和题意，使III-3个体患病的UBE3A缺陷基因的遗传途径来自于____
+A．II-3  B．II-4  C．I-1  D．I-2
+
+(5) II-3与II-4再次生育，后代患AS的概率是____
+A．0  B．1/2  C．1/4  D．1/8
+
+(8) 某个体的15号染色体来自父本两条（均甲基化沉默），来自母本0条（三体自救清除了母本染色体）。判断该个体是否为AS患病个体，并解释15号染色体组成形成的原因。`,
+    focus: `关键①：蛋白质不含P（A错）；基本单位是氨基酸而非脱氧核苷酸（B错）；蛋白质合成在核糖体，内质网/高尔基体参与加工分泌蛋白（C错）；双缩脲呈紫色而非蓝色（D错）。全选ABCD。
+关键②：同一基因在不同细胞类型表达不同→细胞分化（B）
+关键③：碱基T缺失→基因突变（②）；甲基化不表达→表观遗传（④）
+关键④：常染色体隐性遗传，III-3(aa)缺陷基因分别来自II-3(Aa)和II-4(Aa)。选AB。
+关键⑤：Aa×Aa→aa概率1/4。选C。
+关键⑧：是AS患者。原因：减数分裂时，15号染色体不分离→卵细胞含母本15号，精子含父本两条15号→受精卵3条15号→三体自救随机清除→若清除母本那条→只剩两条父本（均高度甲基化→沉默）→无UBE3A功能→AS`,
+    answer: `(1) ABCD
+(2) B
+(3) ②；④
+(4) AB
+(5) C（1/4）
+(6) CD（直系血亲：I-1/I-2父母，III-3子女）
+(7) 近亲带有相同隐性遗传致病基因的可能性较大，近亲结婚所生孩子患遗传病的可能性较大
+(8) 是AS患者。减数分裂时15号染色体不分离：一个卵细胞含来自母本的15号染色体+一个精子含两条来自父本的15号染色体→三体受精卵→三体自救随机清除一条→若清除了母本那条→两条均来自父本（均高度甲基化沉默）→神经细胞无UBE3A表达→患AS`
+  },
+  'mq-ec094': {
+    badge: '子专题2 母题',
+    badgeStyle: 'background:var(--teal-l);color:var(--teal-d);',
+    name: 'EC-094 雷特综合征MECP2-BDNF通路与肿瘤抑素',
+    ref: 'EC-20260518-094 · 遗传与进化·综合题',
+    stem: `雷特综合征（RTT）是一种罕见遗传病，由MECP2基因突变引起。RTT的发病与BDNF有关。BDNF是一种神经营养因子，能抑制或缓解神经细胞的程序性死亡，其合成受多种因素调节。研究发现，补充BHBA（β-羟基丁酸）可使小鼠体内BDNF水平显著上升。机制：BHBA→促进Ca²⁺通道通透性增大→CaMKⅡ磷酸化↑→H3K4met↑→BDNF基因表达↑
+
+(1) 某RTT患者只有一条染色体上MECP2基因存在致病性突变（杂合子），另一条正常。在精子形成过程中，每个____（编号）一定含有致病基因；可能含有两个致病基因的细胞有____
+①精原细胞 ②初级精母细胞 ③次级精母细胞 ④精细胞 ⑤第一极体 ⑥第二极体
+
+(2) H3K4met表示组蛋白H3上的某种氨基酸甲基化，下列叙述正确的是____（单选）
+A．H3K4met可能导致BDNF基因的碱基序列改变
+B．H3K4met可能导致BDNF基因的某些碱基甲基化
+C．H3K4met可能影响BDNF基因表达中的转录过程
+D．H3K4met可能影响BDNF基因表达中的翻译过程
+
+(3) 由题意推测，RTT患者体内BDNF的含量____（增加/减少/无明显变化）从而影响神经细胞的程序性死亡。
+
+(4) 关于神经细胞程序性死亡，正确的是____
+A．等同于神经细胞衰老  B．是神经细胞自主的死亡
+C．等同于神经细胞坏死  D．是神经细胞被动的死亡
+
+(5) 下列叙述错误的是____（多选）
+A．MECP2基因、BDNF等物质可与双缩脲试剂发生显色反应，结果呈现紫色
+B．细胞在合成BDNF物质时，DNA和RNA的种类、数量均发生改变
+C．BHBA促进Ca²⁺通道通透性增大，促进CaMKⅡ磷酸化，促进BDNF基因表达
+D．若BDNF由119个氨基酸构成，则BDNF基因至少含357个碱基
+
+(6) 根据信息推测，MECP2会____（促进/抑制）BDNF基因的表达。
+
+(7) RTT的治疗思路中可行的有____（多选）
+A．通过基因编辑修正突变的MECP2基因，提高其表达量
+B．通过RNA干扰技术靶向作用于BDNF基因的表达过程
+C．通过药物降低细胞内CaMKⅡ的含量、升高PKA的含量
+D．通过药物降低BDNF基因中H2AKub/H3K4met的比值`,
+    focus: `关键①：杂合子精子形成中，精原细胞①（有丝分裂维持杂合）→初级精母细胞②（复制后含致病基因）；含两个致病基因的细胞：减数一次不分离→次级精母细胞③/第一极体⑤可能含2个。答：每个①②一定含；②③⑤可能含两个。
+关键②：H3K4met是组蛋白修饰，改变染色质结构→影响转录（C对）；不改变DNA碱基序列（A/B错）；不在翻译水平（D错）。选C。
+关键③：MECP2正常→抑制BDNF。MECP2突变→BDNF升高？还是降低？需结合题目：题干说BDNF能抑制神经细胞程序性死亡，RTT患者神经细胞死亡增加→BDNF含量减少。所以MECP2在RTT中实际作用是抑制BDNF减少。选"减少"。
+关键⑤：A错—MECP2基因是DNA不与双缩脲反应；B错—DNA种类不变（体细胞DNA相同）；D错—119×3=357个密码子碱基，但基因双链→357×2=714碱基，且还有非编码区，"至少含357个碱基"说法不准确，应为至少含357对碱基对（714个碱基）。选ABD。
+关键⑥：MECP2→抑制BDNF表达（正常状态下抑制）
+关键⑦：A对（修正MECP2）；C对（降低CaMKⅡ或升高PKA调节通路）；D对（降低H2AKub/H3K4met比值→H3K4met相对升高→促进BDNF表达）；B错（抑制BDNF会使神经细胞死亡增加，不可行）。选ACD。`,
+    answer: `(1) 每个①②一定含有致病基因；可能含有两个致病基因的细胞：②③⑤
+(2) C
+(3) 减少（MECP2突变→无法正常调控→BDNF含量减少→神经细胞程序性死亡增加）
+(4) B（程序性死亡是细胞自主的、受基因程序控制的死亡）
+(5) ABD
+(6) 抑制（正常MECP2蛋白结合甲基化CpG→招募HDAC→染色质压缩→抑制BDNF转录）
+(7) ACD`
+  }
+};
+
+function switchTab(tab, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + tab).classList.add('active');
+  btn.classList.add('active');
+}
+function toggleMQ(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.mq-chevron');
+  body.classList.toggle('open');
+  chevron.classList.toggle('open');
+}
+function filterMQ(topic, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.mq-card').forEach(card => {
+    card.style.display = (topic === 'all' || card.dataset.topic === topic) ? '' : 'none';
+  });
+}
+function openDrawer(id) {
+  const q = QUESTIONS[id];
+  if (!q) return;
+  document.getElementById('drawer-badge').textContent = q.badge;
+  document.getElementById('drawer-badge').style.cssText = q.badgeStyle;
+  document.getElementById('drawer-title').textContent = q.name;
+  document.getElementById('drawer-ref').textContent = q.ref;
+  document.getElementById('drawer-stem').textContent = q.stem;
+  document.getElementById('drawer-focus-text').textContent = q.focus;
+  document.getElementById('drawer-answer-text').textContent = q.answer;
+  document.getElementById('drawer-answer').classList.remove('show');
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawer-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeDrawer() {
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('drawer-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function toggleAnswer() {
+  document.getElementById('drawer-answer').classList.toggle('show');
+}
+function openLightbox(src, alt) {
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lb-img').alt = alt || '';
+  document.getElementById('lb-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lb-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('lb-img').addEventListener('click', e => e.stopPropagation());
+
+const STORAGE_KEY = 'T01_M3_checks';
+const TOTAL = 10;
+function loadChecks() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch(e) { return []; }
+}
+function saveChecks(arr) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)); } catch(e) {}
+}
+function updateProgress() {
+  const done = document.querySelectorAll('.check-item.done').length;
+  document.getElementById('check-count').textContent = done + ' / ' + TOTAL;
+  document.getElementById('check-bar').style.width = (done / TOTAL * 100) + '%';
+}
+function toggleCheck(item, idx) {
+  item.classList.toggle('done');
+  const arr = loadChecks();
+  arr[idx] = item.classList.contains('done');
+  saveChecks(arr);
+  updateProgress();
+}
+function checkAll() {
+  const arr = [];
+  document.querySelectorAll('.check-item').forEach((item, i) => { item.classList.add('done'); arr[i] = true; });
+  saveChecks(arr);
+  updateProgress();
+}
+function clearAll() {
+  const arr = [];
+  document.querySelectorAll('.check-item').forEach((item, i) => { item.classList.remove('done'); arr[i] = false; });
+  saveChecks(arr);
+  updateProgress();
+}
+(function() {
+  const arr = loadChecks();
+  document.querySelectorAll('.check-item').forEach((item, i) => { if (arr[i]) item.classList.add('done'); });
+  updateProgress();
+})();
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (document.getElementById('lb-overlay').classList.contains('open')) closeLightbox();
+    else if (document.getElementById('drawer').classList.contains('open')) closeDrawer();
+  }
+});
+</script>
+</body>
+</html>
