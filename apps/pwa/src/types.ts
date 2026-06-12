@@ -95,14 +95,14 @@ export type KnowledgeCard = {
   card_id: string;
   topic_id: string;
   chapter: string;
-  type: "signal" | "rule" | "trap" | "representative" | "mnemonic" | "recall";
+  type: "signal" | "rule" | "trap" | "representative" | "variant" | "ladder" | "mnemonic" | "recall";
   front: string;
   short_back?: string;
   back: string;
   detail_back?: string;
   maintenance_status?: "ready" | "needs_review" | "refined";
   maintenance_issues?: string[];
-  override_source?: "auto" | "manual";
+  override_source?: "auto" | "manual" | "mother_topic_sample";
   review_prompt: string;
   source: string;
 };

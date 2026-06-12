@@ -19,6 +19,8 @@ const typeLabels = {
   rule: "规则",
   trap: "陷阱",
   representative: "代表",
+  variant: "变式",
+  ladder: "阶梯",
   mnemonic: "口诀",
   recall: "回忆",
 };
@@ -28,9 +30,9 @@ const expectedTypesByChapter = {
   信号: ["signal", "recall"],
   判断: ["rule", "trap", "recall"],
   框架: ["rule", "mnemonic", "recall"],
-  拆题: ["representative", "rule", "recall"],
+  拆题: ["representative", "variant", "ladder", "rule", "recall"],
   陷阱: ["trap", "recall"],
-  收束: ["recall", "mnemonic"],
+  收束: ["recall", "mnemonic", "variant", "ladder"],
 };
 
 function compact(value = "") {
@@ -101,6 +103,8 @@ function auditCard(card) {
   if (card.type === "rule" && !/规则|步骤|先|再|判断|推出|公式|比例|路径|模型|链/.test(full)) issues.push("规则卡未形成判断规则");
   if (card.type === "trap" && !/错|陷阱|不要|不能|混|误|漏|跳|反|只看|以为/.test(full)) issues.push("陷阱卡未指出易错点");
   if (card.type === "representative" && !/迁移|母题|考题|例题|材料|应用|对应|变式|问/.test(full)) issues.push("代表题卡未体现迁移应用");
+  if (card.type === "variant" && !/变式|迁移|同一|换|L1|L2|L3|题面|母题|对应|训练点/.test(full)) issues.push("变式卡未体现迁移方向");
+  if (card.type === "ladder" && !/阶梯|L1|L2|L3|基础|进阶|综合|升级|方向|难度|路线/.test(full)) issues.push("阶梯卡未体现难度路线");
 
   return {
     card_id: card.card_id,

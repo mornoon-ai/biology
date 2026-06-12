@@ -42,7 +42,7 @@ const LECTURE_CHAPTER_BOOKMARKS = [
 ];
 const EXPECTED_LECTURE_CHAPTERS = LECTURE_CHAPTER_BOOKMARKS.map((bookmark) => bookmark.title);
 const LONG_KNOWLEDGE_CARD_LIMIT = 100;
-const CARD_TYPE_ORDER: Array<KnowledgeCard["type"]> = ["signal", "rule", "trap", "representative", "mnemonic", "recall"];
+const CARD_TYPE_ORDER: Array<KnowledgeCard["type"]> = ["signal", "rule", "trap", "representative", "variant", "ladder", "mnemonic", "recall"];
 
 type LectureBookmark = {
   title: string;
@@ -285,6 +285,8 @@ function knowledgeTypeLabel(type: KnowledgeCard["type"]) {
     rule: "规则卡",
     trap: "陷阱卡",
     representative: "代表题",
+    variant: "变式卡",
+    ladder: "阶梯卡",
     mnemonic: "口诀卡",
     recall: "回忆卡",
   };
