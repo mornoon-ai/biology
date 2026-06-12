@@ -1,4 +1,4 @@
-const CACHE_NAME = "mother-topic-player-v4-github-pages";
+const CACHE_NAME = "mother-topic-player-v5-mobile-assets-lite";
 const BASE_PATH = new URL(self.registration.scope).pathname.replace(/\/$/, "");
 const withBase = (path) => `${BASE_PATH}${path}`;
 const pagePath = (pathname) => {

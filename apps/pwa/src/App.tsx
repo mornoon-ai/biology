@@ -1571,14 +1571,14 @@ function ImageCard({ asset }: { asset: Asset }) {
   return (
     <>
       <button className="memory-card-button" onClick={() => setOpen(true)}>
-        <img src={imageUrl} alt={asset.title} />
+        <img src={imageUrl} alt={asset.title} loading="lazy" decoding="async" />
       </button>
       {open ? (
         <div className="image-modal" role="dialog" aria-modal="true">
           <button className="modal-close" onClick={() => setOpen(false)} aria-label="关闭">
             <X size={22} />
           </button>
-          <img src={imageUrl} alt={asset.title} />
+          <img src={imageUrl} alt={asset.title} decoding="async" />
         </div>
       ) : null}
     </>
@@ -1593,7 +1593,7 @@ function DiagramStrip({ diagrams }: { diagrams: Asset[] }) {
       <div className="diagram-strip">
         {diagrams.map((asset) => (
           <button className="diagram-card" key={asset.asset_id} onClick={() => setOpenAsset(asset)}>
-            <img src={publicUrl(asset.public_path)} alt={asset.title} />
+            <img src={publicUrl(asset.public_path)} alt={asset.title} loading="lazy" decoding="async" />
             <span>{asset.title}</span>
           </button>
         ))}
@@ -1604,7 +1604,7 @@ function DiagramStrip({ diagrams }: { diagrams: Asset[] }) {
             <X size={22} />
           </button>
           <figure>
-            <img src={publicUrl(openAsset.public_path)} alt={openAsset.title} />
+            <img src={publicUrl(openAsset.public_path)} alt={openAsset.title} decoding="async" />
             <figcaption>{openAsset.title}</figcaption>
           </figure>
         </div>
