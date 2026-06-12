@@ -1247,67 +1247,6 @@ function KnowledgeCardsPage({ data }: { data: AppData }) {
         )}
       </section>
 
-      <section className="section-block">
-        <SectionTitle icon={RotateCcw} title="连续复测" />
-        {reviewCards.length ? (
-          <div className="knowledge-workbench">
-            {reviewCards.slice(0, 30).map((card) => {
-              const topic = data.topics.find((item) => item.topic_id === card.topic_id);
-              const isMastered = masteredIds.has(card.card_id);
-              const isQueued = queuedCardIds.has(card.card_id);
-              const isDue = dueCardIds.has(card.card_id);
-              return (
-                <article className={`knowledge-review-card type-${card.type}`} key={card.card_id}>
-                  <div className="knowledge-review-head">
-                    <div>
-                      <span>{knowledgeTypeLabel(card.type)} · {card.chapter}</span>
-                      <strong>{card.front}</strong>
-                      <small>
-                        {topic?.title ?? card.topic_id}
-                        {card.back.length > LONG_KNOWLEDGE_CARD_LIMIT ? " · 长卡" : ""}
-                        {card.maintenance_status === "needs_review" ? " · 待精修" : ""}
-                        {card.maintenance_status === "refined" ? " · 已精修" : ""}
-                      </small>
-                    </div>
-                    <Link className="icon-button" to={`/player/${card.topic_id}#lecture`} aria-label="回到讲稿">
-                      <BookOpen size={18} />
-                    </Link>
-                  </div>
-                  {revealed[card.card_id] ? (
-                    <div className="answer-layers">
-                      <p>{card.short_back ?? card.back}</p>
-                      {card.detail_back && card.detail_back !== (card.short_back ?? card.back) ? (
-                        <>
-                          {detailRevealed[card.card_id] ? <p className="detail-answer">{card.detail_back}</p> : null}
-                          <button
-                            className="text-button"
-                            onClick={() => setDetailRevealed({ ...detailRevealed, [card.card_id]: !detailRevealed[card.card_id] })}
-                          >
-                            {detailRevealed[card.card_id] ? "收起详细" : "详细解释"}
-                          </button>
-                        </>
-                      ) : null}
-                    </div>
-                  ) : null}
-                  <div className="knowledge-actions">
-                    <button className="text-button" onClick={() => setRevealed({ ...revealed, [card.card_id]: !revealed[card.card_id] })}>
-                      {revealed[card.card_id] ? "收起答案" : "看答案"}
-                    </button>
-                    <button className="text-button" onClick={() => addError(card.topic_id, card.card_id, card.review_prompt, "coach")}>
-                      {isQueued ? (isDue ? "今日复测中" : "已入队") : "加入复测"}
-                    </button>
-                    <button className="text-button" onClick={() => markMastered(card)}>
-                      {isMastered ? "已掌握" : "标记掌握"}
-                    </button>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-        ) : (
-          <EmptyState text="当前筛选下暂无知识卡" />
-        )}
-      </section>
     </Page>
   );
 }
