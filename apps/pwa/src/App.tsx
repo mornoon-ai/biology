@@ -725,6 +725,7 @@ function PlayerPage({ data }: { data: AppData }) {
         <SectionTitle icon={Headphones} title="专题讲座" />
         {audio ? (
           <AudioPlayer
+            key={audio.asset_id}
             topicId={topic.topic_id}
             asset={audio}
             segments={audioSegments}
@@ -1631,7 +1632,8 @@ function AudioPlayer({
   const lastSavedRef = useRef(0);
   const chapterPlaybackRef = useRef<{ title: string; endSeconds: number | null } | null>(null);
   const chapterStopTimerRef = useRef<number | null>(null);
-  const [duration, setDuration] = useState(0);
+  const knownDuration = segments.find((segment) => segment.title === "完整专题讲座")?.end_seconds ?? 0;
+  const [duration, setDuration] = useState(knownDuration);
   const [currentTime, setCurrentTime] = useState(0);
   const [chapterPlayback, setChapterPlayback] = useState<{ title: string; endSeconds: number | null } | null>(null);
   const setAudioPosition = useProgressStore((state) => state.setAudioPosition);
@@ -1725,10 +1727,10 @@ function AudioPlayer({
       <audio
         ref={audioRef}
         controls
-        preload="metadata"
+        preload="none"
         src={publicUrl(asset.public_path)}
         onLoadedMetadata={(event) => {
-          setDuration(event.currentTarget.duration || 0);
+          setDuration(event.currentTarget.duration || knownDuration);
           if (restoredRef.current) return;
           const saved = useProgressStore.getState().topics[topicId]?.audioPosition ?? 0;
           if (saved > 0 && saved < event.currentTarget.duration - 3) {

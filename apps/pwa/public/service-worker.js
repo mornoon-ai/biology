@@ -1,4 +1,4 @@
-const CACHE_NAME = "mother-topic-player-v5-mobile-assets-lite";
+const CACHE_NAME = "mother-topic-player-v6-mobile-audio-lazy";
 const BASE_PATH = new URL(self.registration.scope).pathname.replace(/\/$/, "");
 const withBase = (path) => `${BASE_PATH}${path}`;
 const pagePath = (pathname) => {
