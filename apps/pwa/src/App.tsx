@@ -1467,18 +1467,18 @@ function StudyRail({
   const dueErrors = openErrors.filter((error) => new Date(error.dueAt).getTime() <= Date.now());
   const audioStarted = (progress?.audioPosition ?? 0) > 15;
   const steps = [
-    { href: "#memory", label: "图片", done: true, meta: "记忆" },
-    { href: "#lecture", label: "讲座", done: audioStarted, meta: audioStarted ? "已听" : "未听" },
-    { href: "#gate", label: "门禁", done: gates.length > 0 && gatePassed.length >= gates.length, meta: `${gatePassed.length}/${gates.length}` },
+    { id: "memory", label: "图片", done: true, meta: "记忆" },
+    { id: "lecture", label: "讲座", done: audioStarted, meta: audioStarted ? "已听" : "未听" },
+    { id: "gate", label: "门禁", done: gates.length > 0 && gatePassed.length >= gates.length, meta: `${gatePassed.length}/${gates.length}` },
     {
-      href: "#training",
+      id: "training",
       label: "结构",
       done: trainingUnits.length > 0 && trainingUnits.every((unit) => completedUnits.includes(unit.unit_id)),
       meta: `${trainingUnits.filter((unit) => completedUnits.includes(unit.unit_id)).length}/${trainingUnits.length}`,
     },
-    { href: "#variants", label: "变式", done: variants.length > 0 && variantDone >= variants.length, meta: `${variantDone}/${variants.length}` },
-    { href: "#review", label: "错因", done: dueErrors.length === 0, meta: dueErrors.length ? `${dueErrors.length} 到期` : `${openErrors.length} 个` },
-    { href: "#coach", label: "教练", done: false, meta: "追问" },
+    { id: "variants", label: "变式", done: variants.length > 0 && variantDone >= variants.length, meta: `${variantDone}/${variants.length}` },
+    { id: "review", label: "错因", done: dueErrors.length === 0, meta: dueErrors.length ? `${dueErrors.length} 到期` : `${openErrors.length} 个` },
+    { id: "coach", label: "教练", done: false, meta: "追问" },
   ];
   const doneCount = steps.filter((step) => step.done).length;
 
@@ -1495,10 +1495,10 @@ function StudyRail({
       </div>
       <div className="study-step-row">
         {steps.map((step) => (
-          <a className={step.done ? "study-step done" : "study-step"} href={step.href} key={step.href}>
+          <button className={step.done ? "study-step done" : "study-step"} type="button" onClick={() => scrollToPageSection(step.id)} key={step.id}>
             <span>{step.label}</span>
             <small>{step.meta}</small>
-          </a>
+          </button>
         ))}
       </div>
     </section>

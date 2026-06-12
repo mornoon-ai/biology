@@ -654,8 +654,11 @@ a {
 .study-step {
   background: #f9f3e3;
   border: 1px solid #ded3b8;
+  color: inherit;
   flex: 0 0 86px;
+  margin: 0;
   padding: 9px;
+  text-align: left;
   border-radius: 8px;
 }
 
