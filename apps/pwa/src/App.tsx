@@ -92,6 +92,10 @@ function activeBookmarkTitle(bookmarks: Array<{ title: string; seconds: number }
   return active;
 }
 
+function displayVariantStem(stem: string) {
+  return stem.replace(/(变式题源：)\s*EC[-\u2010-\u2015]?\d{3,8}(?:[-\u2010-\u2015]\d{1,4})?\s*/, "$1");
+}
+
 function sourceLabel(sourceType: string) {
   const labels: Record<string, string> = {
     gate: "门禁",
@@ -2181,7 +2185,7 @@ function VariantPractice({ topicId, variants }: { topicId: string; variants: Arr
           </button>
           {openId === variant.variant_id ? (
             <div className="variant-body">
-              <p>{variant.stem}</p>
+              <p>{displayVariantStem(variant.stem)}</p>
               <textarea
                 value={answers[variant.variant_id] ?? ""}
                 onChange={(event) => setAnswers({ ...answers, [variant.variant_id]: event.target.value })}
