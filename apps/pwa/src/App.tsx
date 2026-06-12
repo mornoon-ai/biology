@@ -42,6 +42,7 @@ const LECTURE_CHAPTER_BOOKMARKS = [
 ];
 const EXPECTED_LECTURE_CHAPTERS = LECTURE_CHAPTER_BOOKMARKS.map((bookmark) => bookmark.title);
 const LONG_KNOWLEDGE_CARD_LIMIT = 100;
+const CARD_TYPE_ORDER: Array<KnowledgeCard["type"]> = ["signal", "rule", "trap", "representative", "mnemonic", "recall"];
 
 type LectureBookmark = {
   title: string;
@@ -1042,7 +1043,14 @@ function KnowledgeCardsPage({ data }: { data: AppData }) {
   const submitAttempt = useProgressStore((state) => state.submitAttempt);
   const resolveError = useProgressStore((state) => state.resolveError);
   const openErrors = errors.filter((error) => !error.resolved);
-  const cardTypes: Array<KnowledgeCard["type"]> = ["signal", "rule", "trap", "representative", "mnemonic", "recall"];
+  const cardTypeCounts = useMemo(() => {
+    const counts = Object.fromEntries(CARD_TYPE_ORDER.map((type) => [type, 0])) as Record<KnowledgeCard["type"], number>;
+    data.knowledgeCards.forEach((card) => {
+      counts[card.type] += 1;
+    });
+    return counts;
+  }, [data.knowledgeCards]);
+  const cardTypes = CARD_TYPE_ORDER.filter((type) => cardTypeCounts[type] > 0);
   const chapters = EXPECTED_LECTURE_CHAPTERS;
   const masteredIds = new Set(
     Object.values(topicsProgress).flatMap((progress) =>
@@ -1098,6 +1106,12 @@ function KnowledgeCardsPage({ data }: { data: AppData }) {
   useEffect(() => {
     setReviewIndex(0);
   }, [topicFilter, typeFilter, chapterFilter, queueFilter, randomMode]);
+
+  useEffect(() => {
+    if (typeFilter !== "all" && cardTypeCounts[typeFilter] === 0) {
+      setTypeFilter("all");
+    }
+  }, [cardTypeCounts, typeFilter]);
 
   return (
     <Page>
