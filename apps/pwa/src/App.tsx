@@ -717,7 +717,6 @@ function PlayerPage({ data }: { data: AppData }) {
   const variants = data.variants.filter((variant) => variant.topic_id === topic.topic_id);
   const audioSegments = data.audioSegments.filter((segment) => segment.topic_id === topic.topic_id);
   const knowledgeCards = data.knowledgeCards.filter((card) => card.topic_id === topic.topic_id);
-  const readiness = data.topicReadiness.find((item) => item.topic_id === topic.topic_id);
   const touchTopic = useProgressStore((state) => state.touchTopic);
   const [chapterJump, setChapterJump] = useState<ChapterJump | null>(null);
 
@@ -739,8 +738,6 @@ function PlayerPage({ data }: { data: AppData }) {
       </section>
 
       <StudyRail topicId={topic.topic_id} gates={gates} trainingUnits={trainingUnits} variants={variants} />
-
-      {readiness ? <ReadinessPanel readiness={readiness} /> : null}
 
       <section className="section-block" id="memory">
         <SectionTitle icon={Images} title="图片记忆卡" />
@@ -1423,33 +1420,6 @@ function ReportBadge({ data }: { data: AppData }) {
       <BadgeCheck size={16} />
       {data.exportReport.topics_count} 题
     </span>
-  );
-}
-
-function ReadinessPanel({ readiness }: { readiness: NonNullable<AppData["topicReadiness"][number]> }) {
-  const counts = readiness.asset_counts;
-  const items = [
-    ["记忆卡", counts.memory_card],
-    ["插图", counts.diagram],
-    ["音频", counts.lecture_audio],
-    ["讲稿", counts.lecture_script],
-    ["门禁", counts.gate_card],
-  ];
-
-  return (
-    <section className="readiness-panel" aria-label="资产状态">
-      <div>
-        <strong>{readiness.status === "ready" ? "基础页 ready" : "待复核"}</strong>
-        <span>{readiness.issues.length ? readiness.issues.join(" / ") : "资产完整，可进入播放器学习"}</span>
-      </div>
-      <div className="readiness-chips">
-        {items.map(([label, value]) => (
-          <span key={label}>
-            {label} {value}
-          </span>
-        ))}
-      </div>
-    </section>
   );
 }
 

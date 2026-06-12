@@ -588,17 +588,6 @@ a {
   border-radius: 8px;
 }
 
-.readiness-panel {
-  background: #e5ead8;
-  border: 1px solid #c6d1b5;
-  color: #1f392d;
-  display: grid;
-  gap: 10px;
-  margin-bottom: 12px;
-  padding: 12px;
-  border-radius: 8px;
-}
-
 .study-rail {
   background: #fffaf0;
   border: 1px solid #ded3b8;
@@ -684,23 +673,6 @@ a {
   margin-top: 3px;
 }
 
-.readiness-panel strong {
-  display: block;
-  font-size: 15px;
-}
-
-.readiness-panel span {
-  font-size: 12px;
-  font-weight: 800;
-}
-
-.readiness-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-}
-
-.readiness-chips span,
 .mini-status {
   background: #fffaf0;
   color: #1f392d;
