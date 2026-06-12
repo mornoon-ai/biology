@@ -2049,8 +2049,10 @@ function TopicRow({ data, topic }: { data: AppData; topic: Topic }) {
   return (
     <Link className="topic-row" to={`/player/${topic.topic_id}`}>
       <div>
-        <span>{topic.topic_id}</span>
-        <h3>{topic.title}</h3>
+        <div className="topic-row-title">
+          <span>{topic.topic_id}</span>
+          <h3>{topic.title}</h3>
+        </div>
         <p>{topic.module_title}</p>
       </div>
       <div className="topic-row-meta">

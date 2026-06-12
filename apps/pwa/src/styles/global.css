@@ -1231,16 +1231,38 @@ textarea {
   color: inherit;
 }
 
+.topic-row > div:first-child {
+  min-width: 0;
+}
+
+.topic-row-title {
+  align-items: flex-start;
+  display: flex;
+  gap: 8px;
+  min-width: 0;
+}
+
+.topic-row-title span {
+  flex: 0 0 auto;
+  line-height: 1.1;
+}
+
+.topic-row-title h3 {
+  line-height: 1.24;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
 .topic-row p {
   color: #6f5e3d;
   font-size: 13px;
-  margin: 3px 0 0;
+  margin: 6px 0 0;
 }
 
 .topic-row-meta {
   align-items: center;
   display: flex;
-  flex: 0 0 76px;
+  flex: 0 0 auto;
   gap: 6px;
   justify-content: flex-end;
   position: relative;
