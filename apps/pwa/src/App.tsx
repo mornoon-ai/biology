@@ -351,6 +351,13 @@ function scrollToPageSection(id: string) {
   window.scrollTo({ top, behavior: "smooth" });
 }
 
+function alignPageSection(id: string) {
+  const target = document.getElementById(id);
+  if (!target) return;
+  const top = Math.max(0, target.getBoundingClientRect().top + window.scrollY - 8);
+  window.scrollTo({ top, behavior: "auto" });
+}
+
 function ScrollToRouteHash() {
   const location = useLocation();
 
@@ -1862,7 +1869,6 @@ function ScriptViewer({
 }) {
   const [open, setOpen] = useState(false);
   const [text, setText] = useState("");
-  const [mode, setMode] = useState<"skim" | "full">("skim");
   const progress = useProgressStore((state) => state.topics[topicId]);
   const errors = useProgressStore((state) => state.errors);
   const markChapterStatus = useProgressStore((state) => state.markChapterStatus);
@@ -1878,6 +1884,13 @@ function ScriptViewer({
       .then(setText)
       .catch(() => setText("讲稿读取失败"));
   }, [open, scriptUrl, text]);
+
+  useEffect(() => {
+    if (!open) return;
+    [0, 180, 420, 1000].forEach((delay) => {
+      window.setTimeout(() => alignPageSection("lecture-script-reader"), delay);
+    });
+  }, [open, text]);
 
   const blocks = useMemo(() => parseScriptMarkdown(text), [text]);
   const visibleBlocks = blocks;
@@ -1928,24 +1941,21 @@ function ScriptViewer({
 
   return (
     <div className="script-viewer">
-      <button className="secondary-action" onClick={() => setOpen((value) => !value)}>
+      <button
+        className="secondary-action"
+        onClick={() => {
+          setOpen((value) => !value);
+        }}
+      >
         <FileText size={17} />
-        {open ? "收起讲稿" : "阅读讲稿"}
+        {open ? "收起精读" : "精读讲稿"}
       </button>
       {open ? (
-        <div className="script-reader">
+        <div className="script-reader" id="lecture-script-reader">
           <div className="script-reader-head">
             <div>
-              <span>教师专题讲稿</span>
+              <span>精读讲稿</span>
               <strong>{asset.title}</strong>
-            </div>
-            <div className="script-mode-toggle" aria-label="讲稿阅读模式">
-              <button className={mode === "skim" ? "active" : ""} onClick={() => setMode("skim")}>
-                速读
-              </button>
-              <button className={mode === "full" ? "active" : ""} onClick={() => setMode("full")}>
-                精读
-              </button>
             </div>
           </div>
 
@@ -1971,7 +1981,7 @@ function ScriptViewer({
             </div>
           ) : null}
 
-          <article className={`script-content ${mode}`}>
+          <article className="script-content">
             {visibleBlocks.map((block, index) => {
               const key = `${block.type}_${index}_${block.text.slice(0, 16)}`;
               if (block.type === "h1") return <h3 key={key}>{block.text}</h3>;

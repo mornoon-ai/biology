@@ -967,6 +967,7 @@ a {
 .script-reader {
   background: #f9f3e3;
   border: 1px solid #ded3b8;
+  margin-bottom: 18px;
   margin-top: 10px;
   overflow: hidden;
   border-radius: 8px;
@@ -994,30 +995,6 @@ a {
   display: block;
   font-size: 15px;
   line-height: 1.25;
-}
-
-.script-mode-toggle {
-  background: rgba(255, 250, 240, 0.12);
-  display: grid;
-  flex: 0 0 92px;
-  grid-template-columns: repeat(2, 1fr);
-  padding: 3px;
-  border-radius: 8px;
-}
-
-.script-mode-toggle button {
-  background: transparent;
-  border: 0;
-  color: #fff8e8;
-  font-size: 12px;
-  font-weight: 900;
-  padding: 7px 5px;
-  border-radius: 6px;
-}
-
-.script-mode-toggle button.active {
-  background: #f2c14e;
-  color: #17211b;
 }
 
 .script-toc {
@@ -1056,7 +1033,8 @@ a {
 
 .script-content {
   color: #1d251f;
-  max-height: 520px;
+  max-height: min(82dvh, 820px);
+  min-height: min(66dvh, 640px);
   overflow: auto;
   padding: 4px 14px 16px;
 }
@@ -1225,33 +1203,6 @@ a {
   font-size: 15px;
   line-height: 1.78;
   margin: 9px 0;
-}
-
-.script-content.skim h3 {
-  font-size: 20px;
-  margin: 12px 0 9px;
-}
-
-.script-content.skim h4 {
-  font-size: 17px;
-  margin: 14px 0 6px;
-}
-
-.script-content.skim h5 {
-  font-size: 14px;
-  margin: 10px 0 6px;
-  padding: 8px 9px;
-}
-
-.script-content.skim p {
-  font-size: 14px;
-  line-height: 1.58;
-  margin: 6px 0;
-}
-
-.script-content.skim .script-list,
-.script-content.skim blockquote {
-  padding: 8px 9px;
 }
 
 .script-content strong {
