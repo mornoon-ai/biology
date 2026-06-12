@@ -3,12 +3,16 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const projectRoot = path.resolve(root, "../..");
 const cardsPath = path.join(root, "public/data/knowledge_cards.json");
 const topicsPath = path.join(root, "public/data/topics.json");
+const assetsPath = path.join(root, "public/data/assets.json");
 
 const cards = JSON.parse(fs.readFileSync(cardsPath, "utf8"));
 const topics = JSON.parse(fs.readFileSync(topicsPath, "utf8"));
+const assets = JSON.parse(fs.readFileSync(assetsPath, "utf8"));
 const topicMap = new Map(topics.map((topic) => [topic.topic_id, topic]));
+const memoryAssetMap = new Map(assets.filter((asset) => asset.type === "memory_card").map((asset) => [asset.topic_id, asset]));
 
 const typeLabels = {
   signal: "信号",
@@ -63,6 +67,17 @@ function tooVague(text = "") {
   return trimmed.length < 18 || /^(第一道母题|第二道母题|判断属于哪一类|在题目里，你怎么知道|同学们|考题：?)$/.test(trimmed);
 }
 
+function findMotherTopicDoc(topicId) {
+  const dir = path.join(projectRoot, "📂 20_学习专题/母题综合卡");
+  if (!fs.existsSync(dir)) return null;
+  const file = fs.readdirSync(dir).find((name) => name.startsWith(`${topicId}_`) && name.endsWith(".md"));
+  return file ? path.join("📂 20_学习专题/母题综合卡", file) : null;
+}
+
+function hasMotherTopicSource(card) {
+  return /母题|memory|触发卡|程序卡|机制链|得分句|子训练|变式|综合卡/.test(card.source ?? "");
+}
+
 function auditCard(card) {
   const issues = [];
   const full = `${card.front}\n${answerCore(card)}`;
@@ -70,7 +85,12 @@ function auditCard(card) {
   const frontWithoutLabel = card.front.replace(/^.*?：/, "");
   const expectedTypes = expectedTypesByChapter[card.chapter] ?? [];
   const typeLabel = typeLabels[card.type];
+  const memoryAsset = memoryAssetMap.get(card.topic_id);
+  const motherTopicDoc = findMotherTopicDoc(card.topic_id);
 
+  if ((card.source ?? "").includes("_script.md") && !hasMotherTopicSource(card)) issues.push("来源偏离母题卡：当前来自讲稿");
+  if (!memoryAsset) issues.push("缺少母题记忆卡锚点");
+  if (!motherTopicDoc) issues.push("缺少母题综合卡锚点");
   if (expectedTypes.length && !expectedTypes.includes(card.type)) issues.push("类型与章节功能不匹配");
   if (typeLabel && card.type !== "recall" && !card.front.includes(typeLabel)) issues.push("卡片名称/类型标签不显性");
   if (prefixSimilarity(frontWithoutLabel, answer) > 0.72 || prefixSimilarity(card.short_back ?? "", answer) > 0.92) issues.push("正反面重复或答案未加工");
@@ -89,6 +109,9 @@ function auditCard(card) {
     chapter: card.chapter,
     type: card.type,
     maintenance_status: card.maintenance_status ?? "ready",
+    source: card.source ?? "",
+    mother_topic_doc: motherTopicDoc,
+    memory_asset: memoryAsset?.asset_id ?? null,
     issue_count: issues.length,
     issues,
     front: card.front,
@@ -114,6 +137,7 @@ const summary = {
   by_type: countBy(cards, "type"),
   issue_by_type: countBy(issueCards, "type"),
   issue_by_chapter: countBy(issueCards, "chapter"),
+  issue_by_source: countBy(issueCards.map((card) => ({ source: card.source.includes("_script.md") ? "lecture_script" : card.source || "unknown" })), "source"),
   top_issues: issueCards
     .sort((left, right) => right.issue_count - left.issue_count || left.card_id.localeCompare(right.card_id))
     .slice(0, 30),
