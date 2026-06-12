@@ -1014,7 +1014,6 @@ function ErrorsPage({ data }: { data: AppData }) {
 function KnowledgeCardsPage({ data }: { data: AppData }) {
   const [topicFilter, setTopicFilter] = useState("all");
   const [typeFilter, setTypeFilter] = useState<KnowledgeCard["type"] | "all">("all");
-  const [chapterFilter, setChapterFilter] = useState("all");
   const [queueFilter, setQueueFilter] = useState<"all" | "due" | "unmastered" | "queued" | "long" | "needs_review" | "refined">("all");
   const [reviewIndex, setReviewIndex] = useState(0);
   const [randomMode, setRandomMode] = useState(false);
@@ -1034,7 +1033,6 @@ function KnowledgeCardsPage({ data }: { data: AppData }) {
     return counts;
   }, [data.knowledgeCards]);
   const cardTypes = CARD_TYPE_ORDER.filter((type) => cardTypeCounts[type] > 0);
-  const chapters = EXPECTED_LECTURE_CHAPTERS;
   const masteredIds = new Set(
     Object.values(topicsProgress).flatMap((progress) =>
       Object.entries(progress.attempts ?? {})
@@ -1051,7 +1049,6 @@ function KnowledgeCardsPage({ data }: { data: AppData }) {
   const filteredCards = data.knowledgeCards.filter((card) => {
     if (topicFilter !== "all" && card.topic_id !== topicFilter) return false;
     if (typeFilter !== "all" && card.type !== typeFilter) return false;
-    if (chapterFilter !== "all" && card.chapter !== chapterFilter) return false;
     if (queueFilter === "due" && !dueCardIds.has(card.card_id)) return false;
     if (queueFilter === "unmastered" && masteredIds.has(card.card_id)) return false;
     if (queueFilter === "queued" && !queuedCardIds.has(card.card_id)) return false;
@@ -1088,7 +1085,7 @@ function KnowledgeCardsPage({ data }: { data: AppData }) {
 
   useEffect(() => {
     setReviewIndex(0);
-  }, [topicFilter, typeFilter, chapterFilter, queueFilter, randomMode]);
+  }, [topicFilter, typeFilter, queueFilter, randomMode]);
 
   useEffect(() => {
     if (typeFilter !== "all" && cardTypeCounts[typeFilter] === 0) {
@@ -1110,17 +1107,6 @@ function KnowledgeCardsPage({ data }: { data: AppData }) {
               {data.topics.map((topic) => (
                 <option value={topic.topic_id} key={topic.topic_id}>
                   {topic.topic_id} {topic.title}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label>
-            <span>章节</span>
-            <select value={chapterFilter} onChange={(event) => setChapterFilter(event.target.value)}>
-              <option value="all">全部章节</option>
-              {chapters.map((chapter) => (
-                <option value={chapter} key={chapter}>
-                  {chapter}
                 </option>
               ))}
             </select>
