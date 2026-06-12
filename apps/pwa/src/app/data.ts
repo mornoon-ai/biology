@@ -12,7 +12,7 @@ import type {
   Variant,
 } from "../types";
 
-export const DATA_VERSION = "20260612-thumb-first-render";
+export const DATA_VERSION = "20260612-knowledge-card-batch";
 
 export function publicUrl(path: string): string {
   const cleanPath = path.replace(/^\/+/, "");
