@@ -651,16 +651,6 @@ function PlayerPage({ data }: { data: AppData }) {
   return (
     <Page>
       <Header eyebrow={topic.module_title} title={topic.title} action={<TopicPill topic={topic} />} />
-      <section className="anchor-tabs" aria-label="播放器分区导航">
-        <button type="button" onClick={() => scrollToPageSection("memory")}>图片</button>
-        <button type="button" onClick={() => scrollToPageSection("lecture")}>讲座</button>
-        <button type="button" onClick={() => scrollToPageSection("gate")}>门禁</button>
-        <button type="button" onClick={() => scrollToPageSection("training")}>结构</button>
-        <button type="button" onClick={() => scrollToPageSection("variants")}>变式</button>
-        <button type="button" onClick={() => scrollToPageSection("review")}>错因</button>
-        <button type="button" onClick={() => scrollToPageSection("coach")}>教练</button>
-      </section>
-
       <StudyRail topicId={topic.topic_id} gates={gates} trainingUnits={trainingUnits} variants={variants} />
 
       <section className="section-block" id="memory">
