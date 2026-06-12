@@ -1566,13 +1566,18 @@ function InstallPromptCard() {
   );
 }
 
+function thumbnailUrl(path: string): string {
+  return publicUrl(path.replace("/assets/memory-cards/", "/assets/thumbs/memory-cards/").replace("/assets/diagrams/", "/assets/thumbs/diagrams/"));
+}
+
 function ImageCard({ asset }: { asset: Asset }) {
   const [open, setOpen] = useState(false);
   const imageUrl = publicUrl(asset.public_path);
+  const previewUrl = thumbnailUrl(asset.public_path);
   return (
     <>
       <button className="memory-card-button" onClick={() => setOpen(true)}>
-        <img src={imageUrl} alt={asset.title} loading="lazy" decoding="async" />
+        <img src={previewUrl} alt={asset.title} loading="lazy" decoding="async" />
       </button>
       {open ? (
         <div className="image-modal" role="dialog" aria-modal="true">
@@ -1588,17 +1593,27 @@ function ImageCard({ asset }: { asset: Asset }) {
 
 function DiagramStrip({ diagrams }: { diagrams: Asset[] }) {
   const [openAsset, setOpenAsset] = useState<Asset | null>(null);
+  const [expanded, setExpanded] = useState(false);
 
   return (
     <>
-      <div className="diagram-strip">
-        {diagrams.map((asset) => (
-          <button className="diagram-card" key={asset.asset_id} onClick={() => setOpenAsset(asset)}>
-            <img src={publicUrl(asset.public_path)} alt={asset.title} loading="lazy" decoding="async" />
-            <span>{asset.title}</span>
-          </button>
-        ))}
-      </div>
+      {expanded ? (
+        <div className="diagram-strip">
+          {diagrams.map((asset) => (
+            <button className="diagram-card" key={asset.asset_id} onClick={() => setOpenAsset(asset)}>
+              <img src={thumbnailUrl(asset.public_path)} alt={asset.title} loading="lazy" decoding="async" />
+              <span>{asset.title}</span>
+            </button>
+          ))}
+        </div>
+      ) : (
+        <button className="diagram-expand" onClick={() => setExpanded(true)}>
+          <Images size={18} />
+          <span>查看插图</span>
+          <small>{diagrams.length} 张</small>
+          <ChevronRight size={18} />
+        </button>
+      )}
       {openAsset ? (
         <div className="image-modal diagram-modal" role="dialog" aria-modal="true">
           <button className="modal-close" onClick={() => setOpenAsset(null)} aria-label="关闭">

@@ -1,4 +1,4 @@
-const CACHE_NAME = "mother-topic-player-v7-voice-audio-compressed";
+const CACHE_NAME = "mother-topic-player-v8-thumb-first-render";
 const BASE_PATH = new URL(self.registration.scope).pathname.replace(/\/$/, "");
 const withBase = (path) => `${BASE_PATH}${path}`;
 const pagePath = (pathname) => {
