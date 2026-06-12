@@ -452,41 +452,47 @@ function TodayPage({ data }: { data: AppData }) {
   const lastVisitedTopicId =
     Object.entries(topicsProgress).sort((a, b) => new Date(b[1].lastVisited).getTime() - new Date(a[1].lastVisited).getTime())[0]?.[0] ??
     SAMPLE_TOPIC_ID;
-  const topic = data.topics.find((item) => item.topic_id === lastVisitedTopicId) ?? data.topics[0];
-  const progress = topicsProgress[topic.topic_id];
-  const doneCount = progress?.completedUnits.length ?? 0;
-  const gateCount = progress?.gatePassed.length ?? 0;
+  const focusTopic = dailyPlan.focusTopics[0]?.topic ?? data.topics.find((item) => item.topic_id === lastVisitedTopicId) ?? data.topics[0];
+  const firstTask = dailyPlan.planItems[0];
   const attemptedCount = Object.values(topicsProgress).reduce((sum, item) => sum + Object.keys(item.attempts ?? {}).length, 0);
   const completedCount = Object.values(topicsProgress).reduce((sum, item) => sum + item.completedUnits.length, 0);
   const totalPractice = data.trainingUnits.length + data.variants.length;
   const completionRate = totalPractice ? Math.round((completedCount / totalPractice) * 100) : 0;
+  const scheduleReasons = [
+    dueErrors.length ? `${dueErrors.length} 个错因今日到期` : "暂无今日到期错因",
+    dailyPlan.focusTopics.length ? `${dailyPlan.focusTopics[0].topic.title} 进度最低或问题最多` : "暂无重点母题",
+    dailyPlan.reviewCardTasks.length ? `${dailyPlan.reviewCardTasks.length} 张精修卡待短答复测` : "精修卡暂无新任务",
+  ];
 
   return (
     <Page>
       <Header eyebrow="今日速练" title="每日学习调度" action={<ReportBadge data={data} />} />
       <section className="hero-panel">
         <div>
-          <p className="module-label">{topic.module_title}</p>
-          <h2>{topic.title}</h2>
-          <p>{topic.summary || "已接入完整讲稿、专题音频、记忆卡与训练入口。"}</p>
+          <p className="module-label">自动调度依据</p>
+          <h2>{firstTask ? firstTask.title : focusTopic.title}</h2>
+          <p>根据到期错因、母题推进度、卡片掌握记录生成今日建议；每次提交、掌握、加入错因都会改变下一轮排序。</p>
         </div>
-        <Link className="primary-action" to="/plan">
+        <Link className="primary-action" to={firstTask?.to ?? "/plan"}>
           <ListChecks size={18} />
-          任务单
+          {firstTask ? "开始第一项" : "任务单"}
         </Link>
       </section>
 
-      <section className="quick-grid" aria-label="今日学习入口">
-        <QuickLink to={`/player/${topic.topic_id}#memory`} icon={Images} label="图片记忆卡" value="1 张" />
-        <QuickLink to={`/player/${topic.topic_id}#lecture`} icon={Headphones} label="专题讲座" value="完整 mp3" />
-        <QuickLink to={`/player/${topic.topic_id}#gate`} icon={ShieldCheck} label="门禁快测" value={`${gateCount} 关`} />
-        <QuickLink to={`/player/${topic.topic_id}#training`} icon={Dumbbell} label="结构训练" value={`${doneCount}/4`} />
-        <QuickLink to="/cards" icon={BookOpen} label="知识卡" value={`${data.knowledgeCards.length} 张`} />
-        <QuickLink to="/plan" icon={ListChecks} label="今日计划" value={`${dailyPlan.planItems.length} 项`} />
+      <section className="section-block">
+        <SectionTitle icon={ListChecks} title="为什么今天练这些" />
+        <div className="schedule-reasons">
+          {scheduleReasons.map((reason, index) => (
+            <div key={reason}>
+              <span>{index + 1}</span>
+              <p>{reason}</p>
+            </div>
+          ))}
+        </div>
       </section>
 
       <section className="section-block">
-        <SectionTitle icon={PlayCircle} title="10分钟速练" />
+        <SectionTitle icon={PlayCircle} title="今日前三项" />
         {sessionItems.length ? (
           <div className="session-list">
             {sessionItems.map((item, index) => (
@@ -503,6 +509,10 @@ function TodayPage({ data }: { data: AppData }) {
         ) : (
           <EmptyState text="暂无今日任务，先进入母题库选择一个新母题" />
         )}
+        <Link className="inline-plan-link" to="/plan">
+          查看完整任务单
+          <ChevronRight size={18} />
+        </Link>
       </section>
 
       <section className="section-block">
@@ -1372,16 +1382,6 @@ function SectionTitle({ icon: Icon, title }: { icon: LucideIcon; title: string }
       <Icon size={18} />
       <h2>{title}</h2>
     </div>
-  );
-}
-
-function QuickLink({ to, icon: Icon, label, value }: { to: string; icon: LucideIcon; label: string; value: string }) {
-  return (
-    <Link className="quick-link" to={to}>
-      <Icon size={20} />
-      <span>{label}</span>
-      <strong>{value}</strong>
-    </Link>
   );
 }
 

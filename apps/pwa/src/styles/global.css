@@ -145,11 +145,41 @@ a {
   padding: 8px 2px;
 }
 
-.quick-grid {
+.schedule-reasons {
   display: grid;
+  gap: 9px;
+}
+
+.schedule-reasons div {
+  align-items: flex-start;
+  background: #f9f3e3;
+  border: 1px solid #ded3b8;
+  display: flex;
   gap: 10px;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  margin: 14px 0;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.schedule-reasons span {
+  align-items: center;
+  background: #e5ead8;
+  color: #1f392d;
+  display: inline-flex;
+  flex: 0 0 auto;
+  font-size: 12px;
+  font-weight: 900;
+  height: 26px;
+  justify-content: center;
+  width: 26px;
+  border-radius: 8px;
+}
+
+.schedule-reasons p {
+  color: #1d251f;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.38;
+  margin: 3px 0 0;
 }
 
 .session-list {
@@ -203,6 +233,16 @@ a {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.inline-plan-link {
+  align-items: center;
+  color: #2362a2;
+  display: inline-flex;
+  font-size: 13px;
+  font-weight: 900;
+  gap: 4px;
+  margin-top: 12px;
 }
 
 .daily-plan {
@@ -1612,10 +1652,6 @@ textarea {
 @media (min-width: 720px) {
   .page {
     padding: 28px 18px 36px;
-  }
-
-  .quick-grid {
-    grid-template-columns: repeat(4, 1fr);
   }
 
   .metric-grid {
