@@ -752,11 +752,9 @@ function DashboardPage({ data }: { data: AppData }) {
   const now = Date.now();
   const openErrors = errors.filter((error) => !error.resolved);
   const dueErrors = openErrors.filter((error) => new Date(error.dueAt).getTime() <= now);
-  const resolvedErrors = errors.filter((error) => error.resolved);
   const allAttempts = Object.values(topicsProgress).flatMap((progress) => Object.values(progress.attempts ?? {}));
   const correctAttempts = allAttempts.filter((attempt) => attempt.correct);
   const refinedCards = data.knowledgeCards.filter((card) => card.maintenance_status === "refined");
-  const longCards = data.knowledgeCards.filter((card) => card.back.length > LONG_KNOWLEDGE_CARD_LIMIT);
   const activeTopicIds = new Set([...Object.keys(topicsProgress), ...errors.map((error) => error.topicId)]);
 
   const topicStats = data.topics.map((topic) => {
@@ -877,28 +875,6 @@ function DashboardPage({ data }: { data: AppData }) {
           <div>
             <span>{refinedCards.length}</span>
             <p>已精修卡</p>
-          </div>
-        </div>
-      </section>
-
-      <section className="section-block">
-        <SectionTitle icon={Sparkles} title="质量闭环" />
-        <div className="dashboard-quality">
-          <div>
-            <strong>{data.exportReport.knowledge_card_quality_needs_review_count ?? 0}</strong>
-            <span>质量审计待处理</span>
-          </div>
-          <div>
-            <strong>{data.exportReport.knowledge_cards_maintenance_needs_review_count ?? 0}</strong>
-            <span>短答案待精修</span>
-          </div>
-          <div>
-            <strong>{longCards.length}</strong>
-            <span>长卡已纳入精修池</span>
-          </div>
-          <div>
-            <strong>{resolvedErrors.length}</strong>
-            <span>已清错因</span>
           </div>
         </div>
       </section>

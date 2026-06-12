@@ -331,35 +331,6 @@ a {
   margin: 6px 0 0;
 }
 
-.dashboard-quality {
-  display: grid;
-  gap: 10px;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.dashboard-quality div {
-  background: #f9f3e3;
-  border: 1px solid #ded3b8;
-  padding: 12px;
-  border-radius: 8px;
-}
-
-.dashboard-quality strong {
-  color: #264f66;
-  display: block;
-  font-size: 24px;
-  font-weight: 900;
-  line-height: 1;
-}
-
-.dashboard-quality span {
-  color: #5b4a24;
-  display: block;
-  font-size: 12px;
-  font-weight: 800;
-  margin-top: 6px;
-}
-
 .module-dashboard,
 .dashboard-topic-list {
   display: grid;
@@ -1681,10 +1652,6 @@ textarea {
   }
 
   .metric-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-
-  .dashboard-quality {
     grid-template-columns: repeat(4, 1fr);
   }
 
